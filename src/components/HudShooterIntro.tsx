@@ -150,12 +150,13 @@ type LaserBolt = {
 const LASER_SPEED_PX_S = 2600
 const LASER_DURATION_MIN_MS = 70
 const LASER_DURATION_MAX_MS = 320
-/** Hit-test padding vs measured text bounds (gameplay only; drawing unchanged). */
-const WORD_HIT_BOX_SCALE = 3
+/** Tight AABB around glyph + small padding (local / rotated with word). */
+const WORD_BOX_PAD_X = 12
+const WORD_BOX_PAD_Y = 10
 
 const GAME_DURATION_MS = 26_000
 const MAX_WORDS = 13
-const MAX_PARTICLES = 420
+const MAX_PARTICLES = 960
 const EXPLODE_MS = 880
 /** Canvas text size (px); thinnest weight. Scaled 3× for readability + hit feel. */
 function wordFontSize(scale: number) {
@@ -263,14 +264,21 @@ function drawLasers(ctx: CanvasRenderingContext2D, lasers: LaserBolt[], now: num
 
 // --- Rendering helpers (canvas) ---
 
-function measureWord(
+/** Shared hit + outline box: measured text + tight padding. */
+function getWordHitExtents(
   ctx: CanvasRenderingContext2D,
   w: TargetWord,
 ): { halfW: number; halfH: number } {
   const fs = wordFontSize(w.scale)
   ctx.font = WORD_FONT(fs)
-  const tw = ctx.measureText(w.text).width
-  return { halfW: tw / 2 + 36, halfH: fs / 2 + 28 }
+  const m = ctx.measureText(w.text)
+  const tw = m.width
+  const asc = m.actualBoundingBoxAscent ?? fs * 0.72
+  const desc = m.actualBoundingBoxDescent ?? fs * 0.28
+  return {
+    halfW: tw / 2 + WORD_BOX_PAD_X,
+    halfH: (asc + desc) / 2 + WORD_BOX_PAD_Y,
+  }
 }
 
 function worldToLocal(
@@ -304,11 +312,9 @@ function hitTestWords(
 ): TargetWord | null {
   const sorted = [...words].sort((a, b) => b.scale - a.scale)
   for (const w of sorted) {
-    const { halfW, halfH } = measureWord(ctx, w)
-    const hw = halfW * WORD_HIT_BOX_SCALE
-    const hh = halfH * WORD_HIT_BOX_SCALE
+    const { halfW, halfH } = getWordHitExtents(ctx, w)
     const { lx, ly } = worldToLocal(cx, cy, w.x, w.y, w.angle)
-    if (Math.abs(lx) > hw || Math.abs(ly) > hh) continue
+    if (Math.abs(lx) > halfW || Math.abs(ly) > halfH) continue
     if (pointInsideAnyBite(lx, ly, w.bites)) continue
     return w
   }
@@ -331,6 +337,12 @@ function drawWords(
     ctx.translate(w.x + jitter, w.y)
     ctx.rotate(w.angle)
     ctx.font = WORD_FONT(fs)
+    const { halfW, halfH } = getWordHitExtents(ctx, w)
+    ctx.strokeStyle = fg
+    ctx.lineWidth = 1
+    ctx.globalAlpha = clamp(a * 0.32, 0, 0.45)
+    ctx.strokeRect(-halfW, -halfH, halfW * 2, halfH * 2)
+    ctx.globalAlpha = clamp(a, 0, 1)
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = fg
@@ -385,6 +397,67 @@ function spawnGreetingExplosion(
   }
 }
 
+/** Every successful hit — big radial burst at impact. */
+function spawnHitExplosion(
+  parts: FxParticle[],
+  x: number,
+  y: number,
+  cap: number,
+) {
+  const room = cap - parts.length
+  const budget = Math.min(175, room)
+  for (let i = 0; i < budget; i++) {
+    const ang = Math.random() * Math.PI * 2
+    const sp = 220 + Math.random() * 640
+    parts.push({
+      x: x + (Math.random() - 0.5) * 10,
+      y: y + (Math.random() - 0.5) * 10,
+      vx: Math.cos(ang) * sp,
+      vy: Math.sin(ang) * sp,
+      life: 0.5 + Math.random() * 0.55,
+      maxLife: 0.62 + Math.random() * 0.58,
+      size: 2.2 + Math.random() * 6.5,
+    })
+  }
+  const slow = Math.min(90, cap - parts.length)
+  for (let i = 0; i < slow; i++) {
+    const ang = Math.random() * Math.PI * 2
+    const sp = 80 + Math.random() * 220
+    parts.push({
+      x,
+      y,
+      vx: Math.cos(ang) * sp,
+      vy: Math.sin(ang) * sp,
+      life: 0.65 + Math.random() * 0.75,
+      maxLife: 0.85 + Math.random() * 0.7,
+      size: 3 + Math.random() * 7,
+    })
+  }
+}
+
+/** Word fully cleared — extra finale burst at its center. */
+function spawnWordDestroyExplosion(
+  parts: FxParticle[],
+  x: number,
+  y: number,
+  cap: number,
+) {
+  const budget = Math.min(240, cap - parts.length)
+  for (let i = 0; i < budget; i++) {
+    const ang = Math.random() * Math.PI * 2
+    const sp = 160 + Math.random() * 520
+    parts.push({
+      x: x + (Math.random() - 0.5) * 16,
+      y: y + (Math.random() - 0.5) * 16,
+      vx: Math.cos(ang) * sp,
+      vy: Math.sin(ang) * sp,
+      life: 0.55 + Math.random() * 0.65,
+      maxLife: 0.7 + Math.random() * 0.65,
+      size: 2.5 + Math.random() * 7,
+    })
+  }
+}
+
 // --- Component ---
 
 export function HudShooterIntro() {
@@ -426,7 +499,6 @@ export function HudShooterIntro() {
   const [combatHud, setCombatHud] = useState(false)
   const [score, setScore] = useState(0)
   const [combo, setCombo] = useState(0)
-  const [crosshair, setCrosshair] = useState({ x: 0, y: 0 })
   const [highScores, setHighScores] = useState<HighScoreEntry[]>(() =>
     topThree(loadLocalLeaderboard()),
   )
@@ -700,7 +772,7 @@ export function HudShooterIntro() {
     return () => cancelAnimationFrame(raf)
   }, [])
 
-  // Pointer: crosshair + HUD cell track (1:1 follow while shooting)
+  // Pointer: HUD cell track (1:1 follow while shooting; global CustomCursor shows reticle)
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -719,9 +791,6 @@ export function HudShooterIntro() {
       t.w = w
       t.h = h
       t.active = combatHud
-      if (combatHud) {
-        setCrosshair({ x, y })
-      }
     }
     el.addEventListener('pointermove', onMove)
     return () => el.removeEventListener('pointermove', onMove)
@@ -742,7 +811,6 @@ export function HudShooterIntro() {
     t.h = h
     t.x = w / 2
     t.y = h / 2
-    setCrosshair({ x: w / 2, y: h / 2 })
   }, [combatHud])
 
   // Main RAF loop
@@ -829,7 +897,15 @@ export function HudShooterIntro() {
             w.hitFlash = 1
             w.jitterT = 0.18
 
+            spawnHitExplosion(particlesRef.current, mx, my, MAX_PARTICLES)
+
             if (w.health <= 0) {
+              spawnWordDestroyExplosion(
+                particlesRef.current,
+                w.x,
+                w.y,
+                MAX_PARTICLES,
+              )
               list.splice(idx, 1)
             }
 
@@ -1071,12 +1147,14 @@ export function HudShooterIntro() {
       {/* UI overlay */}
       <div className="pointer-events-none absolute inset-0 z-20 flex min-h-0 flex-col p-3 md:p-5">
         <div className="flex shrink-0 items-start justify-between gap-3">
-          <div
-            className="min-w-0 uppercase tracking-[0.14em] text-fg/75"
-            style={{ fontSize: '10px' }}
-          >
-            YOUR CODENAME:{' '}
-            {(uiPhase === 'end' ? finalRunCodename : codename).toUpperCase()}
+          <div className="min-w-0" style={{ fontSize: '10px' }}>
+            <div className="mb-1 font-normal normal-case tracking-[0.08em] text-fg/60">
+              Introduction
+            </div>
+            <div className="uppercase tracking-[0.14em] text-fg/75">
+              YOUR CODENAME:{' '}
+              {(uiPhase === 'end' ? finalRunCodename : codename).toUpperCase()}
+            </div>
           </div>
           {uiPhase === 'game' && (
             <button
@@ -1116,7 +1194,7 @@ export function HudShooterIntro() {
                   </div>
                   <button
                     type="button"
-                    className="pointer-events-auto mt-6 border border-cell-border px-4 py-2.5 text-[12px] uppercase tracking-[0.12em] text-fg transition-colors hover:border-cell-hover hover:bg-fg/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+                    className="pointer-events-auto mt-6 border-2 border-white px-4 py-2.5 text-[12px] uppercase tracking-[0.12em] text-fg transition-colors hover:border-white hover:bg-fg/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
                     onClick={(e) => {
                       e.preventDefault()
                       beginExplosion()
@@ -1201,25 +1279,6 @@ export function HudShooterIntro() {
         </div>
       </div>
 
-      {/* Local crosshair (shooting mode only) */}
-      {combatHud && (
-        <div
-          className="pointer-events-none absolute z-30"
-          style={{
-            left: crosshair.x,
-            top: crosshair.y,
-            transform: 'translate(-50%, -50%)',
-          }}
-          aria-hidden
-        >
-          <div className="relative h-5 w-5 scale-[3]">
-            <div className="absolute left-1/2 top-0 h-2 w-px -translate-x-1/2 bg-fg" />
-            <div className="absolute bottom-0 left-1/2 h-2 w-px -translate-x-1/2 bg-fg" />
-            <div className="absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-fg" />
-            <div className="absolute right-0 top-1/2 h-px w-2 -translate-y-1/2 bg-fg" />
-          </div>
-        </div>
-      )}
     </div>
   )
 }

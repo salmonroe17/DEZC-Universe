@@ -106,6 +106,37 @@ textarea {
   animation: hud-glow-pulse 4.2s ease-in-out infinite;
 }
 
+/* Case study list: active-row progress (duration set inline to match auto-rotate) */
+@keyframes case-study-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Fake3DCube faces: slow HUD-colored glow pulse */
+@keyframes cube-face-glow-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-hud) 14%, transparent),
+      0 0 26px color-mix(in srgb, var(--color-hud) 11%, transparent),
+      0 0 46px color-mix(in srgb, var(--color-hud) 6%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-hud) 22%, transparent),
+      0 0 38px color-mix(in srgb, var(--color-hud) 20%, transparent),
+      0 0 68px color-mix(in srgb, var(--color-hud) 12%, transparent);
+  }
+}
+
+.cube-face-glow {
+  animation: cube-face-glow-pulse 4.8s ease-in-out infinite;
+}
+
 /* Page color themes (top bar selector) */
 html[data-theme='cyan'] {
   --color-bg: #0a1114;
