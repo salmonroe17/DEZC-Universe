@@ -1,0 +1,147 @@
+@import 'tailwindcss';
+
+/* Design system: dark-first neutral palette, spacing, type scale */
+@theme {
+  /* Surfaces & text */
+  --color-bg: #101010;
+  --color-surface: #0a0a0a;
+  --color-elevated: #141414;
+  --color-border: #27272a;
+  --color-fg: #fafafa;
+  --color-fg-muted: #a1a1aa;
+  --color-fg-subtle: #71717a;
+
+  /* HUD / grid accents (overridden per theme) */
+  --color-hud: #ffffff;
+  --color-cell-border: #414141;
+  --color-cell-hover: #ffffff;
+
+  /* Semantic spacing (maps to Tailwind spacing utilities) */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-30: 7.5rem;
+
+  /* Type scale */
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+
+  --text-title: 2rem;
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.02em;
+
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.6;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+
+  --font-sans: 'Space Mono', monospace;
+  --font-mono: 'Space Mono', monospace;
+}
+
+html {
+  color-scheme: dark;
+  font-family: var(--font-sans);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+/* Custom cursor: only fine pointers; hide system cursor only after first move */
+@media (pointer: fine) {
+  body.custom-cursor-active {
+    cursor: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .custom-cursor-root {
+    display: none;
+  }
+}
+
+@keyframes hud-glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 1))
+      drop-shadow(0 0 14px rgba(255, 255, 255, 0.72))
+      drop-shadow(0 0 32px rgba(255, 255, 255, 0.5))
+      drop-shadow(0 0 56px rgba(255, 255, 255, 0.32))
+      drop-shadow(0 0 88px rgba(255, 255, 255, 0.18));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1))
+      drop-shadow(0 0 22px rgba(255, 255, 255, 0.88))
+      drop-shadow(0 0 48px rgba(255, 255, 255, 0.62))
+      drop-shadow(0 0 80px rgba(255, 255, 255, 0.4))
+      drop-shadow(0 0 120px rgba(255, 255, 255, 0.24));
+  }
+}
+
+.hud-svg-glow {
+  animation: hud-glow-pulse 4.2s ease-in-out infinite;
+}
+
+/* Page color themes (top bar selector) */
+html[data-theme='cyan'] {
+  --color-bg: #0a1114;
+  --color-surface: #0c1619;
+  --color-elevated: #122428;
+  --color-border: #1e4a52;
+  --color-fg: #d9f8ff;
+  --color-fg-muted: #7eb8c8;
+  --color-fg-subtle: #5a8a99;
+  --color-hud: #5ee4ff;
+  --color-cell-border: #2a555f;
+  --color-cell-hover: #7ee8f0;
+}
+
+html[data-theme='magenta'] {
+  --color-bg: #100a12;
+  --color-surface: #140d16;
+  --color-elevated: #1c1220;
+  --color-border: #4a2a52;
+  --color-fg: #ffe8ff;
+  --color-fg-muted: #c896d4;
+  --color-fg-subtle: #9a6aa8;
+  --color-hud: #e879f9;
+  --color-cell-border: #553060;
+  --color-cell-hover: #f0a8ff;
+}
+
+html[data-theme='blue'] {
+  --color-bg: #0a0e16;
+  --color-surface: #0c1220;
+  --color-elevated: #121a2e;
+  --color-border: #243a5c;
+  --color-fg: #e8f0ff;
+  --color-fg-muted: #8aa8e0;
+  --color-fg-subtle: #6080c0;
+  --color-hud: #6eb0ff;
+  --color-cell-border: #30456e;
+  --color-cell-hover: #8cc4ff;
+}
