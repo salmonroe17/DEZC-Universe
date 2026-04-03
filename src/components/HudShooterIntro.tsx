@@ -235,7 +235,28 @@ function fillJaggedBiteHole(
   ctx.fill()
 }
 
-function drawLasers(ctx: CanvasRenderingContext2D, lasers: LaserBolt[], now: number) {
+function hudHexToRgba(hex: string, a: number): string {
+  let h = hex.trim()
+  if (h.startsWith('#')) h = h.slice(1)
+  if (h.length === 3) {
+    h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2]
+  }
+  if (h.length !== 6) return `rgba(255,255,255,${a})`
+  const n = parseInt(h, 16)
+  if (Number.isNaN(n)) return `rgba(255,255,255,${a})`
+  const r = (n >> 16) & 255
+  const g = (n >> 8) & 255
+  const b = n & 255
+  return `rgba(${r},${g},${b},${a})`
+}
+
+function drawLasers(
+  ctx: CanvasRenderingContext2D,
+  lasers: LaserBolt[],
+  now: number,
+  hudHex: string,
+) {
+  const core = hudHex.trim() || '#ffffff'
   for (const L of lasers) {
     const u = clamp((now - L.t0) / L.durationMs, 0, 1)
     const hx = lerp(L.sx, L.tx, u)
@@ -243,11 +264,11 @@ function drawLasers(ctx: CanvasRenderingContext2D, lasers: LaserBolt[], now: num
     ctx.save()
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
-    ctx.shadowColor = 'rgba(255,255,255,0.95)'
+    ctx.shadowColor = hudHexToRgba(core, 0.95)
     const layers: [number, string, number][] = [
-      [14, 'rgba(255,255,255,0.35)', 22],
-      [5, 'rgba(255,255,255,0.75)', 14],
-      [2, '#ffffff', 6],
+      [14, hudHexToRgba(core, 0.35), 22],
+      [5, hudHexToRgba(core, 0.75), 14],
+      [2, core.startsWith('#') ? core : `#${core}`, 6],
     ]
     for (const [lw, stroke, blur] of layers) {
       ctx.beginPath()
@@ -725,7 +746,7 @@ export function HudShooterIntro() {
       const fg =
         getComputedStyle(document.documentElement)
           .getPropertyValue('--color-fg')
-          .trim() || '#ffffff'
+          .trim() || '#fafafa'
       const cx = w / 2
       const cy = h / 2
       const stars = starsRef.current
@@ -830,9 +851,10 @@ export function HudShooterIntro() {
       const { w: cw, h: ch } = sizeRef.current
 
       const root = document.documentElement
-      const fg =
-        getComputedStyle(root).getPropertyValue('--color-fg').trim() ||
-        '#ffffff'
+      const cs = getComputedStyle(root)
+      const fg = cs.getPropertyValue('--color-fg').trim() || '#fafafa'
+      const hud =
+        cs.getPropertyValue('--color-hud').trim() || '#ffffff'
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.clearRect(0, 0, cw, ch)
@@ -1072,7 +1094,7 @@ export function HudShooterIntro() {
 
       drawParticles(ctx, parts, fg)
       drawWords(ctx, words, fg)
-      drawLasers(ctx, lasers, now)
+      drawLasers(ctx, lasers, now, hud)
 
       rafRef.current = requestAnimationFrame(tick)
     }
@@ -1194,7 +1216,7 @@ export function HudShooterIntro() {
                   </div>
                   <button
                     type="button"
-                    className="pointer-events-auto mt-6 border-2 border-white px-4 py-2.5 text-[12px] uppercase tracking-[0.12em] text-fg transition-colors hover:border-white hover:bg-fg/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+                    className="pointer-events-auto mt-6 border-2 border-cell-hover px-4 py-2.5 text-[12px] uppercase tracking-[0.12em] text-fg transition-colors hover:border-hud hover:bg-fg/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
                     onClick={(e) => {
                       e.preventDefault()
                       beginExplosion()
