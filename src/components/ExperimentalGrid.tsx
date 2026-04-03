@@ -4,6 +4,7 @@ import { easeOutExpo } from '../animations/variants'
 import { CaseStudyList } from './CaseStudyList'
 import { Fake3DCube } from './Fake3DCube'
 import { HudShooterIntro } from './HudShooterIntro'
+import { ShowAndTellGrid } from './ShowAndTellGrid'
 
 const gridContainerVariants = {
   hidden: {},
@@ -30,8 +31,8 @@ const cellVariants = {
   },
 }
 
-const cellBorder =
-  'border border-cell-border shadow-none transition-[border-color,box-shadow] duration-200 ease-out hover:border-cell-hover hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_12%,transparent),0_0_18px_color-mix(in_srgb,var(--color-hud)_18%,transparent),0_0_36px_color-mix(in_srgb,var(--color-hud)_8%,transparent)]'
+/** Chamfered border + fill via ::before/::after (see index.css). */
+const quadrantCell = 'quadrant-cell min-h-0 min-w-0'
 
 /** Matches quadrant section titles (e.g. Case Studies). */
 const quadrantHeadingClass =
@@ -59,39 +60,48 @@ export function ExperimentalGrid() {
       >
         <motion.div
           variants={cellVariants}
-          className={`relative flex min-h-0 min-w-0 items-stretch justify-stretch overflow-hidden border-dashed ${cellBorder}`}
+          className={`${quadrantCell} relative flex items-stretch justify-stretch`}
           style={{ willChange: 'opacity, transform' }}
         >
-          <HudShooterIntro />
+          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 overflow-hidden">
+            <HudShooterIntro />
+          </div>
         </motion.div>
         <motion.div
           variants={cellVariants}
-          className={`group/right-quadrant relative flex min-h-0 min-w-0 flex-col ${cellBorder}`}
+          className={`group/right-quadrant ${quadrantCell} relative flex flex-col`}
           style={{ willChange: 'opacity, transform' }}
         >
-          <h2 className={quadrantHeadingClass}>Case Studies</h2>
-          <Fake3DCube activeCaseIndex={activeCaseIndex} />
-          <CaseStudyList
-            activeCaseIndex={activeCaseIndex}
-            onActiveCaseChange={setActiveCaseIndex}
-            autoRotatePaused={caseListPointerInside}
-            onAutoAdvance={onCaseAdvance}
-            onCaseListPointerInsideChange={onCaseListPointerInsideChange}
-          />
+          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+            <h2 className={quadrantHeadingClass}>Case Studies</h2>
+            <Fake3DCube activeCaseIndex={activeCaseIndex} />
+            <CaseStudyList
+              activeCaseIndex={activeCaseIndex}
+              onActiveCaseChange={setActiveCaseIndex}
+              autoRotatePaused={caseListPointerInside}
+              onAutoAdvance={onCaseAdvance}
+              onCaseListPointerInsideChange={onCaseListPointerInsideChange}
+            />
+          </div>
         </motion.div>
         <motion.div
           variants={cellVariants}
-          className={`flex min-h-0 min-w-0 flex-col ${cellBorder}`}
+          className={`${quadrantCell} relative flex flex-col`}
           style={{ willChange: 'opacity, transform' }}
         >
-          <h2 className={quadrantHeadingClass}>Show & tell</h2>
+          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+            <h2 className={quadrantHeadingClass}>Show & tell</h2>
+            <ShowAndTellGrid />
+          </div>
         </motion.div>
         <motion.div
           variants={cellVariants}
-          className={`flex min-h-0 min-w-0 flex-col ${cellBorder}`}
+          className={`${quadrantCell} relative flex flex-col`}
           style={{ willChange: 'opacity, transform' }}
         >
-          <h2 className={quadrantHeadingClass}>Who I am</h2>
+          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+            <h2 className={quadrantHeadingClass}>Who I am</h2>
+          </div>
         </motion.div>
       </motion.div>
     </div>

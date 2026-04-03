@@ -71,27 +71,26 @@ export function SiteTopBar() {
         Welcome to the DEZC universe
       </p>
 
-      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-        <span className="hidden text-[10px] text-fg-muted sm:inline">
-          Color change
-        </span>
-        <div className="flex items-center gap-1.5" role="group" aria-label="Theme color">
-          {THEMES.map(({ id, label }) => {
-            const sw = SWATCH[id]
-            return (
-              <button
-                key={id}
-                type="button"
-                aria-label={label}
-                aria-pressed={theme === id}
-                onClick={() => setTheme(id)}
-                className={`size-[18px] shrink-0 rounded-sm transition-[transform,background-color,border-color] hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${
-                  theme === id ? `${sw.selected} border-0` : sw.idle
-                }`}
-              />
-            )
-          })}
-        </div>
+      <div
+        className="flex shrink-0 items-center gap-1.5"
+        role="group"
+        aria-label="Theme color"
+      >
+        {THEMES.map(({ id, label }) => {
+          const sw = SWATCH[id]
+          return (
+            <button
+              key={id}
+              type="button"
+              aria-label={label}
+              aria-pressed={theme === id}
+              onClick={() => setTheme(id)}
+              className={`size-[18px] shrink-0 rounded-sm transition-[transform,background-color,border-color] hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${
+                theme === id ? `${sw.selected} border-0` : sw.idle
+              }`}
+            />
+          )
+        })}
       </div>
 
       <time
