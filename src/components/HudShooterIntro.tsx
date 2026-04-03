@@ -7,31 +7,19 @@ import {
   useState,
 } from 'react'
 import { useHudShooterGame } from '../contexts/HudShooterContext'
+import { ADJECTIVES, NOUNS } from '../data/codenameWords'
+import {
+  fetchLeaderboardTop,
+  loadLocalLeaderboard,
+  submitLeaderboardEntry,
+  topThree,
+  type HighScoreEntry,
+} from '../lib/leaderboard'
 import { HudGraphic, type HudCellTrack } from './HudGraphic'
 
-// --- Codename + word pool (game data) ---
+export type { HighScoreEntry } from '../lib/leaderboard'
 
-const ADJECTIVES = [
-  'Silent',
-  'Crimson',
-  'Phantom',
-  'Neon',
-  'Shadow',
-  'Iron',
-  'Ghost',
-  'Digital',
-] as const
-
-const NOUNS = [
-  'Lockdown',
-  'Vector',
-  'Hunter',
-  'Signal',
-  'Protocol',
-  'Drift',
-  'Operator',
-  'Nova',
-] as const
+// --- Word pool (game targets) ---
 
 const ROLE_WORDS = [
   'Product Designer',
@@ -46,10 +34,68 @@ const ROLE_WORDS = [
   'Builder & dreamer',
 ] as const
 
-function randomCodename(): string {
+const IDLE_GREETINGS = [
+  'Hello, my name is Dez. I like to dream and create.',
+  "Hey, I'm Dez. I thrive in ambiguity.",
+  "Hola, I'm Dez. I turn chaos into structure.",
+  "Ciao, I'm Dez. I obsess over design systems.",
+  "Greetings, I'm Dez. I run design workshops.",
+  "Salutations, I'm Dez. I prototype before debating.",
+  "Good evening, I'm Dez. I ship fast and fix things.",
+  "Good day, I'm Dez. I simplify complex workflows.",
+  "Welcome, I'm Dez. I design for real operations.",
+  "Ahoy, I'm Dez. I build with engineers in mind.",
+  "Bonjour, I'm Dez. I question assumptions.",
+  "Hey there, I'm Dez. I turn ideas into product.",
+] as const
+
+const TYPEWRITER_TYPE_MS = 36
+const TYPEWRITER_HOLD_MS = 2900
+const TYPEWRITER_DELETE_MS = 20
+const TYPEWRITER_GAP_MS = 450
+
+const LAST_TARGETS_HIT_KEY = 'dezc-hud-last-targets-hit-v1'
+
+function loadLastTargetsHit(): number | null {
+  try {
+    const raw = localStorage.getItem(LAST_TARGETS_HIT_KEY)
+    if (raw == null || raw === '') return null
+    const n = Number(raw)
+    return Number.isFinite(n) && n >= 0 ? Math.floor(n) : null
+  } catch {
+    return null
+  }
+}
+
+function persistLastTargetsHit(n: number) {
+  try {
+    localStorage.setItem(LAST_TARGETS_HIT_KEY, String(n))
+  } catch {
+    /* ignore quota */
+  }
+}
+
+const TAG_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+/** Three base-36 chars (0–9, A–Z); 46,656 values × 10k word pairs. */
+function randomTag3(): string {
+  const bytes = new Uint8Array(2)
+  crypto.getRandomValues(bytes)
+  const space = 36 ** 3
+  let n = ((bytes[0]! << 8) | bytes[1]!) % space
+  const c2 = TAG_CHARS[n % 36]!
+  n = Math.floor(n / 36)
+  const c1 = TAG_CHARS[n % 36]!
+  n = Math.floor(n / 36)
+  const c0 = TAG_CHARS[n % 36]!
+  return c0 + c1 + c2
+}
+
+/** Adjective + noun + short random tag. */
+function generateUniqueCodename(): string {
   const a = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]
   const n = NOUNS[Math.floor(Math.random() * NOUNS.length)]
-  return `${a} ${n}`
+  return `${a} ${n} · ${randomTag3()}`
 }
 
 function pickRoleWord(): string {
@@ -60,7 +106,7 @@ function pickRoleWord(): string {
 
 type Phase = 'idle' | 'explode' | 'game' | 'winddown' | 'end'
 
-type WordBite = { lx: number; ly: number; r: number }
+type WordBite = { lx: number; ly: number; r: number; jagSeed: number }
 
 type TargetWord = {
   id: number
@@ -92,13 +138,20 @@ type FxParticle = {
   size: number
 }
 
-type BulletFlash = {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-  life: number
+type LaserBolt = {
+  sx: number
+  sy: number
+  tx: number
+  ty: number
+  t0: number
+  durationMs: number
 }
+
+const LASER_SPEED_PX_S = 2600
+const LASER_DURATION_MIN_MS = 70
+const LASER_DURATION_MAX_MS = 320
+/** Hit-test padding vs measured text bounds (gameplay only; drawing unchanged). */
+const WORD_HIT_BOX_SCALE = 3
 
 const GAME_DURATION_MS = 26_000
 const MAX_WORDS = 13
@@ -152,6 +205,62 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t
 }
 
+function jagHash01(a: number, b: number) {
+  const x = Math.sin(a * 12.9898 + b * 78.233) * 43758.5453
+  return x - Math.floor(x)
+}
+
+/** Irregular “crunch” hole instead of a smooth circle. */
+function fillJaggedBiteHole(
+  ctx: CanvasRenderingContext2D,
+  lx: number,
+  ly: number,
+  r: number,
+  jagSeed: number,
+) {
+  const verts = 9 + Math.floor(jagHash01(jagSeed, 1) * 4)
+  ctx.beginPath()
+  for (let i = 0; i < verts; i++) {
+    const t = i / verts
+    const ang = t * Math.PI * 2 + jagSeed * 1.17
+    const wobble = 0.52 + 0.48 * jagHash01(jagSeed + i * 0.31, t * 6.2)
+    const rad = r * wobble
+    const px = lx + Math.cos(ang) * rad
+    const py = ly + Math.sin(ang) * rad
+    if (i === 0) ctx.moveTo(px, py)
+    else ctx.lineTo(px, py)
+  }
+  ctx.closePath()
+  ctx.fill()
+}
+
+function drawLasers(ctx: CanvasRenderingContext2D, lasers: LaserBolt[], now: number) {
+  for (const L of lasers) {
+    const u = clamp((now - L.t0) / L.durationMs, 0, 1)
+    const hx = lerp(L.sx, L.tx, u)
+    const hy = lerp(L.sy, L.ty, u)
+    ctx.save()
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    ctx.shadowColor = 'rgba(255,255,255,0.95)'
+    const layers: [number, string, number][] = [
+      [14, 'rgba(255,255,255,0.35)', 22],
+      [5, 'rgba(255,255,255,0.75)', 14],
+      [2, '#ffffff', 6],
+    ]
+    for (const [lw, stroke, blur] of layers) {
+      ctx.beginPath()
+      ctx.moveTo(L.sx, L.sy)
+      ctx.lineTo(hx, hy)
+      ctx.strokeStyle = stroke
+      ctx.lineWidth = lw
+      ctx.shadowBlur = blur
+      ctx.stroke()
+    }
+    ctx.restore()
+  }
+}
+
 // --- Rendering helpers (canvas) ---
 
 function measureWord(
@@ -196,8 +305,10 @@ function hitTestWords(
   const sorted = [...words].sort((a, b) => b.scale - a.scale)
   for (const w of sorted) {
     const { halfW, halfH } = measureWord(ctx, w)
+    const hw = halfW * WORD_HIT_BOX_SCALE
+    const hh = halfH * WORD_HIT_BOX_SCALE
     const { lx, ly } = worldToLocal(cx, cy, w.x, w.y, w.angle)
-    if (Math.abs(lx) > halfW || Math.abs(ly) > halfH) continue
+    if (Math.abs(lx) > hw || Math.abs(ly) > hh) continue
     if (pointInsideAnyBite(lx, ly, w.bites)) continue
     return w
   }
@@ -229,9 +340,7 @@ function drawWords(
       ctx.globalCompositeOperation = 'destination-out'
       ctx.fillStyle = '#000'
       for (const b of w.bites) {
-        ctx.beginPath()
-        ctx.arc(b.lx, b.ly, b.r, 0, Math.PI * 2)
-        ctx.fill()
+        fillJaggedBiteHole(ctx, b.lx, b.ly, b.r, b.jagSeed)
       }
       ctx.globalCompositeOperation = 'source-over'
     }
@@ -249,24 +358,6 @@ function drawParticles(
     ctx.globalAlpha = t * t
     ctx.fillStyle = color
     ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size)
-  }
-  ctx.globalAlpha = 1
-}
-
-function drawFlashes(
-  ctx: CanvasRenderingContext2D,
-  flashes: BulletFlash[],
-  stroke: string,
-) {
-  ctx.strokeStyle = stroke
-  ctx.lineWidth = 1.5
-  for (const f of flashes) {
-    const t = f.life / 0.14
-    ctx.globalAlpha = clamp(t, 0, 1)
-    ctx.beginPath()
-    ctx.moveTo(f.x1, f.y1)
-    ctx.lineTo(f.x2, f.y2)
-    ctx.stroke()
   }
   ctx.globalAlpha = 1
 }
@@ -294,52 +385,6 @@ function spawnGreetingExplosion(
   }
 }
 
-/** Per-hit “chunk” flying off */
-function spawnChunkHitSparks(
-  parts: FxParticle[],
-  x: number,
-  y: number,
-  cap: number,
-) {
-  const budget = Math.min(52, cap - parts.length)
-  for (let i = 0; i < budget; i++) {
-    const ang = Math.random() * Math.PI * 2
-    const sp = 95 + Math.random() * 220
-    parts.push({
-      x,
-      y,
-      vx: Math.cos(ang) * sp,
-      vy: Math.sin(ang) * sp,
-      life: 0.22 + Math.random() * 0.32,
-      maxLife: 0.35 + Math.random() * 0.35,
-      size: 0.9 + Math.random() * 2.4,
-    })
-  }
-}
-
-/** Final destroy when word is fully eaten */
-function spawnTargetExplosion(
-  parts: FxParticle[],
-  x: number,
-  y: number,
-  cap: number,
-) {
-  const budget = Math.min(130, cap - parts.length)
-  for (let i = 0; i < budget; i++) {
-    const ang = Math.random() * Math.PI * 2
-    const sp = 80 + Math.random() * 280
-    parts.push({
-      x,
-      y,
-      vx: Math.cos(ang) * sp,
-      vy: Math.sin(ang) * sp,
-      life: 0.35 + Math.random() * 0.45,
-      maxLife: 0.5 + Math.random() * 0.45,
-      size: 0.8 + Math.random() * 2.2,
-    })
-  }
-}
-
 // --- Component ---
 
 export function HudShooterIntro() {
@@ -354,7 +399,7 @@ export function HudShooterIntro() {
   const phaseRef = useRef<Phase>('idle')
   const wordsRef = useRef<TargetWord[]>([])
   const particlesRef = useRef<FxParticle[]>([])
-  const flashesRef = useRef<BulletFlash[]>([])
+  const lasersRef = useRef<LaserBolt[]>([])
   const nextWordId = useRef(0)
   const spawnAccRef = useRef(0)
   const gameT0Ref = useRef(0)
@@ -372,15 +417,100 @@ export function HudShooterIntro() {
   })
   const lastHitRef = useRef(0)
   const comboRef = useRef(0)
+  const scoreRef = useRef(0)
+  const codenameRef = useRef('')
 
-  const [codename, setCodename] = useState(randomCodename)
+  const [codename, setCodename] = useState(() => generateUniqueCodename())
   const [uiPhase, setUiPhase] = useState<'idle' | 'game' | 'end'>('idle')
   /** True only during active shooting (after explosion), not during explode phase */
   const [combatHud, setCombatHud] = useState(false)
   const [score, setScore] = useState(0)
   const [combo, setCombo] = useState(0)
   const [crosshair, setCrosshair] = useState({ x: 0, y: 0 })
+  const [highScores, setHighScores] = useState<HighScoreEntry[]>(() =>
+    topThree(loadLocalLeaderboard()),
+  )
+  const [finalRunScore, setFinalRunScore] = useState(0)
+  const [finalRunCodename, setFinalRunCodename] = useState('')
+  /** Set after a run fully completes; null = never finished a game this browser */
+  const [lastTargetsHit, setLastTargetsHit] = useState<number | null>(() =>
+    loadLastTargetsHit(),
+  )
+  const [idleGreetingText, setIdleGreetingText] = useState('')
   const enteredGameRef = useRef(false)
+
+  useEffect(() => {
+    if (uiPhase !== 'idle') {
+      setIdleGreetingText('')
+      return
+    }
+
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+    let cancelled = false
+
+    const later = (ms: number, fn: () => void) => {
+      const id = setTimeout(() => {
+        if (!cancelled) fn()
+      }, ms)
+      timeouts.push(id)
+    }
+
+    let lineIdx = 0
+    let charCount = 0
+    let phase: 'typing' | 'hold' | 'deleting' = 'typing'
+
+    const step = () => {
+      if (cancelled) return
+      const full = IDLE_GREETINGS[lineIdx]!
+
+      if (phase === 'typing') {
+        if (charCount < full.length) {
+          charCount += 1
+          setIdleGreetingText(full.slice(0, charCount))
+          later(TYPEWRITER_TYPE_MS, step)
+        } else {
+          phase = 'hold'
+          later(TYPEWRITER_HOLD_MS, step)
+        }
+      } else if (phase === 'hold') {
+        phase = 'deleting'
+        later(TYPEWRITER_DELETE_MS, step)
+      } else if (charCount > 0) {
+        charCount -= 1
+        setIdleGreetingText(full.slice(0, charCount))
+        later(TYPEWRITER_DELETE_MS, step)
+      } else {
+        lineIdx = (lineIdx + 1) % IDLE_GREETINGS.length
+        phase = 'typing'
+        later(TYPEWRITER_GAP_MS, step)
+      }
+    }
+
+    step()
+
+    return () => {
+      cancelled = true
+      for (const id of timeouts) clearTimeout(id)
+    }
+  }, [uiPhase])
+
+  useEffect(() => {
+    scoreRef.current = score
+  }, [score])
+
+  useEffect(() => {
+    codenameRef.current = codename
+  }, [codename])
+
+  useEffect(() => {
+    let cancelled = false
+    void fetchLeaderboardTop().then((rows) => {
+      if (!cancelled) setHighScores(rows)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     starfieldWarpRef.current = uiPhase === 'game'
@@ -422,6 +552,7 @@ export function HudShooterIntro() {
     syncHudActive()
     setUiPhase('game')
     particlesRef.current = []
+    lasersRef.current = []
     spawnGreetingExplosion(particlesRef.current, ox, oy, MAX_PARTICLES)
   }, [syncHudActive])
 
@@ -429,7 +560,7 @@ export function HudShooterIntro() {
     phaseRef.current = 'idle'
     wordsRef.current = []
     particlesRef.current = []
-    flashesRef.current = []
+    lasersRef.current = []
     spawnAccRef.current = 0
     gameT0Ref.current = 0
     nextWordId.current = 0
@@ -437,7 +568,7 @@ export function HudShooterIntro() {
     setCombo(0)
     comboRef.current = 0
     lastHitRef.current = 0
-    setCodename(randomCodename())
+    setCodename(generateUniqueCodename())
     setUiPhase('idle')
     setCombatHud(false)
     enteredGameRef.current = false
@@ -452,7 +583,7 @@ export function HudShooterIntro() {
     phaseRef.current = 'idle'
     wordsRef.current = []
     particlesRef.current = []
-    flashesRef.current = []
+    lasersRef.current = []
     spawnAccRef.current = 0
     gameT0Ref.current = 0
     nextWordId.current = 0
@@ -665,7 +796,7 @@ export function HudShooterIntro() {
 
       const words = wordsRef.current
       const parts = particlesRef.current
-      const flashes = flashesRef.current
+      const lasers = lasersRef.current
 
       // Particles
       for (let i = parts.length - 1; i >= 0; i--) {
@@ -678,10 +809,42 @@ export function HudShooterIntro() {
       }
       while (parts.length > MAX_PARTICLES) parts.shift()
 
-      // Bullet flashes
-      for (let i = flashes.length - 1; i >= 0; i--) {
-        flashes[i].life -= dt
-        if (flashes[i].life <= 0) flashes.splice(i, 1)
+      // Lasers: resolve hit when bolt reaches aim point
+      for (let i = lasers.length - 1; i >= 0; i--) {
+        const L = lasers[i]
+        if (now - L.t0 < L.durationMs) continue
+        const mx = L.tx
+        const my = L.ty
+        const list = wordsRef.current
+        const hit = hitTestWords(ctx, list, mx, my)
+        if (hit) {
+          const idx = list.findIndex((w) => w.id === hit.id)
+          if (idx >= 0) {
+            const w = list[idx]
+            const fs = wordFontSize(w.scale)
+            const { lx, ly } = worldToLocal(mx, my, w.x, w.y, w.angle)
+            const biteR = Math.max(11, fs * 0.26)
+            w.bites.push({ lx, ly, r: biteR, jagSeed: Math.random() })
+            w.health -= 1
+            w.hitFlash = 1
+            w.jitterT = 0.18
+
+            if (w.health <= 0) {
+              list.splice(idx, 1)
+            }
+
+            const tnow = now
+            if (tnow - lastHitRef.current < COMBO_WINDOW_MS) {
+              comboRef.current += 1
+            } else {
+              comboRef.current = 1
+            }
+            lastHitRef.current = tnow
+            setCombo(comboRef.current)
+            setScore((s) => s + 1)
+          }
+        }
+        lasers.splice(i, 1)
       }
 
       const gameElapsed =
@@ -806,30 +969,41 @@ export function HudShooterIntro() {
         }
       }
 
-      // Winddown → end
+      // Winddown → end (leaderboard + next codename in background)
       if (phaseRef.current === 'winddown') {
         if (
           words.length === 0 ||
           now - winddownT0Ref.current > WINDDOWN_MAX_MS
         ) {
+          const fs = scoreRef.current
+          const fn = codenameRef.current
           phaseRef.current = 'end'
           wordsRef.current = []
+          lasersRef.current = []
           setActive(false)
           setCombatHud(false)
+          setFinalRunScore(fs)
+          setFinalRunCodename(fn)
           setUiPhase('end')
+          void submitLeaderboardEntry(fs, fn).then((rows) => {
+            setHighScores(rows)
+            persistLastTargetsHit(fs)
+            setLastTargetsHit(fs)
+            setCodename(generateUniqueCodename())
+          })
         }
       }
 
       drawParticles(ctx, parts, fg)
       drawWords(ctx, words, fg)
-      drawFlashes(ctx, flashes, fg)
+      drawLasers(ctx, lasers, now)
 
       rafRef.current = requestAnimationFrame(tick)
     }
 
     rafRef.current = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [setActive, syncHudActive])
+  }, [setActive, syncHudActive, setCombo, setScore])
 
   const onCanvasPointerDown = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -842,66 +1016,23 @@ export function HudShooterIntro() {
       const mx = e.clientX - r.left
       const my = e.clientY - r.top
 
-      const canvas = canvasRef.current
-      if (!canvas) return
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
-
-      const dx = mx - sizeRef.current.w / 2
-      const dy = my - sizeRef.current.h / 2
-      const len = Math.hypot(dx, dy) || 1
-      const ux = dx / len
-      const uy = dy / len
-      flashesRef.current.push({
-        x1: mx - ux * 72,
-        y1: my - uy * 72,
-        x2: mx + ux * 28,
-        y2: my + uy * 28,
-        life: 0.14,
+      const { h: ch } = sizeRef.current
+      const sx = mx
+      const sy = ch - 18
+      const dist = Math.hypot(mx - sx, my - sy) || 1
+      const durationMs = clamp(
+        (dist / LASER_SPEED_PX_S) * 1000,
+        LASER_DURATION_MIN_MS,
+        LASER_DURATION_MAX_MS,
+      )
+      lasersRef.current.push({
+        sx,
+        sy,
+        tx: mx,
+        ty: my,
+        t0: performance.now(),
+        durationMs,
       })
-
-      const list = wordsRef.current
-      const hit = hitTestWords(ctx, list, mx, my)
-      if (hit) {
-        const idx = list.findIndex((w) => w.id === hit.id)
-        if (idx >= 0) {
-          const w = list[idx]
-          const fs = wordFontSize(w.scale)
-          const { lx, ly } = worldToLocal(mx, my, w.x, w.y, w.angle)
-          const biteR = Math.max(11, fs * 0.26)
-          w.bites.push({ lx, ly, r: biteR })
-          w.health -= 1
-          w.hitFlash = 1
-          w.jitterT = 0.18
-
-          if (w.health <= 0) {
-            spawnTargetExplosion(
-              particlesRef.current,
-              w.x,
-              w.y,
-              MAX_PARTICLES,
-            )
-            list.splice(idx, 1)
-          } else {
-            spawnChunkHitSparks(
-              particlesRef.current,
-              mx,
-              my,
-              MAX_PARTICLES,
-            )
-          }
-
-          const tnow = performance.now()
-          if (tnow - lastHitRef.current < COMBO_WINDOW_MS) {
-            comboRef.current += 1
-          } else {
-            comboRef.current = 1
-          }
-          lastHitRef.current = tnow
-          setCombo(comboRef.current)
-          setScore((s) => s + 1)
-        }
-      }
     },
     [],
   )
@@ -940,8 +1071,12 @@ export function HudShooterIntro() {
       {/* UI overlay */}
       <div className="pointer-events-none absolute inset-0 z-20 flex min-h-0 flex-col p-3 md:p-5">
         <div className="flex shrink-0 items-start justify-between gap-3">
-          <div className="min-w-0 text-[10px] uppercase tracking-[0.14em] text-fg/75">
-            YOUR CODENAME: {codename.toUpperCase()}
+          <div
+            className="min-w-0 uppercase tracking-[0.14em] text-fg/75"
+            style={{ fontSize: '10px' }}
+          >
+            YOUR CODENAME:{' '}
+            {(uiPhase === 'end' ? finalRunCodename : codename).toUpperCase()}
           </div>
           {uiPhase === 'game' && (
             <button
@@ -971,17 +1106,13 @@ export function HudShooterIntro() {
                   className="w-full max-w-full pr-2 text-left"
                 >
                   <div ref={idleTextRef}>
-                    <motion.p
-                      className="max-w-full text-[2rem] font-medium leading-[1.15] text-fg md:text-[2.25rem]"
-                      animate={{ opacity: [1, 0.1, 1] }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                    >
-                      Hello, my name is Dez, I like to dream & create
-                    </motion.p>
+                    <p className="max-w-full text-[2rem] font-medium leading-[1.15] text-fg md:text-[2.25rem]">
+                      {idleGreetingText}
+                      <span
+                        className="ml-0.5 inline-block h-[0.85em] w-[2px] translate-y-[0.08em] animate-pulse bg-fg align-middle"
+                        aria-hidden
+                      />
+                    </p>
                   </div>
                   <button
                     type="button"
@@ -1007,10 +1138,10 @@ export function HudShooterIntro() {
                 >
                   <div>
                     <p className="text-lg font-medium text-fg md:text-xl">
-                      Score: {score}
+                      Score: {finalRunScore}
                     </p>
                     <p className="mt-1 text-[11px] text-fg/70 md:text-xs">
-                      Codename: {codename}
+                      Codename: {finalRunCodename}
                     </p>
                   </div>
                   <button
@@ -1027,17 +1158,33 @@ export function HudShooterIntro() {
 
           <div className="mt-auto flex w-full items-end justify-between gap-2 text-[10px] text-fg/70">
             <div className="max-w-[58%] text-fg/50">
-              <div className="text-fg/65">High scores:</div>
-              <div className="tabular-nums leading-relaxed">23 • Lockdown</div>
-              <div className="tabular-nums leading-relaxed">17 • Sniper</div>
-              <div className="tabular-nums leading-relaxed">8 • Cool guy</div>
+              <div className="text-fg/65">All-time high scores:</div>
+              {Array.from({ length: 3 }, (_, i) => {
+                const e = highScores[i]
+                return (
+                  <div
+                    key={e ? `${e.at}-${e.nickname}` : `pad-${i}`}
+                    className="tabular-nums leading-relaxed"
+                  >
+                    {e ? `${e.score} • ${e.nickname}` : '—'}
+                  </div>
+                )
+              })}
             </div>
             <div className="text-right">
               <div className="text-2xl font-medium tabular-nums leading-none text-fg md:text-3xl">
-                {score}
+                {uiPhase === 'idle'
+                  ? lastTargetsHit == null
+                    ? 0
+                    : lastTargetsHit
+                  : uiPhase === 'end'
+                    ? finalRunScore
+                    : score}
               </div>
               <div className="mt-0.5 uppercase tracking-[0.1em] text-fg/55">
-                Targets hit
+                {uiPhase === 'idle' && lastTargetsHit != null
+                  ? 'Targets hit last'
+                  : 'Targets hit'}
               </div>
               {combatHud && combo >= 2 && (
                 <motion.div
@@ -1065,7 +1212,7 @@ export function HudShooterIntro() {
           }}
           aria-hidden
         >
-          <div className="relative h-5 w-5">
+          <div className="relative h-5 w-5 scale-[3]">
             <div className="absolute left-1/2 top-0 h-2 w-px -translate-x-1/2 bg-fg" />
             <div className="absolute bottom-0 left-1/2 h-2 w-px -translate-x-1/2 bg-fg" />
             <div className="absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-fg" />
