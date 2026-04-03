@@ -177,9 +177,42 @@ textarea {
   transition: box-shadow 200ms ease-out;
 }
 
+/* Show & tell: square dot grid (same chamfer clip as ::after) */
+.show-tell-dot-layer {
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  pointer-events: none;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--quadrant-chamfer)) 0,
+    100% var(--quadrant-chamfer),
+    100% 100%,
+    var(--quadrant-chamfer) 100%,
+    0 calc(100% - var(--quadrant-chamfer))
+  );
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--color-fg) 32%, transparent) 0.7px,
+    transparent 0.82px
+  );
+  background-size: 12px 12px;
+  background-position: 0 0;
+  opacity: 0.78;
+  transition: opacity 300ms ease-out;
+}
+
+[data-show-tell-quadrant]:hover .show-tell-dot-layer {
+  opacity: 0.92;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .quadrant-cell::before,
   .quadrant-cell::after {
+    transition: none;
+  }
+
+  .show-tell-dot-layer {
     transition: none;
   }
 }
