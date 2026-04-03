@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { useHudShooterGame } from '../contexts/HudShooterContext'
 
 type Particle = {
   x: number
@@ -33,7 +32,6 @@ function hudRgb(): { r: number; g: number; b: number } {
 }
 
 export function CustomCursor() {
-  const { active: hudShooterActive } = useHudShooterGame()
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
@@ -41,11 +39,6 @@ export function CustomCursor() {
   const hasMovedRef = useRef(false)
 
   useEffect(() => {
-    if (hudShooterActive) {
-      document.body.classList.remove('custom-cursor-active')
-      return
-    }
-
     const wrap = wrapRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
@@ -162,9 +155,7 @@ export function CustomCursor() {
       mq.removeEventListener('change', onMqChange)
       document.body.classList.remove('custom-cursor-active')
     }
-  }, [hudShooterActive])
-
-  if (hudShooterActive) return null
+  }, [])
 
   return (
     <div className="custom-cursor-root">

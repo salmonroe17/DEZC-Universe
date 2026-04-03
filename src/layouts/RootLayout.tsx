@@ -7,10 +7,13 @@ export function RootLayout() {
   const location = useLocation()
 
   return (
-    <div className="min-h-dvh bg-bg">
+    <div className="flex min-h-dvh flex-col bg-bg">
       <SiteTopBar />
       <AnimatePresence mode="wait">
-        <PageTransition key={location.pathname} className="min-h-dvh pt-12">
+        <PageTransition
+          key={location.pathname}
+          className="flex min-h-0 w-full flex-1 flex-col"
+        >
           <Outlet />
         </PageTransition>
       </AnimatePresence>

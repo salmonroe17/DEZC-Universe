@@ -66,7 +66,7 @@ export function SiteTopBar() {
   }, [])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[10050] grid h-12 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 border-b border-border bg-bg/95 px-3 backdrop-blur-sm sm:gap-4 sm:px-6">
+    <header className="relative z-0 grid h-12 w-full shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 border-b border-border bg-bg/95 px-3 backdrop-blur-sm sm:gap-4 sm:px-6">
       <p className="min-w-0 truncate text-[10px] text-fg tracking-tight">
         Welcome to the DEZC universe
       </p>
