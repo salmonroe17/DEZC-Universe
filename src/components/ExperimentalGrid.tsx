@@ -4,7 +4,7 @@ import { easeOutExpo } from '../animations/variants'
 import { CaseStudyList } from './CaseStudyList'
 import { Fake3DCube } from './Fake3DCube'
 import { HudShooterIntro } from './HudShooterIntro'
-import { ShowAndTellGrid } from './ShowAndTellGrid'
+import { FlowingLine } from './FlowingLine'
 
 const gridContainerVariants = {
   hidden: {},
@@ -38,6 +38,9 @@ const quadrantCell = 'quadrant-cell min-h-0 min-w-0'
 const quadrantHeadingClass =
   'shrink-0 px-4 pt-3 text-left text-[11px] font-semibold tracking-[0.06em] text-fg/90 md:pt-4 md:text-xs md:tracking-[0.05em]'
 
+const showTellSubtitleClass =
+  'shrink-0 px-4 pb-1.5 text-left text-[10px] font-normal leading-snug tracking-[0.04em] text-fg-subtle md:pb-2 md:text-[11px] md:tracking-[0.035em]'
+
 export function ExperimentalGrid() {
   const [activeCaseIndex, setActiveCaseIndex] = useState(0)
   const [caseListPointerInside, setCaseListPointerInside] = useState(false)
@@ -51,9 +54,9 @@ export function ExperimentalGrid() {
   }, [])
 
   return (
-    <div className="box-border flex min-h-0 w-full flex-1 flex-col bg-bg p-4 md:p-5">
+    <div className="box-border flex min-h-0 w-full flex-1 flex-col items-start bg-bg p-4 md:p-5">
       <motion.div
-        className="grid min-h-0 w-full flex-1 grid-cols-[minmax(0,2fr)_minmax(0,1fr)] grid-rows-[7fr_3fr] gap-3 md:gap-4"
+        className="grid h-[calc(100dvh-3rem-2rem)] max-h-full min-h-0 w-full shrink-0 grid-cols-[minmax(0,2fr)_minmax(0,1fr)] grid-rows-[7fr_3fr] gap-3 md:h-[calc(100dvh-3rem-2.5rem)] md:gap-4"
         initial="hidden"
         animate="visible"
         variants={gridContainerVariants}
@@ -86,12 +89,25 @@ export function ExperimentalGrid() {
         </motion.div>
         <motion.div
           variants={cellVariants}
-          className={`${quadrantCell} relative flex flex-col`}
+          className={`group/showtell ${quadrantCell} relative flex flex-col`}
+          data-show-tell-quadrant
           style={{ willChange: 'opacity, transform' }}
         >
-          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-            <h2 className={quadrantHeadingClass}>Show & tell</h2>
-            <ShowAndTellGrid />
+          <div className="show-tell-dot-layer" aria-hidden />
+          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-visible">
+            <h2
+              className={`${quadrantHeadingClass} relative z-[2] w-fit max-w-full shrink-0 self-start`}
+            >
+              Show & tell
+            </h2>
+            <p
+              className={`${showTellSubtitleClass} relative z-[2] mb-3 w-fit max-w-full shrink-0 self-start md:mb-4`}
+            >
+              Click squares to see visuals
+            </p>
+            <div className="relative z-[1] flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-visible opacity-30 transition-opacity duration-300 ease-out group-hover/showtell:opacity-100">
+              <FlowingLine />
+            </div>
           </div>
         </motion.div>
         <motion.div
