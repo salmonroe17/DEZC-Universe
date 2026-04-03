@@ -533,7 +533,7 @@ export function HudShooterIntro() {
           const dx = s.x - cx
           const dy = s.y - cy
           const dist = Math.hypot(dx, dy) + 0.001
-          const rush = (165 + dist * 0.62) / 3
+          const rush = (165 + dist * 0.62) / 15
           s.x += (dx / dist) * rush * dt
           s.y += (dy / dist) * rush * dt
           const pad = 120
