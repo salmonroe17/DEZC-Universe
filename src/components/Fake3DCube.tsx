@@ -10,7 +10,7 @@ const HALF = '7.5rem' as const
 const ROTATION_BY_FACE = [0, -90, -180, -270] as const
 
 const faceBase =
-  'cube-face-glow absolute inset-0 flex items-center justify-center border border-zinc-500/80 bg-zinc-950/90 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-300 [backface-visibility:hidden]'
+  'cube-face-glow absolute inset-0 flex items-center justify-center border border-cell-border/80 bg-surface/90 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-fg-muted [backface-visibility:hidden]'
 
 const CubeFaces = memo(function CubeFaces() {
   return (

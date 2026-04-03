@@ -6,30 +6,15 @@ import {
   useState,
   type MouseEvent,
   type PointerEvent,
+  type RefObject,
 } from 'react'
-
-/** ViewBox width for one full sine period (two periods drawn = seamless tile). */
-const PERIOD = 200
-/** Taller viewBox so the wave can use most of the vertical band (stroke + glow margin). */
-const VB_H = 72
-const MID = VB_H / 2
-/** Primary sine amplitude (uses vertical space in the quadrant). */
-const AMP1 = 24
-/** Secondary harmonic — beats against the primary for snake-like silhouette churn. */
-const AMP2 = 5.5
-const TOTAL_W = PERIOD * 2
-/** Markers along the wave (same math as path → stays on-curve under non-uniform scale). */
-const NODE_COUNT = 8
-/**
- * Temporal phase speeds (rad/s). Different rates + opposite sign = slithering, not rigid slide.
- * Spatial periods stay integer multiples of P so horizontal tiling stays seamless.
- */
-const SLITH1 = 0.3
-const SLITH2 = -0.23
-/** One full horizontal wavelength (parent-relative) in seconds — matches prior CSS cadence. */
-const H_SCROLL_S = 80
-/** Horizontal drift while hovering or holding an arrow (wavelengths per second). */
-const ARROW_DRIFT_RATE = 0.2
+import {
+  FLOW_NODE_COUNT,
+  FLOW_PERIOD,
+  FLOW_TOTAL_W,
+  FLOW_VB_H,
+  flowWaveY,
+} from '../lib/flowingLineWave'
 
 function isPrimaryPointer(e: PointerEvent): boolean {
   return e.pointerType === 'touch' || e.pointerType === 'pen' || e.button === 0
@@ -39,12 +24,6 @@ function cycleMod(n: number): number {
   return ((n % 1) + 1) % 1
 }
 
-function waveY(x: number, time: number): number {
-  const s1 = (x / PERIOD) * 2 * Math.PI + time * SLITH1
-  const s2 = (x / PERIOD) * 4 * Math.PI + time * SLITH2
-  return MID + AMP1 * Math.sin(s1) + AMP2 * Math.sin(s2)
-}
-
 function buildSinePath(periods: number, period: number, time: number): string {
   const totalW = period * periods
   const stepsPerPeriod = 64
@@ -52,7 +31,7 @@ function buildSinePath(periods: number, period: number, time: number): string {
   const parts: string[] = []
   for (let i = 0; i <= steps; i++) {
     const x = (totalW * i) / steps
-    const y = waveY(x, time)
+    const y = flowWaveY(x, time)
     parts.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(3)} ${y.toFixed(3)}`)
   }
   return parts.join(' ')
@@ -89,15 +68,29 @@ function ChevronRightIcon({ className }: { className?: string }) {
 const arrowBtnClass =
   'pointer-events-auto z-20 flex size-9 touch-none select-none items-center justify-center border border-cell-border/90 bg-bg/75 text-fg/70 shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-fg)_6%,transparent)] backdrop-blur-[2px] transition-[color,background-color,border-color] duration-150 hover:border-fg/35 hover:bg-elevated/90 hover:text-fg md:size-10'
 
-export function FlowingLine() {
+export type FlowingLineSandProps = {
+  sandLineRootRef?: RefObject<HTMLDivElement | null>
+  sandTrackRef?: RefObject<HTMLDivElement | null>
+  sandPhaseRef?: RefObject<number>
+  sandHoveredNodeIndexRef?: RefObject<number | null>
+}
+
+export function FlowingLine({
+  sandLineRootRef,
+  sandTrackRef,
+  sandPhaseRef,
+  sandHoveredNodeIndexRef,
+}: FlowingLineSandProps) {
   const uid = useId()
   const filterId = useMemo(() => `flowing-line-glow-${uid.replace(/:/g, '')}`, [uid])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  if (sandHoveredNodeIndexRef) sandHoveredNodeIndexRef.current = hoveredIndex
   const linePaused = hoveredIndex !== null
   const linePausedRef = useRef(false)
   linePausedRef.current = linePaused
 
   const [phaseTime, setPhaseTime] = useState(0)
+  const phaseTimeRef = useRef(0)
   const [userHOffset, setUserHOffset] = useState(0)
   const scrollCycleRef = useRef(0)
 
@@ -108,12 +101,21 @@ export function FlowingLine() {
   const rightPointerOverRef = useRef(false)
   const rightPointerHeldRef = useRef(false)
 
+  const internalRootRef = useRef<HTMLDivElement>(null)
+  const internalTrackRef = useRef<HTMLDivElement>(null)
+  const lineRootRef = sandLineRootRef ?? internalRootRef
+  const trackRef = sandTrackRef ?? internalTrackRef
+
   const syncArrowLeft = () => {
     arrowLeftRef.current = leftPointerOverRef.current || leftPointerHeldRef.current
   }
   const syncArrowRight = () => {
     arrowRightRef.current = rightPointerOverRef.current || rightPointerHeldRef.current
   }
+
+  /** One full horizontal wavelength (parent-relative) in seconds — matches prior CSS cadence. */
+  const H_SCROLL_S = 80
+  const ARROW_DRIFT_RATE = 0.2
 
   useEffect(() => {
     let id: number
@@ -123,26 +125,28 @@ export function FlowingLine() {
       last = now
       if (!linePausedRef.current) {
         scrollCycleRef.current += dt / H_SCROLL_S
-        setPhaseTime((t) => t + dt)
+        phaseTimeRef.current += dt
+        setPhaseTime(phaseTimeRef.current)
       }
       if (arrowLeftRef.current) {
         setUserHOffset((u) => u + ARROW_DRIFT_RATE * dt)
       } else if (arrowRightRef.current) {
         setUserHOffset((u) => u - ARROW_DRIFT_RATE * dt)
       }
+      if (sandPhaseRef) sandPhaseRef.current = phaseTimeRef.current
       id = requestAnimationFrame(tick)
     }
     id = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(id)
-  }, [])
+  }, [sandPhaseRef])
 
-  const pathD = useMemo(() => buildSinePath(2, PERIOD, phaseTime), [phaseTime])
+  const pathD = useMemo(() => buildSinePath(2, FLOW_PERIOD, phaseTime), [phaseTime])
 
   const nodePoints = useMemo(
     () =>
-      Array.from({ length: NODE_COUNT }, (_, i) => {
-        const x = ((i + 0.5) / NODE_COUNT) * TOTAL_W
-        return { x, y: waveY(x, phaseTime) }
+      Array.from({ length: FLOW_NODE_COUNT }, (_, i) => {
+        const x = ((i + 0.5) / FLOW_NODE_COUNT) * FLOW_TOTAL_W
+        return { x, y: flowWaveY(x, phaseTime) }
       }),
     [phaseTime],
   )
@@ -157,15 +161,16 @@ export function FlowingLine() {
   }
 
   return (
-    <div className="relative min-h-0 w-full flex-1 overflow-visible py-2 md:py-3">
+    <div ref={lineRootRef} className="relative min-h-0 w-full flex-1 overflow-visible py-2 md:py-3">
       <div
+        ref={trackRef}
         className="absolute top-1 bottom-1 left-0 w-[200%] max-w-none overflow-visible will-change-[left] md:top-2 md:bottom-2"
         style={{ left: `${leftPercent}%` }}
         aria-hidden
       >
         <svg
           className="absolute inset-0 block h-full w-full text-fg/55"
-          viewBox={`0 0 ${TOTAL_W} ${VB_H}`}
+          viewBox={`0 0 ${FLOW_TOTAL_W} ${FLOW_VB_H}`}
           preserveAspectRatio="none"
         >
           <defs>
@@ -205,8 +210,8 @@ export function FlowingLine() {
               data-flowing-line-node
               className="absolute z-[1] overflow-visible pointer-events-auto"
               style={{
-                left: `${(p.x / TOTAL_W) * 100}%`,
-                top: `${(p.y / VB_H) * 100}%`,
+                left: `${(p.x / FLOW_TOTAL_W) * 100}%`,
+                top: `${(p.y / FLOW_VB_H) * 100}%`,
                 transform: 'translate(-50%, -50%)',
                 zIndex: active ? 3 : 1,
               }}

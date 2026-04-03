@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 
 export type SiteTheme = 'grey' | 'cyan' | 'magenta' | 'blue'
 
 const THEMES: { id: SiteTheme; label: string }[] = [
   { id: 'grey', label: 'Grey' },
-  { id: 'cyan', label: 'Cyan' },
+  { id: 'cyan', label: 'Turquoise' },
   { id: 'magenta', label: 'Magenta' },
   { id: 'blue', label: 'Blue' },
 ]
@@ -19,8 +19,8 @@ const SWATCH: Record<
     idle: 'border border-zinc-400 bg-transparent',
   },
   cyan: {
-    selected: 'bg-cyan-400',
-    idle: 'border-2 border-cyan-400 bg-transparent',
+    selected: 'bg-teal-400',
+    idle: 'border-2 border-teal-400 bg-transparent',
   },
   magenta: {
     selected: 'bg-fuchsia-400',
@@ -56,7 +56,7 @@ export function SiteTopBar() {
   const [theme, setTheme] = useState<SiteTheme>('grey')
   const [clock, setClock] = useState(formatTorontoClock)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
 
