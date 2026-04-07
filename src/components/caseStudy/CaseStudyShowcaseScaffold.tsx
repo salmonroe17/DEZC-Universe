@@ -125,8 +125,8 @@ export function CaseStudyShowcaseScaffold({
       <div className="shrink-0" style={{ height: chromeHeight }} aria-hidden />
 
       <CaseStudyRailShell
-        frameClassName="pb-32 pt-10 md:pt-12"
-        gridClassName="mt-4 items-start md:mt-6"
+        frameClassName="pb-32 pt-[24px]"
+        gridClassName="items-start"
         asideClassName="flex flex-col gap-8 lg:sticky lg:top-[calc(var(--cs-components-header-h)+24px)] lg:self-start"
         mainClassName="flex flex-col gap-10 lg:gap-14"
         sidebar={
