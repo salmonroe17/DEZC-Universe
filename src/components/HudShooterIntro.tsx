@@ -5,8 +5,9 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type RefObject,
 } from 'react'
-import { useHudShooterGame } from '../contexts/HudShooterContext'
+import { useHudShooterGame } from '../contexts/useHudShooterGame'
 import { ADJECTIVES, NOUNS } from '../data/codenameWords'
 import {
   fetchLeaderboardTop,
@@ -35,24 +36,94 @@ const ROLE_WORDS = [
 ] as const
 
 const IDLE_GREETINGS = [
-  'Hello, my name is Dez. I like to dream and create.',
-  "Hey, I'm Dez. I thrive in ambiguity.",
-  "Hola, I'm Dez. I turn chaos into structure.",
-  "Ciao, I'm Dez. I obsess over design systems.",
-  "Greetings, I'm Dez. I run design workshops.",
-  "Salutations, I'm Dez. I prototype before debating.",
-  "Good evening, I'm Dez. I ship fast and fix things.",
-  "Good day, I'm Dez. I simplify complex workflows.",
-  "Welcome, I'm Dez. I design for real operations.",
-  "Ahoy, I'm Dez. I build with engineers in mind.",
-  "Bonjour, I'm Dez. I question assumptions.",
-  "Hey there, I'm Dez. I turn ideas into product.",
+  'Hello, my name is Dez.\nI like to dream and create.',
+  "Hey, I'm Dez.\nI thrive in ambiguity.",
+  "Hola, I'm Dez.\nI turn chaos into structure.",
+  "Ciao, I'm Dez.\nI obsess over design systems.",
+  "Greetings, I'm Dez.\nI run design workshops.",
+  "Salutations, I'm Dez.\nI prototype before debating.",
+  "Good evening, I'm Dez.\nI ship fast and fix things.",
+  "Good day, I'm Dez.\nI simplify complex workflows.",
+  "Welcome, I'm Dez.\nI design for real operations.",
+  "Ahoy, I'm Dez.\nI build with engineers in mind.",
+  "Bonjour, I'm Dez.\nI question assumptions.",
+  "Hey there, I'm Dez.\nI turn ideas into product.",
 ] as const
 
 const TYPEWRITER_TYPE_MS = 36
 const TYPEWRITER_HOLD_MS = 2900
 const TYPEWRITER_DELETE_MS = 20
 const TYPEWRITER_GAP_MS = 450
+
+/** Only mounted while `uiPhase === 'idle'` so leaving idle unmounts and clears without effect setState. */
+function IdleGreetingTypewriter({
+  containerRef,
+}: {
+  containerRef: RefObject<HTMLDivElement | null>
+}) {
+  const [text, setText] = useState('')
+
+  useEffect(() => {
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+    let cancelled = false
+    const later = (ms: number, fn: () => void) => {
+      const id = setTimeout(() => {
+        if (!cancelled) fn()
+      }, ms)
+      timeouts.push(id)
+    }
+
+    let lineIdx = 0
+    let charCount = 0
+    let phase: 'typing' | 'hold' | 'deleting' = 'typing'
+
+    const step = () => {
+      if (cancelled) return
+      const full = IDLE_GREETINGS[lineIdx]!
+
+      if (phase === 'typing') {
+        if (charCount < full.length) {
+          charCount += 1
+          setText(full.slice(0, charCount))
+          later(TYPEWRITER_TYPE_MS, step)
+        } else {
+          phase = 'hold'
+          later(TYPEWRITER_HOLD_MS, step)
+        }
+      } else if (phase === 'hold') {
+        phase = 'deleting'
+        later(TYPEWRITER_DELETE_MS, step)
+      } else if (charCount > 0) {
+        charCount -= 1
+        setText(full.slice(0, charCount))
+        later(TYPEWRITER_DELETE_MS, step)
+      } else {
+        lineIdx = (lineIdx + 1) % IDLE_GREETINGS.length
+        phase = 'typing'
+        later(TYPEWRITER_GAP_MS, step)
+      }
+    }
+
+    step()
+
+    return () => {
+      cancelled = true
+      for (const id of timeouts) clearTimeout(id)
+    }
+  }, [])
+
+  return (
+    <div ref={containerRef}>
+      <p className="max-w-full whitespace-pre-line text-[2rem] font-medium leading-[1.15] text-fg md:text-[2.25rem]">
+        {text}
+        <span
+          className="ml-0.5 inline-block h-[0.85em] w-[2px] translate-y-[0.08em] animate-pulse bg-fg align-middle"
+          aria-hidden
+        />
+      </p>
+    </div>
+  )
+}
 
 const LAST_TARGETS_HIT_KEY = 'dezc-hud-last-targets-hit-v1'
 
@@ -529,63 +600,7 @@ export function HudShooterIntro() {
   const [lastTargetsHit, setLastTargetsHit] = useState<number | null>(() =>
     loadLastTargetsHit(),
   )
-  const [idleGreetingText, setIdleGreetingText] = useState('')
   const enteredGameRef = useRef(false)
-
-  useEffect(() => {
-    if (uiPhase !== 'idle') {
-      setIdleGreetingText('')
-      return
-    }
-
-    const timeouts: ReturnType<typeof setTimeout>[] = []
-    let cancelled = false
-
-    const later = (ms: number, fn: () => void) => {
-      const id = setTimeout(() => {
-        if (!cancelled) fn()
-      }, ms)
-      timeouts.push(id)
-    }
-
-    let lineIdx = 0
-    let charCount = 0
-    let phase: 'typing' | 'hold' | 'deleting' = 'typing'
-
-    const step = () => {
-      if (cancelled) return
-      const full = IDLE_GREETINGS[lineIdx]!
-
-      if (phase === 'typing') {
-        if (charCount < full.length) {
-          charCount += 1
-          setIdleGreetingText(full.slice(0, charCount))
-          later(TYPEWRITER_TYPE_MS, step)
-        } else {
-          phase = 'hold'
-          later(TYPEWRITER_HOLD_MS, step)
-        }
-      } else if (phase === 'hold') {
-        phase = 'deleting'
-        later(TYPEWRITER_DELETE_MS, step)
-      } else if (charCount > 0) {
-        charCount -= 1
-        setIdleGreetingText(full.slice(0, charCount))
-        later(TYPEWRITER_DELETE_MS, step)
-      } else {
-        lineIdx = (lineIdx + 1) % IDLE_GREETINGS.length
-        phase = 'typing'
-        later(TYPEWRITER_GAP_MS, step)
-      }
-    }
-
-    step()
-
-    return () => {
-      cancelled = true
-      for (const id of timeouts) clearTimeout(id)
-    }
-  }, [uiPhase])
 
   useEffect(() => {
     scoreRef.current = score
@@ -1171,7 +1186,7 @@ export function HudShooterIntro() {
         <div className="flex shrink-0 items-start justify-between gap-3">
           <div className="min-w-0" style={{ fontSize: '10px' }}>
             <div className="mb-1 font-normal normal-case tracking-[0.08em] text-fg/60">
-              Introduction
+              Introduction / Mini-game
             </div>
             <div className="uppercase tracking-[0.14em] text-fg/75">
               YOUR CODENAME:{' '}
@@ -1205,25 +1220,21 @@ export function HudShooterIntro() {
                   transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                   className="w-full max-w-full pr-2 text-left"
                 >
-                  <div ref={idleTextRef}>
-                    <p className="max-w-full text-[2rem] font-medium leading-[1.15] text-fg md:text-[2.25rem]">
-                      {idleGreetingText}
-                      <span
-                        className="ml-0.5 inline-block h-[0.85em] w-[2px] translate-y-[0.08em] animate-pulse bg-fg align-middle"
-                        aria-hidden
-                      />
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="pointer-events-auto mt-6 border-2 border-cell-hover px-4 py-2.5 text-[12px] uppercase tracking-[0.12em] text-fg transition-colors hover:border-hud hover:bg-fg/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      beginExplosion()
-                    }}
+                  <IdleGreetingTypewriter containerRef={idleTextRef} />
+                  <span
+                    className="quadrant-cell relative mt-6 inline-flex [--quadrant-chamfer:clamp(5px,0.9vmin,9px)]"
                   >
-                    Start shooter
-                  </button>
+                    <button
+                      type="button"
+                      className="pointer-events-auto relative z-10 border-0 bg-transparent px-5 py-2.5 text-[12px] font-normal uppercase tracking-[0.12em] text-fg transition-colors duration-200 hover:text-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        beginExplosion()
+                      }}
+                    >
+                      Start game
+                    </button>
+                  </span>
                 </motion.div>
               )}
 

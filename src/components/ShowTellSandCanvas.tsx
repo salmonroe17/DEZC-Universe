@@ -1,10 +1,5 @@
 import { useEffect, useRef, type RefObject } from 'react'
-import {
-  FLOW_NODE_COUNT,
-  FLOW_TOTAL_W,
-  FLOW_VB_H,
-  flowWaveY,
-} from '../lib/flowingLineWave'
+import { FLOW_NODE_COUNT, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from '../lib/flowingLineWave'
 
 export type ShowTellSandRefs = {
   lineRootRef: RefObject<HTMLDivElement | null>
@@ -24,7 +19,7 @@ type Dot = {
 }
 
 const GRID_SPACING_CSS = 13
-const LINE_REPEL_CSS = 36
+const LINE_REPEL_CSS = 40
 const LINE_STRENGTH = 3.2
 const NODE_REPEL_CSS = 48
 const NODE_STRENGTH = 4.5
@@ -41,6 +36,22 @@ const MAX_DOTS = 2600
 
 function clamp(n: number, a: number, b: number): number {
   return Math.max(a, Math.min(b, n))
+}
+
+/** Repulsion from one curve y(x) in track CSS space. */
+function lineRepelSample(
+  lyCss: number,
+  vxb: number,
+  phase: number,
+  trackH: number,
+  waveFn: (x: number, t: number) => number,
+): number {
+  const waveYpx = (waveFn(vxb, phase) / FLOW_VB_H) * trackH
+  const distLine = Math.abs(lyCss - waveYpx)
+  if (distLine >= LINE_REPEL_CSS) return 0
+  const t = 1 - distLine / LINE_REPEL_CSS
+  const push = t * t * LINE_STRENGTH
+  return (lyCss < waveYpx ? -1 : 1) * push
 }
 
 export function ShowTellSandCanvas({ sandRefs }: { sandRefs: ShowTellSandRefs }) {
@@ -64,12 +75,13 @@ export function ShowTellSandCanvas({ sandRefs }: { sandRefs: ShowTellSandRefs })
 
     const rebuildDots = (w: number, h: number, dpr: number) => {
       let step = GRID_SPACING_CSS * dpr
-      let cols = Math.floor(w / step)
-      let rows = Math.floor(h / step)
+      /** Cover full canvas — floor left a gap on right/bottom on many widths. */
+      let cols = Math.max(1, Math.ceil((w + step * 0.5) / step))
+      let rows = Math.max(1, Math.ceil((h + step * 0.5) / step))
       while (cols * rows > MAX_DOTS && step < 22 * dpr) {
         step += dpr * 2
-        cols = Math.floor(w / step)
-        rows = Math.floor(h / step)
+        cols = Math.max(1, Math.ceil((w + step * 0.5) / step))
+        rows = Math.max(1, Math.ceil((h + step * 0.5) / step))
       }
       colsRowsRef.current = { cols, rows }
       const dots: Dot[] = []
@@ -203,13 +215,7 @@ export function ShowTellSandCanvas({ sandRefs }: { sandRefs: ShowTellSandRefs })
           const lx = viewX - trackRect.left
           const ly = viewY - trackRect.top
           const vxb = (lx / trackRect.width) * FLOW_TOTAL_W
-          const waveYpx = (flowWaveY(vxb, phase) / FLOW_VB_H) * trackRect.height
-          const distLine = Math.abs(ly - waveYpx)
-          if (distLine < LINE_REPEL_CSS) {
-            const t = 1 - distLine / LINE_REPEL_CSS
-            const push = t * t * LINE_STRENGTH
-            fyc += (ly < waveYpx ? -1 : 1) * push
-          }
+          fyc += lineRepelSample(ly, vxb, phase, trackRect.height, flowWaveY)
         }
 
         for (let ni = 0; ni < FLOW_NODE_COUNT; ni++) {

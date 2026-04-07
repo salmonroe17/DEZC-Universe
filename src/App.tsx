@@ -1,20 +1,33 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CustomCursor } from './components/CustomCursor'
-import { HudShooterProvider } from './contexts/HudShooterContext'
+import { HudShooterProvider } from './contexts/HudShooterProvider'
+import { SiteThemeProvider } from './contexts/SiteThemeProvider'
 import { RootLayout } from './layouts/RootLayout'
+import CaseStudyComponentsPage from './pages/CaseStudyComponentsPage'
+import CaseStudyPage from './pages/CaseStudyPage'
 import Home from './pages/Home'
 
 export default function App() {
   return (
-    <HudShooterProvider>
-      <BrowserRouter>
-        <CustomCursor />
-        <Routes>
-          <Route path="/" element={<RootLayout />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </HudShooterProvider>
+    <SiteThemeProvider>
+      <HudShooterProvider>
+        <BrowserRouter>
+          <CustomCursor />
+          <Routes>
+            <Route path="/" element={<RootLayout />}>
+              <Route index element={<Home />} />
+              <Route
+                path="case-study/carbon-neutral-club"
+                element={<CaseStudyPage />}
+              />
+              <Route
+                path="case-study/components"
+                element={<CaseStudyComponentsPage />}
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </HudShooterProvider>
+    </SiteThemeProvider>
   )
 }

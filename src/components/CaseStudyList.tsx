@@ -1,18 +1,31 @@
 import {
   memo,
   useCallback,
+  useLayoutEffect,
   useRef,
   type AnimationEvent,
 } from 'react'
+import { Link } from 'react-router-dom'
+import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
 
 export const CASE_AUTO_ROTATE_MS = 4000
 
-const CASE_STUDIES = [
-  { title: 'Carbon Neutral Club checkout', id: 0 },
+type CaseStudyItem = {
+  title: string
+  id: number
+  to?: string
+}
+
+const CASE_STUDIES: CaseStudyItem[] = [
+  {
+    title: PRIMARY_CASE_STUDY.title,
+    id: 0,
+    to: PRIMARY_CASE_STUDY.path,
+  },
   { title: 'Super app forecasting', id: 1 },
   { title: 'Sherpa unified search', id: 2 },
   { title: 'Design system philosophy', id: 3 },
-] as const
+]
 
 type ProgressFillProps = {
   durationMs: number
@@ -27,7 +40,9 @@ const CaseStudyProgressFill = memo(function CaseStudyProgressFill({
   onComplete,
 }: ProgressFillProps) {
   const pausedRef = useRef(paused)
-  pausedRef.current = paused
+  useLayoutEffect(() => {
+    pausedRef.current = paused
+  }, [paused])
 
   const handleAnimationEnd = useCallback(
     (e: AnimationEvent<HTMLDivElement>) => {
@@ -74,36 +89,48 @@ export function CaseStudyList({
       <ul className="flex flex-col gap-0 px-[16px]" role="list">
         {CASE_STUDIES.map((item) => {
           const isActive = item.id === activeCaseIndex
+          const row = (
+            <div
+              className={`flex items-baseline justify-between gap-4 py-2.5 text-[11px] leading-snug tracking-[0.06em] transition-[color,background-color,box-shadow,padding] duration-200 ease-out md:text-xs md:tracking-[0.05em] ${
+                isActive
+                  ? 'rounded-sm bg-fg/[0.07] px-[16px] text-fg shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_14%,transparent),0_0_16px_color-mix(in_srgb,var(--color-hud)_10%,transparent)]'
+                  : 'px-0 text-fg/90'
+              }`}
+            >
+              <span
+                className={`min-w-0 flex-1 text-left font-medium transition-colors duration-200 ${
+                  isActive ? 'text-fg' : 'text-fg/85'
+                }`}
+              >
+                {item.title}
+              </span>
+              <span
+                className={`shrink-0 underline underline-offset-[3px] transition-colors duration-200 ${
+                  isActive
+                    ? 'text-fg decoration-fg/50'
+                    : 'text-fg-muted decoration-fg-muted/35'
+                }`}
+              >
+                View
+              </span>
+            </div>
+          )
           return (
             <li
               key={item.id}
-              className="relative flex min-h-0 cursor-default flex-col"
-              onMouseEnter={() => onActiveCaseChange(item.id)}
+              className={`relative flex min-h-0 flex-col ${item.to ? '' : 'cursor-default'}`}
             >
-              <div
-                className={`flex items-baseline justify-between gap-4 py-2.5 text-[11px] leading-snug tracking-[0.06em] transition-[color,background-color,box-shadow,padding] duration-200 ease-out md:text-xs md:tracking-[0.05em] ${
-                  isActive
-                    ? 'rounded-sm bg-fg/[0.07] px-[16px] text-fg shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_14%,transparent),0_0_16px_color-mix(in_srgb,var(--color-hud)_10%,transparent)]'
-                    : 'px-0 text-fg/90'
-                }`}
-              >
-                <span
-                  className={`min-w-0 flex-1 text-left font-medium transition-colors duration-200 ${
-                    isActive ? 'text-fg' : 'text-fg/85'
-                  }`}
+              {item.to ? (
+                <Link
+                  to={item.to}
+                  className="flex min-h-0 cursor-pointer flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-fg/35 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                  onMouseEnter={() => onActiveCaseChange(item.id)}
                 >
-                  {item.title}
-                </span>
-                <span
-                  className={`shrink-0 underline underline-offset-[3px] transition-colors duration-200 ${
-                    isActive
-                      ? 'text-fg decoration-fg/50'
-                      : 'text-fg-muted decoration-fg-muted/35'
-                  }`}
-                >
-                  View
-                </span>
-              </div>
+                  {row}
+                </Link>
+              ) : (
+                <div onMouseEnter={() => onActiveCaseChange(item.id)}>{row}</div>
+              )}
               <div
                 className="pointer-events-none relative mb-0.5 h-[2px] w-full shrink-0 overflow-hidden rounded-full bg-fg/[0.1]"
                 aria-hidden

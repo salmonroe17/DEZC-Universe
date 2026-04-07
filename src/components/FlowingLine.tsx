@@ -1,20 +1,58 @@
+import { motion, useReducedMotion, type Transition } from 'framer-motion'
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
   type MouseEvent,
+  type MutableRefObject,
   type PointerEvent,
   type RefObject,
 } from 'react'
-import {
-  FLOW_NODE_COUNT,
-  FLOW_PERIOD,
-  FLOW_TOTAL_W,
-  FLOW_VB_H,
-  flowWaveY,
-} from '../lib/flowingLineWave'
+import { FLOW_NODE_COUNT, FLOW_PERIOD, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from '../lib/flowingLineWave'
+
+/** Distinct idle loops per square (Show & tell). Hover resets to still + scale-up. */
+type IdleMotion = {
+  animate: Record<string, number | number[]>
+  transition: Transition
+}
+
+const FLOW_NODE_IDLE_MOTION: IdleMotion[] = [
+  {
+    animate: { rotate: 360 },
+    transition: { repeat: Infinity, duration: 10, ease: 'linear' },
+  },
+  {
+    animate: { rotate: [-16, 16] },
+    transition: { repeat: Infinity, repeatType: 'reverse', duration: 0.95 },
+  },
+  {
+    animate: { rotateX: 360 },
+    transition: { repeat: Infinity, duration: 5, ease: 'linear' },
+  },
+  {
+    animate: { rotate: 360 },
+    transition: { repeat: Infinity, duration: 2.2, ease: 'linear' },
+  },
+  {
+    animate: { scale: [1, 1.2, 1] },
+    transition: { repeat: Infinity, duration: 1.35, ease: 'easeInOut' },
+  },
+  {
+    animate: { skewX: [-14, 14] },
+    transition: { repeat: Infinity, repeatType: 'reverse', duration: 1.0 },
+  },
+  {
+    animate: { y: [0, -6, 0], rotate: [-4, 4] },
+    transition: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' },
+  },
+  {
+    animate: { rotateY: [-26, 26] },
+    transition: { repeat: Infinity, repeatType: 'reverse', duration: 1.15 },
+  },
+]
 
 function isPrimaryPointer(e: PointerEvent): boolean {
   return e.pointerType === 'touch' || e.pointerType === 'pen' || e.button === 0
@@ -24,14 +62,19 @@ function cycleMod(n: number): number {
   return ((n % 1) + 1) % 1
 }
 
-function buildSinePath(periods: number, period: number, time: number): string {
+function buildSinePath(
+  periods: number,
+  period: number,
+  time: number,
+  waveY: (x: number, t: number) => number,
+): string {
   const totalW = period * periods
   const stepsPerPeriod = 64
   const steps = stepsPerPeriod * periods
   const parts: string[] = []
   for (let i = 0; i <= steps; i++) {
     const x = (totalW * i) / steps
-    const y = flowWaveY(x, time)
+    const y = waveY(x, time)
     parts.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(3)} ${y.toFixed(3)}`)
   }
   return parts.join(' ')
@@ -73,6 +116,8 @@ export type FlowingLineSandProps = {
   sandTrackRef?: RefObject<HTMLDivElement | null>
   sandPhaseRef?: RefObject<number>
   sandHoveredNodeIndexRef?: RefObject<number | null>
+  /** Normalized horizontal scroll (0..1), same basis as track `left` — for ambient lines, etc. */
+  sandScrollHUnitRef?: MutableRefObject<number>
 }
 
 export function FlowingLine({
@@ -80,19 +125,32 @@ export function FlowingLine({
   sandTrackRef,
   sandPhaseRef,
   sandHoveredNodeIndexRef,
+  sandScrollHUnitRef,
 }: FlowingLineSandProps) {
   const uid = useId()
   const filterId = useMemo(() => `flowing-line-glow-${uid.replace(/:/g, '')}`, [uid])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  if (sandHoveredNodeIndexRef) sandHoveredNodeIndexRef.current = hoveredIndex
   const linePaused = hoveredIndex !== null
   const linePausedRef = useRef(false)
-  linePausedRef.current = linePaused
+
+  useLayoutEffect(() => {
+    if (sandHoveredNodeIndexRef) sandHoveredNodeIndexRef.current = hoveredIndex
+  }, [hoveredIndex, sandHoveredNodeIndexRef])
+
+  useLayoutEffect(() => {
+    linePausedRef.current = linePaused
+  }, [linePaused])
 
   const [phaseTime, setPhaseTime] = useState(0)
   const phaseTimeRef = useRef(0)
   const [userHOffset, setUserHOffset] = useState(0)
+  const userHOffsetRef = useRef(0)
   const scrollCycleRef = useRef(0)
+  const [hUnit, setHUnit] = useState(0)
+
+  useLayoutEffect(() => {
+    userHOffsetRef.current = userHOffset
+  }, [userHOffset])
 
   const arrowLeftRef = useRef(false)
   const arrowRightRef = useRef(false)
@@ -124,23 +182,31 @@ export function FlowingLine({
       const dt = Math.min((now - last) / 1000, 0.064)
       last = now
       if (!linePausedRef.current) {
-        scrollCycleRef.current += dt / H_SCROLL_S
+        scrollCycleRef.current -= dt / H_SCROLL_S
         phaseTimeRef.current += dt
         setPhaseTime(phaseTimeRef.current)
       }
       if (arrowLeftRef.current) {
-        setUserHOffset((u) => u + ARROW_DRIFT_RATE * dt)
+        userHOffsetRef.current += ARROW_DRIFT_RATE * dt
+        setUserHOffset(userHOffsetRef.current)
       } else if (arrowRightRef.current) {
-        setUserHOffset((u) => u - ARROW_DRIFT_RATE * dt)
+        userHOffsetRef.current -= ARROW_DRIFT_RATE * dt
+        setUserHOffset(userHOffsetRef.current)
       }
       if (sandPhaseRef) sandPhaseRef.current = phaseTimeRef.current
+      const h = cycleMod(scrollCycleRef.current + userHOffsetRef.current)
+      if (sandScrollHUnitRef) sandScrollHUnitRef.current = h
+      setHUnit(h)
       id = requestAnimationFrame(tick)
     }
     id = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(id)
-  }, [sandPhaseRef])
+  }, [sandPhaseRef, sandScrollHUnitRef])
 
-  const pathD = useMemo(() => buildSinePath(2, FLOW_PERIOD, phaseTime), [phaseTime])
+  const pathD = useMemo(
+    () => buildSinePath(2, FLOW_PERIOD, phaseTime, flowWaveY),
+    [phaseTime],
+  )
 
   const nodePoints = useMemo(
     () =>
@@ -151,7 +217,6 @@ export function FlowingLine({
     [phaseTime],
   )
 
-  const hUnit = cycleMod(scrollCycleRef.current + userHOffset)
   const leftPercent = -hUnit * 100
 
   const onNodeLeave = (e: MouseEvent<HTMLDivElement>) => {
@@ -160,18 +225,21 @@ export function FlowingLine({
     setHoveredIndex(null)
   }
 
+  const reducedMotion = useReducedMotion() ?? false
+
   return (
     <div ref={lineRootRef} className="relative min-h-0 w-full flex-1 overflow-visible py-2 md:py-3">
       <div
         ref={trackRef}
-        className="absolute top-1 bottom-1 left-0 w-[200%] max-w-none overflow-visible will-change-[left] md:top-2 md:bottom-2"
+        className="absolute top-7 bottom-1 left-0 w-[200%] max-w-none overflow-visible will-change-[left] md:top-9 md:bottom-2"
         style={{ left: `${leftPercent}%` }}
         aria-hidden
       >
         <svg
-          className="absolute inset-0 block h-full w-full text-fg/55"
+          className="absolute inset-0 block h-full w-full overflow-visible text-fg/55"
           viewBox={`0 0 ${FLOW_TOTAL_W} ${FLOW_VB_H}`}
           preserveAspectRatio="none"
+          overflow="visible"
         >
           <defs>
             <filter
@@ -203,12 +271,13 @@ export function FlowingLine({
         {nodePoints.map((p, i) => {
           const active = hoveredIndex === i
           const dimOthers = linePaused && !active
+          const idle = FLOW_NODE_IDLE_MOTION[i]!
 
           return (
             <div
               key={i}
               data-flowing-line-node
-              className="absolute z-[1] overflow-visible pointer-events-auto"
+              className="pointer-events-auto absolute z-[1] overflow-visible"
               style={{
                 left: `${(p.x / FLOW_TOTAL_W) * 100}%`,
                 top: `${(p.y / FLOW_VB_H) * 100}%`,
@@ -219,7 +288,7 @@ export function FlowingLine({
               onMouseLeave={onNodeLeave}
               aria-hidden
             >
-              <div className="-m-3 flex items-center justify-center overflow-visible p-3">
+              <div className="-m-3 flex items-center justify-center overflow-visible p-3 [perspective:160px]">
                 {active ? (
                   <div className="relative flex items-center justify-center">
                     <div
@@ -227,18 +296,32 @@ export function FlowingLine({
                       className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[100px] w-[100px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fg/[0.22] blur-[20px] md:h-[120px] md:w-[120px] md:blur-[26px]"
                     />
                     <div
-                      className="relative z-[1] size-4 shrink-0 rounded-none bg-fg/92 brightness-110 transition-[transform,opacity,filter,background-color] duration-150 ease-out scale-[2.5] md:size-5"
+                      className="relative z-[1] size-4 shrink-0 scale-[2.5] rounded-none bg-fg/92 brightness-110 transition-[transform,opacity,filter,background-color] duration-150 ease-out md:size-5"
                     />
                   </div>
-                ) : (
+                ) : reducedMotion ? (
                   <div
                     className={[
-                      'size-4 shrink-0 rounded-none md:size-5',
-                      'transition-[transform,opacity,filter,background-color,box-shadow] duration-150 ease-out',
+                      'relative z-[1] size-4 shrink-0 rounded-none md:size-5',
+                      'transition-[opacity,filter,background-color,box-shadow] duration-150 ease-out',
                       dimOthers
-                        ? 'scale-100 bg-fg/38 opacity-[0.32] brightness-[0.72]'
-                        : 'scale-100 bg-fg/38 shadow-[0_0_6px_rgba(250,250,250,0.12)]',
+                        ? 'bg-fg/38 opacity-[0.32] brightness-[0.72]'
+                        : 'bg-fg/38 shadow-[0_0_6px_rgba(250,250,250,0.12)]',
                     ].join(' ')}
+                  />
+                ) : (
+                  <motion.div
+                    initial={false}
+                    className={[
+                      'relative z-[1] size-4 shrink-0 rounded-none md:size-5',
+                      'transition-[opacity,filter,background-color,box-shadow] duration-150 ease-out',
+                      dimOthers
+                        ? 'bg-fg/38 opacity-[0.32] brightness-[0.72]'
+                        : 'bg-fg/38 shadow-[0_0_6px_rgba(250,250,250,0.12)]',
+                    ].join(' ')}
+                    style={{ transformOrigin: 'center center', transformStyle: 'preserve-3d' }}
+                    animate={idle.animate}
+                    transition={idle.transition}
                   />
                 )}
               </div>

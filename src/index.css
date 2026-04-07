@@ -41,6 +41,210 @@
 
   --font-sans: 'Space Mono', monospace;
   --font-mono: 'Space Mono', monospace;
+
+  /* Figma portfolio frame: 1440 artboard, 12 cols, 24px margin & gutters */
+  --figma-frame-max: 1440px;
+  --figma-margin: 24px;
+  --figma-gutter: 24px;
+}
+
+/* 12-column content grid — margin applied on .figma-frame, gutters between tracks */
+.figma-frame {
+  box-sizing: border-box;
+  margin-inline: auto;
+  max-width: var(--figma-frame-max);
+  padding-inline: var(--figma-margin);
+  width: 100%;
+}
+
+/* Dotted guides share the same inner width as .figma-frame (20% = first rail / main boundary). */
+.figma-ambient-lines-shell {
+  position: absolute;
+  inset-block: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--figma-frame-max);
+  padding-inline: var(--figma-margin);
+  pointer-events: none;
+}
+
+/*
+ * Case study rail: 5 equal tracks, gap 0 — col 1 = sidebar (~20%), cols 2–5 = main (~80%).
+ * Aligns section start with the first background guide at 20% of the frame inner.
+ */
+.figma-rail-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 0;
+  row-gap: var(--figma-gutter);
+}
+
+@media (min-width: 1024px) /* lg */ {
+  .figma-rail-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.figma-grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--figma-gutter);
+  row-gap: var(--figma-gutter);
+  width: 100%;
+}
+
+.figma-rule {
+  border: 0;
+  background-color: var(--color-cell-border);
+  height: 1px;
+  width: 100%;
+}
+
+/*
+ * Problem statement: RGB ghost layers hidden most of the cycle; short chroma burst every 2s for readability.
+ */
+.problem-statement-glitch-ghost--r {
+  opacity: 0;
+  animation: problem-statement-glitch-r-pulse 2s linear infinite;
+}
+
+.problem-statement-glitch-ghost--c {
+  opacity: 0;
+  animation: problem-statement-glitch-c-pulse 2s linear infinite;
+}
+
+@keyframes problem-statement-glitch-r-pulse {
+  0%,
+  86%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+
+  86.3% {
+    opacity: 0.88;
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  87% {
+    opacity: 0.88;
+    transform: translate3d(-5px, -1px, 0);
+  }
+
+  87.4% {
+    transform: translate3d(2px, 1px, 0);
+  }
+
+  87.8% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  88.2% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  88.7% {
+    transform: translate3d(-5px, 1px, 0);
+  }
+
+  89.1% {
+    transform: translate3d(-1px, -2px, 0);
+  }
+
+  89.5% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  90% {
+    transform: translate3d(0, -1px, 0);
+  }
+
+  90.4% {
+    transform: translate3d(-3px, 1px, 0);
+  }
+
+  90.9% {
+    opacity: 0.88;
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  92.5%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes problem-statement-glitch-c-pulse {
+  0%,
+  86%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+
+  86.35% {
+    opacity: 0.88;
+    transform: translate3d(2px, 0, 0);
+  }
+
+  87.1% {
+    opacity: 0.88;
+    transform: translate3d(5px, 1px, 0);
+  }
+
+  87.5% {
+    transform: translate3d(1px, -1px, 0);
+  }
+
+  87.9% {
+    transform: translate3d(3px, 0, 0);
+  }
+
+  88.3% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  88.8% {
+    transform: translate3d(6px, -1px, 0);
+  }
+
+  89.2% {
+    transform: translate3d(2px, 2px, 0);
+  }
+
+  89.6% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  90.1% {
+    transform: translate3d(4px, 0, 0);
+  }
+
+  90.5% {
+    transform: translate3d(1px, -2px, 0);
+  }
+
+  91% {
+    opacity: 0.88;
+    transform: translate3d(2px, 0, 0);
+  }
+
+  92.5%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .problem-statement-glitch-ghost--r,
+  .problem-statement-glitch-ghost--c {
+    display: none;
+  }
 }
 
 html {
@@ -177,11 +381,28 @@ textarea {
   transition: box-shadow 200ms ease-out;
 }
 
+/*
+ * ChamferFrame inner (inside the p-px gutter): same polygon as ::after so raster/vectors
+ * are cropped to the chamfer — top-right and bottom-left diagonal cuts, not a raw rectangle.
+ */
+.chamfer-fill-clip {
+  overflow: hidden;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--quadrant-chamfer)) 0,
+    100% var(--quadrant-chamfer),
+    100% 100%,
+    var(--quadrant-chamfer) 100%,
+    0 calc(100% - var(--quadrant-chamfer))
+  );
+}
+
 /* Show & tell: interactive sand canvas host (same chamfer clip as ::after) */
 .show-tell-sand-host {
   position: absolute;
-  inset: 1px;
-  z-index: 1;
+  /* Bleed past inset slightly so subpixel/chamfer gaps don’t show bare bg on narrow widths */
+  inset: 1px -6px 1px -6px;
+  z-index: 2;
   clip-path: polygon(
     0 0,
     calc(100% - var(--quadrant-chamfer)) 0,
@@ -192,6 +413,25 @@ textarea {
   );
   opacity: 0.78;
   transition: opacity 300ms ease-out;
+}
+
+/*
+ * Decorative lines above quadrant ::after fill (opaque bg) but under sand.
+ * Same z-index as ::after would paint under the fill and stay invisible.
+ */
+.show-tell-ambient-lines {
+  position: absolute;
+  inset: 1px;
+  z-index: 1;
+  pointer-events: none;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--quadrant-chamfer)) 0,
+    100% var(--quadrant-chamfer),
+    100% 100%,
+    var(--quadrant-chamfer) 100%,
+    0 calc(100% - var(--quadrant-chamfer))
+  );
 }
 
 [data-show-tell-quadrant]:hover .show-tell-sand-host {
@@ -215,6 +455,593 @@ textarea {
 
 .quadrant-cell:hover::after {
   box-shadow: inset 0 0 48px color-mix(in srgb, var(--color-hud) 7%, transparent);
+}
+
+/* Figma / showcase frames: keep chamfer read without strong hover on every tile */
+.figma-frame-static.quadrant-cell:hover::before {
+  background-color: var(--color-cell-border);
+}
+
+.figma-frame-static.quadrant-cell:hover::after {
+  box-shadow: none;
+}
+
+/* Image / video / visual chamfer frames — white ring (not theme / interactive border). */
+.chamfer-media-border.quadrant-cell::before {
+  background-color: #ffffff;
+}
+
+.chamfer-media-border.quadrant-cell:hover::before {
+  background-color: color-mix(in srgb, var(--color-hud) 38%, #ffffff);
+}
+
+.chamfer-media-border.figma-frame-static.quadrant-cell:hover::before {
+  background-color: #ffffff;
+}
+
+/* User vs business trade-off rows — #414141 ring, no interior fill (page shows through). */
+.chamfer-tradeoff-outline.quadrant-cell::before {
+  background-color: #414141;
+}
+
+.chamfer-tradeoff-outline.quadrant-cell:hover::before {
+  background-color: #414141;
+}
+
+.chamfer-tradeoff-outline.figma-frame-static.quadrant-cell:hover::before {
+  background-color: #414141;
+}
+
+/* Match page fill so only the 1px chamfer ring reads as #414141 (transparent lets ::before show through). */
+.chamfer-tradeoff-outline.quadrant-cell::after {
+  background-color: var(--color-bg);
+}
+
+/* Before / After comparison toggle — interactive chamfer; follows theme cell border */
+.comparison-toggle-shell.quadrant-cell::before {
+  background-color: var(--color-cell-border);
+}
+
+.comparison-toggle-shell.figma-frame-static.quadrant-cell:hover::before {
+  background-color: var(--color-cell-border);
+}
+
+.comparison-toggle-btn-before {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    var(--quadrant-chamfer) 100%,
+    0 calc(100% - var(--quadrant-chamfer))
+  );
+}
+
+.comparison-toggle-btn-after {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--quadrant-chamfer)) 0,
+    100% var(--quadrant-chamfer),
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Case study: system modules — chamfer + default inset glow (dashboard panels) */
+.system-container.quadrant-cell::after {
+  box-shadow: inset 0 0 44px color-mix(in srgb, var(--color-hud) 5.5%, transparent);
+}
+
+.system-container.quadrant-cell:hover::after {
+  box-shadow: inset 0 0 52px color-mix(in srgb, var(--color-hud) 8%, transparent);
+}
+
+/* In-column visuals: matching chamfer, thin ring, subtle glow */
+.visual-panel {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  --vp-chamfer: clamp(4px, 0.85vmin, 8px);
+  background-color: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--vp-chamfer)) 0,
+    100% var(--vp-chamfer),
+    100% 100%,
+    var(--vp-chamfer) 100%,
+    0 calc(100% - var(--vp-chamfer))
+  );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--color-cell-border) 55%, transparent),
+    inset 0 0 28px color-mix(in srgb, var(--color-hud) 5%, transparent);
+}
+
+/* Who I am: outlined circles, left → right marquee (top-right lane). */
+.whoiam-orbit-marquee {
+  animation: whoiam-orbit-marquee 22s linear infinite;
+  will-change: transform;
+}
+
+@keyframes whoiam-orbit-marquee {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whoiam-orbit-marquee {
+    animation: none;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/*
+ * Frosted site chrome (home top row, case-study portaled bars, etc.): light glass.
+ * Minimal blur so content under the row stays readable; portal keeps backdrop-filter working.
+ */
+.site-frosted-nav {
+  isolation: isolate;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-bg) 18%, transparent) 0%,
+    color-mix(in srgb, var(--color-bg) 22%, transparent) 100%
+  );
+  -webkit-backdrop-filter: blur(10px) saturate(118%) brightness(1.01);
+  backdrop-filter: blur(10px) saturate(118%) brightness(1.01);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-frosted-nav {
+    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/*
+ * Progressive backdrop blur: CSS can’t apply one blur() that varies by Y, so we stack layers.
+ * Smoother-than-before recipe: (1) more layers with smaller blur steps — fewer “jumps”;
+ * (2) long multi-stop mask gradients — softer alpha knees; (3) GPU layer hints.
+ * Still not identical to SVG/canvas variable-blur sites, but much less banding than 3-stop masks.
+ */
+.viewport-bottom-blur-stack {
+  pointer-events: none;
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 15;
+  height: calc(9rem + 24px);
+  isolation: isolate;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  transform: translateZ(0);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer--1 {
+  -webkit-backdrop-filter: blur(1.5px) saturate(138%);
+  backdrop-filter: blur(1.5px) saturate(138%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.48) 0%,
+    rgba(0, 0, 0, 0.32) 18%,
+    rgba(0, 0, 0, 0.16) 42%,
+    rgba(0, 0, 0, 0.06) 68%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.48) 0%,
+    rgba(0, 0, 0, 0.32) 18%,
+    rgba(0, 0, 0, 0.16) 42%,
+    rgba(0, 0, 0, 0.06) 68%,
+    transparent 100%
+  );
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer--2 {
+  -webkit-backdrop-filter: blur(3px) saturate(142%);
+  backdrop-filter: blur(3px) saturate(142%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.52) 0%,
+    rgba(0, 0, 0, 0.36) 14%,
+    rgba(0, 0, 0, 0.2) 34%,
+    rgba(0, 0, 0, 0.08) 58%,
+    rgba(0, 0, 0, 0.02) 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.52) 0%,
+    rgba(0, 0, 0, 0.36) 14%,
+    rgba(0, 0, 0, 0.2) 34%,
+    rgba(0, 0, 0, 0.08) 58%,
+    rgba(0, 0, 0, 0.02) 82%,
+    transparent 100%
+  );
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer--3 {
+  -webkit-backdrop-filter: blur(6px) saturate(148%);
+  backdrop-filter: blur(6px) saturate(148%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.58) 0%,
+    rgba(0, 0, 0, 0.4) 12%,
+    rgba(0, 0, 0, 0.22) 28%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.03) 75%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.58) 0%,
+    rgba(0, 0, 0, 0.4) 12%,
+    rgba(0, 0, 0, 0.22) 28%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.03) 75%,
+    transparent 100%
+  );
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer--4 {
+  -webkit-backdrop-filter: blur(11px) saturate(154%);
+  backdrop-filter: blur(11px) saturate(154%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.45) 10%,
+    rgba(0, 0, 0, 0.26) 24%,
+    rgba(0, 0, 0, 0.11) 44%,
+    rgba(0, 0, 0, 0.04) 66%,
+    transparent 92%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.45) 10%,
+    rgba(0, 0, 0, 0.26) 24%,
+    rgba(0, 0, 0, 0.11) 44%,
+    rgba(0, 0, 0, 0.04) 66%,
+    transparent 92%
+  );
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer--5 {
+  -webkit-backdrop-filter: blur(19px) saturate(162%);
+  backdrop-filter: blur(19px) saturate(162%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.52) 9%,
+    rgba(0, 0, 0, 0.28) 22%,
+    rgba(0, 0, 0, 0.12) 40%,
+    rgba(0, 0, 0, 0.04) 62%,
+    transparent 88%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.52) 9%,
+    rgba(0, 0, 0, 0.28) 22%,
+    rgba(0, 0, 0, 0.12) 40%,
+    rgba(0, 0, 0, 0.04) 62%,
+    transparent 88%
+  );
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer--6 {
+  -webkit-backdrop-filter: blur(30px) saturate(172%);
+  backdrop-filter: blur(30px) saturate(172%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.58) 8%,
+    rgba(0, 0, 0, 0.28) 20%,
+    rgba(0, 0, 0, 0.1) 36%,
+    rgba(0, 0, 0, 0.03) 54%,
+    transparent 78%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.58) 8%,
+    rgba(0, 0, 0, 0.28) 20%,
+    rgba(0, 0, 0, 0.1) 36%,
+    rgba(0, 0, 0, 0.03) 54%,
+    transparent 78%
+  );
+}
+
+.viewport-bottom-blur-stack .viewport-bottom-blur-layer--7 {
+  -webkit-backdrop-filter: blur(46px) saturate(184%);
+  backdrop-filter: blur(46px) saturate(184%);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.96) 0%,
+    rgba(0, 0, 0, 0.72) 7%,
+    rgba(0, 0, 0, 0.4) 16%,
+    rgba(0, 0, 0, 0.16) 30%,
+    rgba(0, 0, 0, 0.05) 48%,
+    transparent 70%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.96) 0%,
+    rgba(0, 0, 0, 0.72) 7%,
+    rgba(0, 0, 0, 0.4) 16%,
+    rgba(0, 0, 0, 0.16) 30%,
+    rgba(0, 0, 0, 0.05) 48%,
+    transparent 70%
+  );
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .viewport-bottom-blur-stack .viewport-bottom-blur-layer {
+    display: none;
+  }
+
+  .viewport-bottom-blur-stack::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-bg) 86%, transparent) 0%,
+      transparent 100%
+    );
+  }
+}
+
+/* Case study KPI hero numbers — soft white bloom + gentle pulse (separate from count-up). */
+@keyframes kpi-metric-value-glow-pulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 5px rgb(255 255 255 / 0.21),
+      0 0 13px rgb(255 255 255 / 0.13),
+      0 0 24px rgb(255 255 255 / 0.07),
+      0 0 1px rgb(255 255 255 / 0.175);
+  }
+
+  /* Peak bloom (~½ prior strength): main layer max ~40% white */
+  50% {
+    text-shadow:
+      0 0 9px rgb(255 255 255 / 0.4),
+      0 0 20px rgb(255 255 255 / 0.26),
+      0 0 36px rgb(255 255 255 / 0.15),
+      0 0 1px rgb(255 255 255 / 0.34);
+  }
+}
+
+.kpi-metric-value-glow {
+  animation: kpi-metric-value-glow-pulse 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kpi-metric-value-glow {
+    animation: none;
+    text-shadow:
+      0 0 5px rgb(255 255 255 / 0.21),
+      0 0 13px rgb(255 255 255 / 0.13),
+      0 0 24px rgb(255 255 255 / 0.07),
+      0 0 1px rgb(255 255 255 / 0.175);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .kpi-metric-value-glow {
+    animation: none;
+    text-shadow: none;
+  }
+}
+
+/* Circular frame: SVG meteor on stroke (pathLength 100), same idea as .chamfer-meteor-path */
+.rotating-gradient-circle {
+  position: relative;
+  box-sizing: border-box;
+  overflow: visible;
+  border-radius: 9999px;
+}
+
+.rotating-circle-meteor-svg {
+  overflow: visible;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--color-hud) 40%, transparent))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-fg) 18%, transparent));
+}
+
+.rotating-circle-meteor-path {
+  shape-rendering: geometricPrecision;
+  stroke-dasharray: 10 90;
+  animation: rotating-circle-meteor-dash 4.8s linear infinite;
+}
+
+@keyframes rotating-circle-meteor-dash {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.rotating-gradient-ring-inner {
+  position: absolute;
+  z-index: 1;
+  inset: 4%;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 9999px;
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotating-circle-meteor-path {
+    animation: none;
+    stroke-dasharray: 100 0;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Case study sidebar: active section label — gentle opacity breathe */
+.sidebar-nav-active-breathe {
+  animation: sidebar-nav-active-breathe 2.75s ease-in-out infinite;
+}
+
+@keyframes sidebar-nav-active-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-nav-active-breathe {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Meteor fill: 1px tail on the left (centered), full-height head on the right. Box height = head (e.g. 4px). */
+.case-study-scroll-progress-meteor {
+  clip-path: polygon(
+    0 calc(50% - 0.5px),
+    0 calc(50% + 0.5px),
+    100% 100%,
+    100% 0
+  );
+}
+
+/* Case study components page: progress bar tip glow */
+.case-study-scroll-progress-glow {
+  transform: translateY(-50%);
+  transform-origin: right center;
+  animation: case-study-scroll-progress-glow-pulse 2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes case-study-scroll-progress-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: translateY(-50%) scaleX(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scaleX(1.42);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-study-scroll-progress-glow {
+    animation: none;
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
+
+/* Chamfer frame: meteor segment travels around perimeter (pathLength 100 on SVG path). */
+.chamfer-meteor-ring {
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--color-hud) 40%, transparent))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-fg) 18%, transparent));
+}
+
+.chamfer-meteor-path {
+  shape-rendering: geometricPrecision;
+  stroke-dasharray: 9 91;
+  animation: chamfer-meteor-dash 17s linear infinite;
+}
+
+@keyframes chamfer-meteor-dash {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chamfer-meteor-path {
+    animation: none;
+    stroke-dasharray: 100 0;
+    stroke-dashoffset: 0;
+  }
+}
+
+/*
+ * Timeline stepper: arrow sweeps L → R, fades out at the right, then fades in again on the left (invisible jump between).
+ */
+.timeline-pills-connector-arrow {
+  animation: timeline-pills-connector-arrow-sweep 2.85s linear infinite normal;
+  animation-fill-mode: none;
+}
+
+@keyframes timeline-pills-connector-arrow-sweep {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+
+  /* Sweep */
+  85% {
+    /* Match TimelinePillsRow arrow wrapper width (w-[22px]) */
+    left: calc(100% - 22px);
+    opacity: 1;
+  }
+
+  /* Brief hold at destination, then fade out */
+  88% {
+    left: calc(100% - 22px);
+    opacity: 1;
+  }
+
+  92% {
+    left: calc(100% - 22px);
+    opacity: 0;
+  }
+
+  /* Jump to start while hidden */
+  92.01% {
+    left: 0;
+    opacity: 0;
+  }
+
+  /* Fade in again at the start */
+  99% {
+    left: 0;
+    opacity: 1;
+  }
+
+  100% {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-pills-connector-arrow {
+    animation: none;
+    left: auto;
+    right: 0;
+  }
 }
 
 /*
