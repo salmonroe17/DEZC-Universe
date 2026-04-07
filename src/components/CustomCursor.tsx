@@ -16,21 +16,6 @@ const GRAVITY = 0.14
 
 const FINE_POINTER_MQ = '(pointer: fine)'
 
-function hudRgb(): { r: number; g: number; b: number } {
-  const raw = getComputedStyle(document.documentElement)
-    .getPropertyValue('--color-hud')
-    .trim()
-  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(raw)
-  if (m) {
-    return {
-      r: parseInt(m[1], 16),
-      g: parseInt(m[2], 16),
-      b: parseInt(m[3], 16),
-    }
-  }
-  return { r: 255, g: 255, b: 255 }
-}
-
 export function CustomCursor() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -122,7 +107,6 @@ export function CustomCursor() {
       ctx.clearRect(0, 0, w, h)
 
       const list = particlesRef.current
-      const { r, g, b } = hudRgb()
       for (let i = list.length - 1; i >= 0; i--) {
         const p = list[i]
         p.vy += GRAVITY
@@ -137,7 +121,8 @@ export function CustomCursor() {
         }
 
         const a = (p.life / p.maxLife) * 0.9
-        ctx.fillStyle = `rgba(${r},${g},${b},${a})`
+        /* White + canvas `mix-blend-difference` inverts against the backdrop (same idea as reticle). */
+        ctx.fillStyle = `rgba(255,255,255,${a})`
         ctx.beginPath()
         ctx.arc(p.x, p.y, 1.15, 0, Math.PI * 2)
         ctx.fill()
@@ -161,18 +146,16 @@ export function CustomCursor() {
     <div className="custom-cursor-root">
       <canvas
         ref={canvasRef}
-        className="pointer-events-none fixed inset-0 z-[9998]"
+        className="pointer-events-none fixed inset-0 z-[9998] mix-blend-difference"
         aria-hidden
       />
       <div
         ref={wrapRef}
-        className="pointer-events-none fixed left-0 top-0 z-[9999] opacity-0 will-change-transform"
+        className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference opacity-0 will-change-transform"
         style={{ transform: 'translate(0px, 0px)' }}
         aria-hidden
       >
-        <div
-          className="-translate-x-1/2 -translate-y-1/2 text-[var(--color-hud)] drop-shadow-[0_0_4px_color-mix(in_srgb,var(--color-hud)_50%,transparent)]"
-        >
+        <div className="inline-flex h-4 w-4 -ml-2 -mt-2 text-white">
           <svg
             width="16"
             height="16"

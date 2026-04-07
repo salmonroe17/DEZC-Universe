@@ -1,22 +1,49 @@
 import { AnimatePresence } from 'framer-motion'
 import { Outlet, useLocation } from 'react-router-dom'
 import { PageTransition } from '../animations/PageTransition'
+import { AmbientVerticalLines } from '../components/AmbientVerticalLines'
+import { SiteFooter } from '../components/SiteFooter'
 import { SiteTopBar } from '../components/SiteTopBar'
 
 export function RootLayout() {
   const location = useLocation()
+  const hideSiteTopBar = /^\/case-study(\/|$)/.test(location.pathname)
+  const isHome = location.pathname === '/'
 
   return (
-    <div className="flex min-h-dvh flex-col bg-bg">
-      <SiteTopBar />
-      <AnimatePresence mode="wait">
-        <PageTransition
-          key={location.pathname}
-          className="flex min-h-0 w-full flex-1 flex-col"
-        >
-          <Outlet />
-        </PageTransition>
-      </AnimatePresence>
-    </div>
+    <>
+      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
+        <div className="absolute inset-0 bg-bg" />
+        <div className="figma-ambient-lines-shell">
+          <div className="relative min-h-dvh w-full">
+            <AmbientVerticalLines />
+          </div>
+        </div>
+      </div>
+      <div className="relative z-10 flex min-h-dvh flex-col">
+        {hideSiteTopBar ? null : <SiteTopBar />}
+        <AnimatePresence mode="wait">
+          <PageTransition
+            key={location.pathname}
+            className="flex min-h-0 w-full flex-1 flex-col"
+          >
+            <Outlet />
+          </PageTransition>
+        </AnimatePresence>
+        {/* Progressive bottom-edge blur: off on home so the grid isn’t capped by a frosted “peak”. */}
+        {isHome ? null : (
+          <div className="viewport-bottom-blur-stack" aria-hidden>
+            <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--1" />
+            <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--2" />
+            <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--3" />
+            <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--4" />
+            <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--5" />
+            <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--6" />
+            <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--7" />
+          </div>
+        )}
+        <SiteFooter />
+      </div>
+    </>
   )
 }

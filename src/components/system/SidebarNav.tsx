@@ -1,0 +1,69 @@
+import type { NavSection } from '../caseStudy/useCaseStudyScrollspy'
+
+/** Dotted trail after the active label (Figma TOC). */
+const ACTIVE_DOTS = '\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7'
+
+type SidebarNavProps = {
+  sections: NavSection[]
+  activeId: string | null
+  onNavigate: (id: string) => void
+  className?: string
+  /** e.g. "On this page" for non–case-study rails */
+  ariaLabel?: string
+  /**
+   * When the nav sits inside an already-sticky aside (e.g. components reference page),
+   * omit outer `sticky` / backdrop so positioning isn’t double-stacked.
+   */
+  embedded?: boolean
+}
+
+export function SidebarNav({
+  sections,
+  activeId,
+  onNavigate,
+  className = '',
+  ariaLabel = 'Case study sections',
+  embedded = false,
+}: SidebarNavProps) {
+  if (sections.length === 0) return null
+
+  return (
+    <nav
+      aria-label={ariaLabel}
+      className={
+        embedded
+          ? `max-w-full font-mono ${className}`
+          : `sticky top-[5.5rem] z-10 max-w-full bg-bg py-1 font-mono md:top-24 ${className}`
+      }
+    >
+      <ul className="flex flex-col gap-4 border-l border-cell-border pl-4 md:gap-[1.125rem]">
+        {sections.map(({ id, label }) => {
+          const isActive = activeId === id
+          return (
+            <li key={id}>
+              <button
+                type="button"
+                onClick={() => onNavigate(id)}
+                className={`flex w-full flex-wrap items-baseline gap-x-1.5 text-left text-[10px] leading-normal tracking-[0.02em] text-fg md:text-[11px] ${
+                  isActive
+                    ? 'sidebar-nav-active-breathe'
+                    : 'opacity-[0.55] transition-opacity hover:opacity-90'
+                }`}
+              >
+                <span className="whitespace-nowrap">{label}</span>
+                {isActive ? (
+                  <span
+                    className="select-none text-[10px] leading-normal tracking-[0.35em] text-fg md:text-[11px]"
+                    aria-hidden
+                  >
+                    {ACTIVE_DOTS}
+                  </span>
+                ) : null}
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}

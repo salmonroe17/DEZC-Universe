@@ -11,15 +11,16 @@ export const easeInExpo: [number, number, number, number] = [0.7, 0, 0.84, 0]
 const pageEase = easeOutExpo
 const pageExitEase = easeInExpo
 
-/** GPU-friendly page enter/exit: opacity + subtle scale */
+/**
+ * Page enter/exit: opacity only (no transform).
+ * Transform on this wrapper breaks descendant `backdrop-filter` (nav glass reads as ~no blur).
+ */
 export const pageTransitionVariants: Variants = {
   initial: {
     opacity: 0,
-    scale: 0.992,
   },
   animate: {
     opacity: 1,
-    scale: 1,
     transition: {
       duration: 0.24,
       ease: pageEase,
@@ -27,7 +28,6 @@ export const pageTransitionVariants: Variants = {
   },
   exit: {
     opacity: 0,
-    scale: 0.996,
     transition: {
       duration: 0.16,
       ease: pageExitEase,
