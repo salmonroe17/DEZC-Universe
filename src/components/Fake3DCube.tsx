@@ -13,16 +13,24 @@ const ROTATION_BY_FACE = [0, -90, -180, -270] as const
 /**
  * Chamfered face shell — same pseudos as `quadrant-cell` via `cube-face-cell` (see index.css).
  * Do not use `quadrant-cell` here: it forces `position: relative` and breaks `absolute` + 3D.
+ *
+ * `cube-face-glow` sits on a wrapper outside `cube-face-cell`: clip-path on the cell would hide
+ * inner `box-shadow`; animated `drop-shadow` on the wrapper follows the chamfered paint.
  */
-/** `cube-face-glow` stays on the chamfered inner only — outer box-shadow follows a square box and clashes with chamfer corners. */
-const faceChamferOuter =
-  'cube-face-cell figma-frame-static absolute inset-0 min-h-0 min-w-0 [backface-visibility:hidden] [--quadrant-chamfer:clamp(14px,1.75vmin,30px)]'
+const faceGlowWrap =
+  'cube-face-glow absolute inset-0 min-h-0 min-w-0 [backface-visibility:hidden]'
 
-const faceChamferInnerClip =
-  'chamfer-fill-clip cube-face-glow min-h-0 min-w-0 size-full'
+const faceChamferShell =
+  'cube-face-cell figma-frame-static relative h-full w-full [--quadrant-chamfer:clamp(14px,1.75vmin,30px)]'
+
+const faceChamferInnerClip = 'chamfer-fill-clip min-h-0 min-w-0 size-full'
 
 const faceLabelInner =
   'flex items-center justify-center bg-surface/90 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-fg-muted'
+
+/** Darkens edges of the image face so it matches the mood of the label faces. */
+const caseStudy1ImageVignette =
+  'pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_92%_92%_at_50%_50%,rgb(0_0_0/0)_38%,rgb(0_0_0/0.55)_72%,rgb(0_0_0/0.88)_100%)]'
 
 function CubeChamferFace({
   transform,
@@ -34,10 +42,12 @@ function CubeChamferFace({
   children: ReactNode
 }) {
   return (
-    <div className={faceChamferOuter} style={{ transform }}>
-      <div className="relative z-10 box-border size-full min-h-0 min-w-0 p-px">
-        <div className={`${faceChamferInnerClip} ${innerClassName}`}>
-          {children}
+    <div className={faceGlowWrap} style={{ transform }}>
+      <div className={faceChamferShell}>
+        <div className="relative z-10 box-border size-full min-h-0 min-w-0 p-px">
+          <div className={`${faceChamferInnerClip} ${innerClassName}`}>
+            {children}
+          </div>
         </div>
       </div>
     </div>
@@ -54,10 +64,11 @@ const CubeFaces = memo(function CubeFaces() {
         <img
           src={caseStudy1Face}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 z-0 h-full w-full object-cover"
           loading="lazy"
           decoding="async"
         />
+        <div className={caseStudy1ImageVignette} aria-hidden />
         <span className="sr-only">Case 1</span>
       </CubeChamferFace>
       <CubeChamferFace

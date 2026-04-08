@@ -1,6 +1,1 @@
-export { PageTransition } from './PageTransition'
-export {
-  easeInExpo,
-  easeOutExpo,
-  pageTransitionVariants,
-} from './variants'
+export { easeInExpo, easeOutExpo } from './variants'

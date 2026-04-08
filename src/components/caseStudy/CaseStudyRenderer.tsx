@@ -52,7 +52,7 @@ export function CaseStudyRenderer({ study }: CaseStudyRendererProps) {
       .filter((s): s is typeof s & { navLabel: string } => Boolean(s.navLabel))
       .map((s) => ({ id: s.id, label: s.navLabel })) ?? []
 
-  const { activeId, onNavigate } = useCaseStudyScrollspy(navSections)
+  const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(navSections)
 
   return (
     <div className="relative min-h-0 w-full text-fg">
@@ -61,7 +61,7 @@ export function CaseStudyRenderer({ study }: CaseStudyRendererProps) {
         gridClassName="items-start"
         sidebar={
           <SidebarNav
-            sections={navSections}
+            sections={sidebarSections}
             activeId={activeId}
             onNavigate={onNavigate}
           />

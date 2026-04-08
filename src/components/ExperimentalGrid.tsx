@@ -105,7 +105,7 @@ export function ExperimentalGrid() {
             <h2
               className={`${quadrantHeadingClass} relative z-[2] w-fit max-w-full shrink-0 self-start`}
             >
-              My multiple timelines of show & tell
+              My multiple timelines of side projects
             </h2>
             <p
               className={`${showTellSubtitleClass} relative z-[2] mb-4 w-fit max-w-full shrink-0 self-start md:mb-5`}

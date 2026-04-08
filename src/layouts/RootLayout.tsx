@@ -1,6 +1,4 @@
-import { AnimatePresence } from 'framer-motion'
 import { Outlet, useLocation } from 'react-router-dom'
-import { PageTransition } from '../animations/PageTransition'
 import { AmbientVerticalLines } from '../components/AmbientVerticalLines'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteTopBar } from '../components/SiteTopBar'
@@ -22,14 +20,9 @@ export function RootLayout() {
       </div>
       <div className="relative z-10 flex min-h-dvh flex-col">
         {hideSiteTopBar ? null : <SiteTopBar />}
-        <AnimatePresence mode="wait">
-          <PageTransition
-            key={location.pathname}
-            className="flex min-h-0 w-full flex-1 flex-col"
-          >
-            <Outlet />
-          </PageTransition>
-        </AnimatePresence>
+        <div className="flex min-h-0 w-full flex-1 flex-col">
+          <Outlet />
+        </div>
         {/* Progressive bottom-edge blur: off on home so the grid isn’t capped by a frosted “peak”. */}
         {isHome ? null : (
           <div className="viewport-bottom-blur-stack" aria-hidden>

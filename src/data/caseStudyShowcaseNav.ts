@@ -18,10 +18,12 @@ export const CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
 
 /** Carbon Neutral Club production page — TOC only for sections built so far. */
 export const CARBON_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
-  { id: 'hero-heading', label: 'Top of page' },
+  { id: 'hero-heading', label: 'Introduction' },
   { id: 'overview-section', label: 'Overview' },
   { id: 'problem-statement', label: 'The problem' },
   { id: 'user-test-findings', label: 'User test findings' },
   { id: 'user-vs-business-needs', label: 'User vs business needs' },
   { id: 'system-we-designed', label: 'The system we designed' },
+  { id: 'design-principles', label: 'Design principles' },
+  { id: 'the-calculator', label: 'The calculator' },
 ]

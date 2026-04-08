@@ -53,6 +53,11 @@ type ChamferFrameProps = {
    * case-study scroll progress meteor. Inner content does not move.
    */
   meteorTrail?: boolean
+  /**
+   * Use `h-auto` on inner wrappers instead of `size-full` so the frame height follows content.
+   * Avoids a dead gap under bottom-aligned media when the outer cell would otherwise stretch.
+   */
+  fitContentHeight?: boolean
 }
 
 /**
@@ -65,6 +70,7 @@ export function ChamferFrame({
   clipToChamfer = true,
   staticVisual = true,
   meteorTrail = false,
+  fitContentHeight = false,
 }: ChamferFrameProps) {
   const rawId = useId()
   const meteorGradId = `chamfer-meteor-grad-${rawId.replace(/:/g, '')}`
@@ -124,9 +130,11 @@ export function ChamferFrame({
         </svg>
       ) : null}
       {/* p-px keeps the ::before chamfer ring visible above z-0 pseudos (inner was full-bleed). */}
-      <div className="relative z-10 box-border min-h-0 min-w-0 size-full p-px">
+      <div
+        className={`relative z-10 box-border min-h-0 min-w-0 p-px ${fitContentHeight ? 'h-auto w-full' : 'size-full'}`}
+      >
         <div
-          className={`min-h-0 min-w-0 size-full ${clipToChamfer ? 'chamfer-fill-clip' : ''} ${innerClassName}`}
+          className={`min-h-0 min-w-0 ${fitContentHeight ? 'h-auto w-full' : 'size-full'} ${clipToChamfer ? 'chamfer-fill-clip' : ''} ${innerClassName}`}
         >
           {children}
         </div>

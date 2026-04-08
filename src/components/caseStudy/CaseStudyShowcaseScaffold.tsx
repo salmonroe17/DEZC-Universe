@@ -37,7 +37,7 @@ export function CaseStudyShowcaseScaffold({
   navSections = CASE_STUDY_SHOWCASE_NAV,
   children,
 }: CaseStudyShowcaseScaffoldProps) {
-  const { activeId, onNavigate } = useCaseStudyScrollspy(navSections)
+  const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(navSections)
   const chromeRef = useRef<HTMLElement | null>(null)
   const caseStudiesNavRef = useRef<HTMLButtonElement>(null)
   const [chromeHeight, setChromeHeight] = useState(52)
@@ -136,7 +136,7 @@ export function CaseStudyShowcaseScaffold({
             </p>
             <SidebarNav
               embedded
-              sections={navSections}
+              sections={sidebarSections}
               activeId={activeId}
               onNavigate={onNavigate}
             />
