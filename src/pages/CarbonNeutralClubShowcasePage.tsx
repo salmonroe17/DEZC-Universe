@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import carbonHeroC1 from '../../CNC photos/c1.png'
 import carbonOverviewC2 from '../../CNC photos/c2.png'
 import carbonOverviewC3 from '../../CNC photos/c3.png'
@@ -7,6 +7,12 @@ import carbonProblemProductSurfaceStruggles from '../../CNC photos/c4.1.png'
 import carbonWhatWeLearnedC5 from '../../CNC photos/c5.png'
 import carbonUserBusinessVennC6 from '../../CNC photos/c6.png'
 import carbonSystemDesignedC7 from '../../CNC photos/c7.png'
+import carbonPrincipleC8 from '../../CNC photos/c8.png'
+import carbonPrincipleC9 from '../../CNC photos/c9.png'
+import carbonPrincipleC10 from '../../CNC photos/c10.png'
+import carbonPrincipleC11 from '../../CNC photos/c11.png'
+import carbonCalculatorMockup from '../../CNC photos/c12.png'
+import carbonCalculatorWhyMockup from '../../CNC photos/c12.1.png'
 import carbonPrototypeVideo from '../../CNC photos/cnc video portfolio prototype 720p30.mp4'
 import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { CARBON_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
@@ -39,6 +45,72 @@ const SYSTEM_DESIGNED_STAGES: { step: number; title: string; question: string }[
   { step: 2, title: 'Result', question: 'What does that impact mean?' },
   { step: 3, title: 'Plan', question: 'What should I do about it?' },
   { step: 4, title: 'Checkout', question: 'What am I actually paying for?' },
+]
+
+const DESIGN_PRINCIPLES: {
+  title: string
+  bullets: string[]
+  visual: string
+  visualAlt: string
+}[] = [
+  {
+    title: 'Make the number meaningful',
+    bullets: [
+      'Users need context before a footprint score becomes actionable.',
+      'Add national average for comparison; have the footprint tracker move up and down based on calculator decisions.',
+    ],
+    visual: carbonPrincipleC8,
+    visualAlt:
+      'UI mockup: footprint result with range bar, national average, and Canadian flag for comparison',
+  },
+  {
+    title: 'Build trust before payment',
+    bullets: [
+      'Transparency must come before financial commitment.',
+      'Show a full breakdown of what is included and why.',
+    ],
+    visual: carbonPrincipleC9,
+    visualAlt: 'UI mockup: cost breakdown and offset plan options before checkout',
+  },
+  {
+    title: 'Reduce decision friction',
+    bullets: [
+      'Choices should feel guided, not overwhelming.',
+      'Use a progress stepper so expectations stay clear.',
+    ],
+    visual: carbonPrincipleC10,
+    visualAlt: 'UI mockup: horizontal progress stepper across estimate, plan, and join steps',
+  },
+  {
+    title: 'Connect cost to impact',
+    bullets: [
+      'Users should understand what they are paying for and why.',
+      'Surface what membership includes on the choose-your-plan step.',
+    ],
+    visual: carbonPrincipleC11,
+    visualAlt: 'UI mockup: offset projects grid explaining where fees go',
+  },
+]
+
+const CALCULATOR_INTRO_COLUMNS: { body: ReactNode }[] = [
+  {
+    body: 'The calculator had to gather meaningful data without making users feel buried in complexity.',
+  },
+  {
+    body: (
+      <>
+        <p className="m-0">We broke the flow into structured, progressive steps that:</p>
+        <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 marker:text-fg-subtle">
+          <li>Focused on one concept</li>
+          <li>Reduced cognitive load</li>
+          <li>Reinforced progress</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    body: 'The goal was not just accuracy. It was maintaining confidence and completion throughout the flow.',
+  },
 ]
 
 const teamConnector = (
@@ -167,6 +239,7 @@ function CarbonPrototypeAutoplayVideo({ src }: { src: string }) {
 
 export default function CarbonNeutralClubShowcasePage() {
   const [seeWhereUsersStruggled, setSeeWhereUsersStruggled] = useState(false)
+  const [showCalculatorWhyWorks, setShowCalculatorWhyWorks] = useState(false)
 
   return (
     <CaseStudyShowcaseScaffold
@@ -599,6 +672,135 @@ export default function CarbonNeutralClubShowcasePage() {
       <div className="figma-rule my-[32px]" aria-hidden />
 
       <section
+        id="design-principles"
+        aria-labelledby="design-principles-heading"
+        className={caseStudyScrollAnchorClass}
+      >
+        <FigmaGrid12>
+          <div className="col-span-12 flex flex-col gap-[16px]">
+            <h2
+              id="design-principles-heading"
+              className="m-0 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+            >
+              Design principles
+            </h2>
+            <p className="m-0 font-mono text-sm font-normal leading-relaxed text-fg md:text-base">
+              We anchored the redesign around four principles:
+            </p>
+          </div>
+          <div className="col-span-12 grid grid-cols-1 items-start gap-4 font-mono md:grid-cols-2 md:gap-5">
+            {DESIGN_PRINCIPLES.map((principle) => (
+              <ChamferFrame
+                key={principle.title}
+                fitContentHeight
+                className="chamfer-tradeoff-outline figma-frame-static w-full self-start"
+                innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-elevated/25"
+              >
+                <div className="px-4 pb-0 pt-4 md:px-5 md:pt-5">
+                  <h3 className="m-0 text-[16px] font-medium leading-snug text-fg">
+                    {principle.title}
+                  </h3>
+                  <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 text-[12px] leading-relaxed text-fg-muted marker:text-fg-subtle md:mt-4">
+                    {principle.bullets.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-4 w-full shrink-0 leading-[0] md:mt-5">
+                  <img
+                    src={principle.visual}
+                    alt={principle.visualAlt}
+                    decoding="async"
+                    loading="lazy"
+                    className="block h-auto w-full max-w-full"
+                  />
+                </div>
+              </ChamferFrame>
+            ))}
+          </div>
+        </FigmaGrid12>
+      </section>
+
+      <div className="figma-rule my-[32px]" aria-hidden />
+
+      <section
+        id="the-calculator"
+        aria-labelledby="the-calculator-heading"
+        className={caseStudyScrollAnchorClass}
+      >
+        <FigmaGrid12>
+          <h2
+            id="the-calculator-heading"
+            className="col-span-12 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+          >
+            The Calculator
+          </h2>
+          <div className="col-span-12 mt-[var(--figma-gutter)] grid grid-cols-1 gap-[var(--figma-gutter)] font-mono text-sm font-normal leading-relaxed text-fg md:grid-cols-3 md:text-base">
+            {CALCULATOR_INTRO_COLUMNS.map((col, i) => (
+              <div key={i} className="min-w-0">
+                {col.body}
+              </div>
+            ))}
+          </div>
+        </FigmaGrid12>
+
+        <ChamferFrame
+          className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
+        >
+          <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showCalculatorWhyWorks}
+              aria-labelledby="calculator-why-toggle-label"
+              onClick={() => setShowCalculatorWhyWorks((v) => !v)}
+              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
+                showCalculatorWhyWorks
+                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_rgba(0,0,0,0.12)]'
+                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+              }`}
+            >
+              <span
+                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
+                  showCalculatorWhyWorks
+                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
+                    : 'left-1 bg-white'
+                }`}
+                aria-hidden
+              />
+            </button>
+            <span
+              id="calculator-why-toggle-label"
+              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+            >
+              Show why this works
+            </span>
+          </div>
+          <div className="relative isolate w-full">
+            <img
+              src={carbonCalculatorMockup}
+              alt="Carbon Neutral Club calculator landing: estimate footprint hero, stepper, and laptop mockup"
+              decoding="async"
+              className={`relative z-0 block h-auto w-full max-w-full align-middle transition-opacity duration-100 ease-out motion-reduce:transition-none ${
+                showCalculatorWhyWorks ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={carbonCalculatorWhyMockup}
+              alt="Carbon Neutral Club calculator — rationale for progressive steps and flow structure"
+              decoding="async"
+              className={`pointer-events-none absolute left-0 top-0 z-10 block h-auto w-full max-w-full align-middle transition-opacity duration-100 ease-out motion-reduce:transition-none ${
+                showCalculatorWhyWorks ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </div>
+        </ChamferFrame>
+      </section>
+
+      <div className="figma-rule my-[32px]" aria-hidden />
+
+      <section
         id="design-title"
         aria-labelledby="design-title-heading"
         className={caseStudyScrollAnchorClass}
@@ -616,21 +818,6 @@ export default function CarbonNeutralClubShowcasePage() {
           </p>
         </FigmaGrid12>
         <FigmaGrid12 className="mt-10 md:mt-[var(--figma-gutter)]">
-          <div className="col-span-12 max-w-none text-sm leading-relaxed text-fg md:col-span-5 md:text-base">
-            <p className="font-medium text-fg">Calculator</p>
-            <ul className="mt-4 list-disc space-y-2 pl-5 text-fg-muted marker:text-fg-subtle">
-              <li>Progressive steps instead of one overwhelming form.</li>
-              <li>Controlled inputs and minimal cognitive load per step.</li>
-            </ul>
-          </div>
-          <div className="col-span-12 md:col-span-7">
-            <PlaceholderVisual
-              className="min-h-[min(72vw,340px)] md:min-h-[431px]"
-              label="Multi-step calculator UI sequence"
-            />
-          </div>
-        </FigmaGrid12>
-        <FigmaGrid12 className="mt-10 md:mt-16">
           <div className="col-span-12 md:order-1 md:col-span-7">
             <PlaceholderVisual
               className="min-h-[min(72vw,340px)] md:min-h-[431px]"

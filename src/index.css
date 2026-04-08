@@ -320,20 +320,17 @@ textarea {
   }
 }
 
-/* Fake3DCube faces: slow HUD-colored glow pulse */
+/*
+ * Fake3DCube: white halo pulse. `filter: drop-shadow` follows the chamfered pixels; `box-shadow`
+ * on the clipped inner face was invisible (ancestor clip-path clips outward shadows).
+ */
 @keyframes cube-face-glow-pulse {
   0%,
   100% {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--color-hud) 14%, transparent),
-      0 0 26px color-mix(in srgb, var(--color-hud) 11%, transparent),
-      0 0 46px color-mix(in srgb, var(--color-hud) 6%, transparent);
+    filter: drop-shadow(0 0 10px rgb(255 255 255 / 0.28)) drop-shadow(0 0 28px rgb(255 255 255 / 0.14));
   }
   50% {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--color-hud) 22%, transparent),
-      0 0 38px color-mix(in srgb, var(--color-hud) 20%, transparent),
-      0 0 68px color-mix(in srgb, var(--color-hud) 12%, transparent);
+    filter: drop-shadow(0 0 20px rgb(255 255 255 / 0.48)) drop-shadow(0 0 44px rgb(255 255 255 / 0.24));
   }
 }
 
@@ -461,6 +458,11 @@ textarea {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cube-face-glow {
+    animation: none;
+    filter: drop-shadow(0 0 14px rgb(255 255 255 / 0.3)) drop-shadow(0 0 32px rgb(255 255 255 / 0.15));
+  }
+
   .cube-face-cell::before,
   .cube-face-cell::after,
   .quadrant-cell::before,
