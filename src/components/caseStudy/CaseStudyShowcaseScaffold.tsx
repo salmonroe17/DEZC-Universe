@@ -102,7 +102,7 @@ export function CaseStudyShowcaseScaffold({
             to="/#show-tell"
             className="underline decoration-cell-border underline-offset-[3px] hover:decoration-hud"
           >
-            Show &amp; tell
+            Side quests
           </Link>
         </nav>
         <ThemeSwatches />

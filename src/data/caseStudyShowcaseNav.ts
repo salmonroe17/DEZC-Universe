@@ -18,7 +18,7 @@ export const CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
 
 /** Carbon Neutral Club production page — TOC only for sections built so far. */
 export const CARBON_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
-  { id: 'hero-heading', label: 'Introduction' },
+  { id: 'hero-heading', label: 'Intro + demo video' },
   { id: 'overview-section', label: 'Overview' },
   { id: 'problem-statement', label: 'The problem' },
   { id: 'user-test-findings', label: 'User test findings' },
@@ -26,4 +26,11 @@ export const CARBON_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
   { id: 'system-we-designed', label: 'The system we designed' },
   { id: 'design-principles', label: 'Design principles' },
   { id: 'the-calculator', label: 'The calculator' },
+  { id: 'making-result-meaningful', label: 'Making the result meaningful' },
+  { id: 'pricing-plan-design', label: 'Pricing & plan design' },
+  { id: 'checkout-trust-building', label: 'Checkout transparency' },
+  { id: 'turning-point', label: 'The turning point' },
+  { id: 'final-experience', label: 'Final experience' },
+  { id: 'impact-outcomes', label: 'Impact' },
+  { id: 'retro-title', label: 'Retrospective' },
 ]
