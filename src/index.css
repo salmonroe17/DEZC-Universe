@@ -509,6 +509,19 @@ textarea {
   background-color: #ffffff;
 }
 
+/* Ring matches page fill: keeps chamfer clip; 1px outline blends away (e.g. inline GIF tiles). */
+.chamfer-border-bg-match.quadrant-cell::before {
+  background-color: var(--color-bg);
+}
+
+.chamfer-border-bg-match.quadrant-cell:hover::before {
+  background-color: var(--color-bg);
+}
+
+.chamfer-border-bg-match.figma-frame-static.quadrant-cell:hover::before {
+  background-color: var(--color-bg);
+}
+
 /* User vs business trade-off rows — #414141 ring, no interior fill (page shows through). */
 .chamfer-tradeoff-outline.quadrant-cell::before {
   background-color: #414141;

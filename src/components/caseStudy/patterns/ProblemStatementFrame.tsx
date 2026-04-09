@@ -48,12 +48,15 @@ const bodyRowFlex =
 function ProblemFramedRow({
   children,
   accentClassName,
+  className = '',
 }: {
   children: ReactNode
   accentClassName: string
+  /** Merged after base row styles (e.g. font-mono). */
+  className?: string
 }) {
   return (
-    <div className={bodyRowFlex}>
+    <div className={[bodyRowFlex, className].filter(Boolean).join(' ')}>
       <ProblemBracket side="left" accentClassName={accentClassName} />
       <div
         className={`flex min-w-0 flex-1 flex-col justify-center gap-4 text-center font-normal md:gap-6 ${accentClassName}`}
@@ -61,6 +64,44 @@ function ProblemFramedRow({
         {children}
       </div>
       <ProblemBracket side="right" accentClassName={accentClassName} />
+    </div>
+  )
+}
+
+export type ProblemStatementGlitchFramedBlockProps = {
+  children: ReactNode
+  /** Extra classes on the outer bracket row (same scale as Problem statement body). */
+  frameClassName?: string
+  /** Extra classes on the relative glitch wrapper (e.g. max width). */
+  containerClassName?: string
+}
+
+/**
+ * RGB ghost glitch + full-height SVG brackets — same treatment as the body copy in
+ * {@link ProblemStatementFrame}, for reuse in other sections.
+ */
+export function ProblemStatementGlitchFramedBlock({
+  children,
+  frameClassName = '',
+  containerClassName = '',
+}: ProblemStatementGlitchFramedBlockProps) {
+  return (
+    <div className={['relative mx-auto w-full min-w-0', containerClassName].filter(Boolean).join(' ')}>
+      <div className="problem-statement-glitch-ghost problem-statement-glitch-ghost--c pointer-events-none absolute inset-0 z-0">
+        <ProblemFramedRow accentClassName="text-[rgba(94,214,255,0.82)]" className={frameClassName}>
+          {children}
+        </ProblemFramedRow>
+      </div>
+      <div className="problem-statement-glitch-ghost problem-statement-glitch-ghost--r pointer-events-none absolute inset-0 z-0">
+        <ProblemFramedRow accentClassName="text-[rgba(255,105,145,0.82)]" className={frameClassName}>
+          {children}
+        </ProblemFramedRow>
+      </div>
+      <div className="relative z-10">
+        <ProblemFramedRow accentClassName="text-fg" className={frameClassName}>
+          {children}
+        </ProblemFramedRow>
+      </div>
     </div>
   )
 }
@@ -86,15 +127,7 @@ export function ProblemStatementFrame({
       </div>
 
       <div className="relative mx-auto mt-10 max-w-4xl px-2 md:mt-14 md:px-4">
-        <div className="problem-statement-glitch-ghost problem-statement-glitch-ghost--c pointer-events-none absolute inset-0 z-0">
-          <ProblemFramedRow accentClassName="text-[rgba(94,214,255,0.82)]">{children}</ProblemFramedRow>
-        </div>
-        <div className="problem-statement-glitch-ghost problem-statement-glitch-ghost--r pointer-events-none absolute inset-0 z-0">
-          <ProblemFramedRow accentClassName="text-[rgba(255,105,145,0.82)]">{children}</ProblemFramedRow>
-        </div>
-        <div className="relative z-10">
-          <ProblemFramedRow accentClassName="text-fg">{children}</ProblemFramedRow>
-        </div>
+        <ProblemStatementGlitchFramedBlock>{children}</ProblemStatementGlitchFramedBlock>
       </div>
 
       <div

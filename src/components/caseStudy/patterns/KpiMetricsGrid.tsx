@@ -57,7 +57,7 @@ function usePrefersReducedMotion(): boolean {
 
 const kpiValueGlowClass = 'kpi-metric-value-glow'
 
-function KpiAnimatedValue({ value }: { value: string }) {
+export function KpiAnimatedValue({ value }: { value: string }) {
   const parsed = useMemo(() => parseKpiNumeric(value), [value])
   const reduceMotion = usePrefersReducedMotion()
   const ref = useRef<HTMLSpanElement>(null)

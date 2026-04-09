@@ -15,6 +15,10 @@ export {
   caseStudySectionHeadingClass,
   caseStudySectionHeadingTimelineClass,
 } from './caseStudyPatternStyles'
-export { KpiMetricsGrid } from './KpiMetricsGrid'
-export { ProblemStatementFrame } from './ProblemStatementFrame'
+export { KpiAnimatedValue, KpiMetricsGrid } from './KpiMetricsGrid'
+export {
+  ProblemStatementFrame,
+  ProblemStatementGlitchFramedBlock,
+} from './ProblemStatementFrame'
+export type { ProblemStatementGlitchFramedBlockProps } from './ProblemStatementFrame'
 export { TimelinePillsRow } from './TimelinePillsRow'

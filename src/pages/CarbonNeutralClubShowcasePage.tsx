@@ -13,25 +13,112 @@ import carbonPrincipleC10 from '../../CNC photos/c10.png'
 import carbonPrincipleC11 from '../../CNC photos/c11.png'
 import carbonCalculatorMockup from '../../CNC photos/c12.png'
 import carbonCalculatorWhyMockup from '../../CNC photos/c12.1.png'
+import carbonCalculatorC13 from '../../CNC photos/c13.png'
+import carbonCalculatorC13Alt from '../../CNC photos/c13.1.png'
+import carbonResultMeaningfulC14 from '../../CNC photos/c14.png'
+import carbonResultMeaningfulC14Alt from '../../CNC photos/c14.1.png'
+import carbonPricingPlanC15 from '../../CNC photos/c15.png'
+import carbonPricingPlanC15Alt from '../../CNC photos/c15.1.png'
+import carbonTrustOffsetProjectsC16 from '../../CNC photos/c16.png'
+import carbonTrustOffsetProjectsC16Alt from '../../CNC photos/c16.1.png'
+import carbonCostBreakdownC17 from '../../CNC photos/c17.png'
+import carbonCostBreakdownC17Alt from '../../CNC photos/c17.1.png'
+import carbonCheckoutTrustC18 from '../../CNC photos/c18.png'
+import carbonTurningPointC19 from '../../CNC photos/c19.png'
+import carbonPlanPageB2BC20 from '../../CNC photos/c20.png'
+import carbonPlanPageB2CC20_1 from '../../CNC photos/c20.1.png'
 import carbonPrototypeVideo from '../../CNC photos/cnc video portfolio prototype 720p30.mp4'
+import mindExplosionGif from '../../CNC photos/mindexplosion.gif'
+import { usePreloadImages } from '../hooks/usePreloadImages'
 import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { CARBON_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
 import {
-  ComparisonShowcase,
+  KpiAnimatedValue,
   ProblemStatementFrame,
+  ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
   caseStudyScrollAnchorClass,
 } from '../components/caseStudy/patterns'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
-import { KPISection } from '../components/sections/KPISection'
 import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStudiesPanel'
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
-import { PlaceholderVisual } from '../components/system/PlaceholderVisual'
 import {
   RotatingGradientCircle,
   RotatingGradientCircleDotPlaceholder,
 } from '../components/system/RotatingGradientCircle'
+
+/** Chamfer toggle image pairs — preloaded so instant swaps don’t hitch on first flip. */
+const CARBON_CHAMFER_CROSSFADE_IMAGE_URLS = [
+  carbonProblemProductSurface,
+  carbonProblemProductSurfaceStruggles,
+  carbonCalculatorMockup,
+  carbonCalculatorWhyMockup,
+  carbonCalculatorC13,
+  carbonCalculatorC13Alt,
+  carbonResultMeaningfulC14,
+  carbonResultMeaningfulC14Alt,
+  carbonPricingPlanC15,
+  carbonPricingPlanC15Alt,
+  carbonTrustOffsetProjectsC16,
+  carbonTrustOffsetProjectsC16Alt,
+  carbonCostBreakdownC17,
+  carbonCostBreakdownC17Alt,
+  carbonCheckoutTrustC18,
+  carbonTurningPointC19,
+  carbonPlanPageB2BC20,
+  carbonPlanPageB2CC20_1,
+] as const
+
+/** Locks aspect/size; base + alt paint in the same box (no shift between exports). */
+const chamferToggleStackSpacerClass =
+  'block h-auto w-full max-w-full select-none pointer-events-none opacity-0'
+
+/**
+ * Spacer sets the box from the base asset; layers fill it with contain + top-left anchor.
+ * Export base and `.1` at the same pixel size so there’s no letterboxing or crop.
+ */
+const chamferToggleStackLayerClass =
+  'pointer-events-none absolute inset-0 h-full w-full max-w-full object-contain object-left object-top align-middle'
+
+const chamferAnnotationToggleLabelOff = 'Show why this works'
+const chamferAnnotationToggleLabelOn = 'Hide annotations'
+
+const WHAT_THIS_CHANGED_BULLETS = [
+  'Who the product was really for',
+  'How onboarding worked',
+  'How value was framed',
+  'How the system needed to support different user states',
+] as const
+
+const FINAL_EXPERIENCE_BULLETS = [
+  'Define impact',
+  'Explain the number',
+  'Choose a level of action',
+  'Complete the experience with confidence',
+] as const
+
+const IMPACT_KPI_ROWS: { value: string; body: string; target?: string }[] = [
+  {
+    value: '85%',
+    body: 'of people enter their email to start the calculator, with 15% dropping off before starting',
+    target: 'Target start rate was 60%',
+  },
+  {
+    value: '95%',
+    body: 'of people who start the calculator finish it',
+    target: 'Target completion rate was 70%',
+  },
+  {
+    value: '3–4%',
+    body: 'of people complete checkout for B2C',
+    target: 'Target checkout rate was 3%',
+  },
+  {
+    value: '97%',
+    body: 'of people complete checkout for B2B',
+  },
+]
 
 const SYSTEM_DESIGNED_FLOW_PILLS = [
   '1. Calculator',
@@ -110,6 +197,112 @@ const CALCULATOR_INTRO_COLUMNS: { body: ReactNode }[] = [
   },
   {
     body: 'The goal was not just accuracy. It was maintaining confidence and completion throughout the flow.',
+  },
+]
+
+const RESULT_MEANINGFUL_INTRO_COLUMNS: { body: ReactNode }[] = [
+  {
+    body: (
+      <>
+        <p className="m-0">
+          A raw footprint number is not enough. Without context, users don&apos;t know:
+        </p>
+        <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 marker:text-fg-subtle">
+          <li>If their score is high or low</li>
+          <li>How it compares to others</li>
+          <li>What it should mean for their decision</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    body: (
+      <>
+        <p className="m-0">We redesigned the result layer to make the number interpretable through:</p>
+        <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 marker:text-fg-subtle">
+          <li>Comparison</li>
+          <li>Category breakdown</li>
+          <li>Contextual framing</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    body: 'This was one of the most important trust-building moments in the flow.',
+  },
+]
+
+const PRICING_PLAN_INTRO_COLUMNS: { body: ReactNode }[] = [
+  {
+    body: (
+      <>
+        <p className="m-0">Plan selection needed to do two jobs at once:</p>
+        <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 marker:text-fg-subtle">
+          <li>Help users understand their options</li>
+          <li>Make the connection between impact and price feel logical</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    body: (
+      <>
+        <p className="m-0">We introduced a limited, clear set of tiers:</p>
+        <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 marker:text-fg-subtle">
+          <li>50%</li>
+          <li>100%</li>
+          <li>200%</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    body: (
+      <>
+        <p className="m-0">
+          That gave users flexibility without overwhelming them. It also made the value proposition
+          easier to explain:
+        </p>
+        <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 marker:text-fg-subtle">
+          <li>Different levels of offset, tied to the same underlying footprint</li>
+        </ul>
+      </>
+    ),
+  },
+]
+
+const PRICING_TRUST_OFFSET_INTRO_COLUMNS: { body: ReactNode }[] = [
+  {
+    body: (
+      <p className="m-0">
+        We gave people a nudge of trust and transparency so they always knew the exact next step.
+      </p>
+    ),
+  },
+  {
+    body: (
+      <>
+        <p className="m-0">Sections we implemented for trust &amp; transparency:</p>
+        <ul className="mb-0 mt-3 list-disc space-y-2 pl-5 marker:text-fg-subtle">
+          <li>How the business works</li>
+          <li>Membership rewards and savings</li>
+          <li>Testimonials</li>
+          <li>Cost breakdowns</li>
+        </ul>
+      </>
+    ),
+  },
+]
+
+const CHECKOUT_TRUST_INTRO_COLUMNS: { body: ReactNode }[] = [
+  {
+    body: 'Checkout was the moment where uncertainty became commitment — the step where intent turned into payment.',
+  },
+  {
+    body: 'Users needed to understand what each line item represented before they felt confident completing checkout. We surfaced offset, membership, processing, taxes, and discounts as separate, legible rows.',
+  },
+  {
+    body: 'Express pay options and card fields sat next to a persistent order summary so the full price story stayed visible through the last tap.',
   },
 ]
 
@@ -240,6 +433,14 @@ function CarbonPrototypeAutoplayVideo({ src }: { src: string }) {
 export default function CarbonNeutralClubShowcasePage() {
   const [seeWhereUsersStruggled, setSeeWhereUsersStruggled] = useState(false)
   const [showCalculatorWhyWorks, setShowCalculatorWhyWorks] = useState(false)
+  const [showCalculatorC13Alt, setShowCalculatorC13Alt] = useState(false)
+  const [showResultMeaningfulAlt, setShowResultMeaningfulAlt] = useState(false)
+  const [showPricingPlanAlt, setShowPricingPlanAlt] = useState(false)
+  const [showPricingTrustProjectsAlt, setShowPricingTrustProjectsAlt] = useState(false)
+  const [showPricingCostBreakdownAlt, setShowPricingCostBreakdownAlt] = useState(false)
+  const [whatChangedPlanIsB2C, setWhatChangedPlanIsB2C] = useState(false)
+
+  usePreloadImages(CARBON_CHAMFER_CROSSFADE_IMAGE_URLS)
 
   return (
     <CaseStudyShowcaseScaffold
@@ -467,15 +668,27 @@ export default function CarbonNeutralClubShowcasePage() {
             id="struggle-toggle-label"
             className="font-mono text-sm font-normal leading-none text-fg md:text-base"
           >
-            See where users struggled
+            {seeWhereUsersStruggled
+              ? chamferAnnotationToggleLabelOn
+              : chamferAnnotationToggleLabelOff}
           </span>
         </div>
         <div className="relative isolate w-full">
           <img
             src={carbonProblemProductSurface}
+            alt=""
+            aria-hidden
+            decoding="async"
+            loading="eager"
+            className={chamferToggleStackSpacerClass}
+          />
+          <img
+            src={carbonProblemProductSurface}
             alt="Carbon Neutral Club — problem and product surface context"
             decoding="async"
-            className={`relative z-0 block h-auto w-full max-w-full align-middle transition-opacity duration-100 ease-out motion-reduce:transition-none ${
+            loading="eager"
+            fetchPriority="high"
+            className={`${chamferToggleStackLayerClass} z-0 ${
               seeWhereUsersStruggled ? 'opacity-0' : 'opacity-100'
             }`}
           />
@@ -483,7 +696,8 @@ export default function CarbonNeutralClubShowcasePage() {
             src={carbonProblemProductSurfaceStruggles}
             alt="Carbon Neutral Club — where users struggled (annotated)"
             decoding="async"
-            className={`pointer-events-none absolute left-0 top-0 z-10 block h-auto w-full max-w-full align-middle transition-opacity duration-100 ease-out motion-reduce:transition-none ${
+            loading="eager"
+            className={`${chamferToggleStackLayerClass} z-10 ${
               seeWhereUsersStruggled ? 'opacity-100' : 'opacity-0'
             }`}
           />
@@ -729,18 +943,20 @@ export default function CarbonNeutralClubShowcasePage() {
         className={caseStudyScrollAnchorClass}
       >
         <FigmaGrid12>
-          <h2
-            id="the-calculator-heading"
-            className="col-span-12 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
-          >
-            The Calculator
-          </h2>
-          <div className="col-span-12 mt-[var(--figma-gutter)] grid grid-cols-1 gap-[var(--figma-gutter)] font-mono text-sm font-normal leading-relaxed text-fg md:grid-cols-3 md:text-base">
-            {CALCULATOR_INTRO_COLUMNS.map((col, i) => (
-              <div key={i} className="min-w-0">
-                {col.body}
-              </div>
-            ))}
+          <div className="col-span-12 flex flex-col gap-[16px]">
+            <h2
+              id="the-calculator-heading"
+              className="m-0 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+            >
+              The Calculator
+            </h2>
+            <div className="grid grid-cols-1 gap-[var(--figma-gutter)] font-mono text-[12px] font-normal leading-relaxed text-fg md:grid-cols-3 [&_li]:text-[12px] [&_p]:text-[12px]">
+              {CALCULATOR_INTRO_COLUMNS.map((col, i) => (
+                <div key={i} className="min-w-0">
+                  {col.body}
+                </div>
+              ))}
+            </div>
           </div>
         </FigmaGrid12>
 
@@ -774,15 +990,27 @@ export default function CarbonNeutralClubShowcasePage() {
               id="calculator-why-toggle-label"
               className="font-mono text-sm font-normal leading-none text-fg md:text-base"
             >
-              Show why this works
+              {showCalculatorWhyWorks
+                ? chamferAnnotationToggleLabelOn
+                : chamferAnnotationToggleLabelOff}
             </span>
           </div>
           <div className="relative isolate w-full">
             <img
               src={carbonCalculatorMockup}
+              alt=""
+              aria-hidden
+              decoding="async"
+              loading="eager"
+              className={chamferToggleStackSpacerClass}
+            />
+            <img
+              src={carbonCalculatorMockup}
               alt="Carbon Neutral Club calculator landing: estimate footprint hero, stepper, and laptop mockup"
               decoding="async"
-              className={`relative z-0 block h-auto w-full max-w-full align-middle transition-opacity duration-100 ease-out motion-reduce:transition-none ${
+              loading="eager"
+              fetchPriority="high"
+              className={`${chamferToggleStackLayerClass} z-0 ${
                 showCalculatorWhyWorks ? 'opacity-0' : 'opacity-100'
               }`}
             />
@@ -790,8 +1018,75 @@ export default function CarbonNeutralClubShowcasePage() {
               src={carbonCalculatorWhyMockup}
               alt="Carbon Neutral Club calculator — rationale for progressive steps and flow structure"
               decoding="async"
-              className={`pointer-events-none absolute left-0 top-0 z-10 block h-auto w-full max-w-full align-middle transition-opacity duration-100 ease-out motion-reduce:transition-none ${
+              loading="eager"
+              className={`${chamferToggleStackLayerClass} z-10 ${
                 showCalculatorWhyWorks ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </div>
+        </ChamferFrame>
+
+        <ChamferFrame
+          className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
+        >
+          <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showCalculatorC13Alt}
+              aria-labelledby="calculator-c13-toggle-label"
+              onClick={() => setShowCalculatorC13Alt((v) => !v)}
+              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
+                showCalculatorC13Alt
+                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_rgba(0,0,0,0.12)]'
+                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+              }`}
+            >
+              <span
+                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
+                  showCalculatorC13Alt
+                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
+                    : 'left-1 bg-white'
+                }`}
+                aria-hidden
+              />
+            </button>
+            <span
+              id="calculator-c13-toggle-label"
+              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+            >
+              {showCalculatorC13Alt
+                ? chamferAnnotationToggleLabelOn
+                : chamferAnnotationToggleLabelOff}
+            </span>
+          </div>
+          <div className="relative isolate w-full">
+            <img
+              src={carbonCalculatorC13}
+              alt=""
+              aria-hidden
+              decoding="async"
+              loading="eager"
+              className={chamferToggleStackSpacerClass}
+            />
+            <img
+              src={carbonCalculatorC13}
+              alt="Carbon Neutral Club calculator — extended flow or interface detail"
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              className={`${chamferToggleStackLayerClass} z-0 ${
+                showCalculatorC13Alt ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={carbonCalculatorC13Alt}
+              alt="Carbon Neutral Club calculator — alternate or annotated view for the extended flow"
+              decoding="async"
+              loading="eager"
+              className={`${chamferToggleStackLayerClass} z-10 ${
+                showCalculatorC13Alt ? 'opacity-100' : 'opacity-0'
               }`}
             />
           </div>
@@ -801,199 +1096,658 @@ export default function CarbonNeutralClubShowcasePage() {
       <div className="figma-rule my-[32px]" aria-hidden />
 
       <section
-        id="design-title"
-        aria-labelledby="design-title-heading"
+        id="making-result-meaningful"
+        aria-labelledby="making-result-meaningful-heading"
         className={caseStudyScrollAnchorClass}
       >
         <FigmaGrid12>
-          <h2
-            id="design-title-heading"
-            className="col-span-12 text-base font-normal text-fg md:text-lg"
-          >
-            Design
-          </h2>
-          <p className="col-span-12 max-w-3xl text-sm leading-relaxed text-fg-muted md:text-base">
-            The system prioritized expectations up front, structured clarity over dumps of copy, and
-            transparency at decision points — especially where money moved at checkout.
-          </p>
+          <div className="col-span-12 flex flex-col gap-[16px]">
+            <h2
+              id="making-result-meaningful-heading"
+              className="m-0 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+            >
+              Making the result meaningful
+            </h2>
+            <div className="grid grid-cols-1 gap-[var(--figma-gutter)] font-mono text-[12px] font-normal leading-relaxed text-fg md:grid-cols-3 [&_li]:text-[12px] [&_p]:text-[12px]">
+              {RESULT_MEANINGFUL_INTRO_COLUMNS.map((col, i) => (
+                <div key={i} className="min-w-0">
+                  {col.body}
+                </div>
+              ))}
+            </div>
+          </div>
         </FigmaGrid12>
-        <FigmaGrid12 className="mt-10 md:mt-[var(--figma-gutter)]">
-          <div className="col-span-12 md:order-1 md:col-span-7">
-            <PlaceholderVisual
-              className="min-h-[min(72vw,340px)] md:min-h-[431px]"
-              label="Results screen + plan selection with offset tiers"
+
+        <ChamferFrame
+          className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
+        >
+          <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showResultMeaningfulAlt}
+              aria-labelledby="result-meaningful-toggle-label"
+              onClick={() => setShowResultMeaningfulAlt((v) => !v)}
+              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
+                showResultMeaningfulAlt
+                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_rgba(0,0,0,0.12)]'
+                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+              }`}
+            >
+              <span
+                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
+                  showResultMeaningfulAlt
+                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
+                    : 'left-1 bg-white'
+                }`}
+                aria-hidden
+              />
+            </button>
+            <span
+              id="result-meaningful-toggle-label"
+              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+            >
+              {showResultMeaningfulAlt
+                ? chamferAnnotationToggleLabelOn
+                : chamferAnnotationToggleLabelOff}
+            </span>
+          </div>
+          <div className="relative isolate w-full">
+            <img
+              src={carbonResultMeaningfulC14}
+              alt=""
+              aria-hidden
+              decoding="async"
+              loading="eager"
+              className={chamferToggleStackSpacerClass}
+            />
+            <img
+              src={carbonResultMeaningfulC14}
+              alt="Carbon Neutral Club footprint result: comparison to national average, range bar, and tonnes per year"
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              className={`${chamferToggleStackLayerClass} z-0 ${
+                showResultMeaningfulAlt ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={carbonResultMeaningfulC14Alt}
+              alt="Carbon Neutral Club footprint result — annotated view explaining comparison and framing"
+              decoding="async"
+              loading="eager"
+              className={`${chamferToggleStackLayerClass} z-10 ${
+                showResultMeaningfulAlt ? 'opacity-100' : 'opacity-0'
+              }`}
             />
           </div>
-          <div className="col-span-12 max-w-none text-sm leading-relaxed text-fg md:order-2 md:col-span-5 md:text-base">
-            <p className="font-medium text-fg">Results &amp; plan</p>
-            <p className="mt-4 text-fg-muted">
-              Footprint with comparison to average so the number landed, then tiered offset depth tied
-              to commitment.
-            </p>
-          </div>
-        </FigmaGrid12>
+        </ChamferFrame>
       </section>
 
       <div className="figma-rule my-[32px]" aria-hidden />
 
-      <div id="quote-block" className={caseStudyScrollAnchorClass}>
-        <FigmaGrid12 aria-labelledby="quote-heading">
-          <h2 id="quote-heading" className="sr-only">
-            Quote
-          </h2>
-          <div className="col-span-12 flex w-full flex-col items-center gap-12 md:flex-row md:items-center md:gap-8">
-            <RotatingGradientCircle
-              className="size-[223px] shrink-0"
-              innerClassName="bg-surface/30"
-              aria-hidden
+      <section
+        id="pricing-plan-design"
+        aria-labelledby="pricing-plan-design-heading"
+        className={caseStudyScrollAnchorClass}
+      >
+        <FigmaGrid12>
+          <div className="col-span-12 flex flex-col gap-[16px]">
+            <h2
+              id="pricing-plan-design-heading"
+              className="m-0 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
             >
-              <RotatingGradientCircleDotPlaceholder />
-            </RotatingGradientCircle>
-            <p className="min-w-0 flex-1 text-center text-lg font-medium leading-snug text-fg md:text-left md:text-xl">
-              Users weren&apos;t confused by climate action. They were confused by what their number
-              meant and whether it was worth paying for.
-            </p>
+              Pricing & plan design
+            </h2>
+            <div className="grid grid-cols-1 gap-[var(--figma-gutter)] font-mono text-[12px] font-normal leading-relaxed text-fg md:grid-cols-3 [&_li]:text-[12px] [&_p]:text-[12px]">
+              {PRICING_PLAN_INTRO_COLUMNS.map((col, i) => (
+                <div key={i} className="min-w-0">
+                  {col.body}
+                </div>
+              ))}
+            </div>
           </div>
         </FigmaGrid12>
-      </div>
 
-      <div className="figma-rule my-[32px]" aria-hidden />
-
-      <ComparisonShowcase
-        title="Business model shift"
-        titleId="components-comparison"
-        titleAlign="center"
-        bullets={[
-          'Individual checkout → company-funded membership',
-          'New pricing and onboarding paths',
-          'Product value reframed around workforce benefit',
-        ]}
-        before={
-          <PlaceholderVisual
-            className="min-h-[200px] md:min-h-[220px]"
-            label="B2C: user calculates, selects plan, pays individually"
-          />
-        }
-        after={
-          <PlaceholderVisual
-            className="min-h-[200px] md:min-h-[220px]"
-            label="B2B2C: employer covers cost; employees still complete core flow"
-          />
-        }
-        caption="Toggle before/after: same calculator experience, different funding model and go-to-market."
-      />
-
-      <div className="figma-rule my-[32px]" aria-hidden />
-
-      <FigmaGrid12 aria-labelledby="feature-pair">
-        <h2
-          id="feature-pair"
-          className={`col-span-12 text-base font-normal text-fg md:text-lg ${caseStudyScrollAnchorClass}`}
+        <ChamferFrame
+          className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
-          Research &amp; checkout
-        </h2>
-        <div className="col-span-12 flex flex-col gap-4 md:col-span-6">
-          <PlaceholderVisual
-            className="min-h-[280px] md:min-h-[340px]"
-            label="Research themes — footprint value, pay hesitation"
-          />
-          <p className="text-xs leading-relaxed text-fg-muted md:text-sm">
-            People engaged deeply with understanding their footprint but hesitated at pay — we
-            doubled down on pricing transparency and the “why this number” story.
-          </p>
-        </div>
-        <div className="col-span-12 flex flex-col gap-4 md:col-span-6">
-          <PlaceholderVisual
-            className="min-h-[280px] md:min-h-[340px]"
-            label="Checkout UI with breakdown and trust cues"
-          />
-          <p className="text-xs leading-relaxed text-fg-muted md:text-sm">
-            Checkout spelled allocation and pricing so the last step felt fair — the same surface
-            later informed B2B2C pricing experiments.
-          </p>
-        </div>
-      </FigmaGrid12>
+          <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showPricingPlanAlt}
+              aria-labelledby="pricing-plan-toggle-label"
+              onClick={() => setShowPricingPlanAlt((v) => !v)}
+              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
+                showPricingPlanAlt
+                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_rgba(0,0,0,0.12)]'
+                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+              }`}
+            >
+              <span
+                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
+                  showPricingPlanAlt
+                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
+                    : 'left-1 bg-white'
+                }`}
+                aria-hidden
+              />
+            </button>
+            <span
+              id="pricing-plan-toggle-label"
+              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+            >
+              {showPricingPlanAlt
+                ? chamferAnnotationToggleLabelOn
+                : chamferAnnotationToggleLabelOff}
+            </span>
+          </div>
+          <div className="relative isolate w-full">
+            <img
+              src={carbonPricingPlanC15}
+              alt=""
+              aria-hidden
+              decoding="async"
+              loading="eager"
+              className={chamferToggleStackSpacerClass}
+            />
+            <img
+              src={carbonPricingPlanC15}
+              alt="Carbon Neutral Club plan selection: footprint summary, tier cards, and monthly or yearly pricing"
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              className={`${chamferToggleStackLayerClass} z-0 ${
+                showPricingPlanAlt ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={carbonPricingPlanC15Alt}
+              alt="Carbon Neutral Club plan selection — annotated view explaining tiers and pricing rationale"
+              decoding="async"
+              loading="eager"
+              className={`${chamferToggleStackLayerClass} z-10 ${
+                showPricingPlanAlt ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </div>
+        </ChamferFrame>
 
-      <div className="figma-rule my-[32px]" aria-hidden />
+        <FigmaGrid12 className="mt-[var(--figma-gutter)]">
+          <div className="col-span-12 grid grid-cols-1 gap-[var(--figma-gutter)] font-mono text-[12px] font-normal leading-relaxed text-fg md:grid-cols-2 [&_li]:text-[12px] [&_p]:text-[12px]">
+            {PRICING_TRUST_OFFSET_INTRO_COLUMNS.map((col, i) => (
+              <div key={i} className="min-w-0">
+                {col.body}
+              </div>
+            ))}
+          </div>
+        </FigmaGrid12>
 
-      <FigmaGrid12 aria-labelledby="decision-grid-title">
-        <h2
-          id="decision-grid-title"
-          className={`col-span-12 text-base font-normal text-fg md:text-lg ${caseStudyScrollAnchorClass}`}
+        <ChamferFrame
+          className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
-          Key decisions
-        </h2>
-        <ChamferFrame className="col-span-12 md:col-span-4" innerClassName="flex flex-col bg-elevated/15">
-          <div className="flex min-h-[140px] items-center justify-center bg-surface/50 p-4 md:min-h-[160px]">
-            <p className="text-center text-[11px] leading-relaxed text-fg-muted">
-              Employer-funded pilot: same calculator, $0 employee contribution — validated B2B2C
-              demand.
-            </p>
+          <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showPricingTrustProjectsAlt}
+              aria-labelledby="pricing-trust-offset-toggle-label"
+              onClick={() => setShowPricingTrustProjectsAlt((v) => !v)}
+              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
+                showPricingTrustProjectsAlt
+                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_rgba(0,0,0,0.12)]'
+                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+              }`}
+            >
+              <span
+                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
+                  showPricingTrustProjectsAlt
+                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
+                    : 'left-1 bg-white'
+                }`}
+                aria-hidden
+              />
+            </button>
+            <span
+              id="pricing-trust-offset-toggle-label"
+              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+            >
+              {showPricingTrustProjectsAlt
+                ? chamferAnnotationToggleLabelOn
+                : chamferAnnotationToggleLabelOff}
+            </span>
           </div>
-          <div className="border-t border-cell-border/60 p-4">
-            <h3 className="text-sm font-medium text-fg">B2B2C pilot</h3>
-            <p className="mt-2 text-xs leading-relaxed text-fg-muted">
-              Companies wanted offsets as a benefit, not only individual pay.
-            </p>
+          <div className="relative isolate w-full">
+            <img
+              src={carbonTrustOffsetProjectsC16}
+              alt=""
+              aria-hidden
+              decoding="async"
+              loading="eager"
+              className={chamferToggleStackSpacerClass}
+            />
+            <img
+              src={carbonTrustOffsetProjectsC16}
+              alt="Carbon Neutral Club — Want to know more: offset projects tab, project cards, and trust framing"
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              className={`${chamferToggleStackLayerClass} z-0 ${
+                showPricingTrustProjectsAlt ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={carbonTrustOffsetProjectsC16Alt}
+              alt="Carbon Neutral Club offset projects — annotated view for trust and transparency"
+              decoding="async"
+              loading="eager"
+              className={`${chamferToggleStackLayerClass} z-10 ${
+                showPricingTrustProjectsAlt ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
           </div>
         </ChamferFrame>
-        <ChamferFrame className="col-span-12 md:col-span-4" innerClassName="flex flex-col bg-elevated/15">
-          <div className="flex min-h-[140px] items-center justify-center bg-surface/50 p-4 md:min-h-[160px]">
-            <p className="text-center text-[11px] leading-relaxed text-fg-muted">
-              Kept explicit steps instead of collapsing the journey — trust beat faux simplicity.
-            </p>
+
+        <ChamferFrame
+          className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
+        >
+          <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showPricingCostBreakdownAlt}
+              aria-labelledby="pricing-cost-breakdown-toggle-label"
+              onClick={() => setShowPricingCostBreakdownAlt((v) => !v)}
+              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
+                showPricingCostBreakdownAlt
+                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_rgba(0,0,0,0.12)]'
+                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+              }`}
+            >
+              <span
+                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
+                  showPricingCostBreakdownAlt
+                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
+                    : 'left-1 bg-white'
+                }`}
+                aria-hidden
+              />
+            </button>
+            <span
+              id="pricing-cost-breakdown-toggle-label"
+              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+            >
+              {showPricingCostBreakdownAlt
+                ? chamferAnnotationToggleLabelOn
+                : chamferAnnotationToggleLabelOff}
+            </span>
           </div>
-          <div className="border-t border-cell-border/60 p-4">
-            <h3 className="text-sm font-medium text-fg">Flow depth</h3>
-            <p className="mt-2 text-xs leading-relaxed text-fg-muted">
-              Fewer “what am I buying?” moments at checkout after iteration.
-            </p>
+          <div className="relative isolate w-full">
+            <img
+              src={carbonCostBreakdownC17}
+              alt=""
+              aria-hidden
+              decoding="async"
+              loading="eager"
+              className={chamferToggleStackSpacerClass}
+            />
+            <img
+              src={carbonCostBreakdownC17}
+              alt="Carbon Neutral Club cost breakdown: plan tiers, segmented fees, and monthly total"
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              className={`${chamferToggleStackLayerClass} z-0 ${
+                showPricingCostBreakdownAlt ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={carbonCostBreakdownC17Alt}
+              alt="Carbon Neutral Club cost breakdown — annotated view explaining fees and transparency"
+              decoding="async"
+              loading="eager"
+              className={`${chamferToggleStackLayerClass} z-10 ${
+                showPricingCostBreakdownAlt ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
           </div>
         </ChamferFrame>
-        <ChamferFrame className="col-span-12 md:col-span-4" innerClassName="flex flex-col bg-elevated/15">
-          <div className="flex min-h-[140px] items-center justify-center bg-surface/50 p-4 md:min-h-[160px]">
-            <p className="text-center text-[11px] leading-relaxed text-fg-muted">
-              Checkout became the experiment surface for pricing and packaging — product + GTM
-              aligned.
-            </p>
-          </div>
-          <div className="border-t border-cell-border/60 p-4">
-            <h3 className="text-sm font-medium text-fg">Checkout as lab</h3>
-            <p className="mt-2 text-xs leading-relaxed text-fg-muted">
-              Informed membership pricing and employer onboarding.
-            </p>
-          </div>
-        </ChamferFrame>
-      </FigmaGrid12>
+      </section>
 
       <div className="figma-rule my-[32px]" aria-hidden />
 
-      <KPISection
-        title="Impact"
-        headingId="components-kpi"
-        metrics={[
-          {
-            value: 'High',
-            label: 'Calculator engagement',
-            description: 'Majority entered the flow',
-          },
-          {
-            value: '↓',
-            label: 'Structured drop-off',
-            description: 'Clearer funnel after iteration',
-          },
-          {
-            value: '1000+',
-            label: 'Members (year one)',
-            description: 'Including company-funded paths',
-          },
-          {
-            value: 'B2B2C',
-            label: 'Model expansion',
-            description: 'Checkout informed pricing strategy',
-          },
-        ]}
-      />
+      <section
+        id="checkout-trust-building"
+        aria-labelledby="checkout-trust-building-heading"
+        className={caseStudyScrollAnchorClass}
+      >
+        <FigmaGrid12>
+          <div className="col-span-12 flex flex-col gap-[16px]">
+            <h2
+              id="checkout-trust-building-heading"
+              className="m-0 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+            >
+              Checkout transparency
+            </h2>
+            <div className="grid grid-cols-1 gap-[var(--figma-gutter)] font-mono text-[12px] font-normal leading-relaxed text-fg md:grid-cols-3 [&_li]:text-[12px] [&_p]:text-[12px]">
+              {CHECKOUT_TRUST_INTRO_COLUMNS.map((col, i) => (
+                <div key={i} className="min-w-0">
+                  {col.body}
+                </div>
+              ))}
+            </div>
+          </div>
+        </FigmaGrid12>
+
+        <ChamferFrame
+          className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
+        >
+          <img
+            src={carbonCheckoutTrustC18}
+            alt="Carbon Neutral Club checkout: order summary with line items, express pay, card form, and pay now"
+            decoding="async"
+            loading="eager"
+            fetchPriority="high"
+            className="block h-auto w-full max-w-full align-middle"
+          />
+        </ChamferFrame>
+
+        <ChamferFrame
+          fitContentHeight
+          className="chamfer-media-border mt-[48px] w-full"
+          innerClassName="flex min-h-0 min-w-0 flex-col items-center justify-center overflow-hidden bg-white px-6 py-4 md:px-10 md:py-5"
+        >
+          <p className="m-0 max-w-[56rem] text-center font-mono text-[24px] font-normal leading-snug tracking-tight text-black">
+            End of 7 week project, 3 months later
+          </p>
+        </ChamferFrame>
+      </section>
+
+      <section
+        id="turning-point"
+        aria-labelledby="turning-point-heading"
+        className={`${caseStudyScrollAnchorClass} mt-10 md:mt-[var(--figma-gutter)]`}
+      >
+        <div className="w-full min-w-0">
+          <div className="flex flex-col gap-5 md:gap-6">
+            <div className="relative flex justify-center">
+              <span
+                className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-cell-border"
+                aria-hidden
+              />
+              <h2
+                id="turning-point-heading"
+                className="relative m-0 bg-bg px-4 text-center font-mono text-[10px] font-normal uppercase tracking-[0.14em] text-fg md:text-[11px]"
+              >
+                The turning point
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6 lg:gap-8">
+              <div className="flex min-w-0 flex-col gap-3 font-mono text-[12px] font-normal leading-relaxed text-fg">
+                <p className="m-0">This is where everything changed.</p>
+                <p className="m-0">Originally, the product was B2C:</p>
+                <p className="m-0">User → calculate → choose → pay</p>
+                <p className="m-0">Then something unexpected happened.</p>
+              </div>
+
+              <div className="min-w-0">
+                <ProblemStatementGlitchFramedBlock>
+                  <p className="m-0 text-balance">
+                    A CEO wanted to pay for everyone in the company.
+                  </p>
+                </ProblemStatementGlitchFramedBlock>
+              </div>
+
+              <div className="flex min-w-0 flex-col gap-3 font-mono text-[12px] font-normal leading-relaxed text-fg">
+                <p className="m-0">Everything changed.</p>
+                <p className="m-0">Now:</p>
+                <ul className="m-0 list-none space-y-2.5 p-0">
+                  <li className="relative pl-4 before:absolute before:left-0 before:text-fg before:content-['•']">
+                    Employees still calculate their footprint
+                  </li>
+                  <li className="relative pl-4 before:absolute before:left-0 before:text-fg before:content-['•']">
+                    Still go through the flow
+                  </li>
+                  <li className="relative pl-4 before:absolute before:left-0 before:text-fg before:content-['•']">
+                    But checkout ends at $0.00
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ChamferFrame
+          className="chamfer-media-border mt-[32px] w-full min-w-0"
+          innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
+        >
+          <img
+            src={carbonTurningPointC19}
+            alt="B2C versus B2B: four-step flow from calculator through checkout with a split at plan selection, and bullet comparison of each flow."
+            decoding="async"
+            loading="lazy"
+            className="block h-auto w-full max-w-full align-middle"
+          />
+        </ChamferFrame>
+
+        <div className="mt-[32px] w-full min-w-0" id="what-this-changed">
+          <div className="flex flex-col gap-[16px]">
+            <h3
+              id="what-this-changed-heading"
+              className="m-0 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+            >
+              What this changed
+            </h3>
+
+            <div className="grid grid-cols-1 gap-8 font-mono text-[12px] font-normal leading-relaxed text-fg md:grid-cols-3 md:gap-6 lg:gap-8">
+              <p className="m-0">
+                The shift from B2C to employer-funded memberships changed more than pricing.
+              </p>
+              <div className="flex min-w-0 flex-col gap-3">
+                <p className="m-0">It changed:</p>
+                <ul className="m-0 list-none space-y-2.5 p-0">
+                  {WHAT_THIS_CHANGED_BULLETS.map((line) => (
+                    <li
+                      key={line}
+                      className="relative pl-4 before:absolute before:left-0 before:text-fg before:content-['•']"
+                    >
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <p className="m-0">
+                A flow that once ended in personal payment now had to support multiple models cleanly.
+              </p>
+            </div>
+          </div>
+
+          <ChamferFrame
+            className="chamfer-media-border mt-[32px] w-full min-w-0"
+            innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
+          >
+            <div
+              className="flex w-full shrink-0 border-b border-fg/[0.12] bg-surface"
+              role="tablist"
+              aria-label="Plan page version"
+            >
+              <button
+                type="button"
+                role="tab"
+                id="what-changed-tab-b2b"
+                aria-selected={!whatChangedPlanIsB2C}
+                aria-controls="what-changed-plan-panel"
+                tabIndex={whatChangedPlanIsB2C ? -1 : 0}
+                onClick={() => setWhatChangedPlanIsB2C(false)}
+                className={`min-h-[44px] flex-1 px-4 py-3 text-center font-mono text-[12px] font-normal leading-snug transition-[background-color,color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-fg/55 md:text-[13px] ${
+                  !whatChangedPlanIsB2C
+                    ? 'bg-fg text-bg'
+                    : 'text-fg/75 hover:bg-fg/[0.06] hover:text-fg active:bg-fg/[0.1]'
+                }`}
+              >
+                B2B Plan page
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="what-changed-tab-b2c"
+                aria-selected={whatChangedPlanIsB2C}
+                aria-controls="what-changed-plan-panel"
+                tabIndex={!whatChangedPlanIsB2C ? -1 : 0}
+                onClick={() => setWhatChangedPlanIsB2C(true)}
+                className={`min-h-[44px] flex-1 px-4 py-3 text-center font-mono text-[12px] font-normal leading-snug transition-[background-color,color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-fg/55 md:text-[13px] ${
+                  whatChangedPlanIsB2C
+                    ? 'bg-fg text-bg'
+                    : 'text-fg/75 hover:bg-fg/[0.06] hover:text-fg active:bg-fg/[0.1]'
+                }`}
+              >
+                B2C Plan page
+              </button>
+            </div>
+
+            <div
+              id="what-changed-plan-panel"
+              role="tabpanel"
+              aria-labelledby={
+                whatChangedPlanIsB2C ? 'what-changed-tab-b2c' : 'what-changed-tab-b2b'
+              }
+              className="relative isolate w-full bg-[#f9f6f0]"
+            >
+              <img
+                src={carbonPlanPageB2BC20}
+                alt=""
+                aria-hidden
+                decoding="async"
+                loading="lazy"
+                className={chamferToggleStackSpacerClass}
+              />
+              <img
+                src={carbonPlanPageB2BC20}
+                alt="Carbon Neutral Club — B2B plan selection: employer-funded offset, Select your plan with free tier and sub-total at zero."
+                decoding="async"
+                loading="lazy"
+                className={`${chamferToggleStackLayerClass} z-0 transition-opacity duration-300 ease-out motion-reduce:transition-none ${
+                  whatChangedPlanIsB2C ? 'opacity-0' : 'opacity-100'
+                }`}
+              />
+              <img
+                src={carbonPlanPageB2CC20_1}
+                alt="Carbon Neutral Club — B2C plan flow: choose a plan, cost breakdown, savings, and long-form checkout context."
+                decoding="async"
+                loading="lazy"
+                className={`${chamferToggleStackLayerClass} z-10 transition-opacity duration-300 ease-out motion-reduce:transition-none ${
+                  whatChangedPlanIsB2C ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            </div>
+          </ChamferFrame>
+        </div>
+      </section>
+
+      <div className="figma-rule my-[32px]" aria-hidden />
+
+      <section
+        id="final-experience"
+        aria-labelledby="final-experience-heading"
+        className={caseStudyScrollAnchorClass}
+      >
+        <div className="w-full min-w-0">
+          <h2
+            id="final-experience-heading"
+            className="m-0 font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+          >
+            Final experience
+          </h2>
+
+          <div className="mt-6 grid grid-cols-1 gap-8 font-mono text-[12px] font-normal leading-relaxed text-fg md:mt-6 md:grid-cols-2 md:gap-10">
+            <div className="flex min-w-0 flex-col gap-3">
+              <p className="m-0">The final system brought the entire journey together:</p>
+              <ul className="m-0 list-none space-y-2.5 p-0">
+                {FINAL_EXPERIENCE_BULLETS.map((line) => (
+                  <li
+                    key={line}
+                    className="relative pl-4 before:absolute before:left-0 before:text-fg before:content-['•']"
+                  >
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p className="m-0 min-w-0">
+              Whether the user is paying themselves or being covered by an employer, the system now
+              supports the decision clearly and consistently.
+            </p>
+          </div>
+
+          <ChamferFrame
+            className="chamfer-media-border mt-6 w-full min-w-0 md:mt-8"
+            innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
+          >
+            <CarbonPrototypeAutoplayVideo src={carbonPrototypeVideo} />
+          </ChamferFrame>
+        </div>
+      </section>
+
+      <div className="figma-rule my-[32px]" aria-hidden />
+
+      <section
+        id="impact-outcomes"
+        aria-labelledby="impact-outcomes-heading"
+        className={caseStudyScrollAnchorClass}
+      >
+        <FigmaGrid12 className="md:[column-gap:clamp(1.75rem,3.8vw,2.75rem)]">
+          <div className="col-span-12 flex flex-col gap-[24px]">
+            <h2
+              id="impact-outcomes-heading"
+              className="m-0 text-left font-mono text-[24px] font-normal leading-snug tracking-tight text-fg"
+            >
+              Impact
+            </h2>
+            <p className="m-0 max-w-4xl font-mono text-[12px] font-normal leading-relaxed text-fg">
+              {
+                "The data didn't just show conversion. It proved the experience was intuitive, trusted, and compelling enough to support a scalable business model."
+              }
+            </p>
+          </div>
+          {IMPACT_KPI_ROWS.map((row, i) => (
+            <div key={`${row.value}-${i}`} className="col-span-12 md:col-span-3">
+              <p className="text-4xl font-normal tabular-nums tracking-tight text-fg md:text-[76px] md:leading-none">
+                <KpiAnimatedValue value={row.value} />
+              </p>
+              <p className="mt-3 text-[12px] font-normal leading-relaxed text-fg">{row.body}</p>
+              {row.target ? (
+                <p className="mt-2 text-[12px] font-normal leading-relaxed text-fg-muted">
+                  {row.target}
+                </p>
+              ) : null}
+            </div>
+          ))}
+        </FigmaGrid12>
+
+        <div
+          className="mt-10 border-t border-dashed border-cell-border md:mt-12"
+          aria-hidden
+        />
+
+        <div className="mx-auto mt-10 w-full max-w-4xl min-w-0 md:mt-14">
+          <ProblemStatementGlitchFramedBlock>
+            <>
+              <p className="m-0 text-balance">The strongest signal was not just conversion.</p>
+              <p className="m-0 text-balance">
+                It was that the experience was strong enough to become the foundation for a
+                company-funded model.
+              </p>
+            </>
+          </ProblemStatementGlitchFramedBlock>
+        </div>
+      </section>
 
       <div className="figma-rule my-[32px]" aria-hidden />
 
@@ -1001,26 +1755,47 @@ export default function CarbonNeutralClubShowcasePage() {
         <ChamferFrame
           meteorTrail
           className="col-span-12 md:col-span-8 md:col-start-3"
-          innerClassName="px-4 py-12 md:px-6 md:py-16"
+          innerClassName="px-4 py-12 text-left md:px-6 md:py-16"
         >
           <h2
             id="retro-title"
-            className={`text-center text-base font-normal text-fg md:text-[40px] ${caseStudyScrollAnchorClass}`}
+            className={`text-left text-base font-normal text-fg md:text-[40px] ${caseStudyScrollAnchorClass}`}
           >
             Retrospective
           </h2>
-          <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-fg-muted md:text-xs md:leading-[1.4]">
-            More steps bought clarity; slower flow bought trust; more explanation supported better
-            decisions. In complex domains, legibility beats faux simplicity — and a well instrumented
-            flow can steer business strategy, not only UX.
-          </p>
+          <div className="mt-8 flex max-w-2xl flex-col gap-6 font-mono text-[12px] font-normal leading-relaxed text-fg">
+            <p className="m-0">This project reinforced three things for me:</p>
+            <ul className="m-0 list-outside list-disc space-y-3 pl-5 marker:text-fg">
+              <li className="pl-1">
+                Clarity builds trust more effectively than simplicity alone
+              </li>
+              <li className="pl-1">
+                Checkout is often a product strategy problem, not just a UI problem
+              </li>
+              <li className="pl-1">
+                Small experience shifts can reshape an entire business model
+              </li>
+            </ul>
+            <p className="m-0">
+              The most important part of this work wasn&apos;t just making the flow feel cleaner.
+            </p>
+            <p className="m-0">
+              It was designing a system that helped users understand enough to act, and that gave the
+              company a better way to grow.
+            </p>
+          </div>
           <ChamferFrame
-            className="mx-auto mt-12 w-full max-w-full"
-            innerClassName="flex min-h-[185px] items-center justify-center bg-surface/30 px-4"
+            fitContentHeight
+            className="chamfer-tradeoff-outline mt-8 w-fit max-w-full shrink-0"
+            innerClassName="flex min-h-0 min-w-0 items-center justify-start overflow-hidden bg-bg p-0"
           >
-            <span className="text-center text-[11px] text-fg-subtle">
-              Outcome diagram / funnel (replace with final asset)
-            </span>
+            <img
+              src={mindExplosionGif}
+              alt=""
+              decoding="async"
+              loading="lazy"
+              className="block h-auto w-24 max-w-[6.5rem] object-contain object-left md:w-28 md:max-w-[7.5rem]"
+            />
           </ChamferFrame>
         </ChamferFrame>
       </FigmaGrid12>
