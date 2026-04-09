@@ -236,15 +236,126 @@ function wordFontSize(scale: number) {
 const WORD_FONT = (fs: number) => `100 ${fs}px "Space Mono", monospace`
 const COMBO_WINDOW_MS = 720
 const WINDDOWN_MAX_MS = 4500
-/** Hits to fully clear a target (cookie eaten away) */
-const WORD_MAX_HEALTH = 6
+/** Hits before the word fully explodes (5th hit clears it). */
+const WORD_MAX_HEALTH = 5
 /** Uniform pacing — not tied to player accuracy */
 const SPAWN_INTERVAL_SEC = 0.68
 const WORD_SPEED = 210
 const WORD_SCALE_RATE = 0.5
+/** Cap `TargetWord.scale` so glyphs stay readable (see `wordFontSize`). */
+const WORD_SCALE_MAX = 0.92
 const WHIMSY_LATERAL = 155
 const WHIMSY_PHASE_SPEED = 1.15
 const WORD_SPIN_MAX = 0.55
+
+/** Per-run motion tuning so each game’s drift / swirl feels different (set when `game` starts). */
+type GameMotionProfile = {
+  whimsyLateral: number
+  whimsyPhaseSpeed: number
+  outward: number
+  loopMul: number
+  vCap: number
+  spawnIntervalMul: number
+}
+
+const DEFAULT_GAME_MOTION: GameMotionProfile = {
+  whimsyLateral: WHIMSY_LATERAL,
+  whimsyPhaseSpeed: WHIMSY_PHASE_SPEED,
+  outward: 22,
+  loopMul: 0.42,
+  vCap: 360,
+  spawnIntervalMul: 1,
+}
+
+function rollGameMotionProfile(): GameMotionProfile {
+  return {
+    whimsyLateral: 78 + Math.random() * 165,
+    whimsyPhaseSpeed: 0.68 + Math.random() * 1.12,
+    outward: 9 + Math.random() * 30,
+    loopMul: 0.18 + Math.random() * 0.42,
+    vCap: 275 + Math.random() * 125,
+    spawnIntervalMul: 0.78 + Math.random() * 0.4,
+  }
+}
+
+/**
+ * Randomized spawn so runs differ: edge fly-ins, center burst, or corner sweeps.
+ */
+function spawnTargetWord(cw: number, ch: number, id: number): TargetWord {
+  const sp = WORD_SPEED + (Math.random() - 0.5) * 56
+  const spinRate =
+    (Math.random() < 0.5 ? -1 : 1) * (0.1 + Math.random() * WORD_SPIN_MAX)
+  const m = 52 + Math.random() * 28
+
+  const mode = Math.random()
+  let x: number
+  let y: number
+  let vx: number
+  let vy: number
+
+  if (mode < 0.4) {
+    const edge = Math.floor(Math.random() * 4)
+    if (edge === 0) {
+      x = m + Math.random() * Math.max(8, cw - 2 * m)
+      y = -m
+      vx = (Math.random() - 0.5) * 220
+      vy = sp * (0.48 + Math.random() * 0.85)
+    } else if (edge === 1) {
+      x = cw + m
+      y = m + Math.random() * Math.max(8, ch - 2 * m)
+      vx = -sp * (0.48 + Math.random() * 0.85)
+      vy = (Math.random() - 0.5) * 220
+    } else if (edge === 2) {
+      x = m + Math.random() * Math.max(8, cw - 2 * m)
+      y = ch + m
+      vx = (Math.random() - 0.5) * 220
+      vy = -sp * (0.48 + Math.random() * 0.85)
+    } else {
+      x = -m
+      y = m + Math.random() * Math.max(8, ch - 2 * m)
+      vx = sp * (0.48 + Math.random() * 0.85)
+      vy = (Math.random() - 0.5) * 220
+    }
+  } else if (mode < 0.68) {
+    const angle = Math.random() * Math.PI * 2
+    const spread = 10 + Math.random() * 58
+    x = cw / 2 + Math.cos(angle) * spread
+    y = ch / 2 + Math.sin(angle) * spread
+    vx = Math.cos(angle) * sp
+    vy = Math.sin(angle) * sp
+  } else {
+    const left = Math.random() < 0.5
+    const top = Math.random() < 0.5
+    x = left ? m * 0.35 + Math.random() * cw * 0.18 : cw - m * 0.35 - Math.random() * cw * 0.18
+    y = top ? m * 0.35 + Math.random() * ch * 0.18 : ch - m * 0.35 - Math.random() * ch * 0.18
+    const tdx = cw / 2 - x + (Math.random() - 0.5) * cw * 0.42
+    const tdy = ch / 2 - y + (Math.random() - 0.5) * ch * 0.42
+    const len = Math.hypot(tdx, tdy) || 1
+    const jitter = 0.72 + Math.random() * 0.38
+    vx = (tdx / len) * sp * jitter
+    vy = (tdy / len) * sp * jitter
+  }
+
+  return {
+    id,
+    text: pickRoleWord(),
+    x,
+    y,
+    scale: 0.14 + Math.random() * 0.05,
+    opacity: 0,
+    vx,
+    vy,
+    speed: WORD_SCALE_RATE,
+    hitFlash: 0,
+    jitterT: 0,
+    health: WORD_MAX_HEALTH,
+    angle: (Math.random() - 0.5) * 0.52,
+    spinRate,
+    wanderPhase: Math.random() * Math.PI * 2,
+    wanderFreq: 0.48 + Math.random() * 1.72,
+    bites: [],
+  }
+}
 
 const STAR_COUNT = 175
 
@@ -430,14 +541,10 @@ function drawWords(
     ctx.rotate(w.angle)
     ctx.font = WORD_FONT(fs)
     const { halfW, halfH } = getWordHitExtents(ctx, w)
-    ctx.strokeStyle = fg
-    ctx.lineWidth = 1
-    ctx.globalAlpha = clamp(a * 0.32, 0, 0.45)
-    ctx.strokeRect(-halfW, -halfH, halfW * 2, halfH * 2)
-    ctx.globalAlpha = clamp(a, 0, 1)
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = fg
+    ctx.globalAlpha = clamp(a, 0, 1)
     ctx.fillText(w.text, 0, 0)
 
     if (w.bites.length > 0) {
@@ -448,6 +555,11 @@ function drawWords(
       }
       ctx.globalCompositeOperation = 'source-over'
     }
+
+    ctx.strokeStyle = fg
+    ctx.lineWidth = 1
+    ctx.globalAlpha = clamp(a * 0.32, 0, 0.45)
+    ctx.strokeRect(-halfW, -halfH, halfW * 2, halfH * 2)
     ctx.restore()
   }
 }
@@ -601,6 +713,7 @@ export function HudShooterIntro() {
     loadLastTargetsHit(),
   )
   const enteredGameRef = useRef(false)
+  const gameMotionProfileRef = useRef<GameMotionProfile>(DEFAULT_GAME_MOTION)
 
   useEffect(() => {
     scoreRef.current = score
@@ -880,6 +993,7 @@ export function HudShooterIntro() {
           phaseRef.current = 'game'
           gameT0Ref.current = now
           spawnAccRef.current = 0
+          gameMotionProfileRef.current = rollGameMotionProfile()
           syncHudActive()
           if (!enteredGameRef.current) {
             enteredGameRef.current = true
@@ -928,8 +1042,19 @@ export function HudShooterIntro() {
             const w = list[idx]
             const fs = wordFontSize(w.scale)
             const { lx, ly } = worldToLocal(mx, my, w.x, w.y, w.angle)
-            const biteR = Math.max(11, fs * 0.26)
-            w.bites.push({ lx, ly, r: biteR, jagSeed: Math.random() })
+            const holeCount = 2 + Math.floor(Math.random() * 2)
+            const scatter = fs * 0.22
+            for (let h = 0; h < holeCount; h++) {
+              const ox = (Math.random() - 0.5) * scatter
+              const oy = (Math.random() - 0.5) * scatter * 1.05
+              const biteR = Math.max(8, fs * (0.14 + Math.random() * 0.12))
+              w.bites.push({
+                lx: lx + ox,
+                ly: ly + oy,
+                r: biteR,
+                jagSeed: Math.random() * 4000 + h * 31.17,
+              })
+            }
             w.health -= 1
             w.hitFlash = 1
             w.jitterT = 0.18
@@ -965,9 +1090,12 @@ export function HudShooterIntro() {
           ? now - gameT0Ref.current
           : 0
       const timeT = clamp(gameElapsed / GAME_DURATION_MS, 0, 1)
-      const spawnInterval = lerp(SPAWN_INTERVAL_SEC, SPAWN_INTERVAL_SEC * 0.55, timeT)
+      const mot = gameMotionProfileRef.current
+      const spawnInterval =
+        lerp(SPAWN_INTERVAL_SEC, SPAWN_INTERVAL_SEC * 0.55, timeT) *
+        mot.spawnIntervalMul
 
-      // Spawn (game only) — fast, uniform motion; spawn rate eases slightly with time only
+      // Spawn (game only) — entry path + drift come from `spawnTargetWord` + per-run `mot`
       if (ph === 'game' && words.length < MAX_WORDS) {
         spawnAccRef.current += dt
         while (
@@ -975,29 +1103,8 @@ export function HudShooterIntro() {
           words.length < MAX_WORDS
         ) {
           spawnAccRef.current -= spawnInterval
-          const angle = Math.random() * Math.PI * 2
-          const spread = 10 + Math.random() * 36
-          const sp = WORD_SPEED + (Math.random() - 0.5) * 28
           const id = nextWordId.current++
-          words.push({
-            id,
-            text: pickRoleWord(),
-            x: cw / 2 + Math.cos(angle) * spread,
-            y: ch / 2 + Math.sin(angle) * spread,
-            scale: 0.14 + Math.random() * 0.05,
-            opacity: 0,
-            vx: Math.cos(angle) * sp,
-            vy: Math.sin(angle) * sp,
-            speed: WORD_SCALE_RATE,
-            hitFlash: 0,
-            jitterT: 0,
-            health: WORD_MAX_HEALTH,
-            angle: (Math.random() - 0.5) * 0.35,
-            spinRate: (Math.random() < 0.5 ? -1 : 1) * (0.18 + Math.random() * WORD_SPIN_MAX),
-            wanderPhase: Math.random() * Math.PI * 2,
-            wanderFreq: 0.65 + Math.random() * 1.4,
-            bites: [],
-          })
+          words.push(spawnTargetWord(cw, ch, id))
         }
       }
 
@@ -1027,15 +1134,18 @@ export function HudShooterIntro() {
           }
         } else if (ph === 'game') {
           word.opacity = clamp(word.opacity + dt * 2.4, 0, 1)
-          word.scale += word.speed * dt
+          word.scale = Math.min(
+            word.scale + word.speed * dt,
+            WORD_SCALE_MAX,
+          )
           word.angle += word.spinRate * dt
 
-          word.wanderPhase += WHIMSY_PHASE_SPEED * dt
+          word.wanderPhase += mot.whimsyPhaseSpeed * dt
           const vm = Math.hypot(word.vx, word.vy) || 1
           const px = -word.vy / vm
           const py = word.vx / vm
           const wobble =
-            WHIMSY_LATERAL *
+            mot.whimsyLateral *
             Math.sin(word.wanderPhase * word.wanderFreq + word.id * 0.37)
           word.vx += px * wobble * dt
           word.vy += py * wobble * dt
@@ -1045,19 +1155,19 @@ export function HudShooterIntro() {
           const ox = word.x - cx
           const oy = word.y - cy
           const dist = Math.hypot(ox, oy) + 12
-          const outward = 22
+          const outward = mot.outward
           word.vx += (ox / dist) * outward * dt
           word.vy += (oy / dist) * outward * dt
 
           const loop =
-            WHIMSY_LATERAL *
-            0.42 *
+            mot.whimsyLateral *
+            mot.loopMul *
             Math.cos(word.wanderPhase * word.wanderFreq * 0.72 + word.id)
           word.vx += (-oy / dist) * loop * dt
           word.vy += (ox / dist) * loop * dt
 
           const vMag = Math.hypot(word.vx, word.vy)
-          const vCap = 360
+          const vCap = mot.vCap
           if (vMag > vCap) {
             word.vx *= vCap / vMag
             word.vy *= vCap / vMag
