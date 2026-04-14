@@ -5,7 +5,10 @@ import {
   ProblemStatementFrame,
   caseStudyScrollAnchorClass,
 } from '../components/caseStudy/patterns'
-import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
+import {
+  CaseStudyShowcaseScaffold,
+  type CaseStudyPresentationSlide,
+} from '../components/caseStudy/CaseStudyShowcaseScaffold'
 import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStudiesPanel'
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
@@ -143,12 +146,148 @@ const RETRO_BULLETS = [
   'Performance measurement',
 ] as const
 
+const SUPER_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = [
+  {
+    content: (
+      <div className="mx-auto flex w-full max-w-[min(100%,1156px)] flex-col gap-6 md:flex-row md:items-center md:gap-x-6 lg:gap-x-8">
+        <div className="min-w-0 flex-1 text-left">
+          <h1 className="m-0 text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg">
+            Super app unifying verticals
+          </h1>
+          <p className="mb-0 mt-5 max-w-2xl text-pretty font-mono text-sm font-normal leading-relaxed text-fg md:mt-6 md:text-base">
+            From scattered features to a shared roadmap and a new way of deciding what to build.
+          </p>
+        </div>
+        <ChamferFrame
+          className="chamfer-media-border w-full shrink-0 md:max-w-[min(52vw,22rem)] lg:ml-auto lg:max-w-[min(40vw,26rem)]"
+          innerClassName="flex min-h-[min(42vw,14rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(34vw,20rem)]"
+        />
+      </div>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,22rem)]"
+      />
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[12rem] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[16rem]"
+      >
+        <span className="text-center font-mono text-xs text-fg-muted md:text-sm">Show user struggles</span>
+      </ChamferFrame>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[min(48vw,18rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(40vw,24rem)]"
+      />
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[14rem] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[18rem]"
+      >
+        <span className="text-center font-mono text-xs text-fg-muted md:text-sm">Old vs new navigation</span>
+      </ChamferFrame>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[min(44vw,15rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(32vw,18rem)]"
+      />
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[5.5rem] items-center justify-center bg-fg/[0.06] p-4 md:min-h-[6.5rem]"
+      >
+        <span className="font-mono text-xs text-fg-muted md:text-sm">Show what works</span>
+      </ChamferFrame>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,22rem)]"
+      >
+        <span className="text-center font-mono text-xs text-fg-muted md:text-sm">Prioritization matrix</span>
+      </ChamferFrame>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,20rem)]"
+      >
+        <span className="text-center font-mono text-xs text-fg-muted md:text-sm">Decision shift</span>
+      </ChamferFrame>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[14rem] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[20rem]"
+      />
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[5.5rem] items-center justify-center bg-fg/[0.06] p-4 md:min-h-[6.5rem]"
+      >
+        <span className="font-mono text-xs text-fg-muted md:text-sm">Show what works</span>
+      </ChamferFrame>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        fitContentHeight
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-0 min-w-0 flex-col items-center justify-center overflow-hidden bg-white px-6 py-8 md:px-10 md:py-10"
+      >
+        <p className="m-0 max-w-[56rem] text-center font-mono text-[18px] font-normal leading-snug tracking-tight text-black md:text-[22px]">
+          The real impact wasn&apos;t the designs, it was giving the team a clear direction to move
+          forward.
+        </p>
+      </ChamferFrame>
+    ),
+  },
+  {
+    content: (
+      <ChamferFrame
+        className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
+        innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,22rem)]"
+      />
+    ),
+  },
+]
+
 export default function SuperAppShowcasePage() {
   return (
     <CaseStudyShowcaseScaffold
       sidebarKicker={SUPER_CASE_STUDY.title}
       caseStudiesModifierTo="/case-study/components"
       navSections={SUPER_CASE_STUDY_SHOWCASE_NAV}
+      presentationSlides={SUPER_PRESENTATION_SLIDES}
     >
       <div className="flex w-full min-w-0 flex-col items-stretch gap-6 md:flex-row md:items-center md:gap-x-6 lg:gap-x-8">
         <div className="min-w-0 flex-1 text-left">
@@ -162,7 +301,7 @@ export default function SuperAppShowcasePage() {
             From scattered features to a shared roadmap and a new way of deciding what to build.
           </p>
         </div>
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={0}
           className="chamfer-media-border w-full shrink-0 md:max-w-[min(52vw,22rem)] lg:ml-auto lg:max-w-[min(40vw,26rem)]"
           innerClassName="flex min-h-[min(42vw,14rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(34vw,20rem)]"
         />
@@ -291,7 +430,7 @@ export default function SuperAppShowcasePage() {
                 </p>
               </div>
               <div className="col-span-12 md:col-span-7">
-                <ChamferFrame
+                <ChamferFrame presentationMediaIndex={1}
                   className="chamfer-media-border w-full"
                   innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,22rem)]"
                 />
@@ -318,7 +457,7 @@ export default function SuperAppShowcasePage() {
                 </div>
               </div>
               <div className="col-span-12 mt-8 md:mt-10">
-                <ChamferFrame
+                <ChamferFrame presentationMediaIndex={2}
                   className="chamfer-media-border w-full"
                   innerClassName="flex min-h-[12rem] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[16rem]"
                 >
@@ -396,7 +535,7 @@ export default function SuperAppShowcasePage() {
             </div>
           </div>
           <div className="col-span-12 md:col-span-6">
-            <ChamferFrame
+            <ChamferFrame presentationMediaIndex={3}
               className="chamfer-media-border w-full"
               innerClassName="flex min-h-[min(48vw,18rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(40vw,24rem)]"
             />
@@ -425,7 +564,7 @@ export default function SuperAppShowcasePage() {
             </p>
           </div>
           <div className="col-span-12 mt-8 md:mt-10">
-            <ChamferFrame
+            <ChamferFrame presentationMediaIndex={4}
               className="chamfer-media-border w-full"
               innerClassName="flex min-h-[14rem] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[18rem]"
             >
@@ -493,13 +632,13 @@ export default function SuperAppShowcasePage() {
                 </p>
               </div>
               <div className="col-span-12 md:col-span-7">
-                <ChamferFrame
+                <ChamferFrame presentationMediaIndex={5}
                   className="chamfer-media-border w-full"
                   innerClassName="flex min-h-[min(44vw,15rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(32vw,18rem)]"
                 />
               </div>
             </FigmaGrid12>
-            <ChamferFrame
+            <ChamferFrame presentationMediaIndex={6}
               className="chamfer-media-border mt-6 w-full md:mt-8"
               innerClassName="flex min-h-[5.5rem] items-center justify-center bg-fg/[0.06] p-4 md:min-h-[6.5rem]"
             >
@@ -533,7 +672,7 @@ export default function SuperAppShowcasePage() {
             </div>
           </div>
           <div className="col-span-12 md:col-span-6">
-            <ChamferFrame
+            <ChamferFrame presentationMediaIndex={7}
               className="chamfer-media-border w-full"
               innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,22rem)]"
             >
@@ -577,7 +716,7 @@ export default function SuperAppShowcasePage() {
             </div>
           </div>
           <div className="col-span-12 md:col-span-6">
-            <ChamferFrame
+            <ChamferFrame presentationMediaIndex={8}
               className="chamfer-media-border w-full"
               innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,20rem)]"
             >
@@ -634,7 +773,7 @@ export default function SuperAppShowcasePage() {
             ))}
           </ul>
           <div className="mt-8 md:mt-10">
-            <ChamferFrame
+            <ChamferFrame presentationMediaIndex={9}
               className="chamfer-media-border w-full"
               innerClassName="flex min-h-[14rem] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[20rem]"
             />
@@ -689,7 +828,7 @@ export default function SuperAppShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={10}
           className="chamfer-media-border mx-auto mt-10 w-full max-w-4xl md:mt-14"
           innerClassName="flex min-h-[5.5rem] items-center justify-center bg-fg/[0.06] p-4 md:min-h-[6.5rem]"
         >
@@ -697,7 +836,7 @@ export default function SuperAppShowcasePage() {
         </ChamferFrame>
       </section>
 
-      <ChamferFrame
+      <ChamferFrame presentationMediaIndex={11}
         fitContentHeight
         className="chamfer-media-border mx-auto mt-10 w-full max-w-4xl md:mt-14"
         innerClassName="flex min-h-0 min-w-0 flex-col items-center justify-center overflow-hidden bg-white px-6 py-8 md:px-10 md:py-10"
@@ -733,7 +872,7 @@ export default function SuperAppShowcasePage() {
           </ul>
         </div>
         <div className="col-span-12 md:col-span-6">
-          <ChamferFrame
+          <ChamferFrame presentationMediaIndex={12}
             className="chamfer-media-border w-full"
             innerClassName="flex min-h-[min(48vw,16rem)] w-full flex-col items-center justify-center gap-3 overflow-hidden bg-fg/[0.08] p-6 md:min-h-[min(36vw,22rem)]"
           />

@@ -4,7 +4,10 @@
  *
  * Sidebar entries must stay in sync with {@link CASE_STUDY_SHOWCASE_NAV}.
  */
-import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
+import {
+  CaseStudyShowcaseScaffold,
+  type CaseStudyPresentationSlide,
+} from '../components/caseStudy/CaseStudyShowcaseScaffold'
 import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
 import {
   ComparisonShowcase,
@@ -22,6 +25,49 @@ import {
 } from '../components/system/RotatingGradientCircle'
 
 const TIMELINE_STEP_LABELS = ['[Step 1]', '[Step 2]', '[Step 3]', '[Step 4]'] as const
+
+const COMPONENTS_REFERENCE_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = [
+  {
+    content: (
+      <>
+        <ChamferFrame
+          className="chamfer-media-border w-full max-w-[min(100%,1156px)]"
+          innerClassName="flex min-h-[min(52vw,240px)] items-center justify-center bg-transparent md:min-h-[min(52vh,530px)]"
+        >
+          <span className="px-4 text-center text-[10px] text-fg-subtle md:text-[11px]">
+            Hero media — chamfered top-right &amp; bottom-left (10-col width)
+          </span>
+        </ChamferFrame>
+        <div className="mx-auto mt-8 flex w-full max-w-[min(100%,1156px)] min-w-0 flex-col items-stretch gap-8 md:mt-10 md:gap-10 lg:flex-row lg:items-center lg:gap-x-6 lg:gap-y-0 xl:gap-x-8">
+          <h1
+            className={`min-w-0 flex-1 text-left text-[clamp(1.875rem,5.5vw,3.75rem)] font-normal leading-[1.1] tracking-[-0.03em] text-fg md:leading-[1.08] lg:text-[clamp(2.5rem,4.8vw,4.25rem)] ${caseStudyScrollAnchorClass}`}
+          >
+            [Fancy one liner about the project lorem ipsum dolor]
+          </h1>
+          <RotatingGradientCircle
+            className="aspect-square w-[min(52vw,11rem)] shrink-0 self-center md:w-[min(42vw,15rem)] lg:ml-auto lg:w-[min(34vw,17.5rem)]"
+            innerClassName="bg-bg"
+            aria-hidden
+          >
+            <RotatingGradientCircleDotPlaceholder />
+          </RotatingGradientCircle>
+        </div>
+      </>
+    ),
+  },
+  {
+    content: (
+      <ComparisonShowcase
+        title="[Section title]"
+        titleId="components-comparison-deck"
+        titleAlign="center"
+        before={<span className="text-sm text-fg-subtle">Before state visual</span>}
+        after={<span className="text-sm text-fg-subtle">After state visual</span>}
+        caption="[Caption — single image area swaps with toggle, centered note below.]"
+      />
+    ),
+  },
+]
 
 export default function CaseStudyComponentsPage() {
   const teamConnector = (
@@ -49,8 +95,9 @@ export default function CaseStudyComponentsPage() {
     <CaseStudyShowcaseScaffold
       sidebarKicker="[Case study name lorem ipsum dolor]"
       caseStudiesModifierTo={PRIMARY_CASE_STUDY.path}
+      presentationSlides={COMPONENTS_REFERENCE_PRESENTATION_SLIDES}
     >
-      <ChamferFrame
+      <ChamferFrame presentationMediaIndex={0}
         className="chamfer-media-border w-full"
         innerClassName="flex min-h-[min(52vw,240px)] items-center justify-center bg-transparent md:min-h-[min(52vh,530px)]"
       >
@@ -242,6 +289,7 @@ export default function CaseStudyComponentsPage() {
         title="[Section title]"
         titleId="components-comparison"
         titleAlign="center"
+        presentationMediaIndex={1}
         before={<span className="text-sm text-fg-subtle">Before state visual</span>}
         after={<span className="text-sm text-fg-subtle">After state visual</span>}
         caption="[Caption — single image area swaps with toggle, centered note below.]"

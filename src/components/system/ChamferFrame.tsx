@@ -1,4 +1,20 @@
-import { useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type ReactNode,
+} from 'react'
+
+/** Wired from {@link CaseStudyShowcaseScaffold}; ChamferFrame reads this when `presentationMediaIndex` is set. */
+export type CaseStudyPresentationModeHandler = (index: number) => void
+
+export const CaseStudyPresentationModeContext = createContext<CaseStudyPresentationModeHandler | null>(
+  null,
+)
 
 /** Matches `quadrant-cell::after`: 1px inset + same clip chamfer as `index.css`. */
 function buildChamferMeteorPath(width: number, height: number, chamferPx: number, borderInsetPx: number): string {
@@ -58,6 +74,11 @@ type ChamferFrameProps = {
    * Avoids a dead gap under bottom-aligned media when the outer cell would otherwise stretch.
    */
   fitContentHeight?: boolean
+  /**
+   * When set and {@link CaseStudyPresentationModeContext} is non-null, enables hover CTA and
+   * click → `openPresentationMode(index)` (excluding clicks on nested interactive controls).
+   */
+  presentationMediaIndex?: number
 }
 
 /**
@@ -71,11 +92,30 @@ export function ChamferFrame({
   staticVisual = true,
   meteorTrail = false,
   fitContentHeight = false,
+  presentationMediaIndex,
 }: ChamferFrameProps) {
+  const openPresentationMode = useContext(CaseStudyPresentationModeContext)
+  const isPresentationTarget =
+    typeof presentationMediaIndex === 'number' && openPresentationMode !== null
+
   const rawId = useId()
   const meteorGradId = `chamfer-meteor-grad-${rawId.replace(/:/g, '')}`
   const rootRef = useRef<HTMLDivElement>(null)
   const [meteorPathD, setMeteorPathD] = useState('')
+
+  const onPresentationSurfaceClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (!isPresentationTarget || !openPresentationMode) return
+    const el = e.target as HTMLElement | null
+    if (!el) return
+    if (
+      el.closest(
+        'button, a, video, input, select, textarea, [role="switch"], [role="tab"], [role="tablist"]',
+      )
+    ) {
+      return
+    }
+    openPresentationMode(presentationMediaIndex)
+  }
 
   useLayoutEffect(() => {
     if (!meteorTrail) return
@@ -100,7 +140,8 @@ export function ChamferFrame({
   return (
     <div
       ref={rootRef}
-      className={`quadrant-cell relative min-h-0 min-w-0 overflow-hidden ${staticVisual ? 'figma-frame-static' : ''} ${className}`}
+      onClick={isPresentationTarget ? onPresentationSurfaceClick : undefined}
+      className={`quadrant-cell relative min-h-0 min-w-0 overflow-hidden ${staticVisual ? 'figma-frame-static' : ''} ${isPresentationTarget ? 'group cursor-pointer' : ''} ${className}`}
     >
       {meteorTrail && meteorPathD ? (
         <svg
@@ -139,6 +180,23 @@ export function ChamferFrame({
           {children}
         </div>
       </div>
+      {isPresentationTarget ? (
+        <div
+          className="pointer-events-none absolute inset-0 z-[25] flex items-end justify-end p-2 opacity-0 transition-opacity duration-150 ease-out group-hover:opacity-100 md:p-3"
+          aria-hidden
+        >
+          <ChamferFrame
+            fitContentHeight
+            staticVisual
+            className="max-w-[min(calc(100%-1rem),18rem)] shrink-0 [--quadrant-chamfer:5px]"
+            innerClassName="bg-[rgba(0,0,0,0.7)] px-[10px] py-[6px]"
+          >
+            <span className="block text-right text-[10px] font-normal leading-snug text-white">
+              Click for presentation mode
+            </span>
+          </ChamferFrame>
+        </div>
+      ) : null}
     </div>
   )
 }

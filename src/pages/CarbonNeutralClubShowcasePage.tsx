@@ -40,6 +40,10 @@ import {
   caseStudyScrollAnchorClass,
 } from '../components/caseStudy/patterns'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
+import {
+  CARBON_PRESENTATION_MEDIA_TO_SLIDE,
+  CARBON_PRESENTATION_SLIDES,
+} from './carbon/CarbonPresentationDeck'
 import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStudiesPanel'
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
@@ -430,6 +434,7 @@ function CarbonPrototypeAutoplayVideo({ src }: { src: string }) {
   )
 }
 
+/** Deck-only crossfade chamfer (local toggle state; matches on-page annotation blocks). */
 export default function CarbonNeutralClubShowcasePage() {
   const [seeWhereUsersStruggled, setSeeWhereUsersStruggled] = useState(false)
   const [showCalculatorWhyWorks, setShowCalculatorWhyWorks] = useState(false)
@@ -447,8 +452,12 @@ export default function CarbonNeutralClubShowcasePage() {
       sidebarKicker={PRIMARY_CASE_STUDY.title}
       caseStudiesModifierTo="/case-study/components"
       navSections={CARBON_CASE_STUDY_SHOWCASE_NAV}
+      presentationSlides={CARBON_PRESENTATION_SLIDES}
+      presentationMediaToSlideIndex={(mediaIndex) =>
+        CARBON_PRESENTATION_MEDIA_TO_SLIDE[mediaIndex] ?? mediaIndex
+      }
     >
-      <ChamferFrame
+      <ChamferFrame presentationMediaIndex={0}
         className="chamfer-media-border w-full"
         innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
       >
@@ -477,7 +486,7 @@ export default function CarbonNeutralClubShowcasePage() {
         </RotatingGradientCircle>
       </div>
 
-      <ChamferFrame
+      <ChamferFrame presentationMediaIndex={1}
         className="chamfer-media-border w-full"
         innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
       >
@@ -565,7 +574,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </ul>
           </div>
 
-          <ChamferFrame
+          <ChamferFrame presentationMediaIndex={2}
             className="chamfer-media-border col-span-12 w-full"
             innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
           >
@@ -576,7 +585,7 @@ export default function CarbonNeutralClubShowcasePage() {
               className="block h-auto w-full max-w-full align-middle"
             />
           </ChamferFrame>
-          <ChamferFrame
+          <ChamferFrame presentationMediaIndex={3}
             className="chamfer-media-border col-span-12 w-full"
             innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
           >
@@ -638,7 +647,7 @@ export default function CarbonNeutralClubShowcasePage() {
         </>
       </ProblemStatementFrame>
 
-      <ChamferFrame
+      <ChamferFrame presentationMediaIndex={4}
         className="chamfer-media-border w-full"
         innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
       >
@@ -731,7 +740,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </div>
         <div className="col-span-12 md:col-span-6">
-          <ChamferFrame
+          <ChamferFrame presentationMediaIndex={5}
             className="chamfer-media-border w-full"
             innerClassName="flex flex-col gap-4 bg-surface/20 p-5 text-left font-mono text-fg md:gap-5 md:p-6"
           >
@@ -750,7 +759,7 @@ export default function CarbonNeutralClubShowcasePage() {
         </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={6}
           className="chamfer-media-border mt-[32px] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -805,7 +814,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={7}
           className="chamfer-media-border mt-10 w-full md:mt-12"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -870,7 +879,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={8}
           className="chamfer-media-border mt-8 w-full md:mt-10"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -903,9 +912,10 @@ export default function CarbonNeutralClubShowcasePage() {
             </p>
           </div>
           <div className="col-span-12 grid grid-cols-1 items-start gap-4 font-mono md:grid-cols-2 md:gap-5">
-            {DESIGN_PRINCIPLES.map((principle) => (
+            {DESIGN_PRINCIPLES.map((principle, principleIndex) => (
               <ChamferFrame
                 key={principle.title}
+                presentationMediaIndex={9 + principleIndex}
                 fitContentHeight
                 className="chamfer-tradeoff-outline figma-frame-static w-full self-start"
                 innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-elevated/25"
@@ -960,7 +970,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={13}
           className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1026,7 +1036,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </ChamferFrame>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={14}
           className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1118,7 +1128,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={15}
           className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1210,7 +1220,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={16}
           className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1286,7 +1296,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={17}
           className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1352,7 +1362,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </ChamferFrame>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={18}
           className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1444,7 +1454,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </FigmaGrid12>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={19}
           className="chamfer-media-border mt-[var(--figma-gutter)] w-full"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1524,7 +1534,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </div>
 
-        <ChamferFrame
+        <ChamferFrame presentationMediaIndex={20}
           className="chamfer-media-border mt-[32px] w-full min-w-0"
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
@@ -1569,7 +1579,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </div>
           </div>
 
-          <ChamferFrame
+          <ChamferFrame presentationMediaIndex={21}
             className="chamfer-media-border mt-[32px] w-full min-w-0"
             innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
           >
@@ -1686,7 +1696,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </p>
           </div>
 
-          <ChamferFrame
+          <ChamferFrame presentationMediaIndex={22}
             className="chamfer-media-border mt-6 w-full min-w-0 md:mt-8"
             innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
           >

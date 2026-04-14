@@ -22,6 +22,8 @@ type ComparisonShowcaseProps = {
   caption?: string
   /** Minimum height for the swap region (matches reference canvas). */
   visualMinClassName?: string
+  /** Case study presentation mode slot (see {@link ChamferFrame} `presentationMediaIndex`). */
+  presentationMediaIndex?: number
 }
 
 /**
@@ -37,6 +39,7 @@ export function ComparisonShowcase({
   bullets,
   caption,
   visualMinClassName = 'min-h-[360px] md:min-h-[567px]',
+  presentationMediaIndex,
 }: ComparisonShowcaseProps) {
   const autoTitleId = useId()
   const titleId = titleIdProp ?? autoTitleId
@@ -63,6 +66,7 @@ export function ComparisonShowcase({
         <BeforeAfterToggle mode={mode} onModeChange={setMode} />
       </div>
       <ChamferFrame
+        presentationMediaIndex={presentationMediaIndex}
         className="chamfer-media-border col-span-12"
         innerClassName={`flex ${visualMinClassName} min-h-0 w-full items-center justify-center bg-surface/40`}
       >
