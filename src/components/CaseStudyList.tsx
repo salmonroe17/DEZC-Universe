@@ -6,7 +6,7 @@ import {
   type AnimationEvent,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
+import { PRIMARY_CASE_STUDY, SUPER_CASE_STUDY } from '../constants/caseStudyCatalog'
 
 export const CASE_AUTO_ROTATE_MS = 4000
 
@@ -22,7 +22,7 @@ const CASE_STUDIES: CaseStudyItem[] = [
     id: 0,
     to: PRIMARY_CASE_STUDY.path,
   },
-  { title: 'Super app forecasting', id: 1 },
+  { title: SUPER_CASE_STUDY.title, id: 1, to: SUPER_CASE_STUDY.path },
   { title: 'Sherpa unified search', id: 2 },
   { title: 'Design system philosophy', id: 3 },
 ]

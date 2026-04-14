@@ -8,6 +8,7 @@ import { CaseStudyRailShell } from './CaseStudyRailShell'
 import { CaseStudyScrollProgressBar } from './CaseStudyScrollProgressBar'
 import { useCaseStudyScrollspy, type NavSection } from './useCaseStudyScrollspy'
 import { CASE_STUDY_SHOWCASE_NAV } from '../../data/caseStudyShowcaseNav'
+import { ChamferFrame } from '../system/ChamferFrame'
 import { FigmaFrame } from '../system/FigmaGrid'
 import { SidebarNav } from '../system/SidebarNav'
 
@@ -40,8 +41,12 @@ export function CaseStudyShowcaseScaffold({
   const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(navSections)
   const chromeRef = useRef<HTMLElement | null>(null)
   const caseStudiesNavRef = useRef<HTMLButtonElement>(null)
+  const showSidebarBtnRef = useRef<HTMLButtonElement>(null)
+  const hideSidebarBtnRef = useRef<HTMLButtonElement>(null)
+  const sidebarWasHiddenRef = useRef(false)
   const [chromeHeight, setChromeHeight] = useState(52)
   const [caseStudiesModalOpen, setCaseStudiesModalOpen] = useState(false)
+  const [sidebarHidden, setSidebarHidden] = useState(false)
 
   const openCaseStudiesModal = () => setCaseStudiesModalOpen(true)
   const closeCaseStudiesModal = () => {
@@ -74,6 +79,13 @@ export function CaseStudyShowcaseScaffold({
       window.removeEventListener('resize', sync)
     }
   }, [])
+
+  useLayoutEffect(() => {
+    if (sidebarWasHiddenRef.current && !sidebarHidden) {
+      queueMicrotask(() => hideSidebarBtnRef.current?.focus({ preventScroll: true }))
+    }
+    sidebarWasHiddenRef.current = sidebarHidden
+  }, [sidebarHidden])
 
   const chromeHeader = (
     <header
@@ -129,20 +141,57 @@ export function CaseStudyShowcaseScaffold({
         gridClassName="items-start"
         asideClassName="flex flex-col gap-8 lg:sticky lg:top-[calc(var(--cs-components-header-h)+24px)] lg:self-start"
         mainClassName="flex flex-col gap-10 lg:gap-14"
+        sidebarHidden={sidebarHidden}
         sidebar={
           <>
             <p className="text-[11px] font-normal leading-snug text-fg md:text-[12px] md:leading-relaxed">
               {sidebarKicker}
             </p>
-            <SidebarNav
-              embedded
-              sections={sidebarSections}
-              activeId={activeId}
-              onNavigate={onNavigate}
-            />
+            <div className="flex min-w-0 flex-col gap-3">
+              <SidebarNav
+                embedded
+                sections={sidebarSections}
+                activeId={activeId}
+                onNavigate={onNavigate}
+              />
+              <button
+                ref={hideSidebarBtnRef}
+                type="button"
+                aria-controls="case-study-sidebar"
+                aria-expanded={!sidebarHidden}
+                onClick={() => {
+                  setSidebarHidden(true)
+                  queueMicrotask(() => showSidebarBtnRef.current?.focus({ preventScroll: true }))
+                }}
+                className="w-fit cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[10px] font-normal leading-snug tracking-[0.02em] text-fg-muted underline decoration-cell-border/70 underline-offset-[3px] transition-colors hover:text-fg hover:decoration-hud md:text-[11px]"
+              >
+                Hide sidebar
+              </button>
+            </div>
           </>
         }
       >
+        {sidebarHidden ? (
+          <div className="sticky top-[calc(var(--cs-components-header-h)+12px)] z-[70] inline-flex max-w-full shrink-0 self-start">
+            <ChamferFrame
+              fitContentHeight
+              staticVisual
+              className="inline-flex max-w-none min-w-0 shadow-[0_2px_12px_rgba(0,0,0,0.18)] [--quadrant-chamfer:clamp(4px,0.65vmin,8px)]"
+              innerClassName="w-max max-w-full bg-white px-3 py-2"
+            >
+              <button
+                ref={showSidebarBtnRef}
+                type="button"
+                aria-controls="case-study-sidebar"
+                aria-expanded={false}
+                onClick={() => setSidebarHidden(false)}
+                className="m-0 block cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[10px] font-medium leading-snug tracking-[0.02em] text-black underline decoration-black/35 underline-offset-[3px] transition-colors hover:decoration-black md:text-[11px]"
+              >
+                Show sidebar
+              </button>
+            </ChamferFrame>
+          </div>
+        ) : null}
         {children}
       </CaseStudyRailShell>
     </div>

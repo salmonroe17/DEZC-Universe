@@ -34,3 +34,19 @@ export const CARBON_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
   { id: 'impact-outcomes', label: 'Impact' },
   { id: 'retro-title', label: 'Retrospective' },
 ]
+
+/** Super app case study — full page TOC. */
+export const SUPER_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
+  { id: 'super-overview-section', label: 'Overview' },
+  { id: 'super-context-section', label: 'Context' },
+  { id: 'super-problem-statement', label: 'Problem' },
+  { id: 'super-tensions-section', label: 'Tensions' },
+  { id: 'super-workshop-section', label: 'Workshop' },
+  { id: 'super-navigation-section', label: 'Navigation' },
+  { id: 'super-key-changes-section', label: 'Key Changes' },
+  { id: 'super-prioritization-section', label: 'Prioritization' },
+  { id: 'super-turning-point-section', label: 'Turning Point' },
+  { id: 'super-outcome-section', label: 'Outcome' },
+  { id: 'super-impact-section', label: 'Impact' },
+  { id: 'super-retrospective-section', label: 'Retrospective' },
+]

@@ -6,6 +6,7 @@ import { RootLayout } from './layouts/RootLayout'
 import CaseStudyComponentsPage from './pages/CaseStudyComponentsPage'
 import CaseStudyPage from './pages/CaseStudyPage'
 import Home from './pages/Home'
+import SuperAppShowcasePage from './pages/SuperAppShowcasePage'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
                 path="case-study/carbon-neutral-club"
                 element={<CaseStudyPage />}
               />
+              <Route path="case-study/super-app" element={<SuperAppShowcasePage />} />
               <Route
                 path="case-study/components"
                 element={<CaseStudyComponentsPage />}
