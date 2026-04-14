@@ -280,6 +280,11 @@ textarea {
   body.custom-cursor-active {
     cursor: none;
   }
+
+  /* Fullscreen case-study deck sits above the canvas reticle; restore native cursor while open. */
+  body.case-study-presentation-overlay-open.custom-cursor-active {
+    cursor: auto;
+  }
 }
 
 @media (pointer: coarse) {
