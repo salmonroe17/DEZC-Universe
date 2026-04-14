@@ -10,12 +10,12 @@ type CaseStudyRailShellProps = {
   gridClassName?: string
   asideClassName?: string
   mainClassName?: string
+  /** When true, the rail column is hidden and main spans the full five-track width at `lg+`. */
+  sidebarHidden?: boolean
 }
 
 const defaultAsideClass =
   'min-w-0 lg:col-span-1 lg:pr-[var(--figma-gutter)]'
-
-const defaultMainClass = 'min-w-0 lg:col-span-4'
 
 /**
  * Shared Figma rail (5-track grid): one sidebar column + four-track main.
@@ -28,14 +28,28 @@ export function CaseStudyRailShell({
   gridClassName = '',
   asideClassName = '',
   mainClassName = '',
+  sidebarHidden = false,
 }: CaseStudyRailShellProps) {
+  const mainSpanClass = sidebarHidden ? 'lg:col-span-5' : 'lg:col-span-4'
+
   return (
     <FigmaFrame className={frameClassName}>
       <FigmaRailGrid className={gridClassName}>
-        <aside className={[defaultAsideClass, asideClassName].filter(Boolean).join(' ')}>
+        <aside
+          id="case-study-sidebar"
+          className={[
+            defaultAsideClass,
+            asideClassName,
+            sidebarHidden ? 'hidden' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           {sidebar}
         </aside>
-        <div className={[defaultMainClass, mainClassName].filter(Boolean).join(' ')}>
+        <div
+          className={['min-w-0', mainSpanClass, mainClassName].filter(Boolean).join(' ')}
+        >
           {children}
         </div>
       </FigmaRailGrid>

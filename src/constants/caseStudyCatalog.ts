@@ -6,3 +6,8 @@ export const PRIMARY_CASE_STUDY = {
   title: 'Carbon Neutral Club, B2C → B2B',
   path: '/case-study/carbon-neutral-club',
 } as const
+
+export const SUPER_CASE_STUDY = {
+  title: 'Super app forecasting',
+  path: '/case-study/super-app',
+} as const
