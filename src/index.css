@@ -287,6 +287,111 @@ textarea {
   }
 }
 
+/* Presentation mode: keep overflow scrolling, hide scrollbar tracks/thumbs (deck + tall slides + nested overflow). */
+.case-study-presentation-overlay,
+.case-study-presentation-overlay * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.case-study-presentation-overlay::-webkit-scrollbar,
+.case-study-presentation-overlay *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+html:has(body.case-study-presentation-overlay-open),
+html:has(body.case-study-presentation-overlay-open) body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html:has(body.case-study-presentation-overlay-open)::-webkit-scrollbar,
+html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Presentation: entire slide visual scales via wrapper (annotations + media together). */
+.case-study-presentation-overlay .presentation-slide-visual-scale {
+  transform-origin: center center;
+  transition: transform 0.18s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-study-presentation-overlay .presentation-slide-visual-scale {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* Presentation: scoped deck themes (do not invert raster media). */
+.case-study-presentation-overlay.presentation-theme-gray {
+  --color-bg: #101010;
+  --color-surface: #141414;
+  --color-elevated: #1a1a1a;
+  --color-border: #2a2a2a;
+  --color-fg: #fafafa;
+  --color-fg-muted: #a3a3a3;
+  --color-fg-subtle: #737373;
+  --color-hud: #ffffff;
+  --color-cell-border: #3f3f3f;
+  --color-cell-hover: #ffffff;
+}
+
+.case-study-presentation-overlay.presentation-theme-turquoise {
+  --color-bg: #0b1312;
+  --color-surface: #0e1715;
+  --color-elevated: #152320;
+  --color-border: #2a5850;
+  --color-fg: #dffaf6;
+  --color-fg-muted: #78c9b8;
+  --color-fg-subtle: #559e8f;
+  --color-hud: #3cdbcb;
+  --color-cell-border: #335f56;
+  --color-cell-hover: #6ae8d4;
+}
+
+.case-study-presentation-overlay.presentation-theme-pink {
+  --color-bg: #100a12;
+  --color-surface: #140d16;
+  --color-elevated: #1c1220;
+  --color-border: #4a2a52;
+  --color-fg: #ffe8ff;
+  --color-fg-muted: #c896d4;
+  --color-fg-subtle: #9a6aa8;
+  --color-hud: #e879f9;
+  --color-cell-border: #553060;
+  --color-cell-hover: #f0a8ff;
+}
+
+.case-study-presentation-overlay.presentation-theme-blue {
+  --color-bg: #0a0e16;
+  --color-surface: #0c1220;
+  --color-elevated: #121a2e;
+  --color-border: #243a5c;
+  --color-fg: #e8f0ff;
+  --color-fg-muted: #8aa8e0;
+  --color-fg-subtle: #6080c0;
+  --color-hud: #6eb0ff;
+  --color-cell-border: #30456e;
+  --color-cell-hover: #8cc4ff;
+}
+
+.case-study-presentation-overlay.presentation-theme-white {
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f5;
+  --color-elevated: #fafafa;
+  --color-border: #e4e4e7;
+  --color-fg: #09090b;
+  --color-fg-muted: #52525b;
+  --color-fg-subtle: #71717a;
+  --color-hud: #18181b;
+  --color-cell-border: #d4d4d8;
+  --color-cell-hover: #18181b;
+}
+
 @media (pointer: coarse) {
   .custom-cursor-root {
     display: none;

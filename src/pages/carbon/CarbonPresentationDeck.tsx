@@ -531,7 +531,7 @@ export const CARBON_PRESENTATION_MEDIA_TO_SLIDE: readonly number[] = [
   0, 2, 3, 5, 8, 10, 11, 13, 15, 17, 18, 19, 20, 22, 23, 25, 27, 29, 30, 32, 34, 35, 37,
 ]
 
-export const CARBON_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = [
+const CARBON_PRESENTATION_SLIDES_BASE = [
   {
     content: (
       <ChamferFrame className={`chamfer-media-border ${deckMaxW}`} innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0">
@@ -541,17 +541,25 @@ export const CARBON_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = [
   },
   {
     content: (
-      <div className={`flex ${deckMaxW} min-w-0 flex-col items-stretch gap-8 md:gap-10 lg:flex-row lg:items-center lg:gap-x-6 lg:gap-y-0 xl:gap-x-8`}>
-        <h1 className="min-w-0 flex-1 text-left text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg">
+      <div
+        data-presentation-split-root
+        className={`flex ${deckMaxW} min-w-0 flex-col items-stretch gap-8 md:gap-10 lg:flex-row lg:items-center lg:gap-x-6 lg:gap-y-0 xl:gap-x-8`}
+      >
+        <h1
+          data-presentation-text-region
+          className="min-w-0 flex-1 text-left text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg"
+        >
           Redesigning the carbon footprint to checkout flow that shifted the product from direct-to-consumer to company-funded memberships.
         </h1>
-        <RotatingGradientCircle
-          className="aspect-square w-[min(52vw,11rem)] shrink-0 self-center md:w-[min(42vw,15rem)] lg:ml-auto lg:w-[min(34vw,17.5rem)]"
-          innerClassName="bg-bg"
-          aria-hidden
-        >
-          <RotatingGradientCircleDotPlaceholder />
-        </RotatingGradientCircle>
+        <div data-presentation-media-region className="shrink-0 self-center lg:ml-auto">
+          <RotatingGradientCircle
+            className="aspect-square w-[min(52vw,11rem)] shrink-0 md:w-[min(42vw,15rem)] lg:w-[min(34vw,17.5rem)]"
+            innerClassName="bg-bg"
+            aria-hidden
+          >
+            <RotatingGradientCircleDotPlaceholder />
+          </RotatingGradientCircle>
+        </div>
       </div>
     ),
   },
@@ -683,7 +691,11 @@ export const CARBON_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = [
   },
   {
     content: (
-      <ChamferFrame className={`chamfer-media-border ${deckMaxW}`} innerClassName="flex flex-col gap-4 bg-surface/20 p-5 text-left font-mono text-fg md:gap-5 md:p-6">
+      <ChamferFrame
+        fitContentHeight
+        className="chamfer-media-border mx-auto w-full max-w-3xl"
+        innerClassName="flex flex-col gap-4 bg-surface/20 p-5 text-left font-mono text-fg md:gap-5 md:p-6"
+      >
         <p className="m-0 text-[22px] font-normal leading-snug">We saw:</p>
         <ul className="m-0 list-none space-y-3 p-0 text-[16px] font-normal leading-relaxed md:space-y-3.5">
           {WHAT_WE_SAW_ITEMS.map((line) => (
@@ -1156,4 +1168,82 @@ export const CARBON_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = [
       </FigmaGrid12>
     ),
   },
-]
+] satisfies CaseStudyPresentationSlide[]
+
+const CARBON_PRESENTATION_IMAGE_INDEX = new Set<number>(CARBON_PRESENTATION_MEDIA_TO_SLIDE)
+
+/** Short labels for presentation thumbnail strip (text slides only). */
+const CARBON_PRESENTATION_TEXT_THUMB_LABELS: Record<number, string> = {
+  1: 'Intro',
+  4: 'Overview',
+  6: 'Climate',
+  7: 'Problems',
+  9: 'Research',
+  12: 'Tradeoffs',
+  14: 'System',
+  16: 'Principles',
+  21: 'Calculator',
+  24: 'Result',
+  26: 'Pricing',
+  28: 'Trust',
+  31: 'Checkout',
+  33: 'Turning point',
+  36: 'B2B shift',
+  38: 'Impact',
+  39: 'Retro',
+}
+
+const CARBON_PRESENTATION_VIDEO_SLIDE_INDEX = new Set<number>([2, 37])
+
+export const CARBON_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = CARBON_PRESENTATION_SLIDES_BASE.map(
+  (slide, i) => ({
+    ...slide,
+    slideKind: CARBON_PRESENTATION_IMAGE_INDEX.has(i) ? ('image' as const) : ('text' as const),
+    thumbnailLabel: CARBON_PRESENTATION_TEXT_THUMB_LABELS[i],
+    thumbnailIsVideo: CARBON_PRESENTATION_VIDEO_SLIDE_INDEX.has(i),
+  }),
+)
+
+/** One preview URL per deck slide (same order as {@link CARBON_PRESENTATION_SLIDES}). */
+export const CARBON_PRESENTATION_THUMBNAILS = [
+  carbonHeroC1,
+  carbonHeroC1,
+  carbonHeroC1,
+  carbonOverviewC2,
+  carbonOverviewC2,
+  carbonOverviewC3,
+  carbonOverviewC3,
+  carbonProblemProductSurface,
+  carbonProblemProductSurface,
+  carbonWhatWeLearnedC5,
+  carbonWhatWeLearnedC5,
+  carbonWhatWeLearnedC5,
+  carbonUserBusinessVennC6,
+  carbonUserBusinessVennC6,
+  carbonSystemDesignedC7,
+  carbonSystemDesignedC7,
+  carbonPrincipleC8,
+  carbonPrincipleC9,
+  carbonPrincipleC10,
+  carbonPrincipleC11,
+  carbonPrincipleC11,
+  carbonCalculatorMockup,
+  carbonCalculatorC13,
+  carbonResultMeaningfulC14,
+  carbonResultMeaningfulC14,
+  carbonPricingPlanC15,
+  carbonPricingPlanC15,
+  carbonTrustOffsetProjectsC16,
+  carbonTrustOffsetProjectsC16,
+  carbonCostBreakdownC17,
+  carbonCostBreakdownC17,
+  carbonCheckoutTrustC18,
+  carbonCheckoutTrustC18,
+  carbonTurningPointC19,
+  carbonTurningPointC19,
+  carbonPlanPageB2BC20,
+  carbonPlanPageB2BC20,
+  carbonHeroC1,
+  carbonResultMeaningfulC14,
+  mindExplosionGif,
+] as const
