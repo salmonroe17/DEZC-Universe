@@ -431,16 +431,18 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 }
 
 /*
- * Fake3DCube: white halo pulse. `filter: drop-shadow` follows the chamfered pixels; `box-shadow`
- * on the clipped inner face was invisible (ancestor clip-path clips outward shadows).
+ * Fake3DCube: halo pulse follows theme accent (`--color-hud`). `filter: drop-shadow` follows the
+ * chamfered pixels; `box-shadow` on the clipped inner face was invisible (ancestor clip-path clips outward shadows).
  */
 @keyframes cube-face-glow-pulse {
   0%,
   100% {
-    filter: drop-shadow(0 0 10px rgb(255 255 255 / 0.28)) drop-shadow(0 0 28px rgb(255 255 255 / 0.14));
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--color-hud) 28%, transparent))
+      drop-shadow(0 0 28px color-mix(in srgb, var(--color-hud) 14%, transparent));
   }
   50% {
-    filter: drop-shadow(0 0 20px rgb(255 255 255 / 0.48)) drop-shadow(0 0 44px rgb(255 255 255 / 0.24));
+    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--color-hud) 48%, transparent))
+      drop-shadow(0 0 44px color-mix(in srgb, var(--color-hud) 24%, transparent));
   }
 }
 
@@ -570,7 +572,8 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 @media (prefers-reduced-motion: reduce) {
   .cube-face-glow {
     animation: none;
-    filter: drop-shadow(0 0 14px rgb(255 255 255 / 0.3)) drop-shadow(0 0 32px rgb(255 255 255 / 0.15));
+    filter: drop-shadow(0 0 14px color-mix(in srgb, var(--color-hud) 30%, transparent))
+      drop-shadow(0 0 32px color-mix(in srgb, var(--color-hud) 15%, transparent));
   }
 
   .cube-face-cell::before,
@@ -606,17 +609,17 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   box-shadow: none;
 }
 
-/* Image / video / visual chamfer frames — white ring (not theme / interactive border). */
+/* Image / video / visual chamfer frames — ring tinted with theme accent. */
 .chamfer-media-border.quadrant-cell::before {
-  background-color: #ffffff;
+  background-color: color-mix(in srgb, var(--color-hud) 42%, var(--color-cell-border));
 }
 
 .chamfer-media-border.quadrant-cell:hover::before {
-  background-color: color-mix(in srgb, var(--color-hud) 38%, #ffffff);
+  background-color: color-mix(in srgb, var(--color-hud) 58%, var(--color-cell-border));
 }
 
 .chamfer-media-border.figma-frame-static.quadrant-cell:hover::before {
-  background-color: #ffffff;
+  background-color: color-mix(in srgb, var(--color-hud) 42%, var(--color-cell-border));
 }
 
 /* Ring matches page fill: keeps chamfer clip; 1px outline blends away (e.g. inline GIF tiles). */
@@ -962,24 +965,23 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   }
 }
 
-/* Case study KPI hero numbers — soft white bloom + gentle pulse (separate from count-up). */
+/* Case study KPI hero numbers — soft accent bloom + gentle pulse (separate from count-up). */
 @keyframes kpi-metric-value-glow-pulse {
   0%,
   100% {
     text-shadow:
-      0 0 5px rgb(255 255 255 / 0.21),
-      0 0 13px rgb(255 255 255 / 0.13),
-      0 0 24px rgb(255 255 255 / 0.07),
-      0 0 1px rgb(255 255 255 / 0.175);
+      0 0 5px color-mix(in srgb, var(--color-hud) 21%, transparent),
+      0 0 13px color-mix(in srgb, var(--color-hud) 13%, transparent),
+      0 0 24px color-mix(in srgb, var(--color-hud) 7%, transparent),
+      0 0 1px color-mix(in srgb, var(--color-hud) 17.5%, transparent);
   }
 
-  /* Peak bloom (~½ prior strength): main layer max ~40% white */
   50% {
     text-shadow:
-      0 0 9px rgb(255 255 255 / 0.4),
-      0 0 20px rgb(255 255 255 / 0.26),
-      0 0 36px rgb(255 255 255 / 0.15),
-      0 0 1px rgb(255 255 255 / 0.34);
+      0 0 9px color-mix(in srgb, var(--color-hud) 40%, transparent),
+      0 0 20px color-mix(in srgb, var(--color-hud) 26%, transparent),
+      0 0 36px color-mix(in srgb, var(--color-hud) 15%, transparent),
+      0 0 1px color-mix(in srgb, var(--color-hud) 34%, transparent);
   }
 }
 
@@ -991,10 +993,10 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   .kpi-metric-value-glow {
     animation: none;
     text-shadow:
-      0 0 5px rgb(255 255 255 / 0.21),
-      0 0 13px rgb(255 255 255 / 0.13),
-      0 0 24px rgb(255 255 255 / 0.07),
-      0 0 1px rgb(255 255 255 / 0.175);
+      0 0 5px color-mix(in srgb, var(--color-hud) 21%, transparent),
+      0 0 13px color-mix(in srgb, var(--color-hud) 13%, transparent),
+      0 0 24px color-mix(in srgb, var(--color-hud) 7%, transparent),
+      0 0 1px color-mix(in srgb, var(--color-hud) 17.5%, transparent);
   }
 }
 
@@ -1016,7 +1018,7 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 .rotating-circle-meteor-svg {
   overflow: visible;
   filter: drop-shadow(0 0 5px color-mix(in srgb, var(--color-hud) 40%, transparent))
-    drop-shadow(0 0 12px color-mix(in srgb, var(--color-fg) 18%, transparent));
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-hud) 18%, transparent));
 }
 
 .rotating-circle-meteor-path {
@@ -1084,12 +1086,35 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   );
 }
 
+.case-study-scroll-progress-meteor-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-hud) 0%, transparent) 0%,
+    var(--color-hud) 100%
+  );
+}
+
+.case-study-scroll-progress-cap {
+  background-color: var(--color-hud);
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--color-hud) 70%, transparent))
+    drop-shadow(8px 0 22px color-mix(in srgb, var(--color-hud) 45%, transparent))
+    drop-shadow(18px 0 42px color-mix(in srgb, var(--color-hud) 45%, transparent));
+}
+
 /* Case study components page: progress bar tip glow */
 .case-study-scroll-progress-glow {
   transform: translateY(-50%);
   transform-origin: right center;
   animation: case-study-scroll-progress-glow-pulse 2s ease-in-out infinite;
   will-change: transform, opacity;
+  box-shadow:
+    12px 0 32px -1px color-mix(in srgb, var(--color-hud) 55%, transparent),
+    22px 0 56px -4px color-mix(in srgb, var(--color-hud) 38%, transparent),
+    38px 0 88px -8px color-mix(in srgb, var(--color-hud) 22%, transparent),
+    52px 0 120px -12px color-mix(in srgb, var(--color-hud) 42%, transparent),
+    0 0 24px 2px color-mix(in srgb, var(--color-hud) 20%, transparent);
 }
 
 @keyframes case-study-scroll-progress-glow-pulse {
@@ -1116,7 +1141,7 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 /* Chamfer frame: meteor segment travels around perimeter (pathLength 100 on SVG path). */
 .chamfer-meteor-ring {
   filter: drop-shadow(0 0 5px color-mix(in srgb, var(--color-hud) 40%, transparent))
-    drop-shadow(0 0 12px color-mix(in srgb, var(--color-fg) 18%, transparent));
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-hud) 18%, transparent));
 }
 
 .chamfer-meteor-path {

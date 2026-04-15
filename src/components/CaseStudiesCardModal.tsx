@@ -65,7 +65,7 @@ export function CaseStudiesCardModal({ open, onClose }: CaseStudiesCardModalProp
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="flex size-9 items-center justify-center rounded-sm border border-cell-border/80 bg-bg/95 text-fg shadow-sm transition-colors hover:border-hud/45 hover:bg-elevated/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fg/35 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              className="flex size-9 items-center justify-center rounded-sm border border-cell-border/80 bg-bg/95 text-fg shadow-sm transition-colors hover:border-hud/45 hover:bg-elevated/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hud/35 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
             >
               <svg
                 className="size-4 shrink-0"

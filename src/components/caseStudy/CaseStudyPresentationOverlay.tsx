@@ -789,7 +789,7 @@ export function CaseStudyPresentationOverlay({
                 className={`relative mx-0.5 h-5 w-9 shrink-0 rounded-full border transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 motion-reduce:transition-none ${
                   textSlidesVisible
                     ? 'border-black bg-white shadow-sm'
-                    : 'border-white bg-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]'
+                    : 'border-white bg-black shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-hud)_22%,transparent)]'
                 }`}
               >
                 <span
@@ -1014,7 +1014,7 @@ export function CaseStudyPresentationOverlay({
                         onClick={() => goToFullIndex(fullIndex)}
                         className={`relative h-20 w-[5.5rem] shrink-0 overflow-hidden rounded-sm border bg-elevated/40 transition-[opacity,box-shadow,border-color] duration-200 ease-out motion-reduce:transition-none md:w-24 ${
                           active
-                            ? 'border-fg opacity-100 shadow-[0_0_0_1px_var(--color-fg)]'
+                            ? 'border-fg opacity-100 shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_72%,transparent)]'
                             : 'border-cell-border opacity-70 hover:opacity-100'
                         }`}
                       >

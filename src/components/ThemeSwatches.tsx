@@ -10,11 +10,11 @@ const THEMES: { id: SiteTheme; label: string }[] = [
 
 /** Center dot on filled color swatches (site header + presentation). */
 export const themeSwatchSelectedDotOnColorClass =
-  'bg-white shadow-[0_0_0_0.5px_rgba(0,0,0,0.22)]'
+  'bg-white shadow-[0_0_0_0.5px_color-mix(in_srgb,var(--color-hud)_42%,transparent)]'
 
 /** Center dot on light/white filled swatch. */
 export const themeSwatchSelectedDotOnLightFillClass =
-  'bg-zinc-800 shadow-[0_0_0_0.5px_rgba(255,255,255,0.28)]'
+  'bg-zinc-800 shadow-[0_0_0_0.5px_color-mix(in_srgb,var(--color-hud)_48%,transparent)]'
 
 const SWATCH: Record<SiteTheme, { selected: string; idle: string; selectedDot: string }> = {
   grey: {

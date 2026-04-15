@@ -398,8 +398,8 @@ export function CarbonDeckCrossfadeChamfer({
           onClick={() => setShowAlt((v) => !v)}
           className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
             showAlt
-              ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_rgba(0,0,0,0.12)]'
-              : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.35)]'
+              ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
+              : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
           }`}
         >
           <span

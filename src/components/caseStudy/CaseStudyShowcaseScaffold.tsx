@@ -222,7 +222,7 @@ export function CaseStudyShowcaseScaffold({
               <ChamferFrame
                 fitContentHeight
                 staticVisual
-                className="inline-flex max-w-none min-w-0 shadow-[0_2px_12px_rgba(0,0,0,0.18)] [--quadrant-chamfer:clamp(4px,0.65vmin,8px)]"
+                className="inline-flex max-w-none min-w-0 shadow-[0_2px_12px_color-mix(in_srgb,var(--color-hud)_20%,transparent)] [--quadrant-chamfer:clamp(4px,0.65vmin,8px)]"
                 innerClassName="w-max max-w-full bg-white px-3 py-2"
               >
                 <button

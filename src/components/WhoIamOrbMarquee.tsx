@@ -53,10 +53,10 @@ function OrbCell({
       aria-label={src ? `Dot art ${index + 1}` : `Empty circle ${index + 1}`}
       className={[
         'group/orb relative box-border flex aspect-square h-full max-h-full min-h-[2.75rem] min-w-[2.75rem] shrink-0 cursor-pointer',
-        'items-center justify-center rounded-full border border-fg/[0.22] bg-transparent',
+        'items-center justify-center rounded-full border border-hud/22 bg-transparent',
         'pointer-events-auto outline-none transition-[box-shadow,border-color] duration-200',
-        'hover:border-fg/[0.48] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-fg)_22%,transparent),0_0_20px_color-mix(in_srgb,var(--color-fg)_12%,transparent)]',
-        'focus-visible:border-fg/[0.55] focus-visible:ring-2 focus-visible:ring-fg/35 focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
+        'hover:border-hud/45 hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_22%,transparent),0_0_20px_color-mix(in_srgb,var(--color-hud)_12%,transparent)]',
+        'focus-visible:border-hud/50 focus-visible:ring-2 focus-visible:ring-hud/35 focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
         bursting ? 'z-[30] overflow-visible' : 'z-[1] overflow-hidden',
       ].join(' ')}
       whileHover={reduced ? undefined : { scale: 1.06 }}
@@ -83,7 +83,7 @@ function OrbCell({
             src={src}
             alt=""
             draggable={false}
-            className="h-full w-full select-none object-contain object-center transition-[filter,transform] duration-200 group-hover/orb:brightness-[1.12] group-hover/orb:contrast-[1.05] group-hover/orb:drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-fg)_18%,transparent)]"
+            className="h-full w-full select-none object-contain object-center transition-[filter,transform] duration-200 group-hover/orb:brightness-[1.12] group-hover/orb:contrast-[1.05] group-hover/orb:drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-hud)_18%,transparent)]"
           />
         ) : (
           <div className="h-full w-full shrink-0" aria-hidden />
@@ -94,7 +94,7 @@ function OrbCell({
         {bursting && !reduced && (
           <motion.span
             key={`ring-${burst.id}`}
-            className="pointer-events-none absolute inset-0 z-[5] rounded-full border-2 border-fg/[0.65]"
+            className="pointer-events-none absolute inset-0 z-[5] rounded-full border-2 border-hud/65"
             initial={{ scale: 0.88, opacity: 0.95 }}
             animate={{ scale: 2.15, opacity: 0 }}
             exit={{ opacity: 0 }}

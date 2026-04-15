@@ -109,7 +109,7 @@ function ChevronRightIcon({ className }: { className?: string }) {
 }
 
 const arrowBtnClass =
-  'pointer-events-auto z-20 flex size-9 touch-none select-none items-center justify-center border border-cell-border/90 bg-bg/75 text-fg/70 shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-fg)_6%,transparent)] backdrop-blur-[2px] transition-[color,background-color,border-color] duration-150 hover:border-fg/35 hover:bg-elevated/90 hover:text-fg md:size-10'
+  'pointer-events-auto z-20 flex size-9 touch-none select-none items-center justify-center border border-cell-border/90 bg-bg/75 text-fg/70 shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-hud)_14%,transparent)] backdrop-blur-[2px] transition-[color,background-color,border-color] duration-150 hover:border-hud/35 hover:bg-elevated/90 hover:text-fg md:size-10'
 
 export type FlowingLineSandProps = {
   sandLineRootRef?: RefObject<HTMLDivElement | null>
@@ -236,7 +236,7 @@ export function FlowingLine({
         aria-hidden
       >
         <svg
-          className="absolute inset-0 block h-full w-full overflow-visible text-fg/55"
+          className="absolute inset-0 block h-full w-full overflow-visible text-hud/55"
           viewBox={`0 0 ${FLOW_TOTAL_W} ${FLOW_VB_H}`}
           preserveAspectRatio="none"
           overflow="visible"
@@ -293,7 +293,7 @@ export function FlowingLine({
                   <div className="relative flex items-center justify-center">
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[100px] w-[100px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fg/[0.22] blur-[20px] md:h-[120px] md:w-[120px] md:blur-[26px]"
+                      className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[100px] w-[100px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-hud)_26%,transparent)] blur-[20px] md:h-[120px] md:w-[120px] md:blur-[26px]"
                     />
                     <div
                       className="relative z-[1] size-4 shrink-0 scale-[2.5] rounded-none bg-fg/92 brightness-110 transition-[transform,opacity,filter,background-color] duration-150 ease-out md:size-5"
@@ -306,7 +306,7 @@ export function FlowingLine({
                       'transition-[opacity,filter,background-color,box-shadow] duration-150 ease-out',
                       dimOthers
                         ? 'bg-fg/38 opacity-[0.32] brightness-[0.72]'
-                        : 'bg-fg/38 shadow-[0_0_6px_rgba(250,250,250,0.12)]',
+                        : 'bg-fg/38 shadow-[0_0_6px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]',
                     ].join(' ')}
                   />
                 ) : (
@@ -317,7 +317,7 @@ export function FlowingLine({
                       'transition-[opacity,filter,background-color,box-shadow] duration-150 ease-out',
                       dimOthers
                         ? 'bg-fg/38 opacity-[0.32] brightness-[0.72]'
-                        : 'bg-fg/38 shadow-[0_0_6px_rgba(250,250,250,0.12)]',
+                        : 'bg-fg/38 shadow-[0_0_6px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]',
                     ].join(' ')}
                     style={{ transformOrigin: 'center center', transformStyle: 'preserve-3d' }}
                     animate={idle.animate}
