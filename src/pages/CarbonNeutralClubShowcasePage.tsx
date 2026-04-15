@@ -43,6 +43,7 @@ import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShow
 import {
   CARBON_PRESENTATION_MEDIA_TO_SLIDE,
   CARBON_PRESENTATION_SLIDES,
+  CARBON_PRESENTATION_THUMBNAILS,
 } from './carbon/CarbonPresentationDeck'
 import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStudiesPanel'
 import { ChamferFrame } from '../components/system/ChamferFrame'
@@ -456,6 +457,7 @@ export default function CarbonNeutralClubShowcasePage() {
       presentationMediaToSlideIndex={(mediaIndex) =>
         CARBON_PRESENTATION_MEDIA_TO_SLIDE[mediaIndex] ?? mediaIndex
       }
+      presentationThumbnailSrcs={CARBON_PRESENTATION_THUMBNAILS}
     >
       <ChamferFrame presentationMediaIndex={0}
         className="chamfer-media-border w-full"

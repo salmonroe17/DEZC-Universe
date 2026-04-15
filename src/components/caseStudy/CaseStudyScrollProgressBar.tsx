@@ -8,12 +8,22 @@ function readScrollProgress(): number {
   return Math.min(1, Math.max(0, top / max))
 }
 
+export type CaseStudyScrollProgressBarProps = {
+  /** When set (0–1), drives the bar instead of window scroll (e.g. presentation deck). */
+  value?: number
+  'aria-label'?: string
+}
+
 /** Reading progress: 1px rail + meteor taper + rounded cap on the head; glow on the head. */
-export function CaseStudyScrollProgressBar() {
-  const [progress, setProgress] = useState(0)
+export function CaseStudyScrollProgressBar({
+  value: controlledValue,
+  'aria-label': ariaLabel = 'Page scroll progress',
+}: CaseStudyScrollProgressBarProps = {}) {
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
-    const update = () => setProgress(readScrollProgress())
+    if (controlledValue !== undefined) return
+    const update = () => setScrollProgress(readScrollProgress())
     update()
     window.addEventListener('scroll', update, { passive: true })
     window.addEventListener('resize', update, { passive: true })
@@ -21,7 +31,12 @@ export function CaseStudyScrollProgressBar() {
       window.removeEventListener('scroll', update)
       window.removeEventListener('resize', update)
     }
-  }, [])
+  }, [controlledValue])
+
+  const progress =
+    controlledValue !== undefined
+      ? Math.min(1, Math.max(0, controlledValue))
+      : scrollProgress
 
   const pct = Math.round(progress * 100)
 
@@ -32,7 +47,7 @@ export function CaseStudyScrollProgressBar() {
       aria-valuenow={pct}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-label="Page scroll progress"
+      aria-label={ariaLabel}
     >
       {/* 1px rail — full width; meteor head extends ±1.5px from center. */}
       <div

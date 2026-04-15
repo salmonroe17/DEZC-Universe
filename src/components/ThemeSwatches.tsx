@@ -8,23 +8,44 @@ const THEMES: { id: SiteTheme; label: string }[] = [
   { id: 'blue', label: 'Blue' },
 ]
 
-const SWATCH: Record<SiteTheme, { selected: string; idle: string }> = {
+/** Center dot on filled color swatches (site header + presentation). */
+export const themeSwatchSelectedDotOnColorClass =
+  'bg-white shadow-[0_0_0_0.5px_rgba(0,0,0,0.22)]'
+
+/** Center dot on light/white filled swatch. */
+export const themeSwatchSelectedDotOnLightFillClass =
+  'bg-zinc-800 shadow-[0_0_0_0.5px_rgba(255,255,255,0.28)]'
+
+const SWATCH: Record<SiteTheme, { selected: string; idle: string; selectedDot: string }> = {
   grey: {
     selected: 'bg-zinc-500',
     idle: 'border border-zinc-400 bg-transparent',
+    selectedDot: themeSwatchSelectedDotOnColorClass,
   },
   cyan: {
     selected: 'bg-teal-400',
     idle: 'border-2 border-teal-400 bg-transparent',
+    selectedDot: themeSwatchSelectedDotOnColorClass,
   },
   magenta: {
     selected: 'bg-fuchsia-400',
     idle: 'border-2 border-fuchsia-400 bg-transparent',
+    selectedDot: themeSwatchSelectedDotOnColorClass,
   },
   blue: {
     selected: 'bg-blue-400',
     idle: 'border-2 border-blue-400 bg-transparent',
+    selectedDot: themeSwatchSelectedDotOnColorClass,
   },
+}
+
+export function ThemeSwatchSelectedIndicator({ className }: { className: string }) {
+  return (
+    <span
+      aria-hidden
+      className={`pointer-events-none absolute left-1/2 top-1/2 size-[5px] -translate-x-1/2 -translate-y-1/2 rounded-full ${className}`}
+    />
+  )
 }
 
 type ThemeSwatchesProps = {
@@ -50,10 +71,12 @@ export function ThemeSwatches({ className = '' }: ThemeSwatchesProps) {
             aria-label={label}
             aria-pressed={theme === id}
             onClick={() => setTheme(id)}
-            className={`size-[18px] shrink-0 rounded-sm transition-[transform,background-color,border-color] hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${
+            className={`relative size-[18px] shrink-0 rounded-sm transition-[transform,background-color,border-color] hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${
               theme === id ? `${sw.selected} border-0` : sw.idle
             }`}
-          />
+          >
+            {theme === id ? <ThemeSwatchSelectedIndicator className={sw.selectedDot} /> : null}
+          </button>
         )
       })}
     </div>

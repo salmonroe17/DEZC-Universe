@@ -36,6 +36,8 @@ export type CaseStudyShowcaseScaffoldProps = {
   presentationSlides?: CaseStudyPresentationSlide[]
   /** Map each `presentationMediaIndex` from the page to a horizontal deck slide index (e.g. image vs copy split). */
   presentationMediaToSlideIndex?: (mediaIndex: number) => number
+  /** Optional strip previews; same length as `presentationSlides` when provided. */
+  presentationThumbnailSrcs?: readonly string[]
   children: ReactNode
 }
 
@@ -51,6 +53,7 @@ export function CaseStudyShowcaseScaffold({
   navSections = CASE_STUDY_SHOWCASE_NAV,
   presentationSlides,
   presentationMediaToSlideIndex,
+  presentationThumbnailSrcs,
   children,
 }: CaseStudyShowcaseScaffoldProps) {
   const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(navSections)
@@ -172,7 +175,9 @@ export function CaseStudyShowcaseScaffold({
           open={presentationMode}
           activeIndex={presentationActiveIndex}
           slides={presentationSlides ?? []}
+          thumbnailSrcs={presentationThumbnailSrcs}
           onClose={closePresentationMode}
+          onActiveIndexChange={setPresentationActiveIndex}
         />
         <CaseStudiesCardModal open={caseStudiesModalOpen} onClose={closeCaseStudiesModal} />
         <div className="shrink-0" style={{ height: chromeHeight }} aria-hidden />
