@@ -126,7 +126,7 @@ export function ShowTellAmbientLines({ scrollHUnitRef, hoveredNodeIndexRef }: Pr
         style={{ left: '0%' }}
       >
         <svg
-          className="absolute inset-0 block h-full w-full text-fg opacity-10"
+          className="absolute inset-0 block h-full w-full text-hud opacity-[0.14]"
           viewBox={`0 0 ${VB} ${VB}`}
           preserveAspectRatio="none"
         >

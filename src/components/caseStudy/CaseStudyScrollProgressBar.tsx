@@ -64,26 +64,16 @@ export function CaseStudyScrollProgressBar({
             className="case-study-scroll-progress-meteor absolute left-0 top-0 h-full"
             style={{ width: 'max(0px, calc(100% - 3px))' }}
           >
-            <div
-              className="h-full w-full"
-              style={{
-                background:
-                  'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%)',
-              }}
-            />
+            <div className="case-study-scroll-progress-meteor-fill" />
           </div>
           {/* Rounded head + per-shape halo (drop-shadow isn’t clipped like a separate glow fill can be). */}
           <div
-            className="pointer-events-none absolute right-0 top-0 z-[1] h-full w-[3px] rounded-r-full bg-white [filter:drop-shadow(0_0_10px_rgba(255,255,255,0.7))_drop-shadow(8px_0_22px_rgba(255,255,255,0.45))_drop-shadow(18px_0_42px_color-mix(in_srgb,var(--color-hud)_45%,transparent))]"
+            className="case-study-scroll-progress-cap pointer-events-none absolute right-0 top-0 z-[1] h-full w-[3px] rounded-r-full"
             aria-hidden
           />
           {/* Transparent layer so the cap stays clean; bloom is mostly box-shadow + pulse. */}
           <div
             className="case-study-scroll-progress-glow pointer-events-none absolute right-0 top-1/2 z-[2] h-[4px] w-[min(100%,7.5rem)] bg-transparent"
-            style={{
-              boxShadow:
-                '12px 0 32px -1px rgba(255, 255, 255, 0.55), 22px 0 56px -4px rgba(255, 255, 255, 0.38), 38px 0 88px -8px rgba(255, 255, 255, 0.22), 52px 0 120px -12px color-mix(in srgb, var(--color-hud) 42%, transparent), 0 0 24px 2px rgba(255, 255, 255, 0.2)',
-            }}
             aria-hidden
           />
         </div>
