@@ -38,6 +38,11 @@ export type CaseStudyShowcaseScaffoldProps = {
   presentationMediaToSlideIndex?: (mediaIndex: number) => number
   /** Optional strip previews; same length as `presentationSlides` when provided. */
   presentationThumbnailSrcs?: readonly string[]
+  /**
+   * When true, presentation opens with “Text slides” on so `slideKind: 'text'` slides are included
+   * (see {@link CaseStudyPresentationOverlayProps.initialTextSlidesVisible}).
+   */
+  presentationInitialTextSlidesVisible?: boolean
   children: ReactNode
 }
 
@@ -54,6 +59,7 @@ export function CaseStudyShowcaseScaffold({
   presentationSlides,
   presentationMediaToSlideIndex,
   presentationThumbnailSrcs,
+  presentationInitialTextSlidesVisible,
   children,
 }: CaseStudyShowcaseScaffoldProps) {
   const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(navSections)
@@ -178,6 +184,7 @@ export function CaseStudyShowcaseScaffold({
           thumbnailSrcs={presentationThumbnailSrcs}
           onClose={closePresentationMode}
           onActiveIndexChange={setPresentationActiveIndex}
+          initialTextSlidesVisible={presentationInitialTextSlidesVisible}
         />
         <CaseStudiesCardModal open={caseStudiesModalOpen} onClose={closeCaseStudiesModal} />
         <div className="shrink-0" style={{ height: chromeHeight }} aria-hidden />

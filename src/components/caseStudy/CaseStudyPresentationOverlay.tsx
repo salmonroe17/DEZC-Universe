@@ -256,6 +256,11 @@ export type CaseStudyPresentationSlide = {
    * (short title, ~6px centered).
    */
   thumbnailLabel?: string
+  /**
+   * When {@link slideKind} is `'image'` and set with {@link thumbnailLabel}, the strip shows that label
+   * instead of a static preview (e.g. external GIF thumbs that would otherwise fall back to a slide number).
+   */
+  thumbnailStripUseLabel?: boolean
   /** When true, thumbnail strip shows centered "Video" instead of a static/captured image. */
   thumbnailIsVideo?: boolean
 }
@@ -268,6 +273,12 @@ type CaseStudyPresentationOverlayProps = {
   thumbnailSrcs?: readonly (string | undefined)[]
   onClose: () => void
   onActiveIndexChange: (index: number) => void
+  /**
+   * Initial state for the “Text slides” control when the overlay opens.
+   * Default false (image-first deck). Use true for decks with few text slides that should
+   * stay visible without toggling (e.g. Super: single Intro text slide).
+   */
+  initialTextSlidesVisible?: boolean
 }
 
 function isSlideVisibleInDeck(slide: CaseStudyPresentationSlide, textSlidesVisible: boolean): boolean {
@@ -336,6 +347,7 @@ export function CaseStudyPresentationOverlay({
   thumbnailSrcs,
   onClose,
   onActiveIndexChange,
+  initialTextSlidesVisible = false,
 }: CaseStudyPresentationOverlayProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const controlsToggleRef = useRef<HTMLButtonElement>(null)
@@ -369,12 +381,12 @@ export function CaseStudyPresentationOverlay({
     if (!wasOpenRef.current) {
       wasOpenRef.current = true
       setControlsVisible(false)
-      setTextSlidesVisible(false)
+      setTextSlidesVisible(initialTextSlidesVisible)
       setTextScale(1)
       setImageScale(1)
       setTheme('gray')
     }
-  }, [open])
+  }, [open, initialTextSlidesVisible])
 
   const visibleEntries = useMemo(
     () =>
@@ -1002,7 +1014,8 @@ export function CaseStudyPresentationOverlay({
                     const isTextSlide = slide.slideKind === 'text'
                     const label = slide.thumbnailLabel?.trim()
                     const showVideoThumb = slide.thumbnailIsVideo === true
-                    const showTextLabelThumb = isTextSlide && !!label
+                    const showStripLabel =
+                      !!label && (isTextSlide || slide.thumbnailStripUseLabel === true)
                     const thumbSrc = staticThumb ?? captured
                     return (
                       <button
@@ -1020,7 +1033,7 @@ export function CaseStudyPresentationOverlay({
                       >
                         {showVideoThumb ? (
                           <span className={thumbStripMiniLabelClass}>Video</span>
-                        ) : showTextLabelThumb ? (
+                        ) : showStripLabel ? (
                           <span className={thumbStripMiniLabelClass}>{label}</span>
                         ) : thumbSrc ? (
                           <img

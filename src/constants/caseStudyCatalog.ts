@@ -8,6 +8,6 @@ export const PRIMARY_CASE_STUDY = {
 } as const
 
 export const SUPER_CASE_STUDY = {
-  title: 'Super app forecasting',
+  title: 'Super app unify verticals',
   path: '/case-study/super-app',
 } as const

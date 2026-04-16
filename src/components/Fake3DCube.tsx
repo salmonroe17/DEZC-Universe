@@ -4,6 +4,7 @@
 
 import { memo, type ReactNode } from 'react'
 import caseStudy1Face from '../../CNC photos/c1.png'
+import caseStudy2Face from '../../Super assets/s1.png'
 
 const EDGE = '15rem' as const
 const HALF = '7.5rem' as const
@@ -28,8 +29,8 @@ const faceChamferInnerClip = 'chamfer-fill-clip min-h-0 min-w-0 size-full'
 const faceLabelInner =
   'flex items-center justify-center bg-surface/90 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-fg-muted'
 
-/** Darkens edges of the image face so it matches the mood of the label faces. */
-const caseStudy1ImageVignette =
+/** Darkens edges of image faces so they match the mood of the label faces. */
+const caseStudyImageFaceVignette =
   'pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_92%_92%_at_50%_50%,rgb(0_0_0/0)_38%,rgb(0_0_0/0.55)_72%,rgb(0_0_0/0.88)_100%)]'
 
 function CubeChamferFace({
@@ -68,14 +69,22 @@ const CubeFaces = memo(function CubeFaces() {
           loading="lazy"
           decoding="async"
         />
-        <div className={caseStudy1ImageVignette} aria-hidden />
+        <div className={caseStudyImageFaceVignette} aria-hidden />
         <span className="sr-only">Case 1</span>
       </CubeChamferFace>
       <CubeChamferFace
         transform={`rotateY(90deg) translateZ(${HALF})`}
-        innerClassName={faceLabelInner}
+        innerClassName="relative"
       >
-        Case 2
+        <img
+          src={caseStudy2Face}
+          alt=""
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className={caseStudyImageFaceVignette} aria-hidden />
+        <span className="sr-only">Case 2</span>
       </CubeChamferFace>
       <CubeChamferFace
         transform={`rotateY(180deg) translateZ(${HALF})`}

@@ -281,9 +281,62 @@ textarea {
     cursor: none;
   }
 
+  /* No hand cursor on interactive targets — reticle scales instead (see CustomCursor). */
+  body.custom-cursor-active a[href],
+  body.custom-cursor-active button:not([disabled]),
+  body.custom-cursor-active [role='button']:not([aria-disabled='true']),
+  body.custom-cursor-active [role='link'],
+  body.custom-cursor-active [role='switch'],
+  body.custom-cursor-active [role='tab'],
+  body.custom-cursor-active label[for],
+  body.custom-cursor-active select,
+  body.custom-cursor-active summary,
+  body.custom-cursor-active .cursor-pointer,
+  body.custom-cursor-active [data-cursor-interactive],
+  body.custom-cursor-active input:not([type='hidden']):not([disabled]) {
+    cursor: none !important;
+  }
+
+  body.custom-cursor-active textarea,
+  body.custom-cursor-active input:not([type]),
+  body.custom-cursor-active input[type='text'],
+  body.custom-cursor-active input[type='search'],
+  body.custom-cursor-active input[type='email'],
+  body.custom-cursor-active input[type='password'],
+  body.custom-cursor-active input[type='url'],
+  body.custom-cursor-active input[type='tel'] {
+    cursor: text !important;
+  }
+
   /* Fullscreen case-study deck sits above the canvas reticle; restore native cursor while open. */
   body.case-study-presentation-overlay-open.custom-cursor-active {
     cursor: auto;
+  }
+
+  body.case-study-presentation-overlay-open.custom-cursor-active a[href],
+  body.case-study-presentation-overlay-open.custom-cursor-active button:not([disabled]),
+  body.case-study-presentation-overlay-open.custom-cursor-active [role='button']:not([aria-disabled='true']),
+  body.case-study-presentation-overlay-open.custom-cursor-active [role='link'],
+  body.case-study-presentation-overlay-open.custom-cursor-active [role='switch'],
+  body.case-study-presentation-overlay-open.custom-cursor-active [role='tab'],
+  body.case-study-presentation-overlay-open.custom-cursor-active label[for],
+  body.case-study-presentation-overlay-open.custom-cursor-active select,
+  body.case-study-presentation-overlay-open.custom-cursor-active summary,
+  body.case-study-presentation-overlay-open.custom-cursor-active .cursor-pointer,
+  body.case-study-presentation-overlay-open.custom-cursor-active [data-cursor-interactive],
+  body.case-study-presentation-overlay-open.custom-cursor-active input:not([type='hidden']):not([disabled]) {
+    cursor: revert !important;
+  }
+
+  body.case-study-presentation-overlay-open.custom-cursor-active textarea,
+  body.case-study-presentation-overlay-open.custom-cursor-active input:not([type]),
+  body.case-study-presentation-overlay-open.custom-cursor-active input[type='text'],
+  body.case-study-presentation-overlay-open.custom-cursor-active input[type='search'],
+  body.case-study-presentation-overlay-open.custom-cursor-active input[type='email'],
+  body.case-study-presentation-overlay-open.custom-cursor-active input[type='password'],
+  body.case-study-presentation-overlay-open.custom-cursor-active input[type='url'],
+  body.case-study-presentation-overlay-open.custom-cursor-active input[type='tel'] {
+    cursor: text !important;
   }
 }
 
@@ -324,6 +377,14 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   .case-study-presentation-overlay .presentation-slide-visual-scale {
     transition-duration: 0.01ms;
   }
+}
+
+/* Super case study: last (retrospective) deck slide — avoid full-rail width in presentation only. */
+.case-study-presentation-overlay .super-retrospective-presentation-deck {
+  width: 100%;
+  max-width: min(100%, 40rem);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Presentation: scoped deck themes (do not invert raster media). */
@@ -390,6 +451,12 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   --color-hud: #18181b;
   --color-cell-border: #d4d4d8;
   --color-cell-hover: #18181b;
+}
+
+/* Entire subtree must ignore hit-testing so `elementFromPoint` sees real UI under the reticle. */
+.custom-cursor-root,
+.custom-cursor-root * {
+  pointer-events: none !important;
 }
 
 @media (pointer: coarse) {
