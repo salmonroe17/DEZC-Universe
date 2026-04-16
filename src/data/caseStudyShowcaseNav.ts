@@ -37,13 +37,16 @@ export const CARBON_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
 
 /** Super app case study — full page TOC. */
 export const SUPER_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
+  { id: 'super-hero-heading', label: 'Intro + demo video' },
   { id: 'super-overview-section', label: 'Overview' },
-  { id: 'super-context-section', label: 'Context' },
   { id: 'super-problem-statement', label: 'Problem' },
-  { id: 'super-tensions-section', label: 'Tensions' },
+  { id: 'super-alignment-section', label: 'Alignment, not iteration' },
   { id: 'super-workshop-section', label: 'Workshop' },
-  { id: 'super-navigation-section', label: 'Navigation' },
-  { id: 'super-key-changes-section', label: 'Key Changes' },
+  { id: 'super-navigation-section', label: 'Navigation change' },
+  { id: 'super-true-home-section', label: 'A true home' },
+  { id: 'super-supercash-relocated-section', label: 'SuperCash relocated' },
+  { id: 'super-notifications-section', label: 'Notifications' },
+  { id: 'super-rewards-profile-section', label: 'Rewards & profile' },
   { id: 'super-prioritization-section', label: 'Prioritization' },
   { id: 'super-turning-point-section', label: 'Turning Point' },
   { id: 'super-outcome-section', label: 'Outcome' },

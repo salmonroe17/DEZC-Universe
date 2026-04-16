@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type Particle = {
   x: number
@@ -16,12 +16,151 @@ const GRAVITY = 0.14
 
 const FINE_POINTER_MQ = '(pointer: fine)'
 
+/** Matches elements that would typically use `cursor: pointer` — reticle scales on hover. */
+const INTERACTIVE_RETICLE_SELECTOR =
+  'a[href],button:not([disabled]),[role="button"]:not([aria-disabled="true"]),[role="link"],[role="switch"],[role="tab"],label[for],select,summary,.cursor-pointer,[data-cursor-interactive],input:not([type="hidden"]):not([disabled])'
+
+const TEXT_FIELD_SELECTOR =
+  'textarea,input:not([type]),input[type="text"],input[type="search"],input[type="email"],input[type="password"],input[type="url"],input[type="tel"]'
+
+const RETICLE_HOVER_SCALE = 2.5
+/** Matches legacy 16×16 SVG over viewBox 0…14 — scales geometry only; strokes stay 1px. */
+const RETICLE_PX_PER_UNIT = 16 / 14
+
+const RETICLE_TRANSITION = 'width 200ms ease-out, height 200ms ease-out, top 200ms ease-out, left 200ms ease-out, margin 200ms ease-out'
+
+type ReticleLayout = {
+  box: number
+  cx: number
+  cy: number
+  ring: number
+  tickLen: number
+  dot: number
+  u: (n: number) => number
+}
+
+function getReticleLayout(expanded: boolean): ReticleLayout {
+  const s = expanded ? RETICLE_HOVER_SCALE : 1
+  const u = (n: number) => n * s * RETICLE_PX_PER_UNIT
+  const extent = u(6.5)
+  const box = Math.ceil(extent * 2 + 4)
+  const cx = box / 2
+  const cy = box / 2
+  return {
+    box,
+    cx,
+    cy,
+    ring: 2 * u(4.5),
+    tickLen: u(3),
+    dot: 2 * u(0.9),
+    u,
+  }
+}
+
+function Reticle({ expanded }: { expanded: boolean }) {
+  const { box, cx, cy, ring, tickLen, dot, u } = getReticleLayout(expanded)
+  const lineStyle = { transition: RETICLE_TRANSITION, backgroundColor: 'currentColor' } as const
+
+  return (
+    <div
+      className="relative text-white"
+      style={{
+        width: box,
+        height: box,
+        marginLeft: -box / 2,
+        marginTop: -box / 2,
+        transition: RETICLE_TRANSITION,
+      }}
+    >
+      {/* Ring — 1px border; geometry scales, stroke does not */}
+      <div
+        className="absolute rounded-full border border-solid border-current opacity-95"
+        style={{
+          width: ring,
+          height: ring,
+          left: cx - ring / 2,
+          top: cy - ring / 2,
+          boxSizing: 'border-box',
+          transition: RETICLE_TRANSITION,
+        }}
+      />
+      {/* Ticks — 1px rects */}
+      <div
+        className="absolute rounded-[1px]"
+        style={{
+          ...lineStyle,
+          width: 1,
+          height: tickLen,
+          left: '50%',
+          top: cy - u(6.5),
+          transform: 'translateX(-0.5px)',
+        }}
+      />
+      <div
+        className="absolute rounded-[1px]"
+        style={{
+          ...lineStyle,
+          width: 1,
+          height: tickLen,
+          left: '50%',
+          top: cy + u(3.5),
+          transform: 'translateX(-0.5px)',
+        }}
+      />
+      <div
+        className="absolute rounded-[1px]"
+        style={{
+          ...lineStyle,
+          width: tickLen,
+          height: 1,
+          left: cx - u(6.5),
+          top: '50%',
+          transform: 'translateY(-0.5px)',
+        }}
+      />
+      <div
+        className="absolute rounded-[1px]"
+        style={{
+          ...lineStyle,
+          width: tickLen,
+          height: 1,
+          left: cx + u(3.5),
+          top: '50%',
+          transform: 'translateY(-0.5px)',
+        }}
+      />
+      {/* Center dot */}
+      <div
+        className="absolute rounded-full bg-current opacity-90"
+        style={{
+          width: dot,
+          height: dot,
+          left: cx - dot / 2,
+          top: cy - dot / 2,
+          transition: RETICLE_TRANSITION,
+        }}
+      />
+    </div>
+  )
+}
+
+function shouldEnlargeReticle(clientX: number, clientY: number): boolean {
+  const el = document.elementFromPoint(clientX, clientY)
+  if (!el) return false
+  /* `.custom-cursor-root * { pointer-events: none }` — reticle should not be the hit target. */
+  if (el.closest(TEXT_FIELD_SELECTOR)) return false
+  return !!el.closest(INTERACTIVE_RETICLE_SELECTOR)
+}
+
 export function CustomCursor() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const lastSpawnRef = useRef({ x: 0, y: 0 })
   const hasMovedRef = useRef(false)
+  /** Scale reticle geometry on interactive hover (strokes stay 1px via DOM layout, not transform scale). */
+  const [reticleExpanded, setReticleExpanded] = useState(false)
+  const lastExpandedRef = useRef<boolean | null>(null)
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -76,6 +215,12 @@ export function CustomCursor() {
 
       wrap.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`
 
+      const enlarge = shouldEnlargeReticle(e.clientX, e.clientY)
+      if (lastExpandedRef.current !== enlarge) {
+        lastExpandedRef.current = enlarge
+        setReticleExpanded(enlarge)
+      }
+
       const last = lastSpawnRef.current
       const dist = Math.hypot(e.clientX - last.x, e.clientY - last.y)
       if (dist >= SPAWN_MIN_DIST) {
@@ -90,6 +235,8 @@ export function CustomCursor() {
         document.body.classList.remove('custom-cursor-active')
         wrap.style.opacity = '0'
         hasMovedRef.current = false
+        lastExpandedRef.current = null
+        setReticleExpanded(false)
       }
     }
 
@@ -155,60 +302,8 @@ export function CustomCursor() {
         style={{ transform: 'translate(0px, 0px)' }}
         aria-hidden
       >
-        <div className="inline-flex h-4 w-4 -ml-2 -mt-2 text-white">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 14 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="7"
-              cy="7"
-              r="4.5"
-              stroke="currentColor"
-              strokeWidth="0.85"
-              opacity={0.95}
-            />
-            <line
-              x1="7"
-              y1="0.5"
-              x2="7"
-              y2="3.5"
-              stroke="currentColor"
-              strokeWidth="0.75"
-              strokeLinecap="round"
-            />
-            <line
-              x1="7"
-              y1="10.5"
-              x2="7"
-              y2="13.5"
-              stroke="currentColor"
-              strokeWidth="0.75"
-              strokeLinecap="round"
-            />
-            <line
-              x1="0.5"
-              y1="7"
-              x2="3.5"
-              y2="7"
-              stroke="currentColor"
-              strokeWidth="0.75"
-              strokeLinecap="round"
-            />
-            <line
-              x1="10.5"
-              y1="7"
-              x2="13.5"
-              y2="7"
-              stroke="currentColor"
-              strokeWidth="0.75"
-              strokeLinecap="round"
-            />
-            <circle cx="7" cy="7" r="0.9" fill="currentColor" opacity={0.9} />
-          </svg>
+        <div className="inline-flex overflow-visible will-change-transform">
+          <Reticle expanded={reticleExpanded} />
         </div>
       </div>
     </div>

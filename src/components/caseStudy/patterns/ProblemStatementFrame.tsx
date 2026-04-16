@@ -8,6 +8,8 @@ type ProblemStatementFrameProps = {
   /** Renders below the dashed rule (still inside the section). */
   afterRule?: ReactNode
   className?: string
+  /** Extra classes on the bracketed statement row (e.g. `font-mono`). */
+  framedStatementClassName?: string
 }
 
 /** SVG bracket stroke matches body scale (~1px–2px); stretches with row height. */
@@ -116,6 +118,7 @@ export function ProblemStatementFrame({
   children,
   afterRule = null,
   className = '',
+  framedStatementClassName = '',
 }: ProblemStatementFrameProps) {
   return (
     <section id={id} className={`w-full ${className}`}>
@@ -127,7 +130,9 @@ export function ProblemStatementFrame({
       </div>
 
       <div className="relative mx-auto mt-10 max-w-4xl px-2 md:mt-14 md:px-4">
-        <ProblemStatementGlitchFramedBlock>{children}</ProblemStatementGlitchFramedBlock>
+        <ProblemStatementGlitchFramedBlock frameClassName={framedStatementClassName}>
+          {children}
+        </ProblemStatementGlitchFramedBlock>
       </div>
 
       <div
