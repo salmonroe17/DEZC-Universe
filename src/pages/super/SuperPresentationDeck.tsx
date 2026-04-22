@@ -271,7 +271,7 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
           data-presentation-text-region
           className="m-0 min-w-0 flex-1 text-left text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg"
         >
-          From scattered features to a shared roadmap and a new way of deciding what to build.
+          From scattered features to a shared roadmap and driving a new way of deciding what to build.
         </h1>
         <div data-presentation-media-region className="shrink-0 self-center lg:ml-auto">
           <RotatingGradientCircle

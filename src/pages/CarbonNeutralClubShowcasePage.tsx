@@ -29,6 +29,7 @@ import carbonPlanPageB2BC20 from '../../CNC photos/c20.png'
 import carbonPlanPageB2CC20_1 from '../../CNC photos/c20.1.png'
 import carbonPrototypeVideo from '../../CNC photos/cnc video portfolio prototype 720p30.mp4'
 import mindExplosionGif from '../../CNC photos/mindexplosion.gif'
+import carbonHeroTurtleGif from '../../CNC photos/turtle.gif'
 import { usePreloadImages } from '../hooks/usePreloadImages'
 import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { CARBON_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
@@ -49,10 +50,7 @@ import {
 import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStudiesPanel'
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
-import {
-  RotatingGradientCircle,
-  RotatingGradientCircleDotPlaceholder,
-} from '../components/system/RotatingGradientCircle'
+import { RotatingGradientCircle } from '../components/system/RotatingGradientCircle'
 
 /** Chamfer toggle image pairs — preloaded so instant swaps don’t hitch on first flip. */
 const CARBON_CHAMFER_CROSSFADE_IMAGE_URLS = [
@@ -486,10 +484,16 @@ export default function CarbonNeutralClubShowcasePage() {
         </h1>
         <RotatingGradientCircle
           className="aspect-square w-[min(52vw,11rem)] shrink-0 self-center md:w-[min(42vw,15rem)] lg:ml-auto lg:w-[min(34vw,17.5rem)]"
-          innerClassName="bg-bg"
+          innerClassName="bg-bg p-0"
           aria-hidden
         >
-          <RotatingGradientCircleDotPlaceholder />
+          <img
+            src={carbonHeroTurtleGif}
+            alt=""
+            className="pointer-events-none block h-full w-full object-cover object-center select-none"
+            loading="lazy"
+            decoding="async"
+          />
         </RotatingGradientCircle>
       </div>
 

@@ -30,6 +30,7 @@ import ibmBeforeAfterAp19 from '../../IBM case study assets/ap19.png'
 import ibmBeforeAfterAp19Alt from '../../IBM case study assets/ap19.1.png'
 import ibmActionPlansPrototypeVideo from '../../IBM case study assets/IBM prototype video action plans 720p.mp4'
 import ibmRetrospectiveConfusedGif from '../../IBM case study assets/confused.gif'
+import ibmHeroShipGif from '../../IBM case study assets/ship.gif'
 import { IBM_ENVIZI_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
 import {
   ProblemStatementFrame,
@@ -43,10 +44,7 @@ import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShow
 import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStudiesPanel'
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
-import {
-  RotatingGradientCircle,
-  RotatingGradientCircleDotPlaceholder,
-} from '../components/system/RotatingGradientCircle'
+import { RotatingGradientCircle } from '../components/system/RotatingGradientCircle'
 
 import { IBM_ENVIZI_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { usePreloadImages } from '../hooks/usePreloadImages'
@@ -375,10 +373,16 @@ export default function IbmEnviziShowcasePage() {
         </h1>
         <RotatingGradientCircle
           className="aspect-square w-[min(52vw,11rem)] shrink-0 self-center md:w-[min(42vw,15rem)] lg:ml-auto lg:w-[min(34vw,17.5rem)]"
-          innerClassName="bg-bg"
+          innerClassName="bg-bg p-0"
           aria-hidden
         >
-          <RotatingGradientCircleDotPlaceholder />
+          <img
+            src={ibmHeroShipGif}
+            alt=""
+            className="pointer-events-none block h-full w-full object-cover object-center select-none"
+            loading="lazy"
+            decoding="async"
+          />
         </RotatingGradientCircle>
       </div>
 
