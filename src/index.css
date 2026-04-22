@@ -367,6 +367,15 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   height: 0;
 }
 
+/* Text slides: vertically center when content is shorter than the viewport; `safe` falls back to
+   start when the block overflows (tall copy stays scrollable from the top). */
+@supports (justify-content: safe center) {
+  .case-study-presentation-overlay
+    .presentation-slide-capture-root.presentation-slide-text-v {
+    justify-content: safe center;
+  }
+}
+
 /* Presentation: entire slide visual scales via wrapper (annotations + media together). */
 .case-study-presentation-overlay .presentation-slide-visual-scale {
   transform-origin: center center;
@@ -1245,21 +1254,21 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
     opacity: 1;
   }
 
-  /* Sweep */
+  /* Sweep — clamp end so a narrow flex segment never makes calc(100% - 22px) negative. */
   85% {
     /* Match TimelinePillsRow arrow wrapper width (w-[22px]) */
-    left: calc(100% - 22px);
+    left: max(0px, calc(100% - 22px));
     opacity: 1;
   }
 
   /* Brief hold at destination, then fade out */
   88% {
-    left: calc(100% - 22px);
+    left: max(0px, calc(100% - 22px));
     opacity: 1;
   }
 
   92% {
-    left: calc(100% - 22px);
+    left: max(0px, calc(100% - 22px));
     opacity: 0;
   }
 

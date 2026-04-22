@@ -1,16 +1,31 @@
+const pillClassSingle =
+  'inline-flex shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-2 text-[12px] font-normal leading-none tracking-[0.02em] text-fg md:px-5 md:py-2.5'
+
+const pillClassMultiline =
+  'inline-flex max-w-[5.5rem] shrink-0 items-center justify-center self-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-3.5 text-center text-[12px] font-normal leading-snug tracking-[0.02em] text-fg whitespace-pre-line sm:max-w-[6rem] md:px-5 md:py-4'
+
 type TimelinePillsRowProps = {
   stepLabels: readonly string[]
   /** Must match an `id` on the section title for `aria-labelledby`. */
   ariaLabelledBy?: string
+  /**
+   * `multiline` uses narrower, stacked text so horizontal connectors can use more room.
+   * Use `\\n` in step label strings for line breaks (e.g. number, then two words on separate lines).
+   */
+  pillTextMode?: 'single' | 'multiline'
 }
 
 function TimelineConnector() {
   return (
     <div
-      className="flex min-h-[12px] min-w-0 flex-1 items-center pl-[24px] text-fg"
+      className="flex min-h-[12px] min-w-[2rem] flex-1 items-center pl-[24px] text-fg"
       aria-hidden
     >
-      <div className="relative flex min-h-[18px] min-w-0 flex-1 items-center">
+      {/*
+        min-w-2rem: the arrow keyframes use left: max(0, 100% - 22px). With min-w-0, flex could shrink
+        the track below 22px and the sweep looked backwards. See index.css @keyframes.
+      */}
+      <div className="relative flex min-h-[18px] w-full min-w-0 flex-1 items-center">
         <svg
           className="pointer-events-none absolute inset-0 h-full w-full text-fg/40"
           viewBox="0 0 100 12"
@@ -45,11 +60,10 @@ function TimelineConnector() {
   )
 }
 
-const pillClassName =
-  'inline-flex shrink-0 items-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-2 text-[11px] font-normal leading-none tracking-[0.02em] text-fg md:px-5 md:py-2.5 md:text-xs'
-
 /** Full-width horizontal stepper: pills + growing dotted connectors (case study canvas). */
-export function TimelinePillsRow({ stepLabels, ariaLabelledBy }: TimelinePillsRowProps) {
+export function TimelinePillsRow({ stepLabels, ariaLabelledBy, pillTextMode = 'single' }: TimelinePillsRowProps) {
+  const pillClassName = pillTextMode === 'multiline' ? pillClassMultiline : pillClassSingle
+
   return (
     <div className="col-span-12 w-full min-w-0">
       <ol

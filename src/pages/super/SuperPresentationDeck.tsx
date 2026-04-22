@@ -221,20 +221,15 @@ function SuperDeckAutoplayVideo({ src }: { src: string }) {
 }
 
 /**
- * Slide index for each on-page `presentationMediaIndex` (0–18), interleaved with text slides
- * (Carbon-style: chamfer opens the image slide for that slot).
+ * Slide index for each on-page `presentationMediaIndex` (0–17), interleaved with text slides
+ * (Carbon-style: chamfer opens the image slide for that slot). Retrospective is not a page click target.
  */
 export const SUPER_PRESENTATION_MEDIA_TO_SLIDE: readonly number[] = [
-  0, 2, 4, 6, 7, 9, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34,
+  0, 2, 4, 6, 7, 9, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32,
 ]
 
-/**
- * Deck slide indices that behave as image slides (media-first strip, zoom, capture).
- * Retrospective is a text section on the page (copy + inline GIF); slot 18 still maps here for navigation.
- */
-const SUPER_PRESENTATION_IMAGE_INDEX = new Set<number>(
-  SUPER_PRESENTATION_MEDIA_TO_SLIDE.filter((slideIdx) => slideIdx !== 34),
-)
+/** Deck slide indices that behave as image slides (media-first strip, zoom, capture). */
+const SUPER_PRESENTATION_IMAGE_INDEX = new Set<number>(SUPER_PRESENTATION_MEDIA_TO_SLIDE)
 
 const SUPER_PRESENTATION_TEXT_THUMB_LABELS: Record<number, string> = {
   1: 'Intro',

@@ -5,6 +5,7 @@
 import { memo, type ReactNode } from 'react'
 import caseStudy1Face from '../../CNC photos/c1.png'
 import caseStudy2Face from '../../Super assets/s1.png'
+import caseStudy3IbmFace from '../../IBM case study assets/ap1.png'
 
 const EDGE = '15rem' as const
 const HALF = '7.5rem' as const
@@ -88,9 +89,17 @@ const CubeFaces = memo(function CubeFaces() {
       </CubeChamferFace>
       <CubeChamferFace
         transform={`rotateY(180deg) translateZ(${HALF})`}
-        innerClassName={faceLabelInner}
+        innerClassName="relative"
       >
-        Case 3
+        <img
+          src={caseStudy3IbmFace}
+          alt=""
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className={caseStudyImageFaceVignette} aria-hidden />
+        <span className="sr-only">IBM Envizi</span>
       </CubeChamferFace>
       <CubeChamferFace
         transform={`rotateY(-90deg) translateZ(${HALF})`}

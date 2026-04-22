@@ -1,3 +1,4 @@
+import { useLayoutEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { AmbientVerticalLines } from '../components/AmbientVerticalLines'
 import { SiteFooter } from '../components/SiteFooter'
@@ -7,6 +8,11 @@ export function RootLayout() {
   const location = useLocation()
   const hideSiteTopBar = /^\/case-study(\/|$)/.test(location.pathname)
   const isHome = location.pathname === '/'
+
+  /** React Router does not reset scroll; case-study (and other) navigations would keep the old offset. */
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   return (
     <>

@@ -37,6 +37,7 @@ import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
+  caseStudyChamferToggleLabelClassName,
   caseStudyScrollAnchorClass,
 } from '../components/caseStudy/patterns'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
@@ -681,7 +682,7 @@ export default function CarbonNeutralClubShowcasePage() {
           </button>
           <span
             id="struggle-toggle-label"
-            className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+            className={caseStudyChamferToggleLabelClassName}
           >
             {seeWhereUsersStruggled
               ? problemSurfaceStrugglesToggleLabelOn
@@ -1004,7 +1005,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </button>
             <span
               id="calculator-why-toggle-label"
-              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+              className={caseStudyChamferToggleLabelClassName}
             >
               {showCalculatorWhyWorks
                 ? chamferAnnotationToggleLabelOn
@@ -1070,7 +1071,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </button>
             <span
               id="calculator-c13-toggle-label"
-              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+              className={caseStudyChamferToggleLabelClassName}
             >
               {showCalculatorC13Alt
                 ? chamferAnnotationToggleLabelOn
@@ -1162,7 +1163,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </button>
             <span
               id="result-meaningful-toggle-label"
-              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+              className={caseStudyChamferToggleLabelClassName}
             >
               {showResultMeaningfulAlt
                 ? chamferAnnotationToggleLabelOn
@@ -1254,7 +1255,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </button>
             <span
               id="pricing-plan-toggle-label"
-              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+              className={caseStudyChamferToggleLabelClassName}
             >
               {showPricingPlanAlt
                 ? chamferAnnotationToggleLabelOn
@@ -1330,7 +1331,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </button>
             <span
               id="pricing-trust-offset-toggle-label"
-              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+              className={caseStudyChamferToggleLabelClassName}
             >
               {showPricingTrustProjectsAlt
                 ? chamferAnnotationToggleLabelOn
@@ -1396,7 +1397,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </button>
             <span
               id="pricing-cost-breakdown-toggle-label"
-              className="font-mono text-sm font-normal leading-none text-fg md:text-base"
+              className={caseStudyChamferToggleLabelClassName}
             >
               {showPricingCostBreakdownAlt
                 ? chamferAnnotationToggleLabelOn

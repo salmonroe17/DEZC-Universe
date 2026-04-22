@@ -76,7 +76,8 @@ type ChamferFrameProps = {
   fitContentHeight?: boolean
   /**
    * When set and {@link CaseStudyPresentationModeContext} is non-null, enables hover CTA and
-   * click → `openPresentationMode(index)` (excluding clicks on nested interactive controls).
+   * click → `openPresentationMode(index)` (excluding links, form controls, and tabs; videos and
+   * media still open presentation via a capture handler).
    */
   presentationMediaIndex?: number
 }
@@ -103,17 +104,19 @@ export function ChamferFrame({
   const rootRef = useRef<HTMLDivElement>(null)
   const [meteorPathD, setMeteorPathD] = useState('')
 
-  const onPresentationSurfaceClick = (e: MouseEvent<HTMLDivElement>) => {
+  const onPresentationSurfaceClickCapture = (e: MouseEvent<HTMLDivElement>) => {
     if (!isPresentationTarget || !openPresentationMode) return
     const el = e.target as HTMLElement | null
     if (!el) return
     if (
       el.closest(
-        'button, a, video, input, select, textarea, [role="switch"], [role="tab"], [role="tablist"]',
+        'button, a, input, select, textarea, [role="switch"], [role="tab"], [role="tablist"]',
       )
     ) {
       return
     }
+    e.preventDefault()
+    e.stopPropagation()
     openPresentationMode(presentationMediaIndex)
   }
 
@@ -140,7 +143,7 @@ export function ChamferFrame({
   return (
     <div
       ref={rootRef}
-      onClick={isPresentationTarget ? onPresentationSurfaceClick : undefined}
+      onClickCapture={isPresentationTarget ? onPresentationSurfaceClickCapture : undefined}
       className={`quadrant-cell relative min-h-0 min-w-0 overflow-hidden ${staticVisual ? 'figma-frame-static' : ''} ${isPresentationTarget ? 'group cursor-pointer' : ''} ${className}`}
     >
       {meteorTrail && meteorPathD ? (

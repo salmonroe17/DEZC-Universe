@@ -11,3 +11,8 @@ export const SUPER_CASE_STUDY = {
   title: 'Super app unify verticals',
   path: '/case-study/super-app',
 } as const
+
+export const IBM_ENVIZI_CASE_STUDY = {
+  title: 'IBM Envizi: From Reporting to Action',
+  path: '/case-study/ibm-envizi',
+} as const
