@@ -34,6 +34,7 @@ import ibmBeforeAfterAp19 from '../../../IBM case study assets/ap19.png'
 import ibmBeforeAfterAp19Alt from '../../../IBM case study assets/ap19.1.png'
 import ibmActionPlansPrototypeVideo from '../../../IBM case study assets/IBM prototype video action plans 720p.mp4'
 import ibmRetrospectiveConfusedGif from '../../../IBM case study assets/confused.gif'
+import ibmHeroShipGif from '../../../IBM case study assets/ship.gif'
 import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
@@ -44,7 +45,7 @@ import type { CaseStudyPresentationSlide } from '../../components/caseStudy/Case
 import { IbmToggleAspectSpacer } from '../../components/caseStudy/IbmChamferMediaPlaceholder'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
-import { RotatingGradientCircle, RotatingGradientCircleDotPlaceholder } from '../../components/system/RotatingGradientCircle'
+import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 import {
   BEFORE_VS_AFTER,
   CRITERIA_SELECTION_STEP_2,
@@ -350,10 +351,16 @@ const IBM_PRESENTATION_SLIDES_BASE = [
         <div data-presentation-media-region className="shrink-0 self-center lg:ml-auto">
           <RotatingGradientCircle
             className="aspect-square w-[min(52vw,11rem)] shrink-0 md:w-[min(42vw,15rem)] lg:w-[min(34vw,17.5rem)]"
-            innerClassName="bg-bg"
+            innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <RotatingGradientCircleDotPlaceholder />
+            <img
+              src={ibmHeroShipGif}
+              alt=""
+              className="pointer-events-none block h-full w-full object-cover object-center select-none"
+              loading="lazy"
+              decoding="async"
+            />
           </RotatingGradientCircle>
         </div>
       </div>
