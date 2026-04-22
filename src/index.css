@@ -604,6 +604,29 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   );
 }
 
+/*
+ * Fake3DCube: chamfered overlay for the inner border — same path as .chamfer-fill-clip but
+ * *without* `overflow: hidden` (that layer suppresses or clips SVG paint in some UAs when combined
+ * with 3D). Sits on top of the image face; not inside .chamfer-fill-clip.
+ */
+.cube-face-stroke-clip {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  /* Slightly in front of the image plane to avoid 3D z-fighting (line never appeared). */
+  transform: translateZ(1px);
+  transform-style: preserve-3d;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--quadrant-chamfer)) 0,
+    100% var(--quadrant-chamfer),
+    100% 100%,
+    var(--quadrant-chamfer) 100%,
+    0 calc(100% - var(--quadrant-chamfer))
+  );
+}
+
 /* Show & tell: interactive sand canvas host (same chamfer clip as ::after) */
 .show-tell-sand-host {
   position: absolute;
