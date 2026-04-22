@@ -344,8 +344,7 @@ export default function SuperAppShowcasePage() {
               className="mt-4 w-full md:mt-5"
               innerClassName="p-5 font-mono text-[12px] leading-relaxed text-fg md:p-6"
             >
-              <p className="m-0 font-normal">What the company does</p>
-              <ul className="mb-0 mt-3 list-disc space-y-1.5 pl-[1.15rem] md:mt-4 md:space-y-2 md:pl-5">
+              <ul className="mb-0 mt-0 list-disc space-y-1.5 pl-[1.15rem] md:space-y-2 md:pl-5">
                 <li>Travel — hotel &amp; flight bookings</li>
                 <li>Fintech — debit card &amp; cashback system</li>
                 <li>Ecommerce — selling warehouse returned products</li>

@@ -376,11 +376,16 @@ export function CarbonDeckCrossfadeChamfer({
   baseAlt,
   altSrc,
   altAlt,
+  toggleLabelOff = chamferAnnotationToggleLabelOff,
+  toggleLabelOn = chamferAnnotationToggleLabelOn,
 }: {
   baseSrc: string
   baseAlt: string
   altSrc: string
   altAlt: string
+  /** Defaults match other deck crossfades (“Show why this works” / “Hide annotations”). */
+  toggleLabelOff?: string
+  toggleLabelOn?: string
 }) {
   const labelId = useId()
   const [showAlt, setShowAlt] = useState(false)
@@ -410,7 +415,7 @@ export function CarbonDeckCrossfadeChamfer({
           />
         </button>
         <span id={labelId} className="font-mono text-sm font-normal leading-none text-fg md:text-base">
-          {showAlt ? chamferAnnotationToggleLabelOn : chamferAnnotationToggleLabelOff}
+          {showAlt ? toggleLabelOn : toggleLabelOff}
         </span>
       </div>
       <div className="relative isolate w-full">
@@ -672,6 +677,8 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
         baseAlt="Carbon Neutral Club — problem and product surface context"
         altSrc={carbonProblemProductSurfaceStruggles}
         altAlt="Carbon Neutral Club — where users struggled (annotated)"
+        toggleLabelOff="Show user struggles"
+        toggleLabelOn="Hide user struggles"
       />
     ),
   },
