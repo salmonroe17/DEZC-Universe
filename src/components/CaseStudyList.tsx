@@ -23,8 +23,8 @@ const CASE_STUDIES: CaseStudyItem[] = [
     to: PRIMARY_CASE_STUDY.path,
   },
   { title: SUPER_CASE_STUDY.title, id: 1, to: SUPER_CASE_STUDY.path },
-  { title: 'Sherpa unified search', id: 2 },
-  { title: 'Design system philosophy', id: 3 },
+  { title: 'IBM Envizi: From Reporting to Action', id: 2 },
+  { title: 'Systems behind the screens', id: 3 },
 ]
 
 type ProgressFillProps = {

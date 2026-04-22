@@ -89,6 +89,10 @@ const chamferToggleStackLayerClass =
 const chamferAnnotationToggleLabelOff = 'Show why this works'
 const chamferAnnotationToggleLabelOn = 'Hide annotations'
 
+/** Problem / product surface chamfer (c4 / c4.1): annotated user-struggle view. */
+const problemSurfaceStrugglesToggleLabelOff = 'Show user struggles'
+const problemSurfaceStrugglesToggleLabelOn = 'Hide user struggles'
+
 const WHAT_THIS_CHANGED_BULLETS = [
   'Who the product was really for',
   'How onboarding worked',
@@ -680,8 +684,8 @@ export default function CarbonNeutralClubShowcasePage() {
             className="font-mono text-sm font-normal leading-none text-fg md:text-base"
           >
             {seeWhereUsersStruggled
-              ? chamferAnnotationToggleLabelOn
-              : chamferAnnotationToggleLabelOff}
+              ? problemSurfaceStrugglesToggleLabelOn
+              : problemSurfaceStrugglesToggleLabelOff}
           </span>
         </div>
         <div className="relative isolate w-full">
