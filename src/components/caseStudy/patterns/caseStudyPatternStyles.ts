@@ -14,3 +14,7 @@ export const caseStudySectionHeadingTimelineClass =
 
 export const caseStudyNarrowProseClass =
   'col-span-12 max-w-none text-base leading-relaxed text-fg md:text-xl'
+
+/** Label beside pill crossfade toggles on chamfer stacks — shared across case study pages. */
+export const caseStudyChamferToggleLabelClassName =
+  'font-mono text-[16px] font-normal leading-none text-fg'

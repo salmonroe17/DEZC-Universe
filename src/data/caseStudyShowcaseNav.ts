@@ -35,6 +35,27 @@ export const CARBON_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
   { id: 'retro-title', label: 'Retrospective' },
 ]
 
+/** IBM Envizi page — same scroll ids as {@link CARBON_CASE_STUDY_SHOWCASE_NAV} for structure parity. */
+export const IBM_ENVIZI_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
+  { id: 'hero-heading', label: 'Intro + demo video' },
+  { id: 'overview-section', label: 'Overview' },
+  { id: 'problem-statement', label: 'The problem' },
+  { id: 'user-vs-business-needs', label: 'Business vs user needs' },
+  { id: 'alignment-brief-to-system', label: 'Brief to product system' },
+  { id: 'system-we-designed', label: 'Workflows > Dashboards' },
+  { id: 'design-principles', label: 'Action layer' },
+  { id: 'criteria-selection', label: 'Criteria selection' },
+  { id: 'define-measurable-success', label: 'Define measurable success' },
+  { id: 'execute-actions', label: 'Execute actions' },
+  { id: 'track-progress', label: 'Track progress' },
+  { id: 'making-emissions-changes-understandable', label: 'Understandable emissions' },
+  { id: 'the-other-half-of-the-system', label: 'The other half' },
+  { id: 'four-methods-one-experience', label: '4 methods, 1 experience' },
+  { id: 'before-vs-after-action-plans', label: 'Before vs after' },
+  { id: 'impact-outcomes', label: 'Impact' },
+  { id: 'retro-title', label: 'Retrospective' },
+]
+
 /** Super app case study — full page TOC. */
 export const SUPER_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
   { id: 'super-hero-heading', label: 'Intro + demo video' },

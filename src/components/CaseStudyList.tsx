@@ -6,7 +6,7 @@ import {
   type AnimationEvent,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { PRIMARY_CASE_STUDY, SUPER_CASE_STUDY } from '../constants/caseStudyCatalog'
+import { IBM_ENVIZI_CASE_STUDY, PRIMARY_CASE_STUDY, SUPER_CASE_STUDY } from '../constants/caseStudyCatalog'
 
 export const CASE_AUTO_ROTATE_MS = 4000
 
@@ -23,7 +23,7 @@ const CASE_STUDIES: CaseStudyItem[] = [
     to: PRIMARY_CASE_STUDY.path,
   },
   { title: SUPER_CASE_STUDY.title, id: 1, to: SUPER_CASE_STUDY.path },
-  { title: 'IBM Envizi: From Reporting to Action', id: 2 },
+  { title: IBM_ENVIZI_CASE_STUDY.title, id: 2, to: IBM_ENVIZI_CASE_STUDY.path },
   { title: 'Systems behind the screens', id: 3 },
 ]
 

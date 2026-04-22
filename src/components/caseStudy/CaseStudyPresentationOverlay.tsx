@@ -972,7 +972,7 @@ export function CaseStudyPresentationOverlay({
                     ref={(el) => {
                       slideCaptureRootsRef.current[fullIndex] = el
                     }}
-                    className="presentation-slide-capture-root mx-auto flex min-h-full w-full min-w-0 max-w-full flex-col justify-center"
+                    className="presentation-slide-capture-root presentation-slide-text-v mx-auto flex min-h-full w-full min-w-0 max-w-full flex-col"
                   >
                     {slide.content}
                   </div>

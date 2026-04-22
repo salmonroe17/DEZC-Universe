@@ -1135,12 +1135,12 @@ export default function SuperAppShowcasePage() {
           </ProblemStatementGlitchFramedBlock>
         </div>
 
-        <div className="figma-rule my-[32px]" aria-hidden />
-
-        <FigmaGrid12 aria-labelledby="super-retrospective-heading">
+        <FigmaGrid12
+          className="mt-8 md:mt-10"
+          aria-labelledby="super-retrospective-heading"
+        >
           <ChamferFrame
             meteorTrail
-            presentationMediaIndex={18}
             className="col-span-12 md:col-span-8 md:col-start-3"
             innerClassName="px-4 py-12 text-left md:px-6 md:py-16"
           >

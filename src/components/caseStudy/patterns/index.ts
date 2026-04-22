@@ -9,6 +9,7 @@ export { BeforeAfterToggle } from './BeforeAfterToggle'
 export type { BeforeAfterMode } from './BeforeAfterToggle'
 export { ComparisonShowcase } from './ComparisonShowcase'
 export {
+  caseStudyChamferToggleLabelClassName,
   caseStudyNarrowProseClass,
   caseStudyScrollAnchorClass,
   caseStudySectionHeadingCenteredClass,

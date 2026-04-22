@@ -6,6 +6,7 @@ import superSuperCashHomeSection from '../../../Super assets/s10.png'
 import superSuperCashDedicated from '../../../Super assets/s10.1.png'
 import superTrueHomeOld from '../../../Super assets/s9.png'
 import superTrueHomeNew from '../../../Super assets/s9.1.png'
+import { caseStudyChamferToggleLabelClassName } from '../../components/caseStudy/patterns/caseStudyPatternStyles'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 
 export const superChamferToggleStackSpacerClass =
@@ -75,7 +76,7 @@ export function SuperToggleImageChamfer({
               aria-hidden
             />
           </button>
-          <span id={toggleId} className="font-mono text-[12px] font-normal leading-none text-fg">
+          <span id={toggleId} className={caseStudyChamferToggleLabelClassName}>
             {showWhatWorks ? toggleLabelOn : toggleLabelOff}
           </span>
         </div>
@@ -185,7 +186,7 @@ export function SuperProblemOldScreensChamfer({
               aria-hidden
             />
           </button>
-          <span id={toggleId} className="font-mono text-[12px] font-normal leading-none text-fg">
+          <span id={toggleId} className={caseStudyChamferToggleLabelClassName}>
             {showStruggles ? SUPER_TOGGLE_LABEL_ON : SUPER_PROBLEM_TOGGLE_LABEL_OFF}
           </span>
         </div>

@@ -33,6 +33,7 @@ import {
   KpiAnimatedValue,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
+  caseStudyChamferToggleLabelClassName,
   caseStudyScrollAnchorClass,
 } from '../../components/caseStudy/patterns'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyPresentationOverlay'
@@ -414,7 +415,7 @@ export function CarbonDeckCrossfadeChamfer({
             aria-hidden
           />
         </button>
-        <span id={labelId} className="font-mono text-sm font-normal leading-none text-fg md:text-base">
+        <span id={labelId} className={caseStudyChamferToggleLabelClassName}>
           {showAlt ? toggleLabelOn : toggleLabelOff}
         </span>
       </div>
