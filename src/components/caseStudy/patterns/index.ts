@@ -19,7 +19,11 @@ export {
 export { KpiAnimatedValue, KpiMetricsGrid } from './KpiMetricsGrid'
 export {
   ProblemStatementFrame,
+  ProblemStatementGlitchedCopy,
   ProblemStatementGlitchFramedBlock,
 } from './ProblemStatementFrame'
-export type { ProblemStatementGlitchFramedBlockProps } from './ProblemStatementFrame'
+export type {
+  ProblemStatementGlitchedCopyProps,
+  ProblemStatementGlitchFramedBlockProps,
+} from './ProblemStatementFrame'
 export { TimelinePillsRow } from './TimelinePillsRow'

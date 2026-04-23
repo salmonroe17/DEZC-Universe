@@ -6,7 +6,12 @@ import {
   type AnimationEvent,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { IBM_ENVIZI_CASE_STUDY, PRIMARY_CASE_STUDY, SUPER_CASE_STUDY } from '../constants/caseStudyCatalog'
+import {
+  DS_CASE_STUDY,
+  IBM_ENVIZI_CASE_STUDY,
+  PRIMARY_CASE_STUDY,
+  SUPER_CASE_STUDY,
+} from '../constants/caseStudyCatalog'
 
 export const CASE_AUTO_ROTATE_MS = 4000
 
@@ -24,7 +29,7 @@ const CASE_STUDIES: CaseStudyItem[] = [
   },
   { title: SUPER_CASE_STUDY.title, id: 1, to: SUPER_CASE_STUDY.path },
   { title: IBM_ENVIZI_CASE_STUDY.title, id: 2, to: IBM_ENVIZI_CASE_STUDY.path },
-  { title: 'Systems behind the screens', id: 3 },
+  { title: DS_CASE_STUDY.title, id: 3, to: DS_CASE_STUDY.path },
 ]
 
 type ProgressFillProps = {

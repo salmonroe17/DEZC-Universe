@@ -10,6 +10,13 @@ type ProblemStatementFrameProps = {
   className?: string
   /** Extra classes on the bracketed statement row (e.g. `font-mono`). */
   framedStatementClassName?: string
+  /**
+   * When true, the framed statement is a single white bracketed row (no RGB glitch),
+   * matching reference comps that use clean brackets only.
+   */
+  plainStatement?: boolean
+  /** Replaces the default `max-w-4xl` wrapper around the statement (e.g. `max-w-5xl`). */
+  statementMaxWidthClassName?: string
 }
 
 /** SVG bracket stroke matches body scale (~1px–2px); stretches with row height. */
@@ -88,7 +95,9 @@ export function ProblemStatementGlitchFramedBlock({
   containerClassName = '',
 }: ProblemStatementGlitchFramedBlockProps) {
   return (
-    <div className={['relative mx-auto w-full min-w-0', containerClassName].filter(Boolean).join(' ')}>
+    <div
+      className={['relative mx-auto w-full min-w-0', containerClassName].filter(Boolean).join(' ')}
+    >
       <div className="problem-statement-glitch-ghost problem-statement-glitch-ghost--c pointer-events-none absolute inset-0 z-0">
         <ProblemFramedRow accentClassName="text-[rgba(94,214,255,0.82)]" className={frameClassName}>
           {children}
@@ -108,6 +117,35 @@ export function ProblemStatementGlitchFramedBlock({
   )
 }
 
+export type ProblemStatementGlitchedCopyProps = {
+  children: ReactNode
+  framedStatementClassName: string
+  /** Same as {@link ProblemStatementFrame} `statementMaxWidthClassName` (default matches frame). */
+  statementMaxWidthClassName?: string
+}
+
+/**
+ * Padded, max-width shell around the glitch bracket block — the same **inner** layout as
+ * {@link ProblemStatementFrame} (the `px-2` / `md:px-4` lives **here**, not on
+ * `ProblemStatementGlitchFramedBlock`’s `containerClassName`). Otherwise horizontal padding on the
+ * `relative` root misaligns `absolute` RGB layers with the foreground and brackets look wrong.
+ */
+export function ProblemStatementGlitchedCopy({
+  children,
+  framedStatementClassName,
+  statementMaxWidthClassName = 'max-w-4xl',
+}: ProblemStatementGlitchedCopyProps) {
+  return (
+    <div
+      className={`relative mx-auto w-full min-w-0 px-2 md:px-4 ${statementMaxWidthClassName}`.trim()}
+    >
+      <ProblemStatementGlitchFramedBlock frameClassName={framedStatementClassName}>
+        {children}
+      </ProblemStatementGlitchFramedBlock>
+    </div>
+  )
+}
+
 /**
  * Framed problem / statement block: solid rule with centered label, brackets around body copy
  * (bracket height follows the text block), dashed rule below, optional `afterRule` under that line.
@@ -119,7 +157,19 @@ export function ProblemStatementFrame({
   afterRule = null,
   className = '',
   framedStatementClassName = '',
+  plainStatement = false,
+  statementMaxWidthClassName = 'max-w-4xl',
 }: ProblemStatementFrameProps) {
+  const statementBlock = plainStatement ? (
+    <ProblemFramedRow accentClassName="text-fg" className={framedStatementClassName}>
+      {children}
+    </ProblemFramedRow>
+  ) : (
+    <ProblemStatementGlitchFramedBlock frameClassName={framedStatementClassName}>
+      {children}
+    </ProblemStatementGlitchFramedBlock>
+  )
+
   return (
     <section id={id} className={`w-full ${className}`}>
       <div className="relative flex justify-center">
@@ -129,10 +179,10 @@ export function ProblemStatementFrame({
         </span>
       </div>
 
-      <div className="relative mx-auto mt-10 max-w-4xl px-2 md:mt-14 md:px-4">
-        <ProblemStatementGlitchFramedBlock frameClassName={framedStatementClassName}>
-          {children}
-        </ProblemStatementGlitchFramedBlock>
+      <div
+        className={`relative mx-auto w-full min-w-0 mt-10 px-2 md:mt-14 md:px-4 ${statementMaxWidthClassName}`.trim()}
+      >
+        {statementBlock}
       </div>
 
       <div

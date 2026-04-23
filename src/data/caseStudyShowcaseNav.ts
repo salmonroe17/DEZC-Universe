@@ -16,6 +16,22 @@ export const CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
   { id: 'retro-title', label: 'Retrospective' },
 ]
 
+/** Design Systems (DS) — same section ids as Carbon for layout parity; placeholder copy. */
+export const DS_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
+  { id: 'hero-heading', label: 'Intro' },
+  { id: 'overview-section', label: 'DS philosophy' },
+  { id: 'problem-statement', label: 'The problem' },
+  { id: 'my-philosophy', label: 'Saving time' },
+  { id: 'foundations-first', label: 'Foundations first' },
+  { id: 'components-at-scale', label: 'Components at scale' },
+  { id: 'states-variants-edge-cases', label: 'States, variants, and edge cases' },
+  { id: 'rules-that-prevent-chaos', label: 'Rules that prevent chaos' },
+  { id: 'built-for-real-world-products', label: 'Built for real-world products' },
+  { id: 'design-engineering-bridge', label: 'Design ↔ Engineering bridge' },
+  { id: 'information-architecture-for-ds', label: 'Information architecture for DS' },
+  { id: 'retro-title', label: 'Retrospective' },
+]
+
 /** Carbon Neutral Club production page — TOC only for sections built so far. */
 export const CARBON_CASE_STUDY_SHOWCASE_NAV: NavSection[] = [
   { id: 'hero-heading', label: 'Intro + demo video' },
