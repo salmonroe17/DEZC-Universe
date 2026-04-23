@@ -20,6 +20,7 @@ import {
 import caseStudy1Face from '../../CNC photos/c1.png'
 import caseStudy2Face from '../../Super assets/s1.png'
 import caseStudy3IbmFace from '../../IBM case study assets/ap1.png'
+import caseStudy4DsFace from '../../DS case study assets/ds1.png'
 
 const EDGE = '15rem' as const
 const HALF = '7.5rem' as const
@@ -55,10 +56,7 @@ const faceContentDim =
 
 const faceChamferInnerClip = 'chamfer-fill-clip relative min-h-0 min-w-0 size-full'
 
-const faceLabelInner =
-  'flex items-center justify-center bg-surface/90 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-fg-muted'
-
-/** Darkens edges of image faces so they match the mood of the label faces. */
+/** Darkens edges of image faces to match the panel mood. */
 const caseStudyImageFaceVignette =
   'pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_92%_92%_at_50%_50%,rgb(0_0_0/0)_38%,rgb(0_0_0/0.55)_72%,rgb(0_0_0/0.88)_100%)]'
 
@@ -220,9 +218,17 @@ const CubeFaces = memo(function CubeFaces() {
       <CubeChamferFace
         faceIndex={3}
         transform={`rotateY(-90deg) translateZ(${HALF})`}
-        innerClassName={faceLabelInner}
+        innerClassName="relative"
       >
-        Case 4
+        <img
+          src={caseStudy4DsFace}
+          alt=""
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className={caseStudyImageFaceVignette} aria-hidden />
+        <span className="sr-only">Design systems: Systems behind the screens</span>
       </CubeChamferFace>
     </>
   )

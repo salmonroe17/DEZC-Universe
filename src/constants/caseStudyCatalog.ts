@@ -17,13 +17,19 @@ export const IBM_ENVIZI_CASE_STUDY = {
   path: '/case-study/ibm-envizi',
 } as const
 
+/** Design Systems — “Systems behind the screens” (placeholder page). */
+export const DS_CASE_STUDY = {
+  title: 'Systems behind the screens',
+  path: '/case-study/design-systems',
+} as const
+
 /**
- * `Fake3DCube` face order: Carbon (0°) → Super (90°) → IBM (180°) → Systems / components (−90°).
+ * `Fake3DCube` face order: Carbon (0°) → Super (90°) → IBM (180°) → DS (−90°).
  * Index matches `activeCaseIndex` in `CaseStudyList`.
  */
 export const CASE_STUDY_FACE_PATHS: readonly [string, string, string, string] = [
   PRIMARY_CASE_STUDY.path,
   SUPER_CASE_STUDY.path,
   IBM_ENVIZI_CASE_STUDY.path,
-  '/case-study/components',
+  DS_CASE_STUDY.path,
 ] as const
