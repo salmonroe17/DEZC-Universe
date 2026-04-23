@@ -1,5 +1,5 @@
 import { CaretLeft, CaretRight, MagnifyingGlassMinus, MagnifyingGlassPlus, X } from '@phosphor-icons/react'
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import type { MouseEvent } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -7,10 +7,27 @@ import { CaseStudiesCardModal } from '../components/CaseStudiesCardModal'
 import { ThemeSwatches } from '../components/ThemeSwatches'
 import { SIDEQUESTS, getSideQuestById, getSideQuestIndexById } from '../data/sidequests'
 
-/** Calm ease, not bouncy — 220ms rail / image */
+/** Calm ease — main image crossfade (not the thumbnail rail) */
 const MOTION_EASE = [0.25, 0.1, 0.25, 1] as const
-const CAROUSEL_SLOT_SIZES = [16, 24, 40, 24, 16] as const
 const DURATION_IMAGE_S = 0.22
+
+const CAROUSEL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+const CAROUSEL_DURATION = 0.38
+
+type RailOffset = -2 | -1 | 0 | 1 | 2
+
+/** All tiles are laid out in a 40px box; `scale` shrinks the 24/16 look. Inset = half the max tile. */
+const RAIL_TILE_MAX_PX = 40
+const RAIL_HALF = RAIL_TILE_MAX_PX / 2
+const RAIL_HIDDEN_NUDGE_PX = 28
+const RAIL_OFFSCREEN_STEP_PX = 40
+const RAIL_TOP = '50%'
+
+function scaleForOffset(offset: -2 | -1 | 0 | 1 | 2): number {
+  if (offset === 0) return 1
+  if (offset === -1 || offset === 1) return 0.6
+  return 0.4
+}
 
 const MAIN_IMAGE_ZOOM_MIN = 1
 const MAIN_IMAGE_ZOOM_MAX = 3
@@ -60,6 +77,74 @@ function mod(n: number, m: number): number {
   return ((n % m) + m) % m
 }
 
+/** Shortest signed offset on the ring: selectedIndex + d ≡ index (mod n). */
+function signedOffsetFromSelected(selectedIndex: number, index: number, n: number): number {
+  if (n <= 0) return 0
+  let d = (index - selectedIndex) % n
+  if (d > n / 2) d -= n
+  if (d < -n / 2) d += n
+  return d
+}
+
+type CarouselTarget = {
+  left: string
+  top: string
+  x: number
+  y: number
+  scale: number
+  opacity: number
+  z: number
+  pointer: boolean
+  offset: RailOffset | null
+}
+
+function carouselTargetFor(selectedIndex: number, index: number, n: number): CarouselTarget {
+  const d = signedOffsetFromSelected(selectedIndex, index, n)
+  const y = -RAIL_HALF
+  if (d >= -2 && d <= 2) {
+    const o = d as RailOffset
+    const i = o + 2
+    const leftPct = (i + 0.5) * 20
+    return {
+      left: `${leftPct}%`,
+      top: RAIL_TOP,
+      x: -RAIL_HALF,
+      y,
+      scale: scaleForOffset(o),
+      opacity: 1,
+      z: o === 0 ? 30 : 20 - 5 * Math.abs(o),
+      pointer: true,
+      offset: o,
+    }
+  }
+  const steps = Math.abs(d) - 2
+  const extra = RAIL_OFFSCREEN_STEP_PX * steps
+  if (d > 2) {
+    return {
+      left: '100%',
+      top: RAIL_TOP,
+      x: RAIL_HIDDEN_NUDGE_PX + extra,
+      y,
+      scale: 0.35,
+      opacity: 0,
+      z: 0,
+      pointer: false,
+      offset: null,
+    }
+  }
+  return {
+    left: '0%',
+    top: RAIL_TOP,
+    x: -RAIL_TILE_MAX_PX - RAIL_HIDDEN_NUDGE_PX - extra,
+    y,
+    scale: 0.35,
+    opacity: 0,
+    z: 0,
+    pointer: false,
+    offset: null,
+  }
+}
+
 function clampMainImagePan(
   pan: { x: number; y: number },
   contentW: number,
@@ -94,15 +179,14 @@ function SideQuestCarousel({
 }) {
   const reducedMotion = useReducedMotion() ?? false
   const n = SIDEQUESTS.length
-  const slotIndices =
-    n === 0
-      ? [0, 0, 0, 0, 0]
-      : [0, 1, 2, 3, 4].map((slot) => mod(selectedIndex + slot - 2, n))
-  const hasSlotDuplicate = new Set(slotIndices).size < slotIndices.length
-  const layoutTx = (reducedMotion: boolean) =>
-    reducedMotion
-      ? { type: 'tween' as const, duration: 0.01, ease: MOTION_EASE }
-      : { type: 'spring' as const, stiffness: 420, damping: 36, mass: 0.8 }
+
+  const transition = reducedMotion
+    ? { duration: 0.01, ease: CAROUSEL_EASE }
+    : { duration: CAROUSEL_DURATION, ease: CAROUSEL_EASE }
+
+  if (n === 0) {
+    return null
+  }
 
   return (
     <div
@@ -119,8 +203,7 @@ function SideQuestCarousel({
         </button>
       </div>
 
-      <div className="relative min-w-0 flex-1">
-        {/* Rail: horizontal through vertical center */}
+      <div className="relative min-h-0 min-w-0 flex-1 self-stretch">
         <div
           className="pointer-events-none absolute inset-x-0 top-1/2 z-0 h-[1px] min-h-[1px] -translate-y-1/2"
           style={{
@@ -129,104 +212,91 @@ function SideQuestCarousel({
           }}
           aria-hidden
         />
-        <div className="viewer-carousel-strip relative z-[1] flex h-full w-full min-w-0 items-center justify-center overflow-hidden">
-          <LayoutGroup id="sidequest-carousel-5up">
-            <div className="grid w-full min-w-0 max-w-3xl grid-cols-5 place-items-center gap-1.5 px-1.5 min-[500px]:gap-2 min-[500px]:px-2 md:gap-3 md:px-3">
-              {[0, 1, 2, 3, 4].map((slot) => {
-                const sidequestIndex = slotIndices[slot]!
-                const sq = SIDEQUESTS[sidequestIndex]!
-                const size = CAROUSEL_SLOT_SIZES[slot]!
-                const isCenter = slot === 2
-                // Stable id for shared layout: one per sidequest. Duplicates in strip need a slot-unique id (no cross-slot link).
-                const layoutIdForTile = hasSlotDuplicate
-                  ? `sqc-${String(sq.id)}-slot${String(slot)}`
-                  : `sqc-${String(sq.id)}`
-                return (
-                  <button
-                    key={`slot-${slot}`}
-                    type="button"
-                    aria-label={`${isCenter ? 'Selected: ' : ''}Select ${sq.title}`}
-                    aria-current={isCenter ? 'true' : undefined}
-                    onClick={() => onSelectIndex(sidequestIndex)}
+        <div
+          className="viewer-carousel-strip relative z-[1] h-full w-full min-w-0 overflow-hidden"
+          style={{ minHeight: 44 }}
+        >
+          <div className="relative h-full w-full min-w-0 [contain:layout_style]">
+            {Array.from({ length: n }, (_, sidequestIndex) => {
+              const sq = SIDEQUESTS[sidequestIndex]!
+              const t = carouselTargetFor(selectedIndex, sidequestIndex, n)
+              const isCenter = sidequestIndex === selectedIndex
+              const { left, top, x, y, scale: s, opacity, z, pointer, offset } = t
+              return (
+                <motion.button
+                  key={String(sidequestIndex)}
+                  type="button"
+                  layout={false}
+                  initial={false}
+                  animate={{ left, top, x, y, opacity, scale: s }}
+                  transition={transition}
+                  style={{ zIndex: z }}
+                  className={[
+                    'absolute h-10 w-10 will-change-transform',
+                    'font-mono font-normal',
+                    FOCUS_1,
+                    pointer ? 'pointer-events-auto' : 'pointer-events-none',
+                  ].join(' ')}
+                  tabIndex={pointer ? 0 : -1}
+                  aria-hidden={!pointer}
+                  aria-label={
+                    pointer ? (isCenter ? `Selected: ${sq.title}` : `Select ${sq.title}`) : undefined
+                  }
+                  aria-current={isCenter && pointer ? 'true' : undefined}
+                  onClick={() => {
+                    if (pointer && sidequestIndex !== selectedIndex) onSelectIndex(sidequestIndex)
+                  }}
+                >
+                  <span
                     className={[
-                      'group relative flex h-full w-full min-w-0 max-w-full items-center justify-center',
-                      'font-mono font-normal',
-                      FOCUS_1,
+                      'group relative box-border flex size-full flex-col',
+                      'items-stretch justify-center overflow-hidden rounded-[2px] origin-center',
+                      isCenter
+                        ? [
+                            LINE_SEL,
+                            'bg-elevated',
+                            'shadow-[0_0_20px_color-mix(in_srgb,var(--color-hud)_20%,transparent),0_0_1px_color-mix(in_srgb,var(--color-fg)_18%,transparent)]',
+                          ].join(' ')
+                        : [LINE, LINE_HOVER, 'bg-surface'].join(' '),
                     ].join(' ')}
                   >
-                    <span className="relative flex w-full min-w-0 max-w-full flex-col items-center justify-center">
-                      <motion.span
-                        layout
-                        layoutId={layoutIdForTile}
-                        initial={false}
-                        transition={{ layout: layoutTx(reducedMotion) }}
-                        style={{ width: size, height: size, maxWidth: '100%' }}
-                        className={[
-                          'relative z-[1] box-border flex shrink-0 flex-col items-stretch justify-center overflow-hidden rounded-[2px]',
-                          isCenter
-                            ? [
-                                LINE_SEL,
-                                'bg-elevated',
-                                'opacity-100',
-                                'shadow-[0_0_24px_color-mix(in_srgb,var(--color-hud)_16%,transparent),0_0_1px_color-mix(in_srgb,var(--color-fg)_22%,transparent)]',
-                              ].join(' ')
-                            : [LINE, LINE_HOVER, 'bg-surface'].join(' '),
-                        ].join(' ')}
-                      >
-                        {sq.cover ? (
-                          <>
-                            <img
-                              src={sq.cover}
-                              alt=""
-                              className={[
-                                'h-full w-full object-cover',
-                                isCenter
-                                  ? 'grayscale-0'
-                                  : [
-                                      'grayscale opacity-50',
-                                      'transition-[filter,opacity] duration-200 ease-out',
-                                      'group-hover:opacity-80 group-hover:grayscale-[0.2]',
-                                    ].join(' '),
-                              ].join(' ')}
-                              draggable={false}
-                            />
-                            {!isCenter ? (
-                              <span
-                                className={[
-                                  'pointer-events-none absolute inset-0 z-[1] bg-bg/50',
-                                  'transition-[background-color,opacity] duration-200 ease-out',
-                                  'group-hover:bg-bg/28',
-                                ].join(' ')}
-                                aria-hidden
-                              />
-                            ) : null}
-                          </>
-                        ) : (
-                          <span className="relative block h-full w-full">
-                            <span className="block h-full w-full bg-fg/[0.05]" />
-                            {!isCenter ? (
-                              <span
-                                className="pointer-events-none absolute inset-0 z-[1] bg-bg/40"
-                                aria-hidden
-                              />
-                            ) : null}
-                          </span>
-                        )}
-                      </motion.span>
-                      <span
-                        className={[
-                          'pointer-events-none absolute -bottom-1 left-1/2 z-0 h-3 w-[130%] max-w-[3.5rem] -translate-x-1/2',
-                          'rounded-full opacity-0 blur-md transition-[opacity,box-shadow] duration-200 ease-out',
-                          'group-hover:opacity-100 group-hover:shadow-[0_6px_24px_8px_color-mix(in_srgb,var(--color-fg)_12%,transparent)]',
-                        ].join(' ')}
-                        aria-hidden
-                      />
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-          </LayoutGroup>
+                    {sq.cover ? (
+                      <>
+                        <img
+                          src={sq.cover}
+                          alt=""
+                          className={[
+                            'h-full w-full object-cover',
+                            isCenter
+                              ? 'grayscale-0'
+                              : [
+                                  'grayscale opacity-50',
+                                  'transition-[filter,opacity] duration-200 ease-out',
+                                  'group-hover:opacity-80 group-hover:grayscale-[0.2]',
+                                ].join(' '),
+                          ].join(' ')}
+                          draggable={false}
+                        />
+                        {!isCenter && offset != null && offset !== 0 ? (
+                          <span
+                            className="pointer-events-none absolute inset-0 z-[1] bg-bg/50 transition-[background-color,opacity] duration-200 group-hover:bg-bg/28"
+                            aria-hidden
+                          />
+                        ) : null}
+                      </>
+                    ) : (
+                      <span className="relative block h-full w-full">
+                        <span className="block h-full w-full bg-fg/[0.05]" />
+                        {!isCenter && offset != null && offset !== 0 ? (
+                          <span className="pointer-events-none absolute inset-0 z-[1] bg-bg/40" aria-hidden />
+                        ) : null}
+                      </span>
+                    )}
+                  </span>
+                </motion.button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
