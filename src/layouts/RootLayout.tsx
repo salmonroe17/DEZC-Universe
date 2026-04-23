@@ -6,8 +6,9 @@ import { SiteTopBar } from '../components/SiteTopBar'
 
 export function RootLayout() {
   const location = useLocation()
-  const hideSiteTopBar = /^\/case-study(\/|$)/.test(location.pathname)
+  const hideSiteTopBar = /^\/case-study(\/|$)/.test(location.pathname) || /^\/sidequest(\/|$)/.test(location.pathname)
   const isHome = location.pathname === '/'
+  const isSideQuestViewer = /^\/sidequest(\/|$)/.test(location.pathname)
 
   /** React Router does not reset scroll; case-study (and other) navigations would keep the old offset. */
   useLayoutEffect(() => {
@@ -30,7 +31,7 @@ export function RootLayout() {
           <Outlet />
         </div>
         {/* Progressive bottom-edge blur: off on home so the grid isn’t capped by a frosted “peak”. */}
-        {isHome ? null : (
+        {isHome || isSideQuestViewer ? null : (
           <div className="viewport-bottom-blur-stack" aria-hidden>
             <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--1" />
             <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--2" />
@@ -41,7 +42,7 @@ export function RootLayout() {
             <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--7" />
           </div>
         )}
-        <SiteFooter />
+        {isSideQuestViewer ? null : <SiteFooter />}
       </div>
     </>
   )

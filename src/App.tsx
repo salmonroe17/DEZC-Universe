@@ -8,6 +8,7 @@ import CaseStudyPage from './pages/CaseStudyPage'
 import DesignSystemsShowcasePage from './pages/DesignSystemsShowcasePage'
 import Home from './pages/Home'
 import IbmEnviziShowcasePage from './pages/IbmEnviziShowcasePage'
+import SideQuestViewerPage from './pages/SideQuestViewerPage'
 import SuperAppShowcasePage from './pages/SuperAppShowcasePage'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
                 path="case-study/components"
                 element={<CaseStudyComponentsPage />}
               />
+              <Route path="sidequest/:sidequestId" element={<SideQuestViewerPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
