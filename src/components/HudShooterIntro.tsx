@@ -151,18 +151,21 @@ function persistLastTargetsHit(n: number) {
 
 const TAG_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-/** Three base-36 chars (0–9, A–Z); 46,656 values × 10k word pairs. */
+/** Three chars from base-36; one position is always 0–9 so the tag never reads as three letters. */
 function randomTag3(): string {
-  const bytes = new Uint8Array(2)
-  crypto.getRandomValues(bytes)
-  const space = 36 ** 3
-  let n = ((bytes[0]! << 8) | bytes[1]!) % space
-  const c2 = TAG_CHARS[n % 36]!
-  n = Math.floor(n / 36)
-  const c1 = TAG_CHARS[n % 36]!
-  n = Math.floor(n / 36)
-  const c0 = TAG_CHARS[n % 36]!
-  return c0 + c1 + c2
+  const b = new Uint8Array(4)
+  crypto.getRandomValues(b)
+  const pos = b[0]! % 3
+  const digit = TAG_CHARS[b[1]! % 10]!
+  const out: [string, string, string] = ['', '', '']
+  out[pos] = digit
+  let o = 0
+  for (let i = 0; i < 3; i++) {
+    if (i === pos) continue
+    out[i] = TAG_CHARS[b[2 + o]! % 36]!
+    o += 1
+  }
+  return out[0]! + out[1]! + out[2]!
 }
 
 /** Adjective + noun + short random tag. */

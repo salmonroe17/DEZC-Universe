@@ -51,16 +51,28 @@ export function ExperimentalGrid() {
   const [whoIamFocusInside, setWhoIamFocusInside] = useState(false)
   const whoIamScrollActive = whoIamPointerInside || whoIamFocusInside
 
+  const sidequestN = SIDEQUESTS.length
+
   const onShowTellNodeClick = useCallback(
     (nodeIndex: number) => {
-      const n = SIDEQUESTS.length
-      if (n === 0) return
-      const sq = SIDEQUESTS[nodeIndex % n]
+      if (sidequestN === 0) return
+      const sq = SIDEQUESTS[nodeIndex % sidequestN]
       if (!sq) return
       navigate(`/sidequest/${sq.id}`)
     },
-    [navigate],
+    [navigate, sidequestN],
   )
+
+  const getNodePreviewSrc = useCallback((nodeIndex: number) => {
+    if (sidequestN === 0) return undefined
+    const sq = SIDEQUESTS[nodeIndex % sidequestN]!
+    return sq.images[0] ?? sq.cover
+  }, [sidequestN])
+
+  const getNodeTitle = useCallback((nodeIndex: number) => {
+    if (sidequestN === 0) return undefined
+    return SIDEQUESTS[nodeIndex % sidequestN]!.title
+  }, [sidequestN])
 
   const sandLineRootRef = useRef<HTMLDivElement>(null)
   const sandTrackRef = useRef<HTMLDivElement>(null)
@@ -122,7 +134,7 @@ export function ExperimentalGrid() {
               My multiple timelines of side quests
             </h2>
             <p
-              className={`${showTellSubtitleClass} relative z-[2] mb-4 w-fit max-w-full shrink-0 self-start md:mb-5`}
+              className={`${showTellSubtitleClass} relative z-[2] mt-[8px] mb-4 w-fit max-w-full shrink-0 self-start md:mb-5`}
             >
               Click squares to see visuals
             </p>
@@ -134,6 +146,8 @@ export function ExperimentalGrid() {
                 sandHoveredNodeIndexRef={sandHoveredNodeIndexRef}
                 sandScrollHUnitRef={sandScrollHUnitRef}
                 onNodeClick={onShowTellNodeClick}
+                getNodePreviewSrc={getNodePreviewSrc}
+                getNodeTitle={getNodeTitle}
               />
             </div>
           </div>
