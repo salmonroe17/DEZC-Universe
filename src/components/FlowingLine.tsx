@@ -118,6 +118,8 @@ export type FlowingLineSandProps = {
   sandHoveredNodeIndexRef?: RefObject<number | null>
   /** Normalized horizontal scroll (0..1), same basis as track `left` — for ambient lines, etc. */
   sandScrollHUnitRef?: MutableRefObject<number>
+  /** Primary click on a Show & tell square — e.g. open Sidequest viewer for that index. */
+  onNodeClick?: (nodeIndex: number) => void
 }
 
 export function FlowingLine({
@@ -126,6 +128,7 @@ export function FlowingLine({
   sandPhaseRef,
   sandHoveredNodeIndexRef,
   sandScrollHUnitRef,
+  onNodeClick,
 }: FlowingLineSandProps) {
   const uid = useId()
   const filterId = useMemo(() => `flowing-line-glow-${uid.replace(/:/g, '')}`, [uid])
@@ -277,7 +280,12 @@ export function FlowingLine({
             <div
               key={i}
               data-flowing-line-node
-              className="pointer-events-auto absolute z-[1] overflow-visible"
+              className={[
+                'pointer-events-auto absolute z-[1] overflow-visible',
+                onNodeClick ? 'cursor-pointer' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
               style={{
                 left: `${(p.x / FLOW_TOTAL_W) * 100}%`,
                 top: `${(p.y / FLOW_VB_H) * 100}%`,
@@ -286,7 +294,21 @@ export function FlowingLine({
               }}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={onNodeLeave}
-              aria-hidden
+              onClick={onNodeClick ? () => onNodeClick(i) : undefined}
+              role={onNodeClick ? 'button' : undefined}
+              tabIndex={onNodeClick ? 0 : undefined}
+              onKeyDown={
+                onNodeClick
+                  ? (e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        onNodeClick(i)
+                      }
+                    }
+                  : undefined
+              }
+              aria-hidden={onNodeClick ? undefined : true}
+              aria-label={onNodeClick ? `Open sidequest ${i + 1}` : undefined}
             >
               <div className="-m-3 flex items-center justify-center overflow-visible p-3 [perspective:160px]">
                 {active ? (

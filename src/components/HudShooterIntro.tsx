@@ -55,6 +55,9 @@ const TYPEWRITER_HOLD_MS = 2900
 const TYPEWRITER_DELETE_MS = 20
 const TYPEWRITER_GAP_MS = 450
 
+const SHOOT_HINT_FADE_S = 0.35
+const SHOOT_HINT_READ_MS = 3000
+
 /** Only mounted while `uiPhase === 'idle'` so leaving idle unmounts and clears without effect setState. */
 function IdleGreetingTypewriter({
   containerRef,
@@ -712,6 +715,8 @@ export function HudShooterIntro() {
   const [lastTargetsHit, setLastTargetsHit] = useState<number | null>(() =>
     loadLastTargetsHit(),
   )
+  /** Short-lived center hint after “Start game” (fades in, shows ~3s, fades out). */
+  const [shootHintShow, setShootHintShow] = useState(false)
   const enteredGameRef = useRef(false)
   const gameMotionProfileRef = useRef<GameMotionProfile>(DEFAULT_GAME_MOTION)
 
@@ -744,6 +749,20 @@ export function HudShooterIntro() {
       if (w > 4 && h > 4) initBackgroundStars(w, h, starsRef.current)
     }
     prevUiPhaseRef.current = uiPhase
+  }, [uiPhase])
+
+  useEffect(() => {
+    if (uiPhase !== 'game') {
+      setShootHintShow(false)
+      return
+    }
+    setShootHintShow(true)
+    const t = window.setTimeout(() => {
+      setShootHintShow(false)
+    }, Math.round(1000 * SHOOT_HINT_FADE_S) + SHOOT_HINT_READ_MS)
+    return () => {
+      window.clearTimeout(t)
+    }
   }, [uiPhase])
 
   const syncHudActive = useCallback(() => {
@@ -1422,6 +1441,24 @@ export function HudShooterIntro() {
         </div>
       </div>
 
+      <AnimatePresence>
+        {uiPhase === 'game' && shootHintShow && (
+          <motion.div
+            key="shoot-hint"
+            role="status"
+            aria-live="polite"
+            className="pointer-events-none absolute inset-0 z-[30] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: SHOOT_HINT_FADE_S, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="max-w-[min(100%,20rem)] text-center text-sm font-medium leading-snug text-fg [text-shadow:0_0_1.5rem_rgb(0_0_0/0.85),0_0_0.25rem_rgb(0_0_0/0.4)] md:text-base">
+              Click and shoot the flying words
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

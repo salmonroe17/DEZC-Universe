@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { easeOutExpo } from '../animations/variants'
+import { SIDEQUESTS } from '../data/sidequests'
 import { ExperimentalCaseStudiesPanel } from './ExperimentalCaseStudiesPanel'
 import { HudShooterIntro } from './HudShooterIntro'
 import { FlowingLine } from './FlowingLine'
@@ -44,9 +46,21 @@ const showTellSubtitleClass =
   'shrink-0 px-4 pb-1.5 text-left text-[10px] font-normal leading-snug tracking-[0.04em] text-fg-subtle md:pb-2 md:text-[11px] md:tracking-[0.035em]'
 
 export function ExperimentalGrid() {
+  const navigate = useNavigate()
   const [whoIamPointerInside, setWhoIamPointerInside] = useState(false)
   const [whoIamFocusInside, setWhoIamFocusInside] = useState(false)
   const whoIamScrollActive = whoIamPointerInside || whoIamFocusInside
+
+  const onShowTellNodeClick = useCallback(
+    (nodeIndex: number) => {
+      const n = SIDEQUESTS.length
+      if (n === 0) return
+      const sq = SIDEQUESTS[nodeIndex % n]
+      if (!sq) return
+      navigate(`/sidequest/${sq.id}`)
+    },
+    [navigate],
+  )
 
   const sandLineRootRef = useRef<HTMLDivElement>(null)
   const sandTrackRef = useRef<HTMLDivElement>(null)
@@ -119,6 +133,7 @@ export function ExperimentalGrid() {
                 sandPhaseRef={sandPhaseRef}
                 sandHoveredNodeIndexRef={sandHoveredNodeIndexRef}
                 sandScrollHUnitRef={sandScrollHUnitRef}
+                onNodeClick={onShowTellNodeClick}
               />
             </div>
           </div>
