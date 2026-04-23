@@ -1,0 +1,99 @@
+/*
+ * Portfolio responsive foundation (infrastructure only).
+ * Breakpoints: 0–389 (small mobile) · 390–767 (large mobile) · 768–1023 (tablet) ·
+ * 1024–1439 (small desktop) · 1440+ (large desktop).
+ * Desktop (1024+): --port-pad-x matches legacy 24px figma margin; body type matches @theme.
+ */
+
+:root {
+  /* Reference widths (plain CSS, JS) — match @theme --breakpoint-port-* in index.css */
+  --port-bp-end-sm: 389px;
+  --port-bp-sm: 390px;
+  --port-bp-md: 768px;
+  --port-bp-lg: 1024px;
+  --port-bp-xl: 1440px;
+  /* Horizontal page gutter: scales down below desktop; 24px at 1024+ (preserves current desktop) */
+  --port-pad-x: 1rem;
+  --port-modal-bleed: 1rem;
+}
+
+@media (min-width: 390px) {
+  :root {
+    --port-pad-x: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --port-pad-x: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --port-pad-x: 24px;
+  }
+}
+
+html {
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+}
+
+#root {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+/* Fluid media: avoid layout overflow; icons/small inline SVGs keep explicit size in components */
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+picture {
+  display: block;
+  max-width: 100%;
+}
+
+/* Opt-in max-width + shared gutters; does not change existing page structures until used */
+.port-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--figma-frame-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--port-pad-x, var(--figma-margin));
+  padding-right: var(--port-pad-x, var(--figma-margin));
+}
+
+/* Case studies quick modal: safe-area + viewport-bound panel (infrastructure) */
+.port-modal-backdrop {
+  box-sizing: border-box;
+  padding-top: max(var(--port-modal-bleed), env(safe-area-inset-top));
+  padding-bottom: max(var(--port-modal-bleed), env(safe-area-inset-bottom));
+  padding-left: max(var(--port-modal-bleed), env(safe-area-inset-left));
+  padding-right: max(var(--port-modal-bleed), env(safe-area-inset-right));
+}
+
+.port-modal-panel {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  max-height: min(92dvh, 920px, calc(100dvh - max(2rem, env(safe-area-inset-top) + env(safe-area-inset-bottom))));
+}
+
+/* Fullscreen presentation: avoid 100vw horizontal scroll; keep to visual viewport */
+.port-presentation-viewport {
+  left: 0;
+  right: 0;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}

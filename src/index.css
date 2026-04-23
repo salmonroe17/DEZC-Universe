@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './port-foundation.css';
 
 /* Design system: dark-first neutral palette, spacing, type scale */
 @theme {
@@ -46,6 +47,16 @@
   --figma-frame-max: 1440px;
   --figma-margin: 24px;
   --figma-gutter: 24px;
+
+  /*
+   * Portfolio responsive foundation — opt-in Tailwind variants:
+   * port-sm (390+), port-md (768+), port-lg (1024+), port-xl (1440+).
+   * Canonical tokens for plain CSS: see port-foundation.css (:root --port-bp-*).
+   */
+  --breakpoint-port-sm: 390px;
+  --breakpoint-port-md: 768px;
+  --breakpoint-port-lg: 1024px;
+  --breakpoint-port-xl: 1440px;
 }
 
 /* 12-column content grid — margin applied on .figma-frame, gutters between tracks */
@@ -53,7 +64,7 @@
   box-sizing: border-box;
   margin-inline: auto;
   max-width: var(--figma-frame-max);
-  padding-inline: var(--figma-margin);
+  padding-inline: var(--port-pad-x, var(--figma-margin));
   width: 100%;
 }
 
@@ -66,7 +77,7 @@
   box-sizing: border-box;
   width: 100%;
   max-width: var(--figma-frame-max);
-  padding-inline: var(--figma-margin);
+  padding-inline: var(--port-pad-x, var(--figma-margin));
   pointer-events: none;
 }
 
@@ -1402,4 +1413,26 @@ html[data-theme='blue'] {
   --color-hud: #6eb0ff;
   --color-cell-border: #30456e;
   --color-cell-hover: #8cc4ff;
+}
+
+/*
+ * Responsive `--text-body` (after @theme): small / large mobile only; tablet+ matches @theme (1rem).
+ * Opt in per page later via component classes; base body uses var(--text-body) already.
+ */
+@media (max-width: 389px) {
+  :root {
+    --text-body: 0.9375rem;
+  }
+}
+
+@media (min-width: 390px) and (max-width: 767px) {
+  :root {
+    --text-body: 0.96875rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --text-body: 1rem;
+  }
 }

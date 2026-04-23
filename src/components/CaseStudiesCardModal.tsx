@@ -45,7 +45,7 @@ export function CaseStudiesCardModal({ open, onClose }: CaseStudiesCardModalProp
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex cursor-default items-center justify-center bg-[color-mix(in_srgb,var(--color-bg)_72%,transparent)] p-4 backdrop-blur-[3px]"
+      className="port-modal-backdrop fixed inset-0 z-[100] flex cursor-default items-center justify-center bg-[color-mix(in_srgb,var(--color-bg)_72%,transparent)] backdrop-blur-[3px]"
       role="presentation"
       onClick={onBackdropClick}
     >
@@ -53,7 +53,7 @@ export function CaseStudiesCardModal({ open, onClose }: CaseStudiesCardModalProp
         role="dialog"
         aria-modal="true"
         aria-label="Case studies"
-        className={`max-h-[min(92dvh,920px)] cursor-auto overflow-y-auto overflow-x-hidden ${CASE_STUDIES_MODAL_SHELL_WIDTH_CLASS}`}
+        className={`port-modal-panel cursor-auto overflow-y-auto overflow-x-hidden ${CASE_STUDIES_MODAL_SHELL_WIDTH_CLASS}`}
         onClick={(e) => e.stopPropagation()}
       >
         <ExperimentalCaseStudiesPanel

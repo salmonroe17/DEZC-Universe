@@ -1,4 +1,4 @@
-import { motion, useReducedMotion, type Transition } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion, type Transition } from 'framer-motion'
 import {
   useEffect,
   useId,
@@ -120,6 +120,10 @@ export type FlowingLineSandProps = {
   sandScrollHUnitRef?: MutableRefObject<number>
   /** Primary click on a Show & tell square — e.g. open Sidequest viewer for that index. */
   onNodeClick?: (nodeIndex: number) => void
+  /** Hovered node shows this image (e.g. first sidequest gallery frame) instead of a solid highlight. */
+  getNodePreviewSrc?: (nodeIndex: number) => string | undefined
+  /** Hovered node title, shown bottom-center aligned with the scroll arrow controls. */
+  getNodeTitle?: (nodeIndex: number) => string | undefined
 }
 
 export function FlowingLine({
@@ -129,6 +133,8 @@ export function FlowingLine({
   sandHoveredNodeIndexRef,
   sandScrollHUnitRef,
   onNodeClick,
+  getNodePreviewSrc,
+  getNodeTitle,
 }: FlowingLineSandProps) {
   const uid = useId()
   const filterId = useMemo(() => `flowing-line-glow-${uid.replace(/:/g, '')}`, [uid])
@@ -229,6 +235,8 @@ export function FlowingLine({
   }
 
   const reducedMotion = useReducedMotion() ?? false
+  const hoveredTitle =
+    hoveredIndex !== null && getNodeTitle ? (getNodeTitle(hoveredIndex) ?? null) : null
 
   return (
     <div ref={lineRootRef} className="relative min-h-0 w-full flex-1 overflow-visible py-2 md:py-3">
@@ -275,6 +283,7 @@ export function FlowingLine({
           const active = hoveredIndex === i
           const dimOthers = linePaused && !active
           const idle = FLOW_NODE_IDLE_MOTION[i]!
+          const previewSrc = getNodePreviewSrc?.(i)
 
           return (
             <div
@@ -317,9 +326,22 @@ export function FlowingLine({
                       aria-hidden
                       className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[100px] w-[100px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-hud)_26%,transparent)] blur-[20px] md:h-[120px] md:w-[120px] md:blur-[26px]"
                     />
-                    <div
-                      className="relative z-[1] size-4 shrink-0 scale-[2.5] rounded-none bg-fg/92 brightness-110 transition-[transform,opacity,filter,background-color] duration-150 ease-out md:size-5"
-                    />
+                    {previewSrc ? (
+                      <div
+                        className="relative z-[1] size-4 shrink-0 scale-[2.5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] transition-[transform,opacity,filter] duration-150 ease-out md:size-5"
+                      >
+                        <img
+                          src={previewSrc}
+                          alt=""
+                          draggable={false}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="relative z-[1] size-4 shrink-0 scale-[2.5] rounded-none bg-fg/92 brightness-110 transition-[transform,opacity,filter,background-color] duration-150 ease-out md:size-5"
+                      />
+                    )}
                   </div>
                 ) : reducedMotion ? (
                   <div
@@ -351,6 +373,25 @@ export function FlowingLine({
           )
         })}
       </div>
+
+      <AnimatePresence mode="wait">
+        {hoveredTitle ? (
+          <motion.div
+            key={hoveredIndex ?? 'none'}
+            role="status"
+            aria-live="polite"
+            initial={reducedMotion ? false : { opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reducedMotion ? undefined : { opacity: 0, y: 2 }}
+            transition={{ duration: reducedMotion ? 0.01 : 0.12, ease: [0.25, 0.1, 0.25, 1] }}
+            className="pointer-events-none absolute bottom-1 left-1/2 z-[19] flex min-h-9 w-[min(20rem,calc(100%-5.5rem))] -translate-x-1/2 items-center justify-center px-1 text-center md:bottom-2 md:min-h-10"
+          >
+            <span className="line-clamp-2 w-full font-mono text-[10px] font-normal leading-tight text-fg/90 drop-shadow-[0_1px_0_var(--color-bg)] md:text-[11px]">
+              {hoveredTitle}
+            </span>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       <button
         type="button"

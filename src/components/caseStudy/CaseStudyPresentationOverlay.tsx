@@ -718,7 +718,7 @@ export function CaseStudyPresentationOverlay({
   const activeVisibleIndex = Math.max(0, visibleIndexFromFull(safeFullIndex))
 
   const overlayClass = [
-    'case-study-presentation-overlay fixed left-0 top-0 z-[100000] box-border flex h-[100dvh] w-screen cursor-auto flex-col overflow-hidden font-mono text-fg antialiased transition-[color,background-color] duration-200 ease-out motion-reduce:transition-none',
+    'case-study-presentation-overlay port-presentation-viewport fixed left-0 top-0 z-[100000] box-border flex h-[100dvh] w-full min-w-0 max-w-full cursor-auto flex-col overflow-hidden font-mono text-fg antialiased transition-[color,background-color] duration-200 ease-out motion-reduce:transition-none',
     `presentation-theme-${theme}`,
   ].join(' ')
 
@@ -738,7 +738,6 @@ export function CaseStudyPresentationOverlay({
   return createPortal(
     <div
       className={overlayClass}
-      style={{ width: '100vw' }}
       role="dialog"
       aria-modal="true"
       aria-label="Presentation"
