@@ -10,22 +10,26 @@ const quadrantHeadingClass =
   'shrink-0 px-4 pt-3 text-left text-[11px] font-semibold tracking-[0.06em] text-fg/90 md:pt-4 md:text-xs md:tracking-[0.05em]'
 
 /**
- * Width of the home page’s 1fr column: `grid-cols-[2fr_1fr]` with `gap-3 md:gap-4` inside
- * `p-4 md:p-5` (ExperimentalGrid). Matches the physical width of the Case Studies column on `/`.
+ * Home grid stacks quadrants full-width below `lg`; the 1/3 `max-w` is only for the split 2+1
+ * column. Shared by case-study footers and {@link CASE_STUDIES_MODAL_SHELL_WIDTH_CLASS} so they
+ * match the Case Studies column on `/` (not the old 36–48rem reading-width cap).
  */
-const homeQuadrantColumnWidthClass =
-  'w-full max-w-[calc((100vw-2rem-0.75rem)/3)] md:max-w-[calc((100vw-2.5rem-1rem)/3)]'
+const caseStudiesHomeColumnWidthClass =
+  'w-full min-w-0 max-w-full lg:max-w-[calc((100vw-2.5rem-1rem)/3)]'
+
+const footerHomeGridWidthClass = caseStudiesHomeColumnWidthClass
 
 /**
- * Fixed modal shell width (not max-content) so list row / title length doesn’t resize the overlay.
- * Pair with {@link ExperimentalCaseStudiesPanel} `footerColumn="modal-wide"` (`w-full` fill).
+ * Case studies quick-nav modal: same max width as the home Case Studies quadrant (see
+ * `caseStudiesHomeColumnWidthClass`). `shrink-0` keeps the flex-centred dialog from shrinking.
+ * Pair with `footerColumn="modal-wide"` on the panel (`w-full` fill).
  */
 export const CASE_STUDIES_MODAL_SHELL_WIDTH_CLASS =
-  'w-[min(calc(100vw-2rem),36rem)] shrink-0 sm:w-[min(calc(100vw-2.5rem),42rem)] md:w-[min(calc(100vw-3rem),48rem)] max-w-full'
+  `${caseStudiesHomeColumnWidthClass} shrink-0`
 
 /**
  * Footer layout: taller than the home grid estimate, capped by viewport so it feels like a hero
- * module; cube stays vertically centered in the flex-1 band above the list.
+ * module; cube is vertically centered in the flex-1 band above the list.
  */
 const footerPanelHeightClass =
   'min-h-[max(30rem,min(72svh,44rem))] md:min-h-[max(38rem,min(78svh,52rem))]'
@@ -82,7 +86,7 @@ export function ExperimentalCaseStudiesPanel({
   }
 
   const footerWidthClass =
-    footerColumn === 'modal-wide' ? 'w-full min-w-0 max-w-full' : homeQuadrantColumnWidthClass
+    footerColumn === 'modal-wide' ? 'w-full min-w-0 max-w-full' : footerHomeGridWidthClass
 
   return (
     <div

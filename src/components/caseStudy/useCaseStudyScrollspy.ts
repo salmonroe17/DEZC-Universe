@@ -16,10 +16,8 @@ function withSidebarTopItem(sections: NavSection[]): NavSection[] {
 }
 
 /**
- * Horizontal line: a section is "active" once its `#id` top crosses at or above this viewport Y.
- * Must stay in sync with {@link caseStudyScrollAnchorClass}: `scroll-mt-28` / `md:scroll-mt-32`
- * (see `caseStudyPatternStyles.ts`). Those margins position headings after `scrollIntoView`; if the
- * threshold is smaller than that offset, the previous section stays "active" forever.
+ * Fallback when {@link UseCaseStudyScrollspyOptions.stickyOffsetPx} is not passed
+ * (e.g. non–case-study shell). Must stay roughly in sync with scroll-margin on section targets.
  */
 function scrollSpyThresholdPx(): number {
   if (typeof window === 'undefined') return 148
@@ -29,7 +27,19 @@ function scrollSpyThresholdPx(): number {
   return scrollMarginRem * rootRemPx + 16
 }
 
-export function useCaseStudyScrollspy(navSectionsIn: NavSection[]) {
+export type UseCaseStudyScrollspyOptions = {
+  /**
+   * Distance from viewport top to the “reading line” (px), usually the measured fixed header
+   * including the mobile sections row + progress bar (`--cs-components-header-h`).
+   */
+  stickyOffsetPx?: number
+}
+
+export function useCaseStudyScrollspy(
+  navSectionsIn: NavSection[],
+  options: UseCaseStudyScrollspyOptions = {},
+) {
+  const { stickyOffsetPx } = options
   const navSections = useMemo(() => withSidebarTopItem(navSectionsIn), [navSectionsIn])
 
   const [activeIdState, setActiveIdState] = useState<string | null>(
@@ -43,7 +53,7 @@ export function useCaseStudyScrollspy(navSectionsIn: NavSection[]) {
     return ids[0]!
   }, [ids, activeIdState])
 
-  /** After sidebar click, ignore scroll-driven updates while smooth scroll settles (avoids flicker). */
+  /** After sidebar / mobile nav click, ignore scroll-driven updates while smooth scroll settles. */
   const suppressSpyUntilRef = useRef(0)
 
   const onNavigate = useCallback((id: string) => {
@@ -56,12 +66,20 @@ export function useCaseStudyScrollspy(navSectionsIn: NavSection[]) {
     suppressSpyUntilRef.current = Date.now() + 520
   }, [])
 
+  const getOffset = useCallback(() => {
+    if (stickyOffsetPx != null && Number.isFinite(stickyOffsetPx)) {
+      return Math.max(0, stickyOffsetPx) + 2
+    }
+    return scrollSpyThresholdPx()
+  }, [stickyOffsetPx])
+
   useEffect(() => {
     if (ids.length === 0) return
 
     const updateActive = () => {
       if (Date.now() < suppressSpyUntilRef.current) return
 
+      const offset = getOffset()
       const topIdPresent = ids.includes(CASE_STUDY_SIDEBAR_TOP_ID)
       const scrollTop = window.scrollY || document.documentElement.scrollTop
       if (topIdPresent && scrollTop <= 16) {
@@ -69,7 +87,6 @@ export function useCaseStudyScrollspy(navSectionsIn: NavSection[]) {
         return
       }
 
-      const offset = scrollSpyThresholdPx()
       const contentIds = topIdPresent
         ? ids.filter((i) => i !== CASE_STUDY_SIDEBAR_TOP_ID)
         : ids
@@ -87,14 +104,41 @@ export function useCaseStudyScrollspy(navSectionsIn: NavSection[]) {
       setActiveIdState(current)
     }
 
-    updateActive()
-    window.addEventListener('scroll', updateActive, { passive: true })
-    window.addEventListener('resize', updateActive, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', updateActive)
-      window.removeEventListener('resize', updateActive)
+    const elements = ids
+      .map((id) => (id === CASE_STUDY_SIDEBAR_TOP_ID ? null : document.getElementById(id)))
+      .filter((el): el is HTMLElement => Boolean(el))
+
+    let raf = 0
+    const rafUpdate = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(updateActive)
     }
-  }, [ids])
+
+    updateActive()
+    const t = window.setTimeout(() => {
+      rafUpdate()
+    }, 0)
+    window.addEventListener('scroll', rafUpdate, { passive: true })
+    window.addEventListener('resize', rafUpdate, { passive: true })
+
+    const io =
+      typeof IntersectionObserver !== 'undefined'
+        ? new IntersectionObserver(rafUpdate, {
+            root: null,
+            rootMargin: '0px',
+            threshold: [0, 0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1],
+          })
+        : null
+    elements.forEach((el) => io?.observe(el))
+
+    return () => {
+      window.clearTimeout(t)
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', rafUpdate)
+      window.removeEventListener('resize', rafUpdate)
+      io?.disconnect()
+    }
+  }, [ids, getOffset])
 
   return { activeId, onNavigate, navSections }
 }

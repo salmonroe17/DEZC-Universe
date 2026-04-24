@@ -33,7 +33,17 @@ import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
   caseStudyScrollAnchorClass,
+  caseStudyTeamResponsibilityTextClass,
+  caseStudyTeamRoleColumnClass,
+  caseStudyTeamRowConnectorCellClass,
+  caseStudyTeamRowLiClass,
+  caseStudyTeamRowListClass,
 } from '../components/caseStudy/patterns'
+import {
+  caseStudyTeamConnectorHorizontal,
+  caseStudyTradeConnectorHorizontal,
+  caseStudyTradeConnectorVertical,
+} from '../components/caseStudy/CaseStudyFlowConnectors'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
 import {
   SUPER_PRESENTATION_SLIDES,
@@ -77,37 +87,6 @@ const SUPER_CHAMFER_CROSSFADE_IMAGE_URLS = [
   superImpactHandoff,
   superImpactHandoffEnabled,
 ] as const
-
-const teamConnector = (
-  <span className="relative flex min-h-px min-w-[2.5rem] flex-1 items-center" aria-hidden>
-    <span className="h-px w-full bg-fg/35" />
-    <svg
-      className="-ml-px h-[5px] w-[6px] shrink-0 text-fg/35"
-      viewBox="0 0 6 5"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
-
-const tradeRowConnector = (
-  <span
-    className="relative flex w-full min-w-[2rem] max-w-full items-center md:min-h-[1.25em]"
-    aria-hidden
-  >
-    <span className="h-px min-w-0 flex-1 bg-fg" />
-    <svg
-      className="-ml-px h-[5px] w-[6px] shrink-0 text-fg"
-      viewBox="0 0 6 5"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
 
 const TEAM_ROWS: { role: string; responsibility: string }[] = [
   {
@@ -399,14 +378,18 @@ export default function SuperAppShowcasePage() {
             <h3 className="mt-2 font-mono text-[16px] font-normal leading-none text-fg md:mt-6">
               Team
             </h3>
-            <ul className="mt-7 flex flex-col gap-6 font-mono md:mt-8 md:gap-7">
+            <ul className={`${caseStudyTeamRowListClass} font-mono`}>
               {TEAM_ROWS.map((row) => (
-                <li key={row.role} className="flex items-center gap-3 md:gap-5">
-                  <span className="shrink-0 whitespace-nowrap text-[12px] text-fg">{row.role}</span>
-                  {teamConnector}
-                  <span className="min-w-0 flex-1 text-pretty text-right text-[12px] leading-relaxed text-fg">
-                    {row.responsibility}
+                <li key={row.role} className={caseStudyTeamRowLiClass}>
+                  <span
+                    className={`${caseStudyTeamRoleColumnClass} text-left text-[12px] text-fg md:shrink-0 md:whitespace-nowrap`}
+                  >
+                    {row.role}
                   </span>
+                  <span className={caseStudyTeamRowConnectorCellClass}>
+                    {caseStudyTeamConnectorHorizontal}
+                  </span>
+                  <span className={caseStudyTeamResponsibilityTextClass}>{row.responsibility}</span>
                 </li>
               ))}
             </ul>
@@ -535,7 +518,12 @@ export default function SuperAppShowcasePage() {
                 <p className="m-0 min-w-0 w-full text-left font-mono text-[16px] font-normal leading-snug text-fg">
                   {row.label}
                 </p>
-                <div className="flex min-h-0 min-w-0 w-full items-center">{tradeRowConnector}</div>
+                <div className="hidden min-h-0 min-w-0 w-full items-center md:flex">
+                  {caseStudyTradeConnectorHorizontal}
+                </div>
+                <div className="flex min-h-0 w-full justify-start py-0.5 md:hidden">
+                  {caseStudyTradeConnectorVertical}
+                </div>
                 <p className="m-0 min-w-0 w-full text-left font-mono text-[12px] font-normal leading-relaxed text-fg md:w-auto">
                   {row.body}
                 </p>

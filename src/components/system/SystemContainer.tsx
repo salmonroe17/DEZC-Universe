@@ -11,7 +11,9 @@ export function SystemContainer({ children, className = '' }: SystemContainerPro
     <div
       className={`quadrant-cell system-container relative min-h-0 min-w-0 w-full ${className}`}
     >
-      <div className="relative z-10 px-6 py-12 md:px-8 md:py-16">{children}</div>
+      <div className="relative z-10 px-4 py-10 sm:px-6 sm:py-12 md:px-8 md:py-16">
+        {children}
+      </div>
     </div>
   )
 }

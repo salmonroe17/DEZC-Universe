@@ -26,9 +26,15 @@ import superTurningPointMatrix from '../../../Super assets/s17.png'
 import superImpactHandoff from '../../../Super assets/s18.png'
 import superImpactHandoffEnabled from '../../../Super assets/s18.1.png'
 import superWalkthrough1080 from '../../../Super assets/Super app walkthrough 1080p.mp4'
+import { caseStudyTeamConnectorHorizontal } from '../../components/caseStudy/CaseStudyFlowConnectors'
 import {
   KpiAnimatedValue,
   ProblemStatementGlitchFramedBlock,
+  caseStudyTeamResponsibilityTextClass,
+  caseStudyTeamRoleColumnClass,
+  caseStudyTeamRowConnectorCellClass,
+  caseStudyTeamRowLiClass,
+  caseStudyTeamRowListClass,
 } from '../../components/caseStudy/patterns'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyShowcaseScaffold'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
@@ -65,15 +71,6 @@ const deckTradeRowConnector = (
   >
     <span className="h-px min-w-0 flex-1 bg-fg" />
     <svg className="-ml-px h-[5px] w-[6px] shrink-0 text-fg" viewBox="0 0 6 5" fill="currentColor" aria-hidden>
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
-
-const teamConnectorDeck = (
-  <span className="relative flex min-h-px min-w-[2.5rem] flex-1 items-center" aria-hidden>
-    <span className="h-px w-full bg-fg/35" />
-    <svg className="-ml-px h-[5px] w-[6px] shrink-0 text-fg/35" viewBox="0 0 6 5" fill="currentColor" aria-hidden>
       <path d="M0 0 L6 2.5 L0 5 Z" />
     </svg>
   </span>
@@ -339,14 +336,18 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
         </div>
         <div className="col-span-12">
           <h3 className="mt-2 font-mono text-[16px] font-normal leading-none text-fg md:mt-6">Team</h3>
-          <ul className="mt-7 flex flex-col gap-6 font-mono md:mt-8 md:gap-7">
+          <ul className={`${caseStudyTeamRowListClass} font-mono`}>
             {TEAM_ROWS_DECK.map((row) => (
-              <li key={row.role} className="flex items-center gap-3 md:gap-5">
-                <span className="shrink-0 whitespace-nowrap text-[12px] text-fg">{row.role}</span>
-                {teamConnectorDeck}
-                <span className="min-w-0 flex-1 text-pretty text-right text-[12px] leading-relaxed text-fg">
-                  {row.responsibility}
+              <li key={row.role} className={caseStudyTeamRowLiClass}>
+                <span
+                  className={`${caseStudyTeamRoleColumnClass} text-left text-[12px] text-fg md:shrink-0 md:whitespace-nowrap`}
+                >
+                  {row.role}
                 </span>
+                <span className={caseStudyTeamRowConnectorCellClass}>
+                  {caseStudyTeamConnectorHorizontal}
+                </span>
+                <span className={caseStudyTeamResponsibilityTextClass}>{row.responsibility}</span>
               </li>
             ))}
           </ul>

@@ -55,9 +55,9 @@ export function CaseStudyRenderer({ study }: CaseStudyRendererProps) {
   const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(navSections)
 
   return (
-    <div className="relative min-h-0 w-full text-fg">
+    <div className="relative min-h-0 w-full min-w-0 max-w-full overflow-x-clip text-fg">
       <CaseStudyRailShell
-        frameClassName="pb-24 pt-6 md:pb-32 md:pt-10"
+        frameClassName="pb-20 pt-4 max-lg:pt-2 md:pb-28 md:pt-8 lg:pb-32 lg:pt-10"
         gridClassName="items-start"
         sidebar={
           <SidebarNav

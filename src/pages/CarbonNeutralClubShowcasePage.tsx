@@ -40,7 +40,17 @@ import {
   TimelinePillsRow,
   caseStudyChamferToggleLabelClassName,
   caseStudyScrollAnchorClass,
+  caseStudyTeamResponsibilityTextClass,
+  caseStudyTeamRoleColumnClass,
+  caseStudyTeamRowConnectorCellClass,
+  caseStudyTeamRowLiClass,
+  caseStudyTeamRowListClass,
 } from '../components/caseStudy/patterns'
+import {
+  caseStudyTeamConnectorHorizontal,
+  caseStudyTradeConnectorHorizontal,
+  caseStudyTradeConnectorVertical,
+} from '../components/caseStudy/CaseStudyFlowConnectors'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
 import {
   CARBON_PRESENTATION_MEDIA_TO_SLIDE,
@@ -314,37 +324,6 @@ const CHECKOUT_TRUST_INTRO_COLUMNS: { body: ReactNode }[] = [
   },
 ]
 
-const teamConnector = (
-  <span className="relative flex min-h-px min-w-[2.5rem] flex-1 items-center" aria-hidden>
-    <span className="h-px w-full bg-fg/35" />
-    <svg
-      className="-ml-px h-[5px] w-[6px] shrink-0 text-fg/35"
-      viewBox="0 0 6 5"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
-
-const tradeRowConnector = (
-  <span
-    className="relative flex w-full min-w-[2rem] max-w-full items-center md:min-h-[1.25em]"
-    aria-hidden
-  >
-    <span className="h-px min-w-0 flex-1 bg-fg" />
-    <svg
-      className="-ml-px h-[5px] w-[6px] shrink-0 text-fg"
-      viewBox="0 0 6 5"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
-
 const TEAM_ROWS: { role: string; responsibility: string }[] = [
   {
     role: 'Lead product designer (me)',
@@ -519,7 +498,7 @@ export default function CarbonNeutralClubShowcasePage() {
             </h3>
             <ChamferFrame
               className="mt-4 w-full md:mt-5"
-              innerClassName="p-5 text-xs leading-[1.55] text-fg md:p-6 md:text-sm md:leading-relaxed"
+              innerClassName="p-5 text-[12px] leading-[1.55] text-fg md:p-6 md:leading-relaxed"
             >
               <p className="m-0">
                 Carbon Neutral Club helps users understand and offset their carbon footprint through a
@@ -539,7 +518,7 @@ export default function CarbonNeutralClubShowcasePage() {
             <h3 className="text-sm font-normal leading-none text-fg md:text-base">What I did</h3>
             <ChamferFrame
               className="mt-4 w-full md:mt-5"
-              innerClassName="p-5 text-xs leading-[1.55] text-fg md:p-6 md:text-sm md:leading-relaxed"
+              innerClassName="p-5 text-[12px] leading-[1.55] text-fg md:p-6 md:leading-relaxed"
             >
               <p className="m-0">I led the redesign of the core journey:</p>
               <ul className="mb-0 mt-3 list-disc space-y-1.5 pl-[1.15rem] md:mt-4 md:space-y-2 md:pl-5">
@@ -555,7 +534,7 @@ export default function CarbonNeutralClubShowcasePage() {
             <h3 className="text-sm font-normal leading-none text-fg md:text-base">Scope</h3>
             <ChamferFrame
               className="mt-4 w-full md:mt-5"
-              innerClassName="p-5 text-xs leading-[1.55] text-fg md:p-6 md:text-sm md:leading-relaxed"
+              innerClassName="p-5 text-[12px] leading-[1.55] text-fg md:p-6 md:leading-relaxed"
             >
               <p className="m-0">Timeline: 7 weeks</p>
               <p className="mb-0 mt-4 font-normal md:mt-5">Scope details:</p>
@@ -574,12 +553,18 @@ export default function CarbonNeutralClubShowcasePage() {
             <h3 className="mt-2 text-base font-normal leading-none text-fg md:mt-6 md:text-lg">
               Team
             </h3>
-            <ul className="mt-7 flex flex-col gap-6 md:mt-8 md:gap-7">
+            <ul className={caseStudyTeamRowListClass}>
               {TEAM_ROWS.map((row) => (
-                <li key={row.role} className="flex items-center gap-3 text-xs md:gap-5 md:text-sm">
-                  <span className="shrink-0 whitespace-nowrap text-fg">{row.role}</span>
-                  {teamConnector}
-                  <span className="min-w-0 shrink-0 text-right text-fg">{row.responsibility}</span>
+                <li key={row.role} className={caseStudyTeamRowLiClass}>
+                  <span
+                    className={`${caseStudyTeamRoleColumnClass} text-left text-xs text-fg md:shrink-0 md:whitespace-nowrap md:text-sm`}
+                  >
+                    {row.role}
+                  </span>
+                  <span className={caseStudyTeamRowConnectorCellClass}>
+                    {caseStudyTeamConnectorHorizontal}
+                  </span>
+                  <span className={caseStudyTeamResponsibilityTextClass}>{row.responsibility}</span>
                 </li>
               ))}
             </ul>
@@ -810,7 +795,12 @@ export default function CarbonNeutralClubShowcasePage() {
                 <p className="m-0 min-w-0 w-full text-left font-mono text-sm font-normal leading-snug text-fg md:text-base">
                   {row.label}
                 </p>
-                <div className="flex min-h-0 min-w-0 w-full items-center">{tradeRowConnector}</div>
+                <div className="hidden min-h-0 min-w-0 w-full items-center md:flex">
+                  {caseStudyTradeConnectorHorizontal}
+                </div>
+                <div className="flex min-h-0 w-full justify-start py-0.5 md:hidden">
+                  {caseStudyTradeConnectorVertical}
+                </div>
                 <p className="m-0 min-w-0 w-full text-left font-mono text-xs font-normal leading-relaxed text-fg md:w-auto md:text-sm">
                   {row.body}
                 </p>
@@ -848,7 +838,7 @@ export default function CarbonNeutralClubShowcasePage() {
         <FigmaGrid12>
           <h2
             id="flow-system-heading"
-            className="col-span-12 font-mono text-[24px] font-normal leading-snug text-fg"
+            className="col-span-12 text-center font-mono text-[24px] font-normal leading-snug text-fg md:text-left"
           >
             The System We Designed
           </h2>

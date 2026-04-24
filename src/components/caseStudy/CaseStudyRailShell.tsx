@@ -15,7 +15,7 @@ type CaseStudyRailShellProps = {
 }
 
 const defaultAsideClass =
-  'min-w-0 lg:col-span-1 lg:pr-[var(--figma-gutter)]'
+  'min-w-0 max-lg:hidden lg:col-span-1 lg:pr-[var(--figma-gutter)]'
 
 /**
  * Shared Figma rail (5-track grid): one sidebar column + four-track main.
@@ -48,7 +48,7 @@ export function CaseStudyRailShell({
           {sidebar}
         </aside>
         <div
-          className={['min-w-0', mainSpanClass, mainClassName].filter(Boolean).join(' ')}
+          className={['min-w-0 max-w-full', mainSpanClass, mainClassName].filter(Boolean).join(' ')}
         >
           {children}
         </div>

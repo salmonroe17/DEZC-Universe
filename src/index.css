@@ -651,6 +651,18 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   );
 }
 
+/* List block: clip bottom-left to match .quadrant-cell chamfer so dividers don’t overshoot. */
+.chamfer-case-study-list-clip {
+  overflow: hidden;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    var(--quadrant-chamfer, 9px) 100%,
+    0 calc(100% - var(--quadrant-chamfer, 9px))
+  );
+}
+
 /*
  * Fake3DCube: chamfered overlay for the inner border — same path as .chamfer-fill-clip but
  * *without* `overflow: hidden` (that layer suppresses or clips SVG paint in some UAs when combined
@@ -711,7 +723,8 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   );
 }
 
-[data-show-tell-quadrant]:hover .show-tell-sand-host {
+[data-show-tell-quadrant]:hover .show-tell-sand-host,
+[data-show-tell-quadrant][data-quadrant-in-view] .show-tell-sand-host {
   opacity: 0.92;
 }
 
@@ -735,12 +748,14 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 }
 
 .cube-face-cell:hover::before,
-.quadrant-cell:hover::before {
+.quadrant-cell:hover::before,
+.quadrant-cell[data-quadrant-in-view]::before {
   background-color: color-mix(in srgb, var(--color-hud) 38%, var(--color-cell-border));
 }
 
 .cube-face-cell:hover::after,
-.quadrant-cell:hover::after {
+.quadrant-cell:hover::after,
+.quadrant-cell[data-quadrant-in-view]::after {
   box-shadow: inset 0 0 48px color-mix(in srgb, var(--color-hud) 7%, transparent);
 }
 
@@ -752,6 +767,15 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 
 .figma-frame-static.cube-face-cell:hover::after,
 .figma-frame-static.quadrant-cell:hover::after {
+  box-shadow: none;
+}
+
+/* Touch / no primary hover: column majority in view — cube faces use figma chamfer (see above) */
+.quadrant-cell[data-quadrant-in-view] .figma-frame-static.cube-face-cell::before {
+  background-color: var(--color-cell-border);
+}
+
+.quadrant-cell[data-quadrant-in-view] .figma-frame-static.cube-face-cell::after {
   box-shadow: none;
 }
 
