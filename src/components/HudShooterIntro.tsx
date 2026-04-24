@@ -117,7 +117,7 @@ function IdleGreetingTypewriter({
 
   return (
     <div ref={containerRef}>
-      <p className="max-w-full whitespace-pre-line text-[2rem] font-medium leading-[1.15] text-fg md:text-[2.25rem]">
+      <p className="max-w-full whitespace-pre-line text-[2.4rem] font-medium leading-[1.15] text-fg max-lg:tracking-tight sm:text-[2.6rem] md:max-lg:text-[2.9rem] lg:text-[3rem] port-xl:text-[3.25rem]">
         {text}
         <span
           className="ml-0.5 inline-block h-[0.85em] w-[2px] translate-y-[0.08em] animate-pulse bg-fg align-middle"
@@ -235,9 +235,34 @@ const GAME_DURATION_MS = 26_000
 const MAX_WORDS = 13
 const MAX_PARTICLES = 960
 const EXPLODE_MS = 880
-/** Canvas text size (px); thinnest weight. Scaled 3× for readability + hit feel. */
-function wordFontSize(scale: number) {
-  return (6.5 + scale * 14) * 3
+/**
+ * Shrink world-space words on narrow playfields. `refW` sets how fast we approach full size.
+ * `min` = hard floor (after all factors). `remPx` from root for zoom.
+ *
+ * When playfield is narrower than `COMPACT_CUTOFF_REM`, an extra downscale (see `COMPACT_SIZE_MUL`) is
+ * applied — wide hero cells (≥ ~52rem) keep the pre-compact size.
+ */
+const GAME_WORD_REF_WIDTH_REM = 72
+const GAME_WORD_LAYOUT_MIN = 0.15
+/** Playfield `cw` at/below this (× root rem) uses the compact downscale. */
+const GAME_WORD_COMPACT_CUTOFF_REM = 52
+/** Only under compact width; another 25% down from 2.8125 (×0.75); clamped to 1. */
+const GAME_WORD_COMPACT_SIZE_MUL = 2.109375
+
+function gameWordLayoutScale(cw: number, remPx: number) {
+  const refW = GAME_WORD_REF_WIDTH_REM * remPx
+  if (refW < 1) return 1
+  let s = Math.min(1, cw / refW)
+  s = Math.max(GAME_WORD_LAYOUT_MIN, s)
+  if (cw < GAME_WORD_COMPACT_CUTOFF_REM * remPx) {
+    s = Math.max(GAME_WORD_LAYOUT_MIN, Math.min(1, s * GAME_WORD_COMPACT_SIZE_MUL))
+  }
+  return s
+}
+
+/** Canvas text size (CSS px); thinnest weight. Scaled 3× for readability + hit feel, then by layout. */
+function wordFontSize(wScale: number, layout: number) {
+  return (6.5 + wScale * 14) * 3 * layout
 }
 const WORD_FONT = (fs: number) => `100 ${fs}px "Space Mono", monospace`
 const COMBO_WINDOW_MS = 720
@@ -477,16 +502,19 @@ function drawLasers(
 function getWordHitExtents(
   ctx: CanvasRenderingContext2D,
   w: TargetWord,
+  layout: number,
 ): { halfW: number; halfH: number } {
-  const fs = wordFontSize(w.scale)
+  const fs = wordFontSize(w.scale, layout)
   ctx.font = WORD_FONT(fs)
   const m = ctx.measureText(w.text)
   const tw = m.width
   const asc = m.actualBoundingBoxAscent ?? fs * 0.72
   const desc = m.actualBoundingBoxDescent ?? fs * 0.28
+  const px = WORD_BOX_PAD_X * layout
+  const py = WORD_BOX_PAD_Y * layout
   return {
-    halfW: tw / 2 + WORD_BOX_PAD_X,
-    halfH: (asc + desc) / 2 + WORD_BOX_PAD_Y,
+    halfW: tw / 2 + px,
+    halfH: (asc + desc) / 2 + py,
   }
 }
 
@@ -518,10 +546,11 @@ function hitTestWords(
   words: TargetWord[],
   cx: number,
   cy: number,
+  layout: number,
 ): TargetWord | null {
   const sorted = [...words].sort((a, b) => b.scale - a.scale)
   for (const w of sorted) {
-    const { halfW, halfH } = getWordHitExtents(ctx, w)
+    const { halfW, halfH } = getWordHitExtents(ctx, w, layout)
     const { lx, ly } = worldToLocal(cx, cy, w.x, w.y, w.angle)
     if (Math.abs(lx) > halfW || Math.abs(ly) > halfH) continue
     if (pointInsideAnyBite(lx, ly, w.bites)) continue
@@ -534,9 +563,10 @@ function drawWords(
   ctx: CanvasRenderingContext2D,
   words: TargetWord[],
   fg: string,
+  layout: number,
 ) {
   for (const w of words) {
-    const fs = wordFontSize(w.scale)
+    const fs = wordFontSize(w.scale, layout)
     ctx.save()
     let a = w.opacity
     if (w.hitFlash > 0) a = clamp(w.opacity + w.hitFlash * 0.35, 0, 1)
@@ -546,7 +576,7 @@ function drawWords(
     ctx.translate(w.x + jitter, w.y)
     ctx.rotate(w.angle)
     ctx.font = WORD_FONT(fs)
-    const { halfW, halfH } = getWordHitExtents(ctx, w)
+    const { halfW, halfH } = getWordHitExtents(ctx, w, layout)
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillStyle = fg
@@ -691,6 +721,8 @@ export function HudShooterIntro() {
   const rafRef = useRef<number>(0)
   const dprRef = useRef(1)
   const sizeRef = useRef({ w: 1, h: 1 })
+  /** Rem-anchored: canvas word + hit target scale vs playfield (narrow = smaller, harder to camp). */
+  const gameWordLayoutScaleRef = useRef(1)
   const hudTrackRef = useRef<HudCellTrack>({
     active: false,
     x: 0,
@@ -853,6 +885,8 @@ export function HudShooterIntro() {
       const w = el.clientWidth
       const h = el.clientHeight
       sizeRef.current = { w, h }
+      const remPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
+      gameWordLayoutScaleRef.current = gameWordLayoutScale(w, remPx)
       hudTrackRef.current.w = w
       hudTrackRef.current.h = h
       canvas.width = Math.max(1, Math.floor(w * dpr))
@@ -999,6 +1033,7 @@ export function HudShooterIntro() {
 
       const dpr = dprRef.current
       const { w: cw, h: ch } = sizeRef.current
+      const layout = gameWordLayoutScaleRef.current
 
       const root = document.documentElement
       const cs = getComputedStyle(root)
@@ -1057,12 +1092,12 @@ export function HudShooterIntro() {
         const mx = L.tx
         const my = L.ty
         const list = wordsRef.current
-        const hit = hitTestWords(ctx, list, mx, my)
+        const hit = hitTestWords(ctx, list, mx, my, layout)
         if (hit) {
           const idx = list.findIndex((w) => w.id === hit.id)
           if (idx >= 0) {
             const w = list[idx]
-            const fs = wordFontSize(w.scale)
+            const fs = wordFontSize(w.scale, layout)
             const { lx, ly } = worldToLocal(mx, my, w.x, w.y, w.angle)
             const holeCount = 2 + Math.floor(Math.random() * 2)
             const scatter = fs * 0.22
@@ -1240,7 +1275,7 @@ export function HudShooterIntro() {
       }
 
       drawParticles(ctx, parts, fg)
-      drawWords(ctx, words, fg)
+      drawWords(ctx, words, fg, layout)
       drawLasers(ctx, lasers, now, hud)
 
       rafRef.current = requestAnimationFrame(tick)
@@ -1314,8 +1349,8 @@ export function HudShooterIntro() {
       />
 
       {/* UI overlay */}
-      <div className="pointer-events-none absolute inset-0 z-20 flex min-h-0 flex-col p-3 md:p-5">
-        <div className="flex shrink-0 items-start justify-between gap-3">
+      <div className="pointer-events-none absolute inset-0 z-20 flex min-h-0 flex-col p-2 max-lg:p-2.5 sm:max-lg:p-3 lg:max-[1439px]:p-3.5 port-xl:p-5">
+        <div className="flex shrink-0 items-start justify-between gap-2 max-lg:gap-2.5 sm:max-lg:gap-3 port-xl:gap-3">
           <div className="min-w-0" style={{ fontSize: '10px' }}>
             <div className="mb-1 font-normal normal-case tracking-[0.08em] text-fg/60">
               Introduction / Mini-game

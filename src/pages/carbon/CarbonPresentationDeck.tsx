@@ -769,7 +769,10 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
   {
     content: (
       <FigmaGrid12>
-        <h2 id="flow-system-heading-deck" className="col-span-12 font-mono text-[24px] font-normal leading-snug text-fg">
+        <h2
+          id="flow-system-heading-deck"
+          className="col-span-12 text-center font-mono text-[24px] font-normal leading-snug text-fg md:text-left"
+        >
           The System We Designed
         </h2>
         <div className="col-span-12 -mx-1 w-full min-w-0 overflow-x-auto px-1 pb-1 md:overflow-visible md:pb-0">

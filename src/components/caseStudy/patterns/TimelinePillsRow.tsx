@@ -1,8 +1,13 @@
+import { ArrowDown } from '@phosphor-icons/react'
+
 const pillClassSingle =
   'inline-flex shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-2 text-[12px] font-normal leading-none tracking-[0.02em] text-fg md:px-5 md:py-2.5'
 
 const pillClassMultiline =
   'inline-flex max-w-[5.5rem] shrink-0 items-center justify-center self-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-3.5 text-center text-[12px] font-normal leading-snug tracking-[0.02em] text-fg whitespace-pre-line sm:max-w-[6rem] md:px-5 md:py-4'
+
+const mobileStackPillMultiline =
+  'inline-flex w-auto max-w-full shrink-0 items-center justify-center self-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-3.5 text-center text-[12px] font-normal leading-snug tracking-[0.02em] text-fg whitespace-pre-line md:px-5 md:py-4'
 
 type TimelinePillsRowProps = {
   stepLabels: readonly string[]
@@ -60,19 +65,44 @@ function TimelineConnector() {
   )
 }
 
-/** Full-width horizontal stepper: pills + growing dotted connectors (case study canvas). */
+function MobileStepArrow() {
+  return (
+    <span className="flex w-full min-w-0 items-center justify-center" aria-hidden>
+      <ArrowDown className="shrink-0 text-fg" size={22} weight="bold" />
+    </span>
+  )
+}
+
+/** Full-width stepper: vertical stack with Phosphor arrows (sm); horizontal pills + animated connectors (md+). */
 export function TimelinePillsRow({ stepLabels, ariaLabelledBy, pillTextMode = 'single' }: TimelinePillsRowProps) {
   const pillClassName = pillTextMode === 'multiline' ? pillClassMultiline : pillClassSingle
+  const mobilePillClassName =
+    pillTextMode === 'multiline' ? mobileStackPillMultiline : `${pillClassSingle} self-center`
 
   return (
     <div className="col-span-12 w-full min-w-0">
       <ol
         aria-labelledby={ariaLabelledBy}
-        className="flex w-full min-w-0 list-none flex-row items-center py-1"
+        className="flex w-full min-w-0 list-none flex-col items-center gap-4 py-0 md:hidden"
       >
         {stepLabels.map((label, i) => (
           <li
-            key={`${label}-${i}`}
+            key={`${label}-stack-${i}`}
+            className="flex w-full min-w-0 max-w-full flex-col items-center gap-4"
+          >
+            {i > 0 ? <MobileStepArrow /> : null}
+            <span className={mobilePillClassName}>{label}</span>
+          </li>
+        ))}
+      </ol>
+
+      <ol
+        aria-labelledby={ariaLabelledBy}
+        className="hidden w-full min-w-0 list-none flex-row items-center py-1 md:flex"
+      >
+        {stepLabels.map((label, i) => (
+          <li
+            key={`${label}-row-${i}`}
             className={`flex min-w-0 max-w-full items-center ${i === 0 ? 'shrink-0' : 'flex-1 gap-[24px]'}`}
           >
             {i > 0 ? <TimelineConnector /> : null}

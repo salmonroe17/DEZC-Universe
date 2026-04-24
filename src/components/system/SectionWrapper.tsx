@@ -10,7 +10,7 @@ export function SectionWrapper({ id, children, className = '' }: SectionWrapperP
   return (
     <section
       id={id}
-      className={`scroll-mt-28 md:scroll-mt-32 ${className}`}
+      className={`scroll-mt-[calc(var(--cs-components-header-h,7.5rem)+0.75rem)] ${className}`}
     >
       {children}
     </section>

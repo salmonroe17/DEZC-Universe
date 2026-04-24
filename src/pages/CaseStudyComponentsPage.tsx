@@ -5,6 +5,9 @@
  * Sidebar entries must stay in sync with {@link CASE_STUDY_SHOWCASE_NAV}.
  */
 import {
+  caseStudyTeamConnectorHorizontal,
+} from '../components/caseStudy/CaseStudyFlowConnectors'
+import {
   CaseStudyShowcaseScaffold,
   type CaseStudyPresentationSlide,
 } from '../components/caseStudy/CaseStudyShowcaseScaffold'
@@ -13,6 +16,11 @@ import {
   ComparisonShowcase,
   ProblemStatementFrame,
   caseStudyScrollAnchorClass,
+  caseStudyTeamResponsibilityTextClass,
+  caseStudyTeamRoleColumnClass,
+  caseStudyTeamRowConnectorCellClass,
+  caseStudyTeamRowLiChamferClass,
+  caseStudyTeamRowListClass,
 } from '../components/caseStudy/patterns'
 import { KPISection } from '../components/sections/KPISection'
 import { StepperSection } from '../components/sections/StepperSection'
@@ -70,20 +78,6 @@ const COMPONENTS_REFERENCE_PRESENTATION_SLIDES: CaseStudyPresentationSlide[] = [
 ]
 
 export default function CaseStudyComponentsPage() {
-  const teamConnector = (
-    <span className="relative flex min-h-px min-w-[2.5rem] flex-1 items-center" aria-hidden>
-      <span className="h-px w-full bg-fg/35" />
-      <svg
-        className="-ml-px h-[5px] w-[6px] shrink-0 text-fg/35"
-        viewBox="0 0 6 5"
-        fill="currentColor"
-        aria-hidden
-      >
-        <path d="M0 0 L6 2.5 L0 5 Z" />
-      </svg>
-    </span>
-  )
-
   const teamRowChamfer = (
     <ChamferFrame
       className="size-10 shrink-0 [--quadrant-chamfer:clamp(3px,0.55vmin,6px)]"
@@ -152,17 +146,22 @@ export default function CaseStudyComponentsPage() {
         </div>
         <div className="col-span-12 md:col-span-7">
           <h2 className="text-base font-normal leading-none text-fg md:text-lg">Team</h2>
-          <ul className="mt-7 flex flex-col gap-6 md:mt-8 md:gap-7">
+          <ul className={caseStudyTeamRowListClass}>
             {['Designer', 'PM', 'Engineer'].map((role) => (
-              <li
-                key={role}
-                className="flex items-center gap-3 text-xs md:gap-5 md:text-sm"
-              >
-                {teamRowChamfer}
-                <span className="shrink-0 whitespace-nowrap text-fg">[team member role]</span>
-                {teamConnector}
-                <span className="min-w-0 shrink-0 text-right text-fg">Team member responsibility</span>
-                {teamRowChamfer}
+              <li key={role} className={caseStudyTeamRowLiChamferClass}>
+                <span className="hidden shrink-0 md:block">{teamRowChamfer}</span>
+                <span
+                  className={`${caseStudyTeamRoleColumnClass} text-left text-xs text-fg md:shrink-0 md:whitespace-nowrap md:text-sm`}
+                >
+                  [team member role]
+                </span>
+                <span className={caseStudyTeamRowConnectorCellClass}>
+                  {caseStudyTeamConnectorHorizontal}
+                </span>
+                <span className={caseStudyTeamResponsibilityTextClass}>
+                  Team member responsibility
+                </span>
+                <span className="hidden shrink-0 md:block">{teamRowChamfer}</span>
               </li>
             ))}
           </ul>

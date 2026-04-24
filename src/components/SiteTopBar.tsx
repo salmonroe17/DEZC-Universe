@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { ThemeSwatches } from './ThemeSwatches'
 
 function formatTorontoClock() {
@@ -22,6 +23,8 @@ function formatTorontoClock() {
 }
 
 export function SiteTopBar() {
+  const { pathname } = useLocation()
+  const isHome = pathname === '/'
   const [clock, setClock] = useState(formatTorontoClock)
 
   useEffect(() => {
@@ -30,15 +33,36 @@ export function SiteTopBar() {
   }, [])
 
   return (
-    <div className="site-frosted-nav grid h-12 w-full shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 border-b border-border px-3 sm:gap-4 sm:px-6">
+    <div
+      className={[
+        'site-frosted-nav grid h-12 w-full shrink-0 items-center gap-3 border-b border-border px-3 sm:gap-4 sm:px-6',
+        isHome
+          ? 'max-lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]'
+          : 'grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]',
+      ].join(' ')}
+    >
       <p className="min-w-0 truncate text-[10px] tracking-tight text-fg">
-        Welcome to the DEZC universe
+        {isHome ? (
+          <>
+            <span className="max-lg:inline lg:hidden">DEZC</span>
+            <span className="hidden lg:inline">Welcome to the DEZC universe</span>
+          </>
+        ) : (
+          'Welcome to the DEZC universe'
+        )}
       </p>
 
-      <ThemeSwatches />
+      <div className={isHome ? 'max-lg:justify-self-end' : undefined}>
+        <ThemeSwatches />
+      </div>
 
       <time
-        className="justify-self-end text-[10px] tabular-nums text-fg-muted"
+        className={[
+          'justify-self-end text-[10px] tabular-nums text-fg-muted',
+          isHome ? 'max-lg:hidden' : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
         dateTime={new Date().toISOString()}
         suppressHydrationWarning
       >

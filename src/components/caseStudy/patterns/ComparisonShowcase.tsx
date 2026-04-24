@@ -38,7 +38,7 @@ export function ComparisonShowcase({
   after,
   bullets,
   caption,
-  visualMinClassName = 'min-h-[360px] md:min-h-[567px]',
+  visualMinClassName = 'min-h-[min(52vw,280px)] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[567px]',
   presentationMediaIndex,
 }: ComparisonShowcaseProps) {
   const autoTitleId = useId()
@@ -62,7 +62,7 @@ export function ComparisonShowcase({
           ))}
         </ul>
       ) : null}
-      <div className="col-span-12 flex justify-center">
+      <div className="col-span-12 flex w-full min-w-0 justify-center px-0">
         <BeforeAfterToggle mode={mode} onModeChange={setMode} />
       </div>
       <ChamferFrame

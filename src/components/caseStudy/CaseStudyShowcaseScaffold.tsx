@@ -1,10 +1,14 @@
 import type { CSSProperties, MouseEvent, ReactNode } from 'react'
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { CaseStudiesCardModal } from '../CaseStudiesCardModal'
 import { ThemeSwatches } from '../ThemeSwatches'
 import { CaseStudyRailShell } from './CaseStudyRailShell'
+import {
+  CaseStudyMobileSectionsModal,
+  CaseStudyMobileSectionsRow,
+} from './CaseStudyMobileToc'
 import { CaseStudyScrollProgressBar } from './CaseStudyScrollProgressBar'
 import { useCaseStudyScrollspy, type NavSection } from './useCaseStudyScrollspy'
 import { CASE_STUDY_SHOWCASE_NAV } from '../../data/caseStudyShowcaseNav'
@@ -62,14 +66,20 @@ export function CaseStudyShowcaseScaffold({
   presentationInitialTextSlidesVisible,
   children,
 }: CaseStudyShowcaseScaffoldProps) {
-  const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(navSections)
+  const sectionsNavDialogTitleId = useId()
+  const sectionsNavBtnRef = useRef<HTMLButtonElement>(null)
+  /** Until ResizeObserver measures the portaled header, avoid under-counting (nav + sections row + progress rail). */
+  const [chromeHeight, setChromeHeight] = useState(92)
+  const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(
+    navSections,
+    { stickyOffsetPx: chromeHeight },
+  )
   const chromeRef = useRef<HTMLElement | null>(null)
   const caseStudiesNavRef = useRef<HTMLButtonElement>(null)
   const showSidebarBtnRef = useRef<HTMLButtonElement>(null)
   const hideSidebarBtnRef = useRef<HTMLButtonElement>(null)
   const sidebarWasHiddenRef = useRef(false)
-  /** Until ResizeObserver measures the portaled header, avoid under-counting (nav + progress rail). */
-  const [chromeHeight, setChromeHeight] = useState(92)
+  const [sectionsNavOpen, setSectionsNavOpen] = useState(false)
   const [caseStudiesModalOpen, setCaseStudiesModalOpen] = useState(false)
   const [sidebarHidden, setSidebarHidden] = useState(false)
   const [presentationMode, setPresentationMode] = useState(false)
@@ -104,6 +114,11 @@ export function CaseStudyShowcaseScaffold({
     }
     openCaseStudiesModal()
   }
+
+  const closeSectionsNav = useCallback(() => {
+    setSectionsNavOpen(false)
+    queueMicrotask(() => sectionsNavBtnRef.current?.focus({ preventScroll: true }))
+  }, [])
 
   useLayoutEffect(() => {
     const el = chromeRef.current
@@ -162,6 +177,16 @@ export function CaseStudyShowcaseScaffold({
         </nav>
         <ThemeSwatches />
       </FigmaFrame>
+      <div className="w-full max-w-none px-0 lg:hidden">
+        <CaseStudyMobileSectionsRow
+          ref={sectionsNavBtnRef}
+          dialogTitleId={sectionsNavDialogTitleId}
+          sections={sidebarSections}
+          activeId={activeId}
+          open={sectionsNavOpen}
+          onOpenChange={setSectionsNavOpen}
+        />
+      </div>
       <CaseStudyScrollProgressBar />
     </header>
   )
@@ -169,7 +194,7 @@ export function CaseStudyShowcaseScaffold({
   return (
     <CaseStudyPresentationModeContext.Provider value={openPresentationMode}>
       <div
-        className="min-h-0 flex-1 font-mono text-fg antialiased"
+        className="cs-showcase-body min-h-0 min-w-0 max-w-full flex-1 overflow-x-clip font-mono text-fg antialiased"
         style={
           {
             '--cs-components-header-h': `${chromeHeight}px`,
@@ -177,6 +202,14 @@ export function CaseStudyShowcaseScaffold({
         }
       >
         {typeof document !== 'undefined' ? createPortal(chromeHeader, document.body) : null}
+        <CaseStudyMobileSectionsModal
+          titleId={sectionsNavDialogTitleId}
+          sections={sidebarSections}
+          activeId={activeId}
+          onNavigate={onNavigate}
+          open={sectionsNavOpen}
+          onClose={closeSectionsNav}
+        />
         <CaseStudyPresentationOverlay
           open={presentationMode}
           activeIndex={presentationActiveIndex}
@@ -190,10 +223,10 @@ export function CaseStudyShowcaseScaffold({
         <div className="shrink-0" style={{ height: chromeHeight }} aria-hidden />
 
         <CaseStudyRailShell
-          frameClassName="pb-32 pt-8 md:pt-10 lg:pt-12"
+          frameClassName="cs-showcase-frame pb-24 pt-4 max-lg:pt-2 md:pb-28 md:pt-10 lg:pb-32 lg:pt-12"
           gridClassName="items-start"
           asideClassName="flex flex-col gap-8 lg:sticky lg:top-[calc(var(--cs-components-header-h)+24px)] lg:self-start"
-          mainClassName="flex flex-col gap-10 lg:gap-14"
+          mainClassName="flex min-w-0 max-w-full flex-col gap-8 md:gap-10 port-md:gap-10 lg:gap-14"
           sidebarHidden={sidebarHidden}
           sidebar={
             <>
@@ -216,7 +249,7 @@ export function CaseStudyShowcaseScaffold({
                     setSidebarHidden(true)
                     queueMicrotask(() => showSidebarBtnRef.current?.focus({ preventScroll: true }))
                   }}
-                  className="w-fit cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[10px] font-normal leading-snug tracking-[0.02em] text-fg-muted underline decoration-cell-border/70 underline-offset-[3px] transition-colors hover:text-fg hover:decoration-hud md:text-[11px]"
+                  className="hidden w-fit cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[11px] font-normal leading-snug tracking-[0.02em] text-fg-muted underline decoration-cell-border/70 underline-offset-[3px] transition-colors hover:text-fg hover:decoration-hud lg:inline"
                 >
                   Hide sidebar
                 </button>
@@ -225,7 +258,7 @@ export function CaseStudyShowcaseScaffold({
           }
         >
           {sidebarHidden ? (
-            <div className="sticky top-[calc(var(--cs-components-header-h)+12px)] z-[70] inline-flex max-w-full shrink-0 self-start">
+            <div className="sticky top-[calc(var(--cs-components-header-h)+12px)] z-[70] hidden max-w-full shrink-0 self-start lg:inline-flex">
               <ChamferFrame
                 fitContentHeight
                 staticVisual
@@ -238,7 +271,7 @@ export function CaseStudyShowcaseScaffold({
                   aria-controls="case-study-sidebar"
                   aria-expanded={false}
                   onClick={() => setSidebarHidden(false)}
-                  className="m-0 block cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[10px] font-medium leading-snug tracking-[0.02em] text-black underline decoration-black/35 underline-offset-[3px] transition-colors hover:decoration-black md:text-[11px]"
+                  className="m-0 block cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[10px] font-medium leading-snug tracking-[0.02em] text-black underline decoration-black/35 underline-offset-[3px] transition-colors hover:decoration-black md:text-[11px] lg:text-[11px]"
                 >
                   Show sidebar
                 </button>

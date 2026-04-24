@@ -35,11 +35,17 @@ import ibmBeforeAfterAp19Alt from '../../../IBM case study assets/ap19.1.png'
 import ibmActionPlansPrototypeVideo from '../../../IBM case study assets/IBM prototype video action plans 720p.mp4'
 import ibmRetrospectiveConfusedGif from '../../../IBM case study assets/confused.gif'
 import ibmHeroShipGif from '../../../IBM case study assets/ship.gif'
+import { caseStudyTeamConnectorHorizontal } from '../../components/caseStudy/CaseStudyFlowConnectors'
 import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
   caseStudyChamferToggleLabelClassName,
+  caseStudyTeamResponsibilityTextClass,
+  caseStudyTeamRoleColumnClass,
+  caseStudyTeamRowConnectorCellClass,
+  caseStudyTeamRowLiClass,
+  caseStudyTeamRowListClass,
 } from '../../components/caseStudy/patterns'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyShowcaseScaffold'
 import { IbmToggleAspectSpacer } from '../../components/caseStudy/IbmChamferMediaPlaceholder'
@@ -64,15 +70,6 @@ const deckMaxW = 'mx-auto w-full max-w-[min(100%,1156px)]'
 
 const chamferToggleStackLayerClass =
   'pointer-events-none absolute inset-0 h-full w-full max-w-full object-contain object-left object-top align-middle'
-
-const teamConnector = (
-  <span className="relative flex min-h-px min-w-[2.5rem] flex-1 items-center" aria-hidden>
-    <span className="h-px w-full bg-fg/35" />
-    <svg className="-ml-px h-[5px] w-[6px] shrink-0 text-fg/35" viewBox="0 0 6 5" fill="currentColor" aria-hidden>
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
 
 const tradeRowConnector = (
   <span
@@ -437,16 +434,18 @@ const IBM_PRESENTATION_SLIDES_BASE = [
         </div>
         <div className="col-span-12">
           <h3 className="mt-2 text-[12px] font-mono font-normal leading-none text-fg md:mt-6">Team</h3>
-          <ul className="mt-7 flex flex-col gap-6 font-mono md:mt-8 md:gap-7">
+          <ul className={`${caseStudyTeamRowListClass} font-mono`}>
             {TEAM_ROWS_DECK.map((row) => (
-              <li key={row.role} className="flex min-w-0 items-center gap-3 md:gap-5">
-                <span className="min-w-0 max-w-[min(16rem,46%)] shrink-0 text-left text-[14px] leading-snug text-fg [text-wrap:balance] sm:max-w-[min(20rem,44%)]">
+              <li key={row.role} className={caseStudyTeamRowLiClass}>
+                <span
+                  className={`${caseStudyTeamRoleColumnClass} text-left text-[14px] leading-snug text-fg`}
+                >
                   {row.role}
                 </span>
-                {teamConnector}
-                <span className="min-w-0 shrink-0 text-right text-[10px] font-normal leading-snug text-fg">
-                  {row.responsibility}
+                <span className={caseStudyTeamRowConnectorCellClass}>
+                  {caseStudyTeamConnectorHorizontal}
                 </span>
+                <span className={caseStudyTeamResponsibilityTextClass}>{row.responsibility}</span>
               </li>
             ))}
           </ul>

@@ -52,7 +52,7 @@ const faceChamferShell = 'cube-face-cell figma-frame-static relative h-full w-fu
 
 /** Dims face media only; inner border is a sibling so it stays full opacity (see `opacity-50` note). */
 const faceContentDim =
-  'absolute inset-0 opacity-50 grayscale transition-[filter,opacity] duration-300 ease-out group-hover/right-quadrant:opacity-100 group-hover/right-quadrant:grayscale-0'
+  'absolute inset-0 opacity-50 grayscale transition-[filter,opacity] duration-300 ease-out group-hover/right-quadrant:opacity-100 group-hover/right-quadrant:grayscale-0 group-data-[quadrant-in-view]/right-quadrant:opacity-100 group-data-[quadrant-in-view]/right-quadrant:grayscale-0'
 
 const faceChamferInnerClip = 'chamfer-fill-clip relative min-h-0 min-w-0 size-full'
 

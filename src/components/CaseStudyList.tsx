@@ -85,21 +85,32 @@ export function CaseStudyList({
   onAutoAdvance,
   onCaseListPointerInsideChange,
 }: CaseStudyListProps) {
+  const noTopListBorder = activeCaseIndex === 0
+  const listShellClass = [
+    'chamfer-case-study-list-clip flex w-full shrink-0 flex-col',
+    noTopListBorder ? 'border-t-0' : 'border-t border-cell-border/60',
+  ].join(' ')
+
   return (
     <div
-      className="flex w-full shrink-0 flex-col border-t border-cell-border/60 pb-4 pt-3"
+      className={listShellClass}
       onMouseEnter={() => onCaseListPointerInsideChange(true)}
       onMouseLeave={() => onCaseListPointerInsideChange(false)}
     >
-      <ul className="flex flex-col gap-0 px-[16px]" role="list">
-        {CASE_STUDIES.map((item) => {
+      <ul className="flex flex-col gap-0" role="list">
+        {CASE_STUDIES.map((item, i) => {
           const isActive = item.id === activeCaseIndex
+          const isLast = i === CASE_STUDIES.length - 1
+          const isImmediatelyAboveActive =
+            item.id === activeCaseIndex - 1 && activeCaseIndex > 0
+          const collapseBottomTrackForLast =
+            isLast && !isActive
           const row = (
             <div
-              className={`flex items-baseline justify-between gap-4 py-2.5 text-[11px] leading-snug tracking-[0.06em] transition-[color,background-color,box-shadow,padding] duration-200 ease-out md:text-xs md:tracking-[0.05em] ${
+              className={`flex items-start justify-between gap-3 px-4 py-2.5 text-[11px] leading-snug tracking-[0.06em] transition-[color,background-color,box-shadow] duration-200 ease-out md:gap-4 md:text-xs md:tracking-[0.05em] ${
                 isActive
-                  ? 'rounded-sm bg-fg/[0.07] px-[16px] text-fg shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_14%,transparent),0_0_16px_color-mix(in_srgb,var(--color-hud)_10%,transparent)]'
-                  : 'px-0 text-fg/90'
+                  ? 'bg-fg/[0.07] text-fg shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_14%,transparent),0_0_16px_color-mix(in_srgb,var(--color-hud)_10%,transparent)]'
+                  : 'text-fg/90'
               }`}
             >
               <span
@@ -137,7 +148,12 @@ export function CaseStudyList({
                 <div onMouseEnter={() => onActiveCaseChange(item.id)}>{row}</div>
               )}
               <div
-                className="pointer-events-none relative mb-0.5 h-[2px] w-full shrink-0 overflow-hidden rounded-full bg-fg/[0.1]"
+                className={[
+                  'pointer-events-none relative w-full shrink-0 overflow-hidden rounded-full bg-fg/[0.1]',
+                  isImmediatelyAboveActive || collapseBottomTrackForLast
+                    ? 'h-0 min-h-0'
+                    : 'h-[2px]',
+                ].join(' ')}
                 aria-hidden
               >
                 {isActive ? (

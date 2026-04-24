@@ -15,6 +15,12 @@ export {
   caseStudySectionHeadingCenteredClass,
   caseStudySectionHeadingClass,
   caseStudySectionHeadingTimelineClass,
+  caseStudyTeamResponsibilityTextClass,
+  caseStudyTeamRoleColumnClass,
+  caseStudyTeamRowConnectorCellClass,
+  caseStudyTeamRowLiChamferClass,
+  caseStudyTeamRowLiClass,
+  caseStudyTeamRowListClass,
 } from './caseStudyPatternStyles'
 export { KpiAnimatedValue, KpiMetricsGrid } from './KpiMetricsGrid'
 export {
