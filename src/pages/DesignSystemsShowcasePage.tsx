@@ -32,212 +32,23 @@ import {
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { RotatingGradientCircle } from '../components/system/RotatingGradientCircle'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
-
-const DS_PHILOSOPHY_EXPERIENCE_PARAS: readonly string[] = [
-  "Over the years, I've created, rebuilt, and maintained 8+ design systems across mobile apps, web platforms, startups, and enterprise products.",
-  'Some systems were built from scratch. Others were inherited in chaos and restructured to scale.',
-  'I treat design systems as products, not libraries.',
-]
-
-const DS_PHILOSOPHY_COMPANIES: readonly string[] = [
-  'Anchr',
-  'IBM',
-  'Carbon Neutral Club',
-  'Sherpa',
-  'Super',
-  'Drop',
-  'HomeVisit',
-  'Corelogic',
-  'Sensibill',
-  'Thriver',
-]
-
-const DS_COMPONENTS_AT_SCALE_BULLETS: readonly string[] = [
-  'Buttons + states + variants',
-  'Navigation systems',
-  'Cards',
-  'Modals',
-  'Tables',
-  'Forms',
-  'Dropdowns',
-  'Search patterns',
-  'Empty / loading / error states',
-]
-
-const DS_STATES_VARIANTS_BULLETS: readonly string[] = [
-  'Hover',
-  'Focus',
-  'Disabled',
-  'Loading',
-  'Success',
-  'Warning',
-  'Destructive',
-  'Empty states',
-  'Validation errors',
-  'Overflow text',
-  'Translated text',
-  'Mobile breakpoints',
-]
-
-const DS_RULES_PREVENT_CHAOS_BULLETS: readonly string[] = [
-  'Interaction rules',
-  'Responsive rules',
-  'Do / don\'t usage patterns',
-  'Hierarchy rules',
-  'Spacing rules',
-  'Application logic',
-  'Accessibility expectations',
-]
-
-const DS_BUILT_REAL_WORLD_BULLETS: readonly string[] = [
-  'Localization',
-  'Multi-language expansion',
-  'Right-to-left layouts',
-  'Currency differences',
-  'Date formats',
-  'Light / dark mode',
-  'Enterprise density needs',
-  'Mobile responsiveness',
-]
-
-const DS_DESIGN_ENGINEERING_BULLETS: readonly string[] = [
-  'naming conventions',
-  'specs and measurements',
-  'token references',
-  'state logic',
-  'reusable patterns',
-  'implementation notes',
-  'acceptance criteria support',
-]
-
-const DS_IA_EXAMPLES_BULLETS: readonly string[] = [
-  'Atomic design organization',
-  'Page hierarchies',
-  'Reusable libraries',
-  'Versioning patterns',
-  'Archived explorations',
-  'Flowchart systems',
-  'Searchable component docs',
-]
-
-const DS_PROBLEM_BODY_LEFT: readonly string[] = [
-  'Early teams move fast without one.',
-  'Then growth creates friction.',
-  'A strong design system turns that friction into leverage.',
-]
-
-const DS_PROBLEM_WITHOUT_DS_BULLETS: readonly string[] = [
-  'Duplicate components',
-  'Inconsistent UI',
-  'Slower design cycles',
-  'Unclear developer handoff',
-  'Rework across teams',
-  'Product debt hidden in plain sight',
-]
-
-const DS_MY_PHILOSOPHY_OPTIMIZE_BULLETS: readonly string[] = [
-  'Speed of execution',
-  'Consistency across teams',
-  'Developer clarity',
-  'Scalability over time',
-  'Accessibility by default',
-  'Flexibility without chaos',
-]
-
-const DS_FOUNDATIONS_BULLETS: readonly string[] = [
-  'Spacing scales',
-  'Typography systems',
-  'Grid logic',
-  'Color tokens',
-  'Elevation / shadows',
-  'Border radius rules',
-  'Motion principles',
-  'Light + dark themes',
-]
-
-const DS_RETRO_WHAT_UNLOCKS_BULLETS: readonly string[] = [
-  'Faster design output',
-  'Cleaner handoff',
-  'Reduced duplicate work',
-  'More consistent UX',
-  'Easier onboarding for new hires',
-  'Higher confidence in releases',
-  'Scalable experimentation',
-]
-
-const DS_RETRO_LEARNED_BULLETS: readonly string[] = [
-  'Adoption matters more than perfection',
-  'Documentation matters as much as visuals',
-  'Simplicity beats over-engineering',
-  'Maintenance is part of design',
-  'Systems should accelerate people, not slow them down',
-]
-
-const MAX_BULLETS_PER_COLUMN = 4
-
-function chunkBulletItems<T>(items: readonly T[], maxPerColumn: number = MAX_BULLETS_PER_COLUMN): T[][] {
-  if (items.length === 0) return []
-  const out: T[][] = []
-  for (let i = 0; i < items.length; i += maxPerColumn) {
-    out.push(items.slice(i, i + maxPerColumn) as T[])
-  }
-  return out
-}
-
-type DsBulletGridProps = {
-  items: readonly string[]
-  /** List styles; no top margin here — the grid or single <ul> gets margin from {@link listMarginClass}. */
-  ulClass: string
-  /**
-   * Outer margin: e.g. `mt-2`, `mt-3 md:mt-4`, or `mb-0 mt-3`. Omit to default to `mt-2` after umbrella copy.
-   * Pass an empty string when the parent already provides vertical spacing.
-   */
-  listMarginClass?: string
-  liClassName?: string
-}
-
-/**
- * Splits a bullet list into as many columns as needed (max 4 items per column).
- * One column: a single <ul> with the margin. Multiple: a grid with 2 (or 3) columns at larger breakpoints.
- */
-function DsBulletGrid({ items, ulClass, listMarginClass, liClassName = '' }: DsBulletGridProps) {
-  const margin = listMarginClass === undefined ? 'mt-2' : listMarginClass
-  const chunks = chunkBulletItems(items)
-  if (chunks.length === 0) return null
-  if (chunks.length === 1) {
-    return (
-      <ul className={[margin, ulClass].filter(Boolean).join(' ')}>
-        {chunks[0].map((line) => (
-          <li key={line} className={liClassName}>
-            {line}
-          </li>
-        ))}
-      </ul>
-    )
-  }
-  const gridClass = [
-    margin,
-    'grid',
-    'grid-cols-1',
-    'gap-x-6',
-    chunks.length === 2 ? 'gap-y-0 sm:grid-cols-2' : 'gap-y-4 sm:grid-cols-2 lg:grid-cols-3',
-  ]
-    .filter(Boolean)
-    .join(' ')
-  return (
-    <div className={gridClass}>
-      {chunks.map((chunk, index) => (
-        <ul key={index} className={ulClass}>
-          {chunk.map((line) => (
-            <li key={line} className={liClassName}>
-              {line}
-            </li>
-          ))}
-        </ul>
-      ))}
-    </div>
-  )
-}
+import { DsBulletGrid } from './ds/dsShowcaseBulletGrid'
+import {
+  DS_BUILT_REAL_WORLD_BULLETS,
+  DS_COMPONENTS_AT_SCALE_BULLETS,
+  DS_DESIGN_ENGINEERING_BULLETS,
+  DS_FOUNDATIONS_BULLETS,
+  DS_IA_EXAMPLES_BULLETS,
+  DS_MY_PHILOSOPHY_OPTIMIZE_BULLETS,
+  DS_PHILOSOPHY_COMPANIES,
+  DS_PHILOSOPHY_EXPERIENCE_PARAS,
+  DS_PROBLEM_BODY_LEFT,
+  DS_PROBLEM_WITHOUT_DS_BULLETS,
+  DS_RETRO_LEARNED_BULLETS,
+  DS_RETRO_WHAT_UNLOCKS_BULLETS,
+  DS_RULES_PREVENT_CHAOS_BULLETS,
+  DS_STATES_VARIANTS_BULLETS,
+} from './ds/dsShowcaseData'
 
 export default function DesignSystemsShowcasePage() {
   return (
@@ -250,6 +61,7 @@ export default function DesignSystemsShowcasePage() {
         DS_PRESENTATION_MEDIA_TO_SLIDE[mediaIndex] ?? mediaIndex
       }
       presentationThumbnailSrcs={DS_PRESENTATION_THUMBNAILS}
+      presentationInitialTextSlidesVisible
     >
       <ChamferFrame
         presentationMediaIndex={0}
