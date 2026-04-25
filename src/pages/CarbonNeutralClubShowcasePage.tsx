@@ -736,7 +736,9 @@ export default function CarbonNeutralClubShowcasePage() {
           </div>
         </div>
         <div className="col-span-12 md:col-span-6">
-          <ChamferFrame presentationMediaIndex={5}
+          <ChamferFrame
+            presentationMediaIndex={5}
+            presentationCallout={false}
             className="chamfer-media-border w-full"
             innerClassName="flex flex-col gap-4 bg-surface/20 p-5 text-left font-mono text-fg md:gap-5 md:p-6"
           >

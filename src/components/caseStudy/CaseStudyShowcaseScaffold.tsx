@@ -1,8 +1,9 @@
 import type { CSSProperties, MouseEvent, ReactNode } from 'react'
-import { useCallback, useId, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { CaseStudiesCardModal } from '../CaseStudiesCardModal'
+import { ShowTellQuadrantModal } from '../ShowTellQuadrantModal'
 import { ThemeSwatches } from '../ThemeSwatches'
 import { CaseStudyRailShell } from './CaseStudyRailShell'
 import {
@@ -76,14 +77,19 @@ export function CaseStudyShowcaseScaffold({
   )
   const chromeRef = useRef<HTMLElement | null>(null)
   const caseStudiesNavRef = useRef<HTMLButtonElement>(null)
+  const sideQuestsNavRef = useRef<HTMLButtonElement>(null)
   const showSidebarBtnRef = useRef<HTMLButtonElement>(null)
   const hideSidebarBtnRef = useRef<HTMLButtonElement>(null)
   const sidebarWasHiddenRef = useRef(false)
   const [sectionsNavOpen, setSectionsNavOpen] = useState(false)
   const [caseStudiesModalOpen, setCaseStudiesModalOpen] = useState(false)
+  const [sideQuestsModalOpen, setSideQuestsModalOpen] = useState(false)
   const [sidebarHidden, setSidebarHidden] = useState(false)
   const [presentationMode, setPresentationMode] = useState(false)
   const [presentationActiveIndex, setPresentationActiveIndex] = useState(0)
+  /** max-lg only: first chrome row (Home / Case studies / Swatches) hides on scroll down; shows again on scroll up. */
+  const [showTopChromeRow, setShowTopChromeRow] = useState(true)
+  const lastScrollYRef = useRef(0)
 
   const closePresentationMode = useCallback(() => {
     setPresentationMode(false)
@@ -113,6 +119,22 @@ export function CaseStudyShowcaseScaffold({
       return
     }
     openCaseStudiesModal()
+  }
+
+  const sideQuestsModifierTo = '/#show-tell'
+
+  const openSideQuestsModal = () => setSideQuestsModalOpen(true)
+  const closeSideQuestsModal = () => {
+    setSideQuestsModalOpen(false)
+    queueMicrotask(() => sideQuestsNavRef.current?.focus({ preventScroll: true }))
+  }
+
+  const onSideQuestsNavClick = (e: MouseEvent<HTMLButtonElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+      window.open(sideQuestsModifierTo, '_blank', 'noopener,noreferrer')
+      return
+    }
+    openSideQuestsModal()
   }
 
   const closeSectionsNav = useCallback(() => {
@@ -145,38 +167,103 @@ export function CaseStudyShowcaseScaffold({
     sidebarWasHiddenRef.current = sidebarHidden
   }, [sidebarHidden])
 
+  useEffect(() => {
+    if (presentationMode) {
+      setShowTopChromeRow(true)
+    }
+  }, [presentationMode])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+
+    const mqlNarrow = window.matchMedia('(max-width: 1023px)')
+
+    const isNarrowTwoRow = () => mqlNarrow.matches
+
+    const onScroll = () => {
+      if (presentationMode) return
+      if (!isNarrowTwoRow()) {
+        setShowTopChromeRow(true)
+        return
+      }
+      const y = window.scrollY
+      if (y < 20) {
+        setShowTopChromeRow(true)
+        lastScrollYRef.current = y
+        return
+      }
+      const prev = lastScrollYRef.current
+      lastScrollYRef.current = y
+      if (y < prev - 2) {
+        setShowTopChromeRow(true)
+      } else if (y > prev + 2) {
+        setShowTopChromeRow(false)
+      }
+    }
+
+    const onLayoutChange = () => {
+      if (!isNarrowTwoRow()) {
+        setShowTopChromeRow(true)
+      }
+    }
+
+    lastScrollYRef.current = window.scrollY
+    window.addEventListener('scroll', onScroll, { passive: true })
+    mqlNarrow.addEventListener('change', onLayoutChange)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      mqlNarrow.removeEventListener('change', onLayoutChange)
+    }
+  }, [presentationMode])
+
+  const collapseTopRowOnNarrow = !showTopChromeRow
+  const topChromeRowGridClass = [
+    'grid transition-[grid-template-rows] ease-out motion-reduce:transition-none',
+    'lg:grid-rows-[1fr]',
+    collapseTopRowOnNarrow ? 'max-lg:grid-rows-[0fr] max-lg:duration-200' : 'max-lg:grid-rows-[1fr] max-lg:duration-200',
+  ].join(' ')
+
   const chromeHeader = (
     <header
       ref={chromeRef}
       className="site-frosted-nav fixed inset-x-0 top-0 z-[80] flex flex-col"
     >
-      <FigmaFrame className="flex w-full flex-wrap items-center justify-between gap-2 py-2.5 sm:gap-3 sm:py-3 lg:min-h-12 lg:flex-nowrap lg:items-center lg:py-0">
-        <nav className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-normal leading-none text-fg md:gap-x-2 md:text-[11px]">
-          <Link
-            to="/"
-            className="underline decoration-cell-border underline-offset-[3px] hover:decoration-hud"
-          >
-            Home
-          </Link>
-          <span className="text-fg-muted">•</span>
-          <button
-            ref={caseStudiesNavRef}
-            type="button"
-            className={caseStudiesNavButtonClass}
-            onClick={onCaseStudiesNavClick}
-          >
-            Case studies
-          </button>
-          <span className="text-fg-muted">•</span>
-          <Link
-            to="/#show-tell"
-            className="underline decoration-cell-border underline-offset-[3px] hover:decoration-hud"
-          >
-            Side quests
-          </Link>
-        </nav>
-        <ThemeSwatches />
-      </FigmaFrame>
+      <div
+        className={topChromeRowGridClass}
+        aria-hidden={collapseTopRowOnNarrow ? true : undefined}
+      >
+        <div className="min-h-0 overflow-hidden [contain:content]">
+          <FigmaFrame className="flex w-full flex-wrap items-center justify-between gap-2 py-2.5 sm:gap-3 sm:py-3 lg:min-h-12 lg:flex-nowrap lg:items-center lg:py-0">
+            <nav className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-normal leading-none text-fg md:gap-x-2 md:text-[11px]">
+              <Link
+                to="/"
+                className="underline decoration-cell-border underline-offset-[3px] hover:decoration-hud"
+              >
+                Home
+              </Link>
+              <span className="text-fg-muted">•</span>
+              <button
+                ref={caseStudiesNavRef}
+                type="button"
+                className={caseStudiesNavButtonClass}
+                onClick={onCaseStudiesNavClick}
+              >
+                Case studies
+              </button>
+              <span className="text-fg-muted">•</span>
+              <button
+                ref={sideQuestsNavRef}
+                type="button"
+                className={caseStudiesNavButtonClass}
+                onClick={onSideQuestsNavClick}
+              >
+                Side quests
+              </button>
+            </nav>
+            <ThemeSwatches />
+          </FigmaFrame>
+        </div>
+      </div>
       <div className="w-full max-w-none px-0 lg:hidden">
         <CaseStudyMobileSectionsRow
           ref={sectionsNavBtnRef}
@@ -220,6 +307,7 @@ export function CaseStudyShowcaseScaffold({
           initialTextSlidesVisible={presentationInitialTextSlidesVisible}
         />
         <CaseStudiesCardModal open={caseStudiesModalOpen} onClose={closeCaseStudiesModal} />
+        <ShowTellQuadrantModal open={sideQuestsModalOpen} onClose={closeSideQuestsModal} />
         <div className="shrink-0" style={{ height: chromeHeight }} aria-hidden />
 
         <CaseStudyRailShell

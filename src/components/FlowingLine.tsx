@@ -6,9 +6,8 @@ import {
   useMemo,
   useRef,
   useState,
-  type MouseEvent,
   type MutableRefObject,
-  type PointerEvent,
+  type PointerEvent as ReactPointerEvent,
   type RefObject,
 } from 'react'
 import { FLOW_NODE_COUNT, FLOW_PERIOD, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from '../lib/flowingLineWave'
@@ -54,7 +53,7 @@ const FLOW_NODE_IDLE_MOTION: IdleMotion[] = [
   },
 ]
 
-function isPrimaryPointer(e: PointerEvent): boolean {
+function isPrimaryPointer(e: ReactPointerEvent<Element>): boolean {
   return e.pointerType === 'touch' || e.pointerType === 'pen' || e.button === 0
 }
 
@@ -111,6 +110,36 @@ function ChevronRightIcon({ className }: { className?: string }) {
 const arrowBtnClass =
   'pointer-events-auto z-20 flex size-9 touch-none select-none items-center justify-center border border-cell-border/90 bg-bg/75 text-fg/70 shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-hud)_14%,transparent)] backdrop-blur-[2px] transition-[color,background-color,border-color] duration-150 hover:border-hud/35 hover:bg-elevated/90 hover:text-fg md:size-10'
 
+const SPOTLIGHT_EXPAND_S = 0.7
+const SPOTLIGHT_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
+/**
+ * In line-root x (0 = left, 1 = right of the visible line band), the node center must fall in
+ * this range to get the automatic hover (thumbnail) while the wave scrolls.
+ */
+const SPOTLIGHT_ZONE_X0 = 0.34
+const SPOTLIGHT_ZONE_X1 = 0.66
+
+/** Horizontal position of node `i`’s center in line-root space; track is 2× width, window is [0,1]. */
+function nodeCenterXInLineRoot(i: number, hUnit: number): number {
+  const t = (i + 0.5) / FLOW_NODE_COUNT
+  return -hUnit + 2 * t
+}
+
+function pickNodeInZone(hUnit: number, z0: number, z1: number): number | null {
+  const candidates: number[] = []
+  for (let i = 0; i < FLOW_NODE_COUNT; i++) {
+    const x = nodeCenterXInLineRoot(i, hUnit)
+    if (x >= z0 && x <= z1) candidates.push(i)
+  }
+  if (candidates.length === 0) return null
+  const mid = 0.5
+  return candidates.reduce((best, i) => {
+    const d = Math.abs(nodeCenterXInLineRoot(i, hUnit) - mid)
+    const db = Math.abs(nodeCenterXInLineRoot(best, hUnit) - mid)
+    return d < db ? i : best
+  })
+}
+
 export type FlowingLineSandProps = {
   sandLineRootRef?: RefObject<HTMLDivElement | null>
   sandTrackRef?: RefObject<HTMLDivElement | null>
@@ -124,6 +153,22 @@ export type FlowingLineSandProps = {
   getNodePreviewSrc?: (nodeIndex: number) => string | undefined
   /** Hovered node title, shown bottom-center aligned with the scroll arrow controls. */
   getNodeTitle?: (nodeIndex: number) => string | undefined
+  /**
+   * Multiplies horizontal nudge when holding the chevron buttons (default 1). Use values above 1
+   * in constrained shells (e.g. show & tell in a dialog) to match the home grid.
+   */
+  arrowDriftRateScale?: number
+  /**
+   * When true, a node gets the large thumbnail as its **center** x crosses an invisible band in
+   * the line (the timeline keeps scrolling). It scales back to the default square on exit.
+   * Pauses only on real pointer hover on a node. Use on the home “multiple timelines” quadrant.
+   */
+  idleSpotlightAutoplay?: boolean
+  /**
+   * Extra classes on the scrolling track only (SVG + nodes), e.g. `-translate-y-16` on the home
+   * quadrant so the wave sits higher while title + chevrons stay on the bottom.
+   */
+  lineTrackClassName?: string
 }
 
 export function FlowingLine({
@@ -135,20 +180,19 @@ export function FlowingLine({
   onNodeClick,
   getNodePreviewSrc,
   getNodeTitle,
+  arrowDriftRateScale = 1,
+  idleSpotlightAutoplay = false,
+  lineTrackClassName,
 }: FlowingLineSandProps) {
   const uid = useId()
   const filterId = useMemo(() => `flowing-line-glow-${uid.replace(/:/g, '')}`, [uid])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const reducedMotion = useReducedMotion() ?? false
+
+  const runIdleSpot = idleSpotlightAutoplay && !reducedMotion
+  /** Wave / timeline scroll — only the user’s own pointer on a node pauses it. */
   const linePaused = hoveredIndex !== null
   const linePausedRef = useRef(false)
-
-  useLayoutEffect(() => {
-    if (sandHoveredNodeIndexRef) sandHoveredNodeIndexRef.current = hoveredIndex
-  }, [hoveredIndex, sandHoveredNodeIndexRef])
-
-  useLayoutEffect(() => {
-    linePausedRef.current = linePaused
-  }, [linePaused])
 
   const [phaseTime, setPhaseTime] = useState(0)
   const phaseTimeRef = useRef(0)
@@ -179,10 +223,10 @@ export function FlowingLine({
   const syncArrowRight = () => {
     arrowRightRef.current = rightPointerOverRef.current || rightPointerHeldRef.current
   }
-
   /** One full horizontal wavelength (parent-relative) in seconds — matches prior CSS cadence. */
   const H_SCROLL_S = 80
   const ARROW_DRIFT_RATE = 0.2
+  const arrowDrift = ARROW_DRIFT_RATE * arrowDriftRateScale
 
   useEffect(() => {
     let id: number
@@ -196,10 +240,10 @@ export function FlowingLine({
         setPhaseTime(phaseTimeRef.current)
       }
       if (arrowLeftRef.current) {
-        userHOffsetRef.current += ARROW_DRIFT_RATE * dt
+        userHOffsetRef.current += arrowDrift * dt
         setUserHOffset(userHOffsetRef.current)
       } else if (arrowRightRef.current) {
-        userHOffsetRef.current -= ARROW_DRIFT_RATE * dt
+        userHOffsetRef.current -= arrowDrift * dt
         setUserHOffset(userHOffsetRef.current)
       }
       if (sandPhaseRef) sandPhaseRef.current = phaseTimeRef.current
@@ -210,7 +254,7 @@ export function FlowingLine({
     }
     id = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(id)
-  }, [sandPhaseRef, sandScrollHUnitRef])
+  }, [sandPhaseRef, sandScrollHUnitRef, arrowDrift])
 
   const pathD = useMemo(
     () => buildSinePath(2, FLOW_PERIOD, phaseTime, flowWaveY),
@@ -228,21 +272,46 @@ export function FlowingLine({
 
   const leftPercent = -hUnit * 100
 
-  const onNodeLeave = (e: MouseEvent<HTMLDivElement>) => {
+  const idleZoneTargetIndex = useMemo((): number | null => {
+    if (!runIdleSpot) return null
+    if (hoveredIndex !== null) return null
+    return pickNodeInZone(hUnit, SPOTLIGHT_ZONE_X0, SPOTLIGHT_ZONE_X1)
+  }, [runIdleSpot, hoveredIndex, hUnit])
+
+  const spotlightDim = hoveredIndex !== null || (runIdleSpot && idleZoneTargetIndex !== null)
+  const displayHoverIndex = hoveredIndex ?? idleZoneTargetIndex
+
+  useLayoutEffect(() => {
+    if (sandHoveredNodeIndexRef) sandHoveredNodeIndexRef.current = displayHoverIndex
+  }, [displayHoverIndex, sandHoveredNodeIndexRef])
+
+  useLayoutEffect(() => {
+    linePausedRef.current = linePaused
+  }, [linePaused])
+
+  const onNodePointerLeave = (e: ReactPointerEvent<HTMLDivElement>) => {
     const rel = e.relatedTarget as HTMLElement | null
     if (rel?.closest?.('[data-flowing-line-node]')) return
     setHoveredIndex(null)
   }
 
-  const reducedMotion = useReducedMotion() ?? false
-  const hoveredTitle =
-    hoveredIndex !== null && getNodeTitle ? (getNodeTitle(hoveredIndex) ?? null) : null
+  const hoveredTitle = (() => {
+    if (!getNodeTitle) return null
+    if (hoveredIndex !== null) return getNodeTitle(hoveredIndex) ?? null
+    if (runIdleSpot && idleZoneTargetIndex !== null) return getNodeTitle(idleZoneTargetIndex) ?? null
+    return null
+  })()
 
   return (
     <div ref={lineRootRef} className="relative min-h-0 w-full flex-1 overflow-visible py-2 md:py-3">
       <div
         ref={trackRef}
-        className="absolute top-7 bottom-1 left-0 w-[200%] max-w-none overflow-visible will-change-[left] md:top-9 md:bottom-2"
+        className={[
+          'absolute top-7 bottom-1 left-0 w-[200%] max-w-none overflow-visible will-change-[left] md:top-9 md:bottom-2',
+          lineTrackClassName ?? '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
         style={{ left: `${leftPercent}%` }}
         aria-hidden
       >
@@ -280,11 +349,14 @@ export function FlowingLine({
           />
         </svg>
         {nodePoints.map((p, i) => {
-          const active = hoveredIndex === i
-          const dimOthers = linePaused && !active
+          const userActive = hoveredIndex === i
+          const inIdlePath = runIdleSpot && hoveredIndex === null
+          const inIdleZone = inIdlePath && idleZoneTargetIndex === i
+          const active = userActive || inIdleZone
+          const dimOthers = spotlightDim && !active
           const idle = FLOW_NODE_IDLE_MOTION[i]!
           const previewSrc = getNodePreviewSrc?.(i)
-
+          const magEase: Transition = { duration: SPOTLIGHT_EXPAND_S, ease: SPOTLIGHT_EASE }
           return (
             <div
               key={i}
@@ -301,8 +373,8 @@ export function FlowingLine({
                 transform: 'translate(-50%, -50%)',
                 zIndex: active ? 3 : 1,
               }}
-              onMouseEnter={() => setHoveredIndex(i)}
-              onMouseLeave={onNodeLeave}
+              onPointerEnter={() => setHoveredIndex(i)}
+              onPointerLeave={onNodePointerLeave}
               onClick={onNodeClick ? () => onNodeClick(i) : undefined}
               role={onNodeClick ? 'button' : undefined}
               tabIndex={onNodeClick ? 0 : undefined}
@@ -320,16 +392,14 @@ export function FlowingLine({
               aria-label={onNodeClick ? `Open sidequest ${i + 1}` : undefined}
             >
               <div className="-m-3 flex items-center justify-center overflow-visible p-3 [perspective:160px]">
-                {active ? (
+                {userActive ? (
                   <div className="relative flex items-center justify-center">
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[100px] w-[100px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-hud)_26%,transparent)] blur-[20px] md:h-[120px] md:w-[120px] md:blur-[26px]"
+                      className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-hud)_26%,transparent)] blur-[24px] md:h-[150px] md:w-[150px] md:blur-[30px]"
                     />
                     {previewSrc ? (
-                      <div
-                        className="relative z-[1] size-4 shrink-0 scale-[2.5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] transition-[transform,opacity,filter] duration-150 ease-out md:size-5"
-                      >
+                      <div className="relative z-[1] size-4 shrink-0 scale-[5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] md:size-5">
                         <img
                           src={previewSrc}
                           alt=""
@@ -338,10 +408,61 @@ export function FlowingLine({
                         />
                       </div>
                     ) : (
-                      <div
-                        className="relative z-[1] size-4 shrink-0 scale-[2.5] rounded-none bg-fg/92 brightness-110 transition-[transform,opacity,filter,background-color] duration-150 ease-out md:size-5"
-                      />
+                      <div className="relative z-[1] size-4 shrink-0 scale-[5] rounded-none bg-fg/92 brightness-110 md:size-5" />
                     )}
+                  </div>
+                ) : inIdlePath ? (
+                  <div className="relative flex min-h-[1.5rem] min-w-[1.5rem] items-center justify-center">
+                    <motion.div
+                      className="absolute flex items-center justify-center will-change-transform"
+                      style={{ zIndex: 1 }}
+                      initial={false}
+                      animate={{
+                        opacity: inIdleZone ? 0 : 1,
+                      }}
+                      transition={magEase}
+                    >
+                      <motion.div
+                        initial={false}
+                        className={[
+                          'relative z-[1] size-4 shrink-0 rounded-none md:size-5',
+                          'transition-[opacity,filter,background-color,box-shadow] duration-150 ease-out',
+                          dimOthers
+                            ? 'bg-fg/38 opacity-[0.32] brightness-[0.72]'
+                            : 'bg-fg/38 shadow-[0_0_6px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]',
+                        ].join(' ')}
+                        style={{ transformOrigin: 'center center', transformStyle: 'preserve-3d' }}
+                        animate={idle.animate}
+                        transition={idle.transition}
+                      />
+                    </motion.div>
+                    <motion.div
+                      className="absolute flex items-center justify-center will-change-transform"
+                      style={{ zIndex: 2, pointerEvents: 'none' }}
+                      initial={false}
+                      animate={{
+                        opacity: inIdleZone ? 1 : 0,
+                        scale: inIdleZone ? 1 : 0.4,
+                      }}
+                      transition={magEase}
+                    >
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-hud)_26%,transparent)] blur-[24px] md:h-[150px] md:w-[150px] md:blur-[30px]"
+                      />
+                      {previewSrc ? (
+                        <div className="relative z-[1] size-4 shrink-0 scale-[5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] md:size-5">
+                          <img
+                            src={previewSrc}
+                            alt=""
+                            draggable={false}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="relative z-[1] size-4 shrink-0 scale-[5] rounded-none bg-fg/92 brightness-110 md:size-5" />
+                      )}
+                    </motion.div>
                   </div>
                 ) : reducedMotion ? (
                   <div
@@ -377,7 +498,13 @@ export function FlowingLine({
       <AnimatePresence mode="wait">
         {hoveredTitle ? (
           <motion.div
-            key={hoveredIndex ?? 'none'}
+            key={
+              hoveredIndex !== null
+                ? `title-h-${hoveredIndex}`
+                : idleZoneTargetIndex !== null
+                  ? `title-z-${idleZoneTargetIndex}`
+                  : 'title-none'
+            }
             role="status"
             aria-live="polite"
             initial={reducedMotion ? false : { opacity: 0, y: 3 }}

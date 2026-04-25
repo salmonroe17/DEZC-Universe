@@ -11,8 +11,8 @@ const quadrantHeadingClass =
 
 /**
  * Home grid stacks quadrants full-width below `lg`; the 1/3 `max-w` is only for the split 2+1
- * column. Shared by case-study footers and {@link CASE_STUDIES_MODAL_SHELL_WIDTH_CLASS} so they
- * match the Case Studies column on `/` (not the old 36–48rem reading-width cap).
+ * column. Used for the home Case Studies tile and footer layout; the quick-nav modal adds 48px
+ * (see {@link CASE_STUDIES_MODAL_SHELL_WIDTH_CLASS}).
  */
 const caseStudiesHomeColumnWidthClass =
   'w-full min-w-0 max-w-full lg:max-w-[calc((100vw-2.5rem-1rem)/3)]'
@@ -20,12 +20,12 @@ const caseStudiesHomeColumnWidthClass =
 const footerHomeGridWidthClass = caseStudiesHomeColumnWidthClass
 
 /**
- * Case studies quick-nav modal: same max width as the home Case Studies quadrant (see
- * `caseStudiesHomeColumnWidthClass`). `shrink-0` keeps the flex-centred dialog from shrinking.
- * Pair with `footerColumn="modal-wide"` on the panel (`w-full` fill).
+ * Case studies quick-nav modal: home Case Studies column width + 48px so the dialog is a bit less
+ * narrow on large viewports (see `caseStudiesHomeColumnWidthClass`). `shrink-0` keeps the
+ * flex-centred dialog from shrinking. Pair with `footerColumn="modal-wide"` on the panel.
  */
 export const CASE_STUDIES_MODAL_SHELL_WIDTH_CLASS =
-  `${caseStudiesHomeColumnWidthClass} shrink-0`
+  'w-full min-w-0 max-w-full lg:max-w-[calc((100vw-2.5rem-1rem)/3+48px)] shrink-0'
 
 /**
  * Footer layout: taller than the home grid estimate, capped by viewport so it feels like a hero

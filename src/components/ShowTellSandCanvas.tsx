@@ -23,9 +23,12 @@ const LINE_REPEL_CSS = 40
 const LINE_STRENGTH = 3.2
 const NODE_REPEL_CSS = 48
 const NODE_STRENGTH = 4.5
-/** Hovered square — wide ring + steep falloff reads as a burst / explosion. */
-const NODE_HOVER_REPEL_CSS = 118
-const NODE_HOVER_STRENGTH = 22
+/**
+ * Hovered / spotlight magnified node — must clear the 5× scaled tile plus HUD glow; otherwise
+ * dots sit on the thumbnail. Radius is screen px from node center in the sand view.
+ */
+const NODE_HOVER_REPEL_CSS = 228
+const NODE_HOVER_STRENGTH = 36
 /** Viewport px — cursor pushes sand without blocking clicks (window pointer tracking). */
 const POINTER_REPEL_CSS = 56
 const POINTER_STRENGTH = 5.2
@@ -226,9 +229,9 @@ export function ShowTellSandCanvas({ sandRefs }: { sandRefs: ShowTellSandRefs })
           const burst = hoveredNode === ni
           const rMax = burst ? NODE_HOVER_REPEL_CSS : NODE_REPEL_CSS
           const str = burst ? NODE_HOVER_STRENGTH : NODE_STRENGTH
-          if (dist < rMax && dist > 0.25) {
+          if (dist < rMax && dist > 0.2) {
             const t = 1 - dist / rMax
-            const falloff = burst ? t * t * t : t * t
+            const falloff = t * t
             const push = falloff * str
             fxc += (dx / dist) * push
             fyc += (dy / dist) * push

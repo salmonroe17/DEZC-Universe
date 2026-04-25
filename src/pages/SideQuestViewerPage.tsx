@@ -686,14 +686,15 @@ export default function SideQuestViewerPage() {
       <header
         className={[
           'sticky top-0 z-40 grid h-[46px] w-full min-w-0 shrink-0',
-          'grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3 md:gap-4',
-          'pl-4 pr-0',
+          'items-center pl-4 pr-0',
+          'grid-cols-[minmax(0,1fr)_auto] gap-2 sm:gap-3',
+          'lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-4',
           LINE_HEADER_B,
           'bg-bg',
         ].join(' ')}
       >
         <nav
-          className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 justify-self-start text-[10px] font-normal leading-none text-fg md:gap-x-2 md:text-[11px]"
+          className="flex min-w-0 flex-wrap items-center justify-self-start gap-x-1.5 gap-y-1 text-[10px] font-normal leading-none text-fg md:gap-x-2 md:text-[11px]"
           aria-label="Site"
         >
           <Link
@@ -713,38 +714,39 @@ export default function SideQuestViewerPage() {
           </button>
         </nav>
 
-        <div className="flex shrink-0 justify-center justify-self-center">
-          <ThemeSwatches />
-        </div>
-
-        <div className="flex justify-self-end">
-          <div className="box-border flex h-[46px] w-[46px] shrink-0">
-            <div className="h-full w-px shrink-0 bg-cell-border" aria-hidden />
-            <button
-              type="button"
-              onClick={goHome}
-              className={[
-                'group flex h-full min-h-0 min-w-0 flex-1 items-center justify-center',
-                'border-0 p-0',
-                'font-mono font-normal',
-                'bg-transparent text-fg/50',
-                'transition-[color,background-color] ease-out duration-200',
-                'hover:bg-fg/5 hover:text-fg/90',
-                FOCUS_1,
-              ].join(' ')}
-              aria-label="Close and return home"
-            >
-              <X
-                size={24}
-                weight="regular"
+        <div className="flex min-w-0 max-lg:shrink-0 max-lg:items-center max-lg:justify-end max-lg:gap-2 sm:max-lg:gap-3 lg:contents">
+          <div className="flex max-lg:shrink-0 max-lg:items-center lg:shrink-0 lg:items-center lg:justify-center lg:justify-self-center">
+            <ThemeSwatches />
+          </div>
+          <div className="flex min-w-0 max-lg:shrink-0 max-lg:justify-end lg:justify-self-end">
+            <div className="box-border flex h-[46px] w-[46px] shrink-0">
+              <div className="h-full w-px shrink-0 bg-cell-border" aria-hidden />
+              <button
+                type="button"
+                onClick={goHome}
                 className={[
-                  'shrink-0 text-current',
-                  'transition-[color,opacity,transform] duration-200 ease-out',
-                  'group-hover:scale-105 group-hover:opacity-100 motion-reduce:group-hover:scale-100',
+                  'group flex h-full min-h-0 min-w-0 flex-1 items-center justify-center',
+                  'border-0 p-0',
+                  'font-mono font-normal',
+                  'bg-transparent text-fg/50',
+                  'transition-[color,background-color] ease-out duration-200',
+                  'hover:bg-fg/5 hover:text-fg/90',
+                  FOCUS_1,
                 ].join(' ')}
-                aria-hidden
-              />
-            </button>
+                aria-label="Close and return home"
+              >
+                <X
+                  size={24}
+                  weight="regular"
+                  className={[
+                    'shrink-0 text-current',
+                    'transition-[color,opacity,transform] duration-200 ease-out',
+                    'group-hover:scale-105 group-hover:opacity-100 motion-reduce:group-hover:scale-100',
+                  ].join(' ')}
+                  aria-hidden
+                />
+              </button>
+            </div>
           </div>
         </div>
       </header>

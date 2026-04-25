@@ -80,6 +80,12 @@ type ChamferFrameProps = {
    * media still open presentation via a capture handler).
    */
   presentationMediaIndex?: number
+  /**
+   * When `presentationMediaIndex` is set, controls the “Click for presentation mode” chip and
+   * pointer cursor. Set `false` for blocks that should stay read-only (click still opens the
+   * deck if you need it, without hover/CTA affordance).
+   */
+  presentationCallout?: boolean
 }
 
 /**
@@ -94,10 +100,12 @@ export function ChamferFrame({
   meteorTrail = false,
   fitContentHeight = false,
   presentationMediaIndex,
+  presentationCallout = true,
 }: ChamferFrameProps) {
   const openPresentationMode = useContext(CaseStudyPresentationModeContext)
   const isPresentationTarget =
     typeof presentationMediaIndex === 'number' && openPresentationMode !== null
+  const showPresentationCallout = isPresentationTarget && presentationCallout
 
   const rawId = useId()
   const meteorGradId = `chamfer-meteor-grad-${rawId.replace(/:/g, '')}`
@@ -144,7 +152,7 @@ export function ChamferFrame({
     <div
       ref={rootRef}
       onClickCapture={isPresentationTarget ? onPresentationSurfaceClickCapture : undefined}
-      className={`quadrant-cell relative min-h-0 min-w-0 overflow-hidden ${staticVisual ? 'figma-frame-static' : ''} ${isPresentationTarget ? 'group cursor-pointer' : ''} ${className}`}
+      className={`quadrant-cell relative min-h-0 min-w-0 overflow-hidden ${staticVisual ? 'figma-frame-static' : ''} ${showPresentationCallout ? 'group cursor-pointer' : ''} ${className}`}
     >
       {meteorTrail && meteorPathD ? (
         <svg
@@ -183,7 +191,7 @@ export function ChamferFrame({
           {children}
         </div>
       </div>
-      {isPresentationTarget ? (
+      {showPresentationCallout ? (
         <div
           className="pointer-events-none absolute inset-0 z-[25] flex items-end justify-end p-2 opacity-0 transition-opacity duration-150 ease-out group-hover:opacity-100 md:p-3"
           aria-hidden
