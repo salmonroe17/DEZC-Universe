@@ -398,6 +398,86 @@ type BackgroundStar = {
   sz: number
 }
 
+/** Short streak across the starfield; head moves in (ux,uy), trail length in px. */
+type ShootingStar = {
+  x: number
+  y: number
+  ux: number
+  uy: number
+  speed: number
+  trail: number
+}
+
+const SHOOTING_SPAWN_MIN_MS = 2200
+const SHOOTING_SPAWN_JITTER_MS = 1800
+const SHOOTING_MAX_STREAKS = 2
+
+function pushShootingStar(w: number, h: number, out: ShootingStar[]) {
+  if (out.length >= SHOOTING_MAX_STREAKS) return
+  const margin = 48 + Math.random() * 40
+  const edge = Math.floor(Math.random() * 4)
+  let x: number
+  let y: number
+  if (edge === 0) {
+    x = Math.random() * w
+    y = -margin
+  } else if (edge === 1) {
+    x = w + margin
+    y = Math.random() * h
+  } else if (edge === 2) {
+    x = Math.random() * w
+    y = h + margin
+  } else {
+    x = -margin
+    y = Math.random() * h
+  }
+  const tx = w * (0.1 + Math.random() * 0.8)
+  const ty = h * (0.1 + Math.random() * 0.8)
+  const dx = tx - x
+  const dy = ty - y
+  const len = Math.hypot(dx, dy) || 1
+  out.push({
+    x,
+    y,
+    ux: dx / len,
+    uy: dy / len,
+    speed: 240 + Math.random() * 260,
+    trail: 42 + Math.random() * 100,
+  })
+}
+
+function drawShootingStreak(
+  ctx: CanvasRenderingContext2D,
+  s: ShootingStar,
+  fg: string,
+  warp: boolean,
+) {
+  const hx = s.x
+  const hy = s.y
+  const tx = hx - s.ux * s.trail
+  const ty = hy - s.uy * s.trail
+  const g = ctx.createLinearGradient(tx, ty, hx, hy)
+  g.addColorStop(0, 'rgba(255,255,255,0)')
+  g.addColorStop(0.45, hudHexToRgba(fg, warp ? 0.22 : 0.32))
+  g.addColorStop(1, hudHexToRgba(fg, warp ? 0.75 : 0.95))
+  ctx.save()
+  ctx.strokeStyle = g
+  ctx.lineWidth = warp ? 1.1 : 1.25
+  ctx.lineCap = 'round'
+  ctx.shadowColor = hudHexToRgba(fg, 0.55)
+  ctx.shadowBlur = warp ? 6 : 10
+  ctx.beginPath()
+  ctx.moveTo(tx, ty)
+  ctx.lineTo(hx, hy)
+  ctx.stroke()
+  ctx.shadowBlur = 0
+  ctx.fillStyle = hudHexToRgba(fg, 0.95)
+  ctx.beginPath()
+  ctx.arc(hx, hy, warp ? 0.85 : 1.05, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.restore()
+}
+
 function initBackgroundStars(w: number, h: number, out: BackgroundStar[]) {
   out.length = 0
   for (let i = 0; i < STAR_COUNT; i++) {
@@ -706,6 +786,8 @@ export function HudShooterIntro() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const starsCanvasRef = useRef<HTMLCanvasElement>(null)
   const starsRef = useRef<BackgroundStar[]>([])
+  const shootingStarsRef = useRef<ShootingStar[]>([])
+  const nextShootingAtRef = useRef(0)
   const starfieldWarpRef = useRef(false)
   const idleTextRef = useRef<HTMLDivElement>(null)
 
@@ -899,18 +981,21 @@ export function HudShooterIntro() {
         starsCanvas.style.width = `${w}px`
         starsCanvas.style.height = `${h}px`
         initBackgroundStars(w, h, starsRef.current)
+        shootingStarsRef.current.length = 0
+        nextShootingAtRef.current = 0
       }
     })
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
 
-  // Starfield: twinkle when idle/end; radial “warp” while uiPhase === 'game'
+  // Starfield: twinkle when idle/end; radial “warp” while uiPhase === 'game'; shooting stars ~3s
   useEffect(() => {
     const canvas = starsCanvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
+    const reducedStarMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     let raf = 0
     let last = performance.now()
@@ -969,6 +1054,29 @@ export function HudShooterIntro() {
         ctx.beginPath()
         ctx.arc(s.x, s.y, rad, 0, Math.PI * 2)
         ctx.fill()
+      }
+
+      if (!reducedStarMotion) {
+        if (nextShootingAtRef.current === 0) {
+          nextShootingAtRef.current = now + 600 + Math.random() * 1400
+        }
+        if (now >= nextShootingAtRef.current) {
+          pushShootingStar(w, h, shootingStarsRef.current)
+          nextShootingAtRef.current =
+            now + SHOOTING_SPAWN_MIN_MS + Math.random() * SHOOTING_SPAWN_JITTER_MS
+        }
+        const shots = shootingStarsRef.current
+        for (let i = shots.length - 1; i >= 0; i--) {
+          const st = shots[i]!
+          st.x += st.ux * st.speed * dt
+          st.y += st.uy * st.speed * dt
+          const oob = st.x < -200 || st.x > w + 200 || st.y < -200 || st.y > h + 200
+          if (oob) shots.splice(i, 1)
+        }
+        ctx.globalAlpha = 1
+        for (const st of shots) {
+          drawShootingStreak(ctx, st, fg, warp)
+        }
       }
       ctx.globalAlpha = 1
     }

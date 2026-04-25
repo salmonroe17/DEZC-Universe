@@ -1,15 +1,11 @@
 import { motion } from 'framer-motion'
-import { useCallback, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { easeOutExpo } from '../animations/variants'
-import { SIDEQUESTS } from '../data/sidequests'
 import { useMajorityInView } from '../hooks/useMajorityInView'
 import { useNoPrimaryHoverDevice } from '../hooks/useNoPrimaryHoverDevice'
 import { ExperimentalCaseStudiesPanel } from './ExperimentalCaseStudiesPanel'
-import { FlowingLine } from './FlowingLine'
+import { ExperimentalSideQuestsPanel, showTellQuadrantCell } from './ExperimentalSideQuestsPanel'
 import { HudShooterIntro } from './HudShooterIntro'
-import { ShowTellAmbientLines } from './ShowTellAmbientLines'
-import { ShowTellSandCanvas } from './ShowTellSandCanvas'
 import { WhoIamOrbMarquee } from './WhoIamOrbMarquee'
 
 const gridContainerVariants = {
@@ -40,18 +36,7 @@ const cellVariants = {
 /** Chamfered border + fill via ::before/::after (see index.css). */
 const quadrantCell = 'quadrant-cell min-h-0 min-w-0'
 
-/** Side quests / show & tell: floor height so the sand + line never collapse. */
-const showTellQuadrantCell = 'quadrant-cell min-h-[300px] min-w-0'
-
-/** Matches quadrant section titles (e.g. Show & tell heading). */
-const quadrantHeadingClass =
-  'shrink-0 px-4 pt-3 text-left text-[11px] font-semibold tracking-[0.06em] text-fg/90 md:pt-4 md:text-xs md:tracking-[0.05em]'
-
-const showTellSubtitleClass =
-  'shrink-0 px-4 pb-1.5 text-left text-[10px] font-normal leading-snug tracking-[0.04em] text-fg-subtle md:pb-2 md:text-[11px] md:tracking-[0.035em]'
-
 export function ExperimentalGrid() {
-  const navigate = useNavigate()
   const noPrimaryHover = useNoPrimaryHoverDevice()
   const [heroQEl, setHeroQEl] = useState<HTMLDivElement | null>(null)
   const [caseStudiesQEl, setCaseStudiesQEl] = useState<HTMLDivElement | null>(null)
@@ -66,50 +51,6 @@ export function ExperimentalGrid() {
   const [whoIamFocusInside, setWhoIamFocusInside] = useState(false)
   const whoIamScrollActive =
     whoIamPointerInside || whoIamFocusInside || (noPrimaryHover && whoIamMajorityInView)
-
-  const sidequestN = SIDEQUESTS.length
-
-  const onShowTellNodeClick = useCallback(
-    (nodeIndex: number) => {
-      if (sidequestN === 0) return
-      const sq = SIDEQUESTS[nodeIndex % sidequestN]
-      if (!sq) return
-      navigate(`/sidequest/${sq.id}`)
-    },
-    [navigate, sidequestN],
-  )
-
-  const getNodePreviewSrc = useCallback(
-    (nodeIndex: number) => {
-      if (sidequestN === 0) return undefined
-      const sq = SIDEQUESTS[nodeIndex % sidequestN]!
-      return sq.images[0] ?? sq.cover
-    },
-    [sidequestN],
-  )
-
-  const getNodeTitle = useCallback(
-    (nodeIndex: number) => {
-      if (sidequestN === 0) return undefined
-      return SIDEQUESTS[nodeIndex % sidequestN]!.title
-    },
-    [sidequestN],
-  )
-
-  const sandLineRootRef = useRef<HTMLDivElement>(null)
-  const sandTrackRef = useRef<HTMLDivElement>(null)
-  const sandPhaseRef = useRef(0)
-  const sandHoveredNodeIndexRef = useRef<number | null>(null)
-  const sandScrollHUnitRef = useRef(0)
-  const sandRefs = useMemo(
-    () => ({
-      lineRootRef: sandLineRootRef,
-      trackRef: sandTrackRef,
-      phaseRef: sandPhaseRef,
-      hoveredNodeIndexRef: sandHoveredNodeIndexRef,
-    }),
-    [],
-  )
 
   const whoBioClass = [
     'min-h-0 flex-1 px-4 py-3 text-left text-[11px] font-normal leading-relaxed tracking-[0.02em] text-fg transition-opacity duration-300 ease-out md:text-xs md:tracking-[0.015em]',
@@ -221,35 +162,7 @@ export function ExperimentalGrid() {
           data-quadrant-in-view={noPrimaryHover && showTellMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}
         >
-          <ShowTellAmbientLines
-            scrollHUnitRef={sandScrollHUnitRef}
-            hoveredNodeIndexRef={sandHoveredNodeIndexRef}
-          />
-          <ShowTellSandCanvas sandRefs={sandRefs} />
-          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-visible">
-            <h2
-              className={`${quadrantHeadingClass} relative z-[2] w-fit max-w-full shrink-0 self-start`}
-            >
-              My multiple timelines of side quests
-            </h2>
-            <p
-              className={`${showTellSubtitleClass} relative z-[2] mt-[8px] mb-4 w-fit max-w-full shrink-0 self-start md:mb-5`}
-            >
-              Click squares to see visuals
-            </p>
-            <div className="relative z-[1] flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-visible opacity-30 transition-opacity duration-300 ease-out group-hover/showtell:opacity-100 group-data-[quadrant-in-view]/showtell:opacity-100">
-              <FlowingLine
-                sandLineRootRef={sandLineRootRef}
-                sandTrackRef={sandTrackRef}
-                sandPhaseRef={sandPhaseRef}
-                sandHoveredNodeIndexRef={sandHoveredNodeIndexRef}
-                sandScrollHUnitRef={sandScrollHUnitRef}
-                onNodeClick={onShowTellNodeClick}
-                getNodePreviewSrc={getNodePreviewSrc}
-                getNodeTitle={getNodeTitle}
-              />
-            </div>
-          </div>
+          <ExperimentalSideQuestsPanel layout="quadrant" />
         </motion.div>
       </motion.div>
     </div>
