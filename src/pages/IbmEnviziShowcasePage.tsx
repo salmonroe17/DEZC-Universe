@@ -69,7 +69,7 @@ import {
   MAKING_EMISSIONS_CHANGES,
   OTHER_HALF_OF_SYSTEM,
   TRACK_PROGRESS_STEP_5,
-} from './ibm/ibmEnviziSharedContent'
+} from './ibm/ibmEnviziContentBlocks'
 import {
   IBM_PRESENTATION_SLIDES,
   IBM_PRESENTATION_THUMBNAILS,

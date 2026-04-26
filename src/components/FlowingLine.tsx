@@ -15,15 +15,38 @@ import { FLOW_NODE_COUNT, FLOW_PERIOD, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from
 
 function FlowLineNodePreview({ src }: { src: string }) {
   const cls = 'h-full w-full object-cover'
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (!isSideQuestVideoUrl(src)) return
+    const video = videoRef.current
+    if (!video) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (!entry) return
+        if (entry.isIntersecting) {
+          void video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { root: null, threshold: 0.2 },
+    )
+    observer.observe(video)
+    return () => observer.disconnect()
+  }, [src])
+
   if (isSideQuestVideoUrl(src)) {
     return (
       <video
+        ref={videoRef}
         src={src}
         className={cls}
         muted
         playsInline
         loop
-        autoPlay
+        preload="metadata"
         aria-hidden
       />
     )
@@ -65,10 +88,6 @@ const FLOW_NODE_IDLE_MOTION: IdleMotion[] = [
   {
     animate: { y: [0, -6, 0], rotate: [-4, 4] },
     transition: { repeat: Infinity, duration: 1.5, ease: 'easeInOut' },
-  },
-  {
-    animate: { rotateY: [-26, 26] },
-    transition: { repeat: Infinity, repeatType: 'reverse', duration: 1.15 },
   },
 ]
 

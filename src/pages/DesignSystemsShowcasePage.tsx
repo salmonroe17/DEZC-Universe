@@ -25,10 +25,12 @@ import {
   DsCaseStudyChamferDs10,
   DsCaseStudyChamferDs11,
   DsCaseStudyChamferDs12,
+} from '../components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia'
+import {
   DS_HERO_MANIFEST_LINES,
   dsCalculatorGif,
   dsPuzzleGif,
-} from '../components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia'
+} from '../components/caseStudy/dsCaseStudy/dsCaseStudyHeroAssets'
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { RotatingGradientCircle } from '../components/system/RotatingGradientCircle'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'

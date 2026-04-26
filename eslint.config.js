@@ -20,4 +20,8 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    files: ['**/carbon/CarbonPresentationDeck.tsx', '**/ibm/ibmEnviziContentBlocks.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ])

@@ -2,7 +2,6 @@
  * Super case study presentation deck — same cadence as {@link ../carbon/CarbonPresentationDeck.tsx}:
  * text slides mirror each on-page section (copy before media), then image / video / toggle slides.
  */
-import { useEffect, useRef } from 'react'
 import superHeroS1 from '../../../Super assets/s1.png'
 import superOverviewS2 from '../../../Super assets/s2.png'
 import superProblemTwoUp from '../../../Super assets/s3.png'
@@ -54,13 +53,8 @@ import {
   SUPER_REWARDS_SYSTEM_TOGGLE_OFF,
   SUPER_TOGGLE_LABEL_ON,
 } from './SuperShowcaseChamfers'
-
-/** https://giphy.com/gifs/producthunt-last-week-tonight-compound-interest-l41YgnyPBDxj5mE1y */
-export const SUPER_RETROSPECTIVE_GIF_URL =
-  'https://media.giphy.com/media/l41YgnyPBDxj5mE1y/giphy.gif' as const
-
-export const superRetrospectiveGifImgClass =
-  'block size-24 max-h-24 max-w-24 shrink-0 object-cover object-center md:size-28 md:max-h-28 md:max-w-28'
+import { SuperDeckAutoplayVideo } from './SuperDeckAutoplayVideo'
+import { SUPER_RETROSPECTIVE_GIF_URL, superRetrospectiveGifImgClass } from './superPresentationGiphy'
 
 const deckMaxW = 'mx-auto w-full max-w-[min(100%,1156px)]'
 
@@ -178,44 +172,6 @@ const SUPER_NEW_NAV_DESTINATIONS: { step: number; title: string; description: st
       "A personal control center for account, activity, and preferences, tying together the user's full relationship with the product.",
   },
 ]
-
-function SuperDeckAutoplayVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const video = ref.current
-    if (!video) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        if (!entry) return
-        if (entry.isIntersecting) {
-          video.currentTime = 0
-          void video.play().catch(() => {})
-        } else {
-          video.pause()
-        }
-      },
-      { threshold: 0.25 },
-    )
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <video
-      ref={ref}
-      className="block h-auto w-full max-w-full align-middle"
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-label="Screen recording of the Super app walkthrough"
-    >
-      <source src={src} type="video/mp4" />
-    </video>
-  )
-}
 
 /**
  * Slide index for each on-page `presentationMediaIndex` (0–17), interleaved with text slides

@@ -13,10 +13,8 @@ import {
 import { CaseStudyScrollProgressBar } from './CaseStudyScrollProgressBar'
 import { useCaseStudyScrollspy, type NavSection } from './useCaseStudyScrollspy'
 import { CASE_STUDY_SHOWCASE_NAV } from '../../data/caseStudyShowcaseNav'
-import {
-  CaseStudyPresentationModeContext,
-  ChamferFrame,
-} from '../system/ChamferFrame'
+import { CaseStudyPresentationModeContext } from './CaseStudyPresentationModeContext'
+import { ChamferFrame } from '../system/ChamferFrame'
 import {
   CaseStudyPresentationOverlay,
   type CaseStudyPresentationSlide,
@@ -168,12 +166,6 @@ export function CaseStudyShowcaseScaffold({
   }, [sidebarHidden])
 
   useEffect(() => {
-    if (presentationMode) {
-      setShowTopChromeRow(true)
-    }
-  }, [presentationMode])
-
-  useEffect(() => {
     if (typeof window === 'undefined') return undefined
 
     const mqlNarrow = window.matchMedia('(max-width: 1023px)')
@@ -216,7 +208,7 @@ export function CaseStudyShowcaseScaffold({
     }
   }, [presentationMode])
 
-  const collapseTopRowOnNarrow = !showTopChromeRow
+  const collapseTopRowOnNarrow = !presentationMode && !showTopChromeRow
   const topChromeRowGridClass = [
     'grid transition-[grid-template-rows] ease-out motion-reduce:transition-none',
     'lg:grid-rows-[1fr]',

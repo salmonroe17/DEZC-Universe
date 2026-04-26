@@ -12,6 +12,8 @@ import {
   DsCaseStudyChamferDs10,
   DsCaseStudyChamferDs11,
   DsCaseStudyChamferDs12,
+} from '../../components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia'
+import {
   ds1Hero,
   ds2Hero,
   ds3Hero,
@@ -24,7 +26,7 @@ import {
   ds10Hero,
   ds11Hero,
   ds12Hero,
-} from '../../components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia'
+} from '../../components/caseStudy/dsCaseStudy/dsCaseStudyHeroAssets'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyPresentationOverlay'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 import { dsScrollOrderTextSlide } from './dsPresentationTextSlides'

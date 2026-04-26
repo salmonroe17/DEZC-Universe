@@ -16,10 +16,7 @@ export function useMajorityInView(
   const [inView, setInView] = useState(false)
 
   useEffect(() => {
-    if (!enabled) {
-      setInView(false)
-      return
-    }
+    if (!enabled) return
     if (!element) return
 
     const obs = new IntersectionObserver(
@@ -36,5 +33,5 @@ export function useMajorityInView(
     }
   }, [element, enabled, minRatio])
 
-  return inView
+  return enabled && inView
 }

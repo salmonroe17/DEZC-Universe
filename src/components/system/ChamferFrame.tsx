@@ -1,20 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type MouseEvent,
-  type ReactNode,
-} from 'react'
+import { useContext, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 
-/** Wired from {@link CaseStudyShowcaseScaffold}; ChamferFrame reads this when `presentationMediaIndex` is set. */
-export type CaseStudyPresentationModeHandler = (index: number) => void
-
-export const CaseStudyPresentationModeContext = createContext<CaseStudyPresentationModeHandler | null>(
-  null,
-)
+import { CaseStudyPresentationModeContext } from '../caseStudy/CaseStudyPresentationModeContext'
 
 /** Matches `quadrant-cell::after`: 1px inset + same clip chamfer as `index.css`. */
 function buildChamferMeteorPath(width: number, height: number, chamferPx: number, borderInsetPx: number): string {

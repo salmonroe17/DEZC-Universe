@@ -2,7 +2,7 @@
 export const FLOW_PERIOD = 200
 export const FLOW_VB_H = 72
 export const FLOW_TOTAL_W = FLOW_PERIOD * 2
-export const FLOW_NODE_COUNT = 8
+export const FLOW_NODE_COUNT = 7
 export const FLOW_MID = FLOW_VB_H / 2
 export const FLOW_AMP1 = 18
 export const FLOW_AMP2 = 4

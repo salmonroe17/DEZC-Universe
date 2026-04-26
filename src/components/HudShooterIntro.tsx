@@ -870,10 +870,10 @@ export function HudShooterIntro() {
 
   useEffect(() => {
     if (uiPhase !== 'game') {
-      setShootHintShow(false)
+      queueMicrotask(() => setShootHintShow(false))
       return
     }
-    setShootHintShow(true)
+    queueMicrotask(() => setShootHintShow(true))
     const t = window.setTimeout(() => {
       setShootHintShow(false)
     }, Math.round(1000 * SHOOT_HINT_FADE_S) + SHOOT_HINT_READ_MS)

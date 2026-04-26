@@ -1,5 +1,5 @@
 import { CaretDown, ListDashes, X } from '@phosphor-icons/react'
-import { forwardRef, useCallback, useEffect, useId, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import type { NavSection } from './useCaseStudyScrollspy'
@@ -114,7 +114,9 @@ export function CaseStudyMobileSectionsModal({
   const autoTitleId = useId()
   const effectiveTitleId = titleId && titleId.length > 0 ? titleId : autoTitleId
 
-  closeRef.current = onClose
+  useLayoutEffect(() => {
+    closeRef.current = onClose
+  }, [onClose])
 
   const onPick = useCallback(
     (id: string) => {

@@ -1,6 +1,6 @@
 import { CaretLeft, CaretRight, MagnifyingGlassMinus, MagnifyingGlassPlus, X } from '@phosphor-icons/react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import type { MouseEvent } from 'react'
+import type { MouseEvent, RefObject } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CaseStudiesCardModal } from '../components/CaseStudiesCardModal'
@@ -10,6 +10,7 @@ import {
   getSideQuestById,
   getSideQuestIndexById,
   isSideQuestVideoUrl,
+  type SideQuestEntry,
 } from '../data/sidequests'
 
 /** Calm ease — main image crossfade (not the thumbnail rail) */
@@ -436,10 +437,6 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
   const isVideo = src != null && isSideQuestVideoUrl(src)
 
   useEffect(() => {
-    setZoom(MAIN_IMAGE_ZOOM_MIN)
-    setPan({ x: 0, y: 0 })
-  }, [imageKey])
-  useEffect(() => {
     panRef.current = pan
   }, [pan])
   useEffect(() => {
@@ -643,19 +640,23 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
   )
 }
 
-export default function SideQuestViewerPage() {
-  const { sidequestId } = useParams()
+function SideQuestViewerShell({
+  current,
+  selectedIndex,
+  caseStudiesModalOpen,
+  caseStudiesNavRef,
+  closeCaseStudiesModal,
+  onCaseStudiesNavClick,
+}: {
+  current: SideQuestEntry
+  selectedIndex: number
+  caseStudiesModalOpen: boolean
+  caseStudiesNavRef: RefObject<HTMLButtonElement | null>
+  closeCaseStudiesModal: () => void
+  onCaseStudiesNavClick: (e: MouseEvent<HTMLButtonElement>) => void
+}) {
   const navigate = useNavigate()
   const [imageIndex, setImageIndex] = useState(0)
-  const [caseStudiesModalOpen, setCaseStudiesModalOpen] = useState(false)
-  const caseStudiesNavRef = useRef<HTMLButtonElement | null>(null)
-
-  const current = getSideQuestById(sidequestId)
-  const selectedIndex = getSideQuestIndexById(sidequestId)
-
-  useEffect(() => {
-    setImageIndex(0)
-  }, [sidequestId])
 
   const goHome = useCallback(() => {
     navigate('/')
@@ -678,19 +679,6 @@ export default function SideQuestViewerPage() {
     goSidequest(selectedIndex + 1)
   }, [goSidequest, selectedIndex])
 
-  const closeCaseStudiesModal = useCallback(() => {
-    setCaseStudiesModalOpen(false)
-    queueMicrotask(() => caseStudiesNavRef.current?.focus({ preventScroll: true }))
-  }, [])
-
-  const onCaseStudiesNavClick = (e: MouseEvent<HTMLButtonElement>) => {
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-      window.open(CASE_STUDIES_NAV_MODIFIER_TO, '_blank', 'noopener,noreferrer')
-      return
-    }
-    setCaseStudiesModalOpen(true)
-  }
-
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -701,8 +689,7 @@ export default function SideQuestViewerPage() {
       }
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
         e.preventDefault()
-        const c = sidequestId ? getSideQuestById(sidequestId) : null
-        const n = c?.galleryImages.length ?? 0
+        const n = current.galleryImages.length
         if (n > 1) {
           setImageIndex((i) =>
             e.key === 'ArrowLeft' ? mod(i - 1, n) : mod(i + 1, n),
@@ -715,18 +702,7 @@ export default function SideQuestViewerPage() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [caseStudiesModalOpen, goHome, onNext, onPrev, setImageIndex, sidequestId])
-
-  if (!sidequestId || !current) {
-    const fallback = SIDEQUESTS[0]
-    if (!fallback) return null
-    return (
-      <>
-        <Navigate to={`/sidequest/${fallback.id}`} replace />
-        <CaseStudiesCardModal open={caseStudiesModalOpen} onClose={closeCaseStudiesModal} />
-      </>
-    )
-  }
+  }, [caseStudiesModalOpen, current.galleryImages.length, goHome, onNext, onPrev])
 
   const images = current.galleryImages
   const hasImages = images.length > 0
@@ -827,7 +803,7 @@ export default function SideQuestViewerPage() {
         ].join(' ')}
       >
         <div className="flex min-h-0 min-w-0 flex-1 flex-col min-[1024px]:h-full min-[1024px]:self-stretch">
-          <MainImageView src={mainSrc} imageKey={mainKey} />
+          <MainImageView key={mainKey} src={mainSrc} imageKey={mainKey} />
         </div>
 
         <aside
@@ -873,5 +849,50 @@ export default function SideQuestViewerPage() {
 
       <CaseStudiesCardModal open={caseStudiesModalOpen} onClose={closeCaseStudiesModal} />
     </div>
+  )
+}
+
+export default function SideQuestViewerPage() {
+  const { sidequestId } = useParams()
+  const [caseStudiesModalOpen, setCaseStudiesModalOpen] = useState(false)
+  const caseStudiesNavRef = useRef<HTMLButtonElement | null>(null)
+
+  const current = getSideQuestById(sidequestId)
+  const selectedIndex = getSideQuestIndexById(sidequestId)
+
+  const closeCaseStudiesModal = useCallback(() => {
+    setCaseStudiesModalOpen(false)
+    queueMicrotask(() => caseStudiesNavRef.current?.focus({ preventScroll: true }))
+  }, [])
+
+  const onCaseStudiesNavClick = (e: MouseEvent<HTMLButtonElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+      window.open(CASE_STUDIES_NAV_MODIFIER_TO, '_blank', 'noopener,noreferrer')
+      return
+    }
+    setCaseStudiesModalOpen(true)
+  }
+
+  if (!sidequestId || !current) {
+    const fallback = SIDEQUESTS[0]
+    if (!fallback) return null
+    return (
+      <>
+        <Navigate to={`/sidequest/${fallback.id}`} replace />
+        <CaseStudiesCardModal open={caseStudiesModalOpen} onClose={closeCaseStudiesModal} />
+      </>
+    )
+  }
+
+  return (
+    <SideQuestViewerShell
+      key={current.id}
+      current={current}
+      selectedIndex={selectedIndex}
+      caseStudiesModalOpen={caseStudiesModalOpen}
+      caseStudiesNavRef={caseStudiesNavRef}
+      closeCaseStudiesModal={closeCaseStudiesModal}
+      onCaseStudiesNavClick={onCaseStudiesNavClick}
+    />
   )
 }

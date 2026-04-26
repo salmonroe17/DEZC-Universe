@@ -2,7 +2,7 @@
  * IBM Envizi case study presentation deck — same pattern as {@link ../carbon/CarbonPresentationDeck.tsx}
  * and {@link ../super/SuperPresentationDeck.tsx}: text slides mirror sections, then image / video / toggle slides.
  */
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import ibmHeroAp1 from '../../../IBM case study assets/ap1.png'
 import ibmOverviewAp2 from '../../../IBM case study assets/ap2.png'
 import ibmOverviewAp3 from '../../../IBM case study assets/ap3.png'
@@ -40,7 +40,6 @@ import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
-  caseStudyChamferToggleLabelClassName,
   caseStudyTeamResponsibilityTextClass,
   caseStudyTeamRoleColumnClass,
   caseStudyTeamRowConnectorCellClass,
@@ -59,12 +58,13 @@ import {
   EXECUTE_ACTIONS_STEP_4,
   FOUR_METHODS_ONE_EXPERIENCE,
   IBM_IMPACT_OUTCOMES,
-  IbmActionLayerStep1Chamfer,
-  IbmCoreFlowStepBlock,
   MAKING_EMISSIONS_CHANGES,
   OTHER_HALF_OF_SYSTEM,
   TRACK_PROGRESS_STEP_5,
-} from './ibmEnviziSharedContent'
+} from './ibmEnviziContentBlocks'
+import { IbmActionLayerStep1Chamfer, IbmCoreFlowStepBlock } from './ibmEnviziContentComponents'
+import { IbmDeckAutoplayVideo } from './IbmDeckAutoplayVideo'
+import { IbmDeckToggleChamfer } from './IbmDeckToggleChamfer'
 
 const deckMaxW = 'mx-auto w-full max-w-[min(100%,1156px)]'
 
@@ -189,109 +189,6 @@ const ACTION_PLANS_WORKFLOW_BULLETS = [
   'Compare impact',
   'Track progress over time',
 ] as const
-
-function IbmDeckAutoplayVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const video = ref.current
-    if (!video) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        if (!entry) return
-        if (entry.isIntersecting) {
-          video.currentTime = 0
-          void video.play().catch(() => {})
-        } else {
-          video.pause()
-        }
-      },
-      { threshold: 0.25 },
-    )
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <video
-      ref={ref}
-      className="block h-auto w-full max-w-full align-middle"
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-label="Screen recording: IBM Envizi action plans prototype"
-    >
-      <source src={src} type="video/mp4" />
-    </video>
-  )
-}
-
-function IbmDeckToggleChamfer({
-  baseSrc,
-  toggledSrc,
-  baseAlt,
-  toggledAlt,
-  toggleLabelOff,
-  toggleLabelOn,
-}: {
-  baseSrc: string
-  toggledSrc: string
-  baseAlt: string
-  toggledAlt: string
-  toggleLabelOff: string
-  toggleLabelOn: string
-}) {
-  const [toggled, setToggled] = useState(false)
-  return (
-    <ChamferFrame
-      className={`chamfer-media-border ${deckMaxW}`}
-      innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
-    >
-      <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-        <button
-          type="button"
-          role="switch"
-          aria-checked={toggled}
-          onClick={() => setToggled((v) => !v)}
-          className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-            toggled
-              ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-              : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-          }`}
-        >
-          <span
-            className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-              toggled ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg' : 'left-1 bg-white'
-            }`}
-            aria-hidden
-          />
-        </button>
-        <span className={caseStudyChamferToggleLabelClassName}>
-          {toggled ? toggleLabelOn : toggleLabelOff}
-        </span>
-      </div>
-      <div className="relative isolate w-full">
-        <IbmToggleAspectSpacer pixelWidth={2880} pixelHeight={1800} />
-        <img
-          src={baseSrc}
-          alt={baseAlt}
-          decoding="async"
-          loading="eager"
-          className={`${chamferToggleStackLayerClass} z-0 ${toggled ? 'opacity-0' : 'opacity-100'}`}
-        />
-        <img
-          src={toggledSrc}
-          alt={toggledAlt}
-          decoding="async"
-          loading="eager"
-          className={`${chamferToggleStackLayerClass} z-10 ${toggled ? 'opacity-100' : 'opacity-0'}`}
-        />
-      </div>
-    </ChamferFrame>
-  )
-}
 
 const problemSurfaceStrugglesToggleLabelOff = 'Show the goals'
 const problemSurfaceStrugglesToggleLabelOn = 'Hide the goals'

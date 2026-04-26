@@ -7,7 +7,7 @@ import {
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
-import { DS_HERO_MANIFEST_LINES, dsCalculatorGif, dsPuzzleGif } from '../../components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia'
+import { DS_HERO_MANIFEST_LINES, dsCalculatorGif, dsPuzzleGif } from '../../components/caseStudy/dsCaseStudy/dsCaseStudyHeroAssets'
 import { DsBulletGrid } from './dsShowcaseBulletGrid'
 import {
   DS_BUILT_REAL_WORLD_BULLETS,

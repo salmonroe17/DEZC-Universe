@@ -48,10 +48,9 @@ import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShow
 import {
   SUPER_PRESENTATION_SLIDES,
   SUPER_PRESENTATION_THUMBNAILS,
-  SUPER_RETROSPECTIVE_GIF_URL,
   superPresentationMediaToSlideIndex,
-  superRetrospectiveGifImgClass,
 } from './super/SuperPresentationDeck'
+import { SUPER_RETROSPECTIVE_GIF_URL, superRetrospectiveGifImgClass } from './super/superPresentationGiphy'
 import {
   SuperProblemOldScreensChamfer,
   SuperSuperCashRelocatedComparison,

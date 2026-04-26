@@ -144,8 +144,11 @@ function ImageSlidePanViewport({ active, imageScale, pan, setPan, children }: Im
   const rootRef = useRef<HTMLDivElement>(null)
   const innerRef = useRef<HTMLDivElement>(null)
   const panRef = useRef(pan)
-  panRef.current = pan
   const dragRef = useRef<{ pointerId: number; sx: number; sy: number; ox: number; oy: number } | null>(null)
+
+  useLayoutEffect(() => {
+    panRef.current = pan
+  }, [pan])
 
   const clampPan = useCallback(
     (x: number, y: number) => {
@@ -289,7 +292,10 @@ function usePointerHoldRepeat(onRepeat: () => void, canRepeat: boolean) {
   const delayRef = useRef<number | undefined>(undefined)
   const intervalRef = useRef<number | undefined>(undefined)
   const onRepeatRef = useRef(onRepeat)
-  onRepeatRef.current = onRepeat
+
+  useLayoutEffect(() => {
+    onRepeatRef.current = onRepeat
+  }, [onRepeat])
 
   const clearTimers = useCallback(() => {
     window.clearTimeout(delayRef.current)
@@ -369,22 +375,26 @@ export function CaseStudyPresentationOverlay({
   const [capturedThumbs, setCapturedThumbs] = useState<Record<number, string>>({})
   const skipVisualRecaptureDebounce = useRef(true)
 
+  /** Tracks visible slide index set string for scroll snap only (see deck scroll layout effect). */
+  const lastSyncedDeckKeyRef = useRef('')
+
   useEffect(() => {
     if (!open) {
       slideCaptureRootsRef.current = []
-      setCapturedThumbs({})
+      queueMicrotask(() => setCapturedThumbs({}))
       skipVisualRecaptureDebounce.current = true
       wasOpenRef.current = false
-      lastVisibleDeckKeyRef.current = ''
       return
     }
     if (!wasOpenRef.current) {
       wasOpenRef.current = true
-      setControlsVisible(false)
-      setTextSlidesVisible(initialTextSlidesVisible)
-      setTextScale(1)
-      setImageScale(1)
-      setTheme('gray')
+      queueMicrotask(() => {
+        setControlsVisible(false)
+        setTextSlidesVisible(initialTextSlidesVisible)
+        setTextScale(1)
+        setImageScale(1)
+        setTheme('gray')
+      })
     }
   }, [open, initialTextSlidesVisible])
 
@@ -397,7 +407,6 @@ export function CaseStudyPresentationOverlay({
   )
 
   const visibleDeckKey = useMemo(() => visibleEntries.map((e) => e.fullIndex).join(','), [visibleEntries])
-  const lastVisibleDeckKeyRef = useRef('')
 
   const visibleIndexFromFull = useCallback(
     (full: number) => visibleEntries.findIndex((e) => e.fullIndex === full),
@@ -422,7 +431,7 @@ export function CaseStudyPresentationOverlay({
   )
 
   useEffect(() => {
-    setImagePan({ x: 0, y: 0 })
+    queueMicrotask(() => setImagePan({ x: 0, y: 0 }))
   }, [resolvedActiveFullIndex, imageScale])
 
   useLayoutEffect(() => {
@@ -479,7 +488,7 @@ export function CaseStudyPresentationOverlay({
   useEffect(() => {
     if (!open) return
     slideCaptureRootsRef.current.length = slides.length
-    void runCaptureThumbnails()
+    void Promise.resolve().then(() => runCaptureThumbnails())
   }, [open, slides.length, runCaptureThumbnails])
 
   useEffect(() => {
@@ -542,15 +551,18 @@ export function CaseStudyPresentationOverlay({
   }, [])
 
   useLayoutEffect(() => {
-    if (!open || !scrollRef.current || visibleEntries.length === 0) return
+    if (!open) {
+      lastSyncedDeckKeyRef.current = ''
+      return
+    }
+    if (!scrollRef.current || visibleEntries.length === 0) return
     const el = scrollRef.current
     const w = el.clientWidth
     if (w <= 0) return
     const vi = visibleEntries.findIndex((e) => e.fullIndex === resolvedActiveFullIndex)
     if (vi < 0) return
     const target = vi * w
-    const deckReshaped = lastVisibleDeckKeyRef.current !== visibleDeckKey
-    lastVisibleDeckKeyRef.current = visibleDeckKey
+    const deckReshaped = lastSyncedDeckKeyRef.current !== visibleDeckKey
     const diff = Math.abs(el.scrollLeft - target)
     if (deckReshaped || diff > w * 1.05) {
       ignoreScrollEmitRef.current = true
@@ -560,6 +572,7 @@ export function CaseStudyPresentationOverlay({
         ignoreScrollEmitRef.current = false
       })
     }
+    lastSyncedDeckKeyRef.current = visibleDeckKey
   }, [resolvedActiveFullIndex, open, visibleEntries, visibleDeckKey])
 
   useEffect(() => {
