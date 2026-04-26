@@ -10,7 +10,26 @@ import {
   type PointerEvent as ReactPointerEvent,
   type RefObject,
 } from 'react'
+import { isSideQuestVideoUrl } from '../data/sidequests'
 import { FLOW_NODE_COUNT, FLOW_PERIOD, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from '../lib/flowingLineWave'
+
+function FlowLineNodePreview({ src }: { src: string }) {
+  const cls = 'h-full w-full object-cover'
+  if (isSideQuestVideoUrl(src)) {
+    return (
+      <video
+        src={src}
+        className={cls}
+        muted
+        playsInline
+        loop
+        autoPlay
+        aria-hidden
+      />
+    )
+  }
+  return <img src={src} alt="" draggable={false} className={cls} />
+}
 
 /** Distinct idle loops per square (Show & tell). Hover resets to still + scale-up. */
 type IdleMotion = {
@@ -389,7 +408,11 @@ export function FlowingLine({
                   : undefined
               }
               aria-hidden={onNodeClick ? undefined : true}
-              aria-label={onNodeClick ? `Open sidequest ${i + 1}` : undefined}
+              aria-label={
+                onNodeClick
+                  ? `Open ${getNodeTitle?.(i)?.trim() || `sidequest ${i + 1}`}`
+                  : undefined
+              }
             >
               <div className="-m-3 flex items-center justify-center overflow-visible p-3 [perspective:160px]">
                 {userActive ? (
@@ -400,12 +423,7 @@ export function FlowingLine({
                     />
                     {previewSrc ? (
                       <div className="relative z-[1] size-4 shrink-0 scale-[5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] md:size-5">
-                        <img
-                          src={previewSrc}
-                          alt=""
-                          draggable={false}
-                          className="h-full w-full object-cover"
-                        />
+                        <FlowLineNodePreview src={previewSrc} />
                       </div>
                     ) : (
                       <div className="relative z-[1] size-4 shrink-0 scale-[5] rounded-none bg-fg/92 brightness-110 md:size-5" />
@@ -452,12 +470,7 @@ export function FlowingLine({
                       />
                       {previewSrc ? (
                         <div className="relative z-[1] size-4 shrink-0 scale-[5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] md:size-5">
-                          <img
-                            src={previewSrc}
-                            alt=""
-                            draggable={false}
-                            className="h-full w-full object-cover"
-                          />
+                          <FlowLineNodePreview src={previewSrc} />
                         </div>
                       ) : (
                         <div className="relative z-[1] size-4 shrink-0 scale-[5] rounded-none bg-fg/92 brightness-110 md:size-5" />
@@ -513,7 +526,12 @@ export function FlowingLine({
             transition={{ duration: reducedMotion ? 0.01 : 0.12, ease: [0.25, 0.1, 0.25, 1] }}
             className="pointer-events-none absolute bottom-1 left-1/2 z-[19] flex min-h-9 w-[min(20rem,calc(100%-5.5rem))] -translate-x-1/2 items-center justify-center px-1 text-center md:bottom-2 md:min-h-10"
           >
-            <span className="line-clamp-2 w-full font-mono text-[10px] font-normal leading-tight text-fg/90 drop-shadow-[0_1px_0_var(--color-bg)] md:text-[11px]">
+            <span
+              className={[
+                'line-clamp-2 w-full font-mono font-normal leading-tight text-fg/90 drop-shadow-[0_1px_0_var(--color-bg)]',
+                hoveredTitle.length >= 18 ? 'text-[9px] md:text-[10px]' : 'text-[10px] md:text-[11px]',
+              ].join(' ')}
+            >
               {hoveredTitle}
             </span>
           </motion.div>
