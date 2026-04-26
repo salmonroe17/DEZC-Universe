@@ -71,7 +71,7 @@ export function ExperimentalSideQuestsPanel({
     (nodeIndex: number) => {
       if (sidequestN === 0) return undefined
       const sq = SIDEQUESTS[nodeIndex % sidequestN]!
-      return sq.images[0] ?? sq.cover
+      return sq.galleryImages[0] ?? sq.coverImage
     },
     [sidequestN],
   )

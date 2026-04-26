@@ -5,7 +5,12 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CaseStudiesCardModal } from '../components/CaseStudiesCardModal'
 import { ThemeSwatches } from '../components/ThemeSwatches'
-import { SIDEQUESTS, getSideQuestById, getSideQuestIndexById } from '../data/sidequests'
+import {
+  SIDEQUESTS,
+  getSideQuestById,
+  getSideQuestIndexById,
+  isSideQuestVideoUrl,
+} from '../data/sidequests'
 
 /** Calm ease — main image crossfade (not the thumbnail rail) */
 const MOTION_EASE = [0.25, 0.1, 0.25, 1] as const
@@ -260,23 +265,44 @@ function SideQuestCarousel({
                         : [LINE, LINE_HOVER, 'bg-surface'].join(' '),
                     ].join(' ')}
                   >
-                    {sq.cover ? (
+                    {sq.coverImage ? (
                       <>
-                        <img
-                          src={sq.cover}
-                          alt=""
-                          className={[
-                            'h-full w-full object-cover',
-                            isCenter
-                              ? 'grayscale-0'
-                              : [
-                                  'grayscale opacity-50',
-                                  'transition-[filter,opacity] duration-200 ease-out',
-                                  'group-hover:opacity-80 group-hover:grayscale-[0.2]',
-                                ].join(' '),
-                          ].join(' ')}
-                          draggable={false}
-                        />
+                        {isSideQuestVideoUrl(sq.coverImage) ? (
+                          <video
+                            src={sq.coverImage}
+                            muted
+                            playsInline
+                            loop
+                            autoPlay
+                            className={[
+                              'h-full w-full object-cover',
+                              isCenter
+                                ? 'grayscale-0'
+                                : [
+                                    'grayscale opacity-50',
+                                    'transition-[filter,opacity] duration-200 ease-out',
+                                    'group-hover:opacity-80 group-hover:grayscale-[0.2]',
+                                  ].join(' '),
+                            ].join(' ')}
+                            aria-hidden
+                          />
+                        ) : (
+                          <img
+                            src={sq.coverImage}
+                            alt=""
+                            className={[
+                              'h-full w-full object-cover',
+                              isCenter
+                                ? 'grayscale-0'
+                                : [
+                                    'grayscale opacity-50',
+                                    'transition-[filter,opacity] duration-200 ease-out',
+                                    'group-hover:opacity-80 group-hover:grayscale-[0.2]',
+                                  ].join(' '),
+                            ].join(' ')}
+                            draggable={false}
+                          />
+                        )}
                         {!isCenter && offset != null && offset !== 0 ? (
                           <span
                             className="pointer-events-none absolute inset-0 z-[1] bg-bg/50 transition-[background-color,opacity] duration-200 group-hover:bg-bg/28"
@@ -339,15 +365,30 @@ function ThumbnailGrid({
                 : [LINE, LINE_HOVER, 'hover:brightness-105'].join(' '),
             ].join(' ')}
           >
-            <img
-              src={src}
-              alt=""
-              className={[
-                'absolute inset-0 h-full w-full object-cover transition-[filter] duration-200 ease-out',
-                active ? 'grayscale-0' : 'grayscale group-hover:grayscale-0',
-              ].join(' ')}
-              draggable={false}
-            />
+            {isSideQuestVideoUrl(src) ? (
+              <video
+                src={src}
+                muted
+                playsInline
+                loop
+                autoPlay
+                className={[
+                  'absolute inset-0 h-full w-full object-cover transition-[filter] duration-200 ease-out',
+                  active ? 'grayscale-0' : 'grayscale group-hover:grayscale-0',
+                ].join(' ')}
+                aria-hidden
+              />
+            ) : (
+              <img
+                src={src}
+                alt=""
+                className={[
+                  'absolute inset-0 h-full w-full object-cover transition-[filter] duration-200 ease-out',
+                  active ? 'grayscale-0' : 'grayscale group-hover:grayscale-0',
+                ].join(' ')}
+                draggable={false}
+              />
+            )}
             {active ? (
               <>
                 <span
@@ -388,10 +429,11 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [isPanning, setIsPanning] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const imageRef = useRef<HTMLImageElement | null>(null)
+  const contentRef = useRef<HTMLImageElement | HTMLVideoElement | null>(null)
   const panRef = useRef(pan)
   const zoomRef = useRef(zoom)
   const panDrag = useRef<{ startX: number; startY: number; origX: number; origY: number } | null>(null)
+  const isVideo = src != null && isSideQuestVideoUrl(src)
 
   useEffect(() => {
     setZoom(MAIN_IMAGE_ZOOM_MIN)
@@ -406,12 +448,12 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
 
   const applyClamp = useCallback(() => {
     const c = containerRef.current
-    const img = imageRef.current
-    if (!c || !img) return
+    const el = contentRef.current
+    if (!c || !el) return
     const cw = c.clientWidth
     const ch = c.clientHeight
-    const bw = img.offsetWidth
-    const bh = img.offsetHeight
+    const bw = el.offsetWidth
+    const bh = el.offsetHeight
     if (bw <= 0 || bh <= 0) return
     setPan((p) => clampMainImagePan(p, bw, bh, cw, ch, zoomRef.current))
   }, [])
@@ -430,7 +472,7 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
     return () => ro.disconnect()
   }, [applyClamp])
 
-  const onImageLoad = useCallback(() => {
+  const onMediaReady = useCallback(() => {
     applyClamp()
   }, [applyClamp])
 
@@ -468,12 +510,12 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
       if (!d) return
       e.preventDefault()
       const c = containerRef.current
-      const img = imageRef.current
-      if (!c || !img) return
+      const el = contentRef.current
+      if (!c || !el) return
       const cw = c.clientWidth
       const ch = c.clientHeight
-      const bw = img.offsetWidth
-      const bh = img.offsetHeight
+      const bw = el.offsetWidth
+      const bh = el.offsetHeight
       if (bw <= 0 || bh <= 0) return
       const nx = d.origX + (e.clientX - d.startX)
       const ny = d.origY + (e.clientY - d.startY)
@@ -528,15 +570,33 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
                     cursor: isZoomed ? (isPanning ? 'grabbing' : 'grab') : 'default',
                   }}
                 >
-                  <img
-                    ref={imageRef}
-                    src={src}
-                    alt=""
-                    onLoad={onImageLoad}
-                    className="max-h-full max-w-full object-contain antialiased [image-rendering:auto] pointer-events-none"
-                    style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
-                    draggable={false}
-                  />
+                  {isVideo ? (
+                    <video
+                      ref={(el) => {
+                        contentRef.current = el
+                      }}
+                      src={src}
+                      muted
+                      playsInline
+                      loop
+                      autoPlay
+                      onLoadedMetadata={onMediaReady}
+                      className="max-h-full max-w-full object-contain antialiased pointer-events-none"
+                      style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
+                    />
+                  ) : (
+                    <img
+                      ref={(el) => {
+                        contentRef.current = el
+                      }}
+                      src={src}
+                      alt=""
+                      onLoad={onMediaReady}
+                      className="max-h-full max-w-full object-contain antialiased [image-rendering:auto] pointer-events-none"
+                      style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto' }}
+                      draggable={false}
+                    />
+                  )}
                 </div>
               </motion.div>
             ) : (
@@ -642,7 +702,7 @@ export default function SideQuestViewerPage() {
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
         e.preventDefault()
         const c = sidequestId ? getSideQuestById(sidequestId) : null
-        const n = c?.images.length ?? 0
+        const n = c?.galleryImages.length ?? 0
         if (n > 1) {
           setImageIndex((i) =>
             e.key === 'ArrowLeft' ? mod(i - 1, n) : mod(i + 1, n),
@@ -668,7 +728,7 @@ export default function SideQuestViewerPage() {
     )
   }
 
-  const images = current.images
+  const images = current.galleryImages
   const hasImages = images.length > 0
   const safeImageIndex = hasImages ? Math.min(imageIndex, images.length - 1) : 0
   const mainSrc = hasImages ? images[safeImageIndex]! : null
