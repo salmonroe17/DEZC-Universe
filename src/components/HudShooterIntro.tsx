@@ -955,9 +955,9 @@ export function HudShooterIntro() {
   }, [resetRun])
 
   const exitToIdle = useCallback(() => {
-    const ph = phaseRef.current
-    const shouldSubmitToLeaderboard =
-      (ph === 'game' || ph === 'winddown') && scoreRef.current > 0
+    // Exit is only shown while uiPhase === 'game' (intro explode, shooting, winddown).
+    // Submit so an early Exit still records the run like a full finish (same sessionId).
+    const shouldSubmitToLeaderboard = uiPhase === 'game' && scoreRef.current > 0
 
     if (shouldSubmitToLeaderboard) {
       const fs = scoreRef.current
@@ -966,8 +966,13 @@ export function HudShooterIntro() {
       void (async () => {
         const submitResult = await submitLeaderboardEntry(fs, fn, sid)
         setLeaderboardRank(submitResult.rank)
+        if (submitResult.leaderboard.length > 0) {
+          setHighScores(
+            topLeaderboardEntries(submitResult.leaderboard, LEADERBOARD_DISPLAY_LIMIT),
+          )
+        }
         const latest = await fetchLeaderboardTop()
-        setHighScores(latest)
+        setHighScores(topLeaderboardEntries(latest, LEADERBOARD_DISPLAY_LIMIT))
         persistLastTargetsHit(fs)
         setLastTargetsHit(fs)
         setCodename(generateUniqueCodename())
@@ -993,7 +998,7 @@ export function HudShooterIntro() {
     setCombatHud(false)
     enteredGameRef.current = false
     syncHudActive()
-  }, [syncHudActive])
+  }, [syncHudActive, uiPhase])
 
   // Resize game + starfield canvases to container
   useLayoutEffect(() => {
@@ -1427,8 +1432,13 @@ export function HudShooterIntro() {
             const sid = gameSessionIdRef.current
             const submitResult = await submitLeaderboardEntry(fs, fn, sid)
             setLeaderboardRank(submitResult.rank)
+            if (submitResult.leaderboard.length > 0) {
+              setHighScores(
+                topLeaderboardEntries(submitResult.leaderboard, LEADERBOARD_DISPLAY_LIMIT),
+              )
+            }
             const latest = await fetchLeaderboardTop()
-            setHighScores(latest)
+            setHighScores(topLeaderboardEntries(latest, LEADERBOARD_DISPLAY_LIMIT))
             persistLastTargetsHit(fs)
             setLastTargetsHit(fs)
             setCodename(generateUniqueCodename())

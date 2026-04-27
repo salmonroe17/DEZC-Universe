@@ -202,6 +202,7 @@ export async function fetchLeaderboardTop(): Promise<HighScoreEntry[]> {
   try {
     const res = await fetch(u, {
       method: 'GET',
+      cache: 'no-store',
       headers: { Accept: 'application/json' },
     })
     if (!res.ok) throw new Error(`GET ${res.status}`)
