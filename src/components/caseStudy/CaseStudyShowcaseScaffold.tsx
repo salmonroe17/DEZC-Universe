@@ -25,6 +25,9 @@ import { SidebarNav } from '../system/SidebarNav'
 const caseStudiesNavButtonClass =
   'cursor-pointer border-0 bg-transparent p-0 font-[inherit] text-inherit underline decoration-cell-border underline-offset-[3px] hover:decoration-hud'
 
+/** Ignore tiny scroll deltas / layout nudges; require this much net movement to change chrome mode. */
+const CHROME_SCROLL_COMMIT_PX = 12
+
 export type CaseStudyShowcaseScaffoldProps = {
   /** Short label above the TOC (case study name). */
   sidebarKicker: string
@@ -67,13 +70,12 @@ export function CaseStudyShowcaseScaffold({
 }: CaseStudyShowcaseScaffoldProps) {
   const sectionsNavDialogTitleId = useId()
   const sectionsNavBtnRef = useRef<HTMLButtonElement>(null)
-  /** Until ResizeObserver measures the portaled header, avoid under-counting (nav + sections row + progress rail). */
-  const [chromeHeight, setChromeHeight] = useState(92)
-  const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(
-    navSections,
-    { stickyOffsetPx: chromeHeight },
-  )
-  const chromeRef = useRef<HTMLElement | null>(null)
+  /** Row 1 content box; measured while expanded so spacer/chrome height stays stable while row 1 is clipped. */
+  const topRowContentRef = useRef<HTMLDivElement | null>(null)
+  /** Sections row + progress bar (everything below row 1). */
+  const tailChromeRef = useRef<HTMLDivElement | null>(null)
+  const [topRowExpandedPx, setTopRowExpandedPx] = useState(56)
+  const [tailChromePx, setTailChromePx] = useState(80)
   const caseStudiesNavRef = useRef<HTMLButtonElement>(null)
   const sideQuestsNavRef = useRef<HTMLButtonElement>(null)
   const showSidebarBtnRef = useRef<HTMLButtonElement>(null)
@@ -87,7 +89,12 @@ export function CaseStudyShowcaseScaffold({
   const [presentationActiveIndex, setPresentationActiveIndex] = useState(0)
   /** max-lg only: first chrome row (Home / Case studies / Swatches) hides on scroll down; shows again on scroll up. */
   const [showTopChromeRow, setShowTopChromeRow] = useState(true)
-  const lastScrollYRef = useRef(0)
+
+  const chromeHeight = tailChromePx + (showTopChromeRow ? topRowExpandedPx : 0)
+  const { activeId, onNavigate, navSections: sidebarSections } = useCaseStudyScrollspy(
+    navSections,
+    { stickyOffsetPx: chromeHeight },
+  )
 
   const closePresentationMode = useCallback(() => {
     setPresentationMode(false)
@@ -141,22 +148,34 @@ export function CaseStudyShowcaseScaffold({
   }, [])
 
   useLayoutEffect(() => {
-    const el = chromeRef.current
-    if (!el) return undefined
+    const top = topRowContentRef.current
+    const tail = tailChromeRef.current
+    if (!tail) return undefined
 
     const sync = () => {
-      setChromeHeight(Math.ceil(el.getBoundingClientRect().height))
+      setTailChromePx(Math.ceil(tail.getBoundingClientRect().height))
+      if (showTopChromeRow && top) {
+        const h = Math.ceil(top.getBoundingClientRect().height)
+        if (h > 0) setTopRowExpandedPx(h)
+      }
     }
-    sync()
 
-    const ro = new ResizeObserver(sync)
-    ro.observe(el)
-    window.addEventListener('resize', sync)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', sync)
+    sync()
+    const roTail = new ResizeObserver(sync)
+    roTail.observe(tail)
+    let roTop: ResizeObserver | undefined
+    if (top) {
+      roTop = new ResizeObserver(sync)
+      roTop.observe(top)
     }
-  }, [])
+    const onWin = () => sync()
+    window.addEventListener('resize', onWin)
+    return () => {
+      roTail.disconnect()
+      roTop?.disconnect()
+      window.removeEventListener('resize', onWin)
+    }
+  }, [showTopChromeRow])
 
   useLayoutEffect(() => {
     if (sidebarWasHiddenRef.current && !sidebarHidden) {
@@ -165,108 +184,169 @@ export function CaseStudyShowcaseScaffold({
     sidebarWasHiddenRef.current = sidebarHidden
   }, [sidebarHidden])
 
+  const presentationModeRef = useRef(presentationMode)
+  useLayoutEffect(() => {
+    presentationModeRef.current = presentationMode
+  }, [presentationMode])
+
+  const scrollAccRef = useRef({ lastY: 0, down: 0, up: 0 })
+
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return
+    scrollAccRef.current.lastY = window.scrollY
+    scrollAccRef.current.down = 0
+    scrollAccRef.current.up = 0
+  }, [presentationMode])
+
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
 
     const mqlNarrow = window.matchMedia('(max-width: 1023px)')
+    let rafId = 0
 
-    const isNarrowTwoRow = () => mqlNarrow.matches
+    const flush = () => {
+      rafId = 0
+      const y = window.scrollY
+      if (presentationModeRef.current) {
+        scrollAccRef.current.lastY = y
+        return
+      }
+
+      if (!mqlNarrow.matches) {
+        scrollAccRef.current.lastY = y
+        scrollAccRef.current.down = 0
+        scrollAccRef.current.up = 0
+        setShowTopChromeRow(true)
+        return
+      }
+
+      const acc = scrollAccRef.current
+      const dy = y - acc.lastY
+      acc.lastY = y
+
+      if (y < 20) {
+        acc.down = 0
+        acc.up = 0
+        setShowTopChromeRow(true)
+        return
+      }
+
+      if (Math.abs(dy) < 0.5) return
+
+      if (dy > 0) {
+        acc.down += dy
+        acc.up = 0
+        if (acc.down >= CHROME_SCROLL_COMMIT_PX) {
+          acc.down = 0
+          setShowTopChromeRow((prev) => (prev ? false : prev))
+        }
+      } else {
+        acc.up += -dy
+        acc.down = 0
+        if (acc.up >= CHROME_SCROLL_COMMIT_PX) {
+          acc.up = 0
+          setShowTopChromeRow((prev) => (prev ? prev : true))
+        }
+      }
+    }
 
     const onScroll = () => {
-      if (presentationMode) return
-      if (!isNarrowTwoRow()) {
-        setShowTopChromeRow(true)
-        return
-      }
-      const y = window.scrollY
-      if (y < 20) {
-        setShowTopChromeRow(true)
-        lastScrollYRef.current = y
-        return
-      }
-      const prev = lastScrollYRef.current
-      lastScrollYRef.current = y
-      if (y < prev - 2) {
-        setShowTopChromeRow(true)
-      } else if (y > prev + 2) {
-        setShowTopChromeRow(false)
-      }
+      if (rafId) return
+      rafId = requestAnimationFrame(flush)
     }
 
     const onLayoutChange = () => {
-      if (!isNarrowTwoRow()) {
+      scrollAccRef.current.lastY = window.scrollY
+      scrollAccRef.current.down = 0
+      scrollAccRef.current.up = 0
+      if (!mqlNarrow.matches) {
         setShowTopChromeRow(true)
       }
     }
 
-    lastScrollYRef.current = window.scrollY
+    scrollAccRef.current.lastY = window.scrollY
     window.addEventListener('scroll', onScroll, { passive: true })
     mqlNarrow.addEventListener('change', onLayoutChange)
     return () => {
+      if (rafId) cancelAnimationFrame(rafId)
       window.removeEventListener('scroll', onScroll)
       mqlNarrow.removeEventListener('change', onLayoutChange)
     }
-  }, [presentationMode])
+  }, [])
 
   const collapseTopRowOnNarrow = !presentationMode && !showTopChromeRow
-  const topChromeRowGridClass = [
-    'grid transition-[grid-template-rows] ease-out motion-reduce:transition-none',
-    'lg:grid-rows-[1fr]',
-    collapseTopRowOnNarrow ? 'max-lg:grid-rows-[0fr] max-lg:duration-200' : 'max-lg:grid-rows-[1fr] max-lg:duration-200',
-  ].join(' ')
 
   const chromeHeader = (
-    <header
-      ref={chromeRef}
-      className="site-frosted-nav fixed inset-x-0 top-0 z-[80] flex flex-col"
-    >
+    <header className="site-frosted-nav fixed inset-x-0 top-0 z-[80] flex flex-col">
       <div
-        className={topChromeRowGridClass}
+        className={[
+          'max-lg:min-h-0 max-lg:overflow-hidden max-lg:transition-[height] max-lg:duration-200 max-lg:ease-out motion-reduce:max-lg:transition-none',
+          'max-lg:h-[var(--cs-top-row-clip)]',
+          'lg:h-auto lg:overflow-visible',
+        ].join(' ')}
+        style={
+          {
+            ['--cs-top-row-clip' as string]: collapseTopRowOnNarrow
+              ? '0px'
+              : `${Math.max(1, topRowExpandedPx)}px`,
+          } as CSSProperties
+        }
         aria-hidden={collapseTopRowOnNarrow ? true : undefined}
       >
-        <div className="min-h-0 overflow-hidden [contain:content]">
-          <FigmaFrame className="flex w-full flex-wrap items-center justify-between gap-2 py-2.5 sm:gap-3 sm:py-3 lg:min-h-12 lg:flex-nowrap lg:items-center lg:py-0">
-            <nav className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-normal leading-none text-fg md:gap-x-2 md:text-[11px]">
-              <Link
-                to="/"
-                className="underline decoration-cell-border underline-offset-[3px] hover:decoration-hud"
-              >
-                Home
-              </Link>
-              <span className="text-fg-muted">•</span>
-              <button
-                ref={caseStudiesNavRef}
-                type="button"
-                className={caseStudiesNavButtonClass}
-                onClick={onCaseStudiesNavClick}
-              >
-                Case studies
-              </button>
-              <span className="text-fg-muted">•</span>
-              <button
-                ref={sideQuestsNavRef}
-                type="button"
-                className={caseStudiesNavButtonClass}
-                onClick={onSideQuestsNavClick}
-              >
-                Side quests
-              </button>
-            </nav>
-            <ThemeSwatches />
-          </FigmaFrame>
+        <div
+          className={[
+            'min-h-0 overflow-hidden [contain:content] lg:overflow-visible',
+            'max-lg:transition-transform max-lg:duration-200 max-lg:ease-out motion-reduce:max-lg:transition-none',
+            collapseTopRowOnNarrow ? 'max-lg:-translate-y-full' : 'max-lg:translate-y-0',
+            'lg:translate-y-0',
+          ].join(' ')}
+        >
+          <div ref={topRowContentRef} className="min-h-0">
+            <FigmaFrame className="flex w-full flex-wrap items-center justify-between gap-2 py-2.5 sm:gap-3 sm:py-3 lg:min-h-12 lg:flex-nowrap lg:items-center lg:py-0">
+              <nav className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-normal leading-none text-fg md:gap-x-2 md:text-[11px]">
+                <Link
+                  to="/"
+                  className="underline decoration-cell-border underline-offset-[3px] hover:decoration-hud"
+                >
+                  Home
+                </Link>
+                <span className="text-fg-muted">•</span>
+                <button
+                  ref={caseStudiesNavRef}
+                  type="button"
+                  className={caseStudiesNavButtonClass}
+                  onClick={onCaseStudiesNavClick}
+                >
+                  Case studies
+                </button>
+                <span className="text-fg-muted">•</span>
+                <button
+                  ref={sideQuestsNavRef}
+                  type="button"
+                  className={caseStudiesNavButtonClass}
+                  onClick={onSideQuestsNavClick}
+                >
+                  Side quests
+                </button>
+              </nav>
+              <ThemeSwatches />
+            </FigmaFrame>
+          </div>
         </div>
       </div>
-      <div className="w-full max-w-none px-0 lg:hidden">
-        <CaseStudyMobileSectionsRow
-          ref={sectionsNavBtnRef}
-          dialogTitleId={sectionsNavDialogTitleId}
-          sections={sidebarSections}
-          activeId={activeId}
-          open={sectionsNavOpen}
-          onOpenChange={setSectionsNavOpen}
-        />
+      <div ref={tailChromeRef} className="flex w-full flex-col">
+        <div className="w-full max-w-none px-0 lg:hidden">
+          <CaseStudyMobileSectionsRow
+            ref={sectionsNavBtnRef}
+            dialogTitleId={sectionsNavDialogTitleId}
+            sections={sidebarSections}
+            activeId={activeId}
+            open={sectionsNavOpen}
+            onOpenChange={setSectionsNavOpen}
+          />
+        </div>
+        <CaseStudyScrollProgressBar />
       </div>
-      <CaseStudyScrollProgressBar />
     </header>
   )
 

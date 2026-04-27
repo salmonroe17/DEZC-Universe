@@ -47,6 +47,13 @@ const LINE_HEADER_B = 'box-border border-solid [border-width:0_0_1px_0] border-b
 /** Rail: bottom hairline only — top comes from `LINE_HEADER_B` (avoid 2px stack under header row) */
 const LINE_RAIL_TB = 'box-border border-solid [border-width:0_0_1px_0] border-b-cell-border'
 
+/**
+ * Below lg: hero fills a tall, stable viewport band (document scroll — not a nested sticky pane).
+ * 52vh → 58vh (sm) → 60vh (md), capped for very large tablets.
+ */
+const MOBILE_HERO_MIN_H_CLASSES =
+  'max-lg:min-h-[clamp(420px,52vh,760px)] sm:max-lg:min-h-[clamp(420px,58vh,760px)] md:max-lg:min-h-[clamp(420px,60vh,760px)]'
+
 const FOCUS_1 =
   'focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-fg)_40%,transparent)]'
 
@@ -198,6 +205,7 @@ function SideQuestCarousel({
     <div
       className={[
         'relative box-border flex h-[58px] w-full min-w-0 shrink-0 items-stretch py-2',
+        'max-lg:sticky max-lg:top-[46px] max-lg:z-[35] max-lg:bg-bg',
         LINE_RAIL_TB,
         'bg-bg',
         'pl-4 pr-4',
@@ -537,7 +545,14 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
   const isZoomed = zoom > MAIN_IMAGE_ZOOM_MIN
 
   return (
-    <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-bg">
+    <div
+      className={[
+        'relative flex min-w-0 flex-col overflow-hidden bg-bg',
+        MOBILE_HERO_MIN_H_CLASSES,
+        'max-lg:flex-none',
+        'lg:min-h-0 lg:flex-1',
+      ].join(' ')}
+    >
       <div
         ref={containerRef}
         className="relative min-h-0 w-full min-w-0 flex-1 overflow-hidden"
@@ -548,7 +563,7 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
             {src ? (
               <motion.div
                 key={imageKey}
-                className="flex max-h-full max-w-full items-center justify-center"
+                className="flex h-full w-full max-h-full max-w-full items-center justify-center"
                 initial={reducedMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={reducedMotion ? undefined : { opacity: 0 }}
@@ -556,7 +571,7 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
                 style={{ maxWidth: '100%', maxHeight: '100%' }}
               >
                 <div
-                  className="flex max-h-full max-w-full select-none"
+                  className="flex h-full w-full max-h-full max-w-full select-none items-center justify-center"
                   onPointerDown={onPointerDown}
                   onPointerMove={onPointerMove}
                   onPointerUp={onPointerUp}
@@ -599,7 +614,7 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
             ) : (
               <motion.div
                 key="placeholder"
-                className="h-full w-full min-h-[12rem] flex-1 bg-fg/5"
+                className="h-full w-full min-h-[12rem] flex-1 bg-fg/5 lg:min-h-0"
                 style={{ minHeight: 'min(50%, 240px)' }}
                 initial={reducedMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -713,7 +728,9 @@ function SideQuestViewerShell({
   return (
     <div
       className={[
-        'sidequest-viewer flex h-dvh max-h-dvh w-full min-w-0 flex-col overflow-hidden',
+        'sidequest-viewer flex w-full min-w-0 flex-col',
+        'max-lg:min-h-dvh max-lg:overflow-x-clip',
+        'lg:h-dvh lg:max-h-dvh lg:overflow-hidden lg:min-h-0',
         'bg-bg text-fg',
         'font-mono font-normal not-italic',
         'antialiased subpixel-antialiased [text-rendering:optimizeLegibility]',
@@ -796,33 +813,35 @@ function SideQuestViewerShell({
 
       <main
         className={[
-          'box-border flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden',
-          'min-[1024px]:grid min-[1024px]:min-h-0',
+          'box-border flex w-full min-w-0 flex-col',
+          'max-lg:flex-none max-lg:overflow-visible',
+          'min-[1024px]:grid min-[1024px]:min-h-0 min-[1024px]:flex-1 min-[1024px]:overflow-hidden',
           'min-[1024px]:grid-cols-[minmax(0,68fr)_minmax(0,32fr)]',
           'min-[1024px]:items-stretch min-[1024px]:gap-0',
         ].join(' ')}
       >
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col min-[1024px]:h-full min-[1024px]:self-stretch">
+        <div className="flex min-w-0 flex-col max-lg:flex-none min-[1024px]:h-full min-[1024px]:min-h-0 min-[1024px]:flex-1 min-[1024px]:self-stretch">
           <MainImageView key={mainKey} src={mainSrc} imageKey={mainKey} />
         </div>
 
         <aside
           className={[
-            'box-border flex min-h-0 w-full min-w-0',
+            'box-border flex w-full min-w-0',
+            'max-lg:flex-none',
             'border-t border-t-cell-border min-[1024px]:border-t-0',
             'min-[1024px]:border-l min-[1024px]:border-l-cell-border',
+            'min-[1024px]:min-h-0',
             'pl-4 pr-4 pb-4 pt-4',
-            'min-[1024px]:h-full min-[1024px]:min-h-0 min-[1024px]:max-h-full min-[1024px]:self-stretch',
+            'min-[1024px]:h-full min-[1024px]:max-h-full min-[1024px]:self-stretch',
             'min-[1024px]:pl-[26px] min-[1024px]:pr-4 min-[1024px]:pb-4 min-[1024px]:pt-[14px]',
           ].join(' ')}
         >
           <div
             className={[
               'sidequest-viewer__scroll',
-              'min-h-0 w-full min-w-0',
-              'min-[1024px]:max-h-full min-[1024px]:min-h-0 min-[1024px]:flex-1',
+              'w-full min-w-0',
+              'min-[1024px]:min-h-0 min-[1024px]:max-h-full min-[1024px]:flex-1',
               'min-[1024px]:overflow-y-auto',
-              'max-[1023px]:max-h-[48vh] max-[1023px]:overflow-y-auto',
             ].join(' ')}
           >
             <div className="w-full max-w-full border-b border-b-cell-border pb-6">

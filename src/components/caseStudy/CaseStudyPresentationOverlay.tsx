@@ -44,6 +44,8 @@ const controlsBarTransformAnimClass =
 const TEXT_SCALE_MIN = 0.5
 const TEXT_SCALE_MAX = 3
 const TEXT_SCALE_STEP = 0.25
+/** Matches `textScale === 1` × body zoom factor on desktop; fixed on narrow viewports (no text +/- controls). */
+const PRESENTATION_TEXT_SLIDE_ZOOM_BASE = 1.5
 const IMAGE_SCALE_MIN = 0.5
 const IMAGE_SCALE_MAX = 3
 const IMAGE_SCALE_STEP = 0.25
@@ -369,6 +371,9 @@ export function CaseStudyPresentationOverlay({
   const [imageScale, setImageScale] = useState(1)
   const [theme, setTheme] = useState<PresentationTheme>('gray')
   const [imagePan, setImagePan] = useState<PanPoint>({ x: 0, y: 0 })
+  const [presentationMdUp, setPresentationMdUp] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : true,
+  )
 
   const slideCaptureRootsRef = useRef<Array<HTMLDivElement | null>>([])
   const captureRunIdRef = useRef(0)
@@ -441,6 +446,15 @@ export function CaseStudyPresentationOverlay({
     }
   }, [open, activeIndex, resolvedActiveFullIndex, onActiveIndexChange])
 
+  useLayoutEffect(() => {
+    if (!open) return
+    const mql = window.matchMedia('(min-width: 768px)')
+    const sync = () => setPresentationMdUp(mql.matches)
+    sync()
+    mql.addEventListener('change', sync)
+    return () => mql.removeEventListener('change', sync)
+  }, [open])
+
   /** Per-slide preview only (no forward-fill) so image thumbnails stay aligned to the correct slide. */
   const resolvedThumbs = useMemo(
     () => slides.map((slide, i) => thumbnailSrcs?.[i] ?? slide.thumbnailSrc),
@@ -499,7 +513,16 @@ export function CaseStudyPresentationOverlay({
     }
     const id = window.setTimeout(() => void runCaptureThumbnails(), 360)
     return () => clearTimeout(id)
-  }, [open, textScale, theme, imageScale, textSlidesVisible, controlsVisible, runCaptureThumbnails])
+  }, [
+    open,
+    textScale,
+    presentationMdUp,
+    theme,
+    imageScale,
+    textSlidesVisible,
+    controlsVisible,
+    runCaptureThumbnails,
+  ])
 
   useEffect(() => {
     if (!open) return
@@ -827,7 +850,7 @@ export function CaseStudyPresentationOverlay({
               </button>
               <button
                 type="button"
-                className={ctrlBtnClass}
+                className={`${ctrlBtnClass} hidden md:flex`}
                 aria-label="Increase text size"
                 {...textPlusHold}
                 disabled={textScale >= TEXT_SCALE_MAX - 1e-6}
@@ -841,7 +864,7 @@ export function CaseStudyPresentationOverlay({
               </button>
               <button
                 type="button"
-                className={ctrlBtnClass}
+                className={`${ctrlBtnClass} hidden md:flex`}
                 aria-label="Decrease text size"
                 {...textMinusHold}
                 disabled={textScale <= TEXT_SCALE_MIN + 1e-6}
@@ -853,7 +876,12 @@ export function CaseStudyPresentationOverlay({
               >
                 <Minus {...iconInCtrl} aria-hidden />
               </button>
-              <button type="button" className={ctrlBtnClass} aria-label="Reset text size" onClick={() => setTextScale(1)}>
+              <button
+                type="button"
+                className={`${ctrlBtnClass} hidden md:flex`}
+                aria-label="Reset text size"
+                onClick={() => setTextScale(1)}
+              >
                 <ArrowClockwise {...iconInCtrl} aria-hidden />
               </button>
 
@@ -940,8 +968,13 @@ export function CaseStudyPresentationOverlay({
               <div
                 className="presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-y-auto overflow-x-hidden px-5 py-8 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 md:py-10"
                 style={{
-                  /* Text +/- only affects text slides; default textScale 1 ⇒ 1.5× vs original copy. */
-                  zoom: slide.slideKind === 'text' ? textScale * 1.5 : 1,
+                  /* Text +/- (md+) only; below md use fixed base zoom to match desktop default. */
+                  zoom:
+                    slide.slideKind === 'text'
+                      ? presentationMdUp
+                        ? textScale * PRESENTATION_TEXT_SLIDE_ZOOM_BASE
+                        : PRESENTATION_TEXT_SLIDE_ZOOM_BASE
+                      : 1,
                 }}
               >
                 {slide.slideKind !== 'text' ? (

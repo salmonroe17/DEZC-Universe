@@ -1,9 +1,7 @@
-import { useCallback, useMemo, useRef, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { SIDEQUESTS } from '../data/sidequests'
-import { FlowingLine } from './FlowingLine'
-import { ShowTellAmbientLines } from './ShowTellAmbientLines'
-import { ShowTellSandCanvas } from './ShowTellSandCanvas'
+import type { ReactNode } from 'react'
+import { SideQuestFlowingLineRail } from './sideQuest/SideQuestFlowingLineRail'
+import { SideQuestSandBackground } from './sideQuest/SideQuestSandBackground'
+import { useSideQuestTimelineController } from './sideQuest/useSideQuestTimelineController'
 import { quadrantHeadingClass, showTellSubtitleClass } from './showTellQuadrantTypography'
 
 /** Chamfered border + fill via ::before/::after (see index.css). */
@@ -42,72 +40,16 @@ export type ExperimentalSideQuestsPanelProps = {
 
 /**
  * “Side quests” / show & tell quadrant: ambient lines, sand, flowing timeline. Shared by
- * {@link ExperimentalGrid} and the case-study “Side quests” nav modal.
+ * {@link ExperimentalGrid} and the case-study “Side quests” nav modal. Timeline behavior is
+ * unified via {@link useSideQuestTimelineController} + {@link SideQuestFlowingLineRail}.
  */
 export function ExperimentalSideQuestsPanel({
   layout = 'quadrant',
   footerColumn = 'home-grid',
   topRightSlot,
 }: ExperimentalSideQuestsPanelProps) {
-  const navigate = useNavigate()
-  const sidequestN = SIDEQUESTS.length
-
-  const onShowTellNodeClick = useCallback(
-    (nodeIndex: number) => {
-      if (sidequestN === 0) return
-      const sq = SIDEQUESTS[nodeIndex % sidequestN]
-      if (!sq) return
-      navigate(`/sidequest/${sq.id}`)
-    },
-    [navigate, sidequestN],
-  )
-
-  const getNodePreviewSrc = useCallback(
-    (nodeIndex: number) => {
-      if (sidequestN === 0) return undefined
-      const sq = SIDEQUESTS[nodeIndex % sidequestN]!
-      return sq.galleryImages[0] ?? sq.coverImage
-    },
-    [sidequestN],
-  )
-
-  const getNodeTitle = useCallback(
-    (nodeIndex: number) => {
-      if (sidequestN === 0) return undefined
-      return SIDEQUESTS[nodeIndex % sidequestN]!.title
-    },
-    [sidequestN],
-  )
-
-  const sandLineRootRef = useRef<HTMLDivElement>(null)
-  const sandTrackRef = useRef<HTMLDivElement>(null)
-  const sandPhaseRef = useRef(0)
-  const sandHoveredNodeIndexRef = useRef<number | null>(null)
-  const sandScrollHUnitRef = useRef(0)
-  const sandRefs = useMemo(
-    () => ({
-      lineRootRef: sandLineRootRef,
-      trackRef: sandTrackRef,
-      phaseRef: sandPhaseRef,
-      hoveredNodeIndexRef: sandHoveredNodeIndexRef,
-    }),
-    [],
-  )
-
-  const lineBandClass =
-    layout === 'quadrant'
-      ? 'relative z-[1] flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-visible opacity-30 transition-opacity duration-300 ease-out group-hover/showtell:opacity-100 group-data-[quadrant-in-view]/showtell:opacity-100'
-      : 'relative z-[1] flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-visible opacity-100'
-
-  const sandStack = (
-    <>
-      <ShowTellAmbientLines
-        scrollHUnitRef={sandScrollHUnitRef}
-        hoveredNodeIndexRef={sandHoveredNodeIndexRef}
-      />
-      <ShowTellSandCanvas sandRefs={sandRefs} />
-    </>
-  )
+  const timeline = useSideQuestTimelineController()
+  const arrowDriftRateScale = layout === 'footer' ? 1.75 : 1
 
   const narrativeColumn = (
     <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-visible">
@@ -121,23 +63,11 @@ export function ExperimentalSideQuestsPanel({
       >
         Click squares to see visuals
       </p>
-      <div className={lineBandClass}>
-        <FlowingLine
-          sandLineRootRef={sandLineRootRef}
-          sandTrackRef={sandTrackRef}
-          sandPhaseRef={sandPhaseRef}
-          sandHoveredNodeIndexRef={sandHoveredNodeIndexRef}
-          sandScrollHUnitRef={sandScrollHUnitRef}
-          onNodeClick={onShowTellNodeClick}
-          getNodePreviewSrc={getNodePreviewSrc}
-          getNodeTitle={getNodeTitle}
-          arrowDriftRateScale={layout === 'footer' ? 1.75 : 1}
-          idleSpotlightAutoplay={layout === 'quadrant'}
-          lineTrackClassName={layout === 'quadrant' ? '-translate-y-16' : undefined}
-        />
-      </div>
+      <SideQuestFlowingLineRail controller={timeline} arrowDriftRateScale={arrowDriftRateScale} />
     </div>
   )
+
+  const sandStack = <SideQuestSandBackground controller={timeline} />
 
   if (layout === 'quadrant') {
     return (
