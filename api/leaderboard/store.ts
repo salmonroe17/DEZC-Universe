@@ -1,8 +1,7 @@
 /**
  * Shared Redis key + parsing for global top-3 leaderboard (Vercel + Upstash).
+ * Use `getRedis()` from `lib/redis.ts` in route handlers.
  */
-
-import { Redis } from '@upstash/redis'
 
 export const LEADERBOARD_REDIS_KEY = 'dezc:portfolio:global-top3-v2'
 export const SESSION_LOCK_PREFIX = 'dezc:portfolio:lb-session:'
@@ -19,13 +18,6 @@ export type TopRow = {
   rank: number
   codename: string
   score: number
-}
-
-export function redisFromEnv(): Redis | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return null
-  return new Redis({ url, token })
 }
 
 export function parseStored(raw: unknown): StoredEntry[] {

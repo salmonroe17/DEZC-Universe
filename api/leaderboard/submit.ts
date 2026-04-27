@@ -1,18 +1,18 @@
 /**
  * POST /api/leaderboard/submit
- * Body: { codename, score, sessionId }
+ * Body: { codename, score, sessionId? }
  *
  * Top 3 globally; same codename only improves if new score is strictly higher;
- * scores not in top 3 are not stored. One POST per sessionId (anti double-submit).
+ * scores not in top 3 are not stored. Optional sessionId: when set, one POST per id (anti double-submit).
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { getRedis } from '../../lib/redis'
 import {
   LEADERBOARD_REDIS_KEY,
   SESSION_LOCK_PREFIX,
   SESSION_LOCK_TTL_S,
   parseStored,
-  redisFromEnv,
   sortEntries,
   toTopRows,
   type StoredEntry,
@@ -49,7 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const redis = redisFromEnv()
+  const redis = getRedis()
   if (!redis) {
     return res.status(503).json({
       error: 'Leaderboard not configured',
@@ -75,22 +75,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!Number.isFinite(score) || score < 0 || score > 1_000_000) {
     return res.status(400).json({ error: 'Invalid score' })
   }
-  if (!sessionId) {
-    return res.status(400).json({ error: 'Invalid sessionId' })
-  }
 
   const scoreInt = Math.floor(score)
 
-  const lockKey = `${SESSION_LOCK_PREFIX}${sessionId}`
-  const lockOk = await redis.set(lockKey, '1', { nx: true, ex: SESSION_LOCK_TTL_S })
-  if (lockOk !== 'OK') {
-    const rawDup = await redis.get(LEADERBOARD_REDIS_KEY)
-    return res.status(200).json({
-      accepted: false,
-      duplicateSession: true,
-      rank: null,
-      top: toTopRows(parseStored(rawDup)),
-    })
+  if (sessionId) {
+    const lockKey = `${SESSION_LOCK_PREFIX}${sessionId}`
+    const lockOk = await redis.set(lockKey, '1', { nx: true, ex: SESSION_LOCK_TTL_S })
+    if (lockOk !== 'OK') {
+      const rawDup = await redis.get(LEADERBOARD_REDIS_KEY)
+      return res.status(200).json({
+        accepted: false,
+        duplicateSession: true,
+        rank: null,
+        top: toTopRows(parseStored(rawDup)),
+      })
+    }
   }
 
   const raw = await redis.get(LEADERBOARD_REDIS_KEY)

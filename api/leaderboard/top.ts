@@ -4,12 +4,8 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import {
-  LEADERBOARD_REDIS_KEY,
-  parseStored,
-  redisFromEnv,
-  toTopRows,
-} from './store'
+import { getRedis } from '../../lib/redis'
+import { LEADERBOARD_REDIS_KEY, parseStored, toTopRows } from './store'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -17,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const redis = redisFromEnv()
+  const redis = getRedis()
   if (!redis) {
     return res.status(503).json([])
   }

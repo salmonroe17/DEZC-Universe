@@ -218,23 +218,25 @@ export async function fetchLeaderboardTop(): Promise<HighScoreEntry[]> {
 export async function submitLeaderboardEntry(
   score: number,
   codename: string,
-  sessionId: string,
+  /** When set, server enforces one submit per game session (recommended). */
+  sessionId?: string,
 ): Promise<LeaderboardSubmitResult> {
   const u = url('/api/leaderboard/submit')
   const trimmed = codename.trim().slice(0, 120)
-  const sid = sessionId.trim().slice(0, 128)
+  const sid = (sessionId ?? '').trim().slice(0, 128)
   try {
+    const body: { score: number; codename: string; sessionId?: string } = {
+      score,
+      codename: trimmed,
+    }
+    if (sid) body.sessionId = sid
     const res = await fetch(u, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({
-        score,
-        codename: trimmed,
-        sessionId: sid,
-      }),
+      body: JSON.stringify(body),
     })
     if (!res.ok) throw new Error(`POST ${res.status}`)
     const data: unknown = await res.json()
