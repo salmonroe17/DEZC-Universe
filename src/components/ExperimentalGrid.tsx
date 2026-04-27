@@ -6,6 +6,7 @@ import { useNoPrimaryHoverDevice } from '../hooks/useNoPrimaryHoverDevice'
 import { ExperimentalCaseStudiesPanel } from './ExperimentalCaseStudiesPanel'
 import { ExperimentalSideQuestsPanel, showTellQuadrantCell } from './ExperimentalSideQuestsPanel'
 import { HudShooterIntro } from './HudShooterIntro'
+import { DEPLOY_VERSION_LABEL } from '../generated/deployVersion'
 import { WhoIamOrbMarquee } from './WhoIamOrbMarquee'
 
 const gridContainerVariants = {
@@ -123,7 +124,17 @@ export function ExperimentalGrid() {
                 <div className="grid min-h-0 flex-1 grid-cols-[auto_1fr]">
                   <div className="flex h-full min-w-0 items-center justify-center border-r border-cell-border px-3 md:px-4">
                     <h2 className="text-center text-[11px] font-semibold tracking-[0.06em] text-fg/90 md:text-xs md:tracking-[0.05em]">
-                      Who I am
+                      Who{' '}
+                      <span className="group/ver relative inline cursor-crosshair underline decoration-transparent decoration-dotted underline-offset-[2px] transition-[text-decoration-color] hover:decoration-fg/25">
+                        I
+                        <span
+                          className="pointer-events-none absolute bottom-[calc(100%+4px)] left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded border border-cell-border bg-[var(--color-bg)] px-1.5 py-0.5 font-mono text-[9px] font-normal tracking-normal text-fg/75 opacity-0 shadow-sm transition-opacity duration-150 motion-reduce:transition-none group-hover/ver:opacity-100"
+                          aria-hidden
+                        >
+                          {DEPLOY_VERSION_LABEL}
+                        </span>
+                      </span>{' '}
+                      am
                     </h2>
                   </div>
                   <div className="relative z-[2] flex h-full min-h-0 min-w-0 w-full items-stretch overflow-visible">

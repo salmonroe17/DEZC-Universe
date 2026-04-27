@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "postinstall": "node scripts/write-deploy-version.mjs",
+    "prebuild": "node scripts/write-deploy-version.mjs",
+    "dev": "node scripts/write-deploy-version.mjs && vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

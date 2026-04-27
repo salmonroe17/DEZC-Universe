@@ -1,6 +1,6 @@
 /**
  * Shared Redis key + parsing for global top-3 leaderboard (Vercel + Upstash).
- * Use `getRedis()` from `lib/redis.ts` in route handlers.
+ * Use `resolveRedis()` from `lib/redis.ts` in route handlers.
  */
 
 /** Single global leaderboard key (JSON array of entries, sorted desc by score, max 3). */
