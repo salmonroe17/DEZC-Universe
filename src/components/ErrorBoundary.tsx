@@ -27,7 +27,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <button
             type="button"
             className="rounded border border-cell-border bg-elevated px-4 py-2 text-xs text-fg hover:bg-surface"
-            onClick={() => this.setState({ error: null })}
+            onClick={() => window.location.reload()}
           >
             Try again
           </button>

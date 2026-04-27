@@ -1,21 +1,22 @@
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CustomCursor } from './components/CustomCursor'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { HudShooterProvider } from './contexts/HudShooterProvider'
 import { SiteThemeProvider } from './contexts/SiteThemeProvider'
 import { RootLayout } from './layouts/RootLayout'
+import { lazyWithRetry } from './lib/lazyWithRetry'
 
-const Home = lazy(() => import('./pages/Home'))
-const CaseStudyPage = lazy(() => import('./pages/CaseStudyPage'))
-const SuperAppShowcasePage = lazy(() => import('./pages/SuperAppShowcasePage'))
-const IbmEnviziShowcasePage = lazy(() => import('./pages/IbmEnviziShowcasePage'))
-const DesignSystemsShowcasePage = lazy(() => import('./pages/DesignSystemsShowcasePage'))
-const CaseStudyComponentsPage = lazy(() => import('./pages/CaseStudyComponentsPage'))
-const SideQuestViewerPage = lazy(() => import('./pages/SideQuestViewerPage'))
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
-const GlobalLeaderboardPage = lazy(() => import('./pages/GlobalLeaderboardPage'))
-const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const Home = lazyWithRetry(() => import('./pages/Home'))
+const CaseStudyPage = lazyWithRetry(() => import('./pages/CaseStudyPage'))
+const SuperAppShowcasePage = lazyWithRetry(() => import('./pages/SuperAppShowcasePage'))
+const IbmEnviziShowcasePage = lazyWithRetry(() => import('./pages/IbmEnviziShowcasePage'))
+const DesignSystemsShowcasePage = lazyWithRetry(() => import('./pages/DesignSystemsShowcasePage'))
+const CaseStudyComponentsPage = lazyWithRetry(() => import('./pages/CaseStudyComponentsPage'))
+const SideQuestViewerPage = lazyWithRetry(() => import('./pages/SideQuestViewerPage'))
+const NotFoundPage = lazyWithRetry(() => import('./pages/NotFoundPage'))
+const GlobalLeaderboardPage = lazyWithRetry(() => import('./pages/GlobalLeaderboardPage'))
+const PrivacyPolicyPage = lazyWithRetry(() => import('./pages/PrivacyPolicyPage'))
 
 function RouteFallback() {
   return (
