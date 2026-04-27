@@ -1,13 +1,10 @@
 import { useCallback, useState, type ReactNode } from 'react'
 import { CaseStudyList } from './CaseStudyList'
 import { Fake3DCube } from './Fake3DCube'
+import { quadrantHeadingClass } from './showTellQuadrantTypography'
 
 /** Chamfered border + fill via ::before/::after (see index.css). */
 const quadrantCell = 'quadrant-cell min-h-0 min-w-0'
-
-/** Matches quadrant section titles (e.g. Case Studies) on the home grid. */
-const quadrantHeadingClass =
-  'shrink-0 px-4 pt-3 text-left text-[11px] font-semibold tracking-[0.06em] text-fg/90 md:pt-4 md:text-xs md:tracking-[0.05em]'
 
 /**
  * Home grid stacks quadrants full-width below `lg`; the 1/3 `max-w` is only for the split 2+1
@@ -82,7 +79,7 @@ export function ExperimentalCaseStudiesPanel({
   )
 
   if (layout === 'quadrant') {
-    return body
+    return <div className="flex h-full min-h-0 flex-col">{body}</div>
   }
 
   const footerWidthClass =

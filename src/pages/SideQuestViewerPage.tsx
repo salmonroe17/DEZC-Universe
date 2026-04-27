@@ -627,7 +627,7 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
       </div>
       {src ? (
         <div
-          className="pointer-events-auto absolute bottom-3 right-3 z-10 flex items-center gap-1.5"
+          className="pointer-events-auto absolute bottom-3 left-3 z-10 flex items-center gap-1.5"
           role="group"
           aria-label="Image zoom controls"
         >

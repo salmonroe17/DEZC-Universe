@@ -53,13 +53,11 @@ export function ExperimentalSideQuestsPanel({
 
   const narrativeColumn = (
     <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-visible">
-      <h2
-        className={`${quadrantHeadingClass} relative z-[2] w-fit max-w-full shrink-0 self-start`}
-      >
+      <h2 className={`${quadrantHeadingClass} relative z-[2]`}>
         My multiple timelines of side quests
       </h2>
       <p
-        className={`${showTellSubtitleClass} relative z-[2] mt-[8px] mb-4 w-fit max-w-full shrink-0 self-start md:mb-5`}
+        className={`${showTellSubtitleClass} relative z-[2] mt-[8px] mb-4 md:mb-5`}
       >
         Click squares to see visuals
       </p>
@@ -71,7 +69,7 @@ export function ExperimentalSideQuestsPanel({
 
   if (layout === 'quadrant') {
     return (
-      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col">
+      <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col">
         {sandStack}
         {narrativeColumn}
       </div>

@@ -11,9 +11,10 @@ import { useHudShooterGame } from '../contexts/useHudShooterGame'
 import { ADJECTIVES, NOUNS } from '../data/codenameWords'
 import {
   fetchLeaderboardTop,
+  LEADERBOARD_DISPLAY_LIMIT,
   loadLocalLeaderboard,
   submitLeaderboardEntry,
-  topThree,
+  topLeaderboardEntries,
   type HighScoreEntry,
 } from '../lib/leaderboard'
 import { HudGraphic, type HudCellTrack } from './HudGraphic'
@@ -824,8 +825,10 @@ export function HudShooterIntro() {
   const [score, setScore] = useState(0)
   const [combo, setCombo] = useState(0)
   const [highScores, setHighScores] = useState<HighScoreEntry[]>(() =>
-    topThree(loadLocalLeaderboard()),
+    topLeaderboardEntries(loadLocalLeaderboard(), LEADERBOARD_DISPLAY_LIMIT),
   )
+  /** 1-based global rank after the latest completed run (server) or offline merge. */
+  const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null)
   const [finalRunScore, setFinalRunScore] = useState(0)
   const [finalRunCodename, setFinalRunCodename] = useState('')
   /** Set after a run fully completes; null = never finished a game this browser */
@@ -926,6 +929,7 @@ export function HudShooterIntro() {
     comboRef.current = 0
     lastHitRef.current = 0
     setCodename(generateUniqueCodename())
+    setLeaderboardRank(null)
     setUiPhase('idle')
     setCombatHud(false)
     enteredGameRef.current = false
@@ -948,6 +952,7 @@ export function HudShooterIntro() {
     setCombo(0)
     comboRef.current = 0
     lastHitRef.current = 0
+    setLeaderboardRank(null)
     setUiPhase('idle')
     setCombatHud(false)
     enteredGameRef.current = false
@@ -1373,8 +1378,9 @@ export function HudShooterIntro() {
           setFinalRunScore(fs)
           setFinalRunCodename(fn)
           setUiPhase('end')
-          void submitLeaderboardEntry(fs, fn).then((rows) => {
-            setHighScores(rows)
+          void submitLeaderboardEntry(fs, fn).then(({ leaderboard, rank }) => {
+            setHighScores(leaderboard)
+            setLeaderboardRank(rank)
             persistLastTargetsHit(fs)
             setLastTargetsHit(fs)
             setCodename(generateUniqueCodename())
@@ -1529,6 +1535,11 @@ export function HudShooterIntro() {
                     <p className="mt-1 text-[11px] text-fg/70 md:text-xs">
                       Codename: {finalRunCodename}
                     </p>
+                    {leaderboardRank != null && (
+                      <p className="mt-1 text-[11px] font-medium text-fg/85 md:text-xs">
+                        Global rank: #{leaderboardRank}
+                      </p>
+                    )}
                   </div>
                   <button
                     type="button"
@@ -1543,16 +1554,23 @@ export function HudShooterIntro() {
           </div>
 
           <div className="mt-auto flex w-full items-end justify-between gap-2 text-[10px] text-fg/70">
-            <div className="max-w-[58%] text-fg/50">
-              <div className="text-fg/65">All-time high scores:</div>
-              {Array.from({ length: 3 }, (_, i) => {
+            <div className="min-w-0 max-w-[58%] text-fg/50">
+              <div className="text-fg/65">Global leaderboard:</div>
+              {Array.from({ length: LEADERBOARD_DISPLAY_LIMIT }, (_, i) => {
                 const e = highScores[i]
+                const n = i + 1
                 return (
                   <div
-                    key={e ? `${e.at}-${e.nickname}` : `pad-${i}`}
+                    key={e ? e.id : `pad-${i}`}
                     className="tabular-nums leading-relaxed"
                   >
-                    {e ? `${e.score} • ${e.nickname}` : '—'}
+                    {e ? (
+                      <>
+                        #{n} {e.codename} — {e.score}
+                      </>
+                    ) : (
+                      '—'
+                    )}
                   </div>
                 )
               })}

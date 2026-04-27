@@ -284,8 +284,7 @@ type CaseStudyPresentationOverlayProps = {
   onActiveIndexChange: (index: number) => void
   /**
    * Initial state for the “Text slides” control when the overlay opens.
-   * Default false (image-first deck). Use true for decks with few text slides that should
-   * stay visible without toggling (e.g. Super: single Intro text slide).
+   * Default true so text sections are included; pass false for an image-first deck only.
    */
   initialTextSlidesVisible?: boolean
 }
@@ -359,7 +358,7 @@ export function CaseStudyPresentationOverlay({
   thumbnailSrcs,
   onClose,
   onActiveIndexChange,
-  initialTextSlidesVisible = false,
+  initialTextSlidesVisible = true,
 }: CaseStudyPresentationOverlayProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const controlsToggleRef = useRef<HTMLButtonElement>(null)
@@ -370,7 +369,7 @@ export function CaseStudyPresentationOverlay({
   const wasOpenRef = useRef(false)
 
   const [controlsVisible, setControlsVisible] = useState(false)
-  const [textSlidesVisible, setTextSlidesVisible] = useState(false)
+  const [textSlidesVisible, setTextSlidesVisible] = useState(true)
   const [textScale, setTextScale] = useState(1)
   const [imageScale, setImageScale] = useState(1)
   const [theme, setTheme] = useState<PresentationTheme>('gray')

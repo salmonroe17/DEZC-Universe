@@ -62,7 +62,11 @@ export function ExperimentalGrid() {
   return (
     <div className="box-border flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col items-stretch overflow-x-hidden bg-bg p-3 sm:p-4 lg:max-[1439px]:p-4 port-xl:p-5">
       <motion.div
-        className="flex w-full min-w-0 max-w-full flex-1 flex-col gap-3 overflow-x-hidden lg:grid lg:min-h-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:grid-rows-[13fr_7fr] lg:gap-2.5 port-xl:gap-4"
+        className={[
+          'grid w-full min-w-0 max-w-full flex-1 gap-3 overflow-x-hidden',
+          'max-lg:grid-cols-1 sm:max-lg:grid-cols-2',
+          'lg:min-h-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:grid-rows-[13fr_7fr] lg:gap-2.5 port-xl:gap-4',
+        ].join(' ')}
         initial="hidden"
         animate="visible"
         variants={gridContainerVariants}
@@ -71,11 +75,11 @@ export function ExperimentalGrid() {
         <motion.div
           ref={setHeroQEl}
           variants={cellVariants}
-          className={`${quadrantCell} relative flex max-lg:shrink-0 lg:col-start-1 lg:row-start-1 lg:min-h-0`}
+          className={`${quadrantCell} relative flex h-full min-h-0 sm:max-lg:col-start-1 sm:max-lg:row-start-1 lg:col-start-1 lg:row-start-1`}
           data-quadrant-in-view={noPrimaryHover && heroMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}
         >
-          <div className="relative z-10 flex min-h-0 min-w-0 w-full max-lg:min-h-[500px] flex-1 overflow-hidden">
+          <div className="relative z-10 flex h-full min-h-0 min-w-0 w-full max-lg:min-h-[500px] flex-1 overflow-hidden">
             <HudShooterIntro />
           </div>
         </motion.div>
@@ -84,11 +88,11 @@ export function ExperimentalGrid() {
         <motion.div
           ref={setCaseStudiesQEl}
           variants={cellVariants}
-          className={`group/right-quadrant ${quadrantCell} relative flex min-w-0 flex-col lg:col-start-2 lg:row-start-1 lg:min-h-0`}
+          className={`group/right-quadrant ${quadrantCell} relative flex h-full min-h-0 min-w-0 flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-1 lg:col-start-2 lg:row-start-1`}
           data-quadrant-in-view={noPrimaryHover && caseStudiesMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}
         >
-          <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+          <div className="relative z-10 flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
             <ExperimentalCaseStudiesPanel layout="quadrant" />
           </div>
         </motion.div>
@@ -97,7 +101,7 @@ export function ExperimentalGrid() {
         <motion.div
           ref={setWhoIamQEl}
           variants={cellVariants}
-          className={`${quadrantCell} relative flex min-w-0 flex-col lg:col-start-2 lg:row-start-2 lg:min-h-0`}
+          className={`${quadrantCell} relative flex h-full min-h-0 min-w-0 flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-2 lg:col-start-2 lg:row-start-2`}
           data-quadrant-in-view={noPrimaryHover && whoIamMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}
           onPointerEnter={() => setWhoIamPointerInside(true)}
@@ -157,7 +161,7 @@ export function ExperimentalGrid() {
           ref={setShowTellQEl}
           variants={cellVariants}
           id="show-tell"
-          className={`group/showtell ${showTellQuadrantCell} relative flex flex-col scroll-mt-24 lg:col-start-1 lg:row-start-2 md:scroll-mt-28`}
+          className={`group/showtell ${showTellQuadrantCell} relative flex h-full min-h-0 flex-col scroll-mt-24 sm:max-lg:col-start-1 sm:max-lg:row-start-2 lg:col-start-1 lg:row-start-2 md:scroll-mt-28`}
           data-show-tell-quadrant
           data-quadrant-in-view={noPrimaryHover && showTellMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}

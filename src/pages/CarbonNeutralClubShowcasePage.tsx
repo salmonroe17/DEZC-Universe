@@ -29,7 +29,7 @@ import carbonPlanPageB2BC20 from '../../CNC photos/c20.png'
 import carbonPlanPageB2CC20_1 from '../../CNC photos/c20.1.png'
 import carbonPrototypeVideo from '../../CNC photos/cnc video portfolio prototype 720p30.mp4'
 import mindExplosionGif from '../../CNC photos/mindexplosion.gif'
-import carbonHeroTurtleGif from '../../CNC photos/turtle.gif'
+import { CARBON_SHOWCASE_HERO_H1, carbonHeroTurtleGif } from './carbon/carbonShowcaseIntroConstants'
 import { usePreloadImages } from '../hooks/usePreloadImages'
 import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { CARBON_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
@@ -458,8 +458,7 @@ export default function CarbonNeutralClubShowcasePage() {
           id="hero-heading"
           className={`min-w-0 flex-1 text-left text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg ${caseStudyScrollAnchorClass}`}
         >
-          Redesigning the carbon footprint to checkout flow that shifted the product from
-          direct-to-consumer to company-funded memberships.
+          {CARBON_SHOWCASE_HERO_H1}
         </h1>
         <RotatingGradientCircle
           className="aspect-square w-[min(52vw,11rem)] shrink-0 self-center md:w-[min(42vw,15rem)] lg:ml-auto lg:w-[min(34vw,17.5rem)]"

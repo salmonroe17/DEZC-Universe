@@ -25,6 +25,7 @@ import superTurningPointMatrix from '../../../Super assets/s17.png'
 import superImpactHandoff from '../../../Super assets/s18.png'
 import superImpactHandoffEnabled from '../../../Super assets/s18.1.png'
 import superWalkthrough1080 from '../../../Super assets/Super app walkthrough 1080p.mp4'
+import { SUPER_SHOWCASE_HERO_H1, superHeroDrivingGif } from './superShowcaseIntroConstants'
 import { caseStudyTeamConnectorHorizontal } from '../../components/caseStudy/CaseStudyFlowConnectors'
 import {
   KpiAnimatedValue,
@@ -38,10 +39,7 @@ import {
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyShowcaseScaffold'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
-import {
-  RotatingGradientCircle,
-  RotatingGradientCircleDotPlaceholder,
-} from '../../components/system/RotatingGradientCircle'
+import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 import {
   SuperProblemOldScreensChamfer,
   SuperSuperCashRelocatedComparison,
@@ -224,15 +222,21 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
           data-presentation-text-region
           className="m-0 min-w-0 flex-1 text-left text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg"
         >
-          From scattered features to a shared roadmap and driving a new way of deciding what to build.
+          {SUPER_SHOWCASE_HERO_H1}
         </h1>
         <div data-presentation-media-region className="shrink-0 self-center lg:ml-auto">
           <RotatingGradientCircle
-            className="aspect-square w-[min(52vw,11rem)] shrink-0 md:w-[min(42vw,15rem)] lg:w-[min(34vw,17.5rem)]"
-            innerClassName="bg-bg"
+            className="aspect-square w-[min(52vw,11rem)] shrink-0 self-center md:w-[min(42vw,15rem)] lg:ml-auto lg:w-[min(34vw,17.5rem)]"
+            innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <RotatingGradientCircleDotPlaceholder />
+            <img
+              src={superHeroDrivingGif}
+              alt=""
+              className="pointer-events-none block h-full w-full object-cover object-center select-none"
+              loading="lazy"
+              decoding="async"
+            />
           </RotatingGradientCircle>
         </div>
       </div>

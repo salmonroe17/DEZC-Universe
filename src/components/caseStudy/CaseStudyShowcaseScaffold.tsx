@@ -48,8 +48,8 @@ export type CaseStudyShowcaseScaffoldProps = {
   /** Optional strip previews; same length as `presentationSlides` when provided. */
   presentationThumbnailSrcs?: readonly string[]
   /**
-   * When true, presentation opens with “Text slides” on so `slideKind: 'text'` slides are included
-   * (see {@link CaseStudyPresentationOverlayProps.initialTextSlidesVisible}).
+   * When true (default), presentation opens with “Text slides” on so `slideKind: 'text'` slides are included.
+   * Set false for an image-first deck (see {@link CaseStudyPresentationOverlayProps.initialTextSlidesVisible}).
    */
   presentationInitialTextSlidesVisible?: boolean
   children: ReactNode

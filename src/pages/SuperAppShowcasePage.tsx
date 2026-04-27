@@ -24,7 +24,7 @@ import superTurningPointMatrix from '../../Super assets/s17.png'
 import superImpactHandoff from '../../Super assets/s18.png'
 import superImpactHandoffEnabled from '../../Super assets/s18.1.png'
 import superWalkthrough1080 from '../../Super assets/Super app walkthrough 1080p.mp4'
-import superHeroDrivingGif from '../../Super assets/driving.gif'
+import { SUPER_SHOWCASE_HERO_H1, superHeroDrivingGif } from './super/superShowcaseIntroConstants'
 import { usePreloadImages } from '../hooks/usePreloadImages'
 import { SUPER_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { SUPER_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
@@ -280,7 +280,7 @@ export default function SuperAppShowcasePage() {
           data-presentation-text-region
           className={`m-0 min-w-0 flex-1 text-left text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg ${caseStudyScrollAnchorClass}`}
         >
-          From scattered features to a shared roadmap and driving a new way of deciding what to build.
+          {SUPER_SHOWCASE_HERO_H1}
         </h1>
         <div data-presentation-media-region className="shrink-0 self-center lg:ml-auto">
         <RotatingGradientCircle

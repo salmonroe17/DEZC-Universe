@@ -54,6 +54,14 @@ function FlowLineNodePreview({ src }: { src: string }) {
   return <img src={src} alt="" draggable={false} className={cls} />
 }
 
+/**
+ * Thumbnail clip around {@link FlowLineNodePreview}. At `lg+`, desaturate until the pointer is over
+ * the Side quests `group/showtell` ancestor or the quadrant is marked in-view (coarse / scroll spy).
+ * Below `lg`, full color — unchanged on phones.
+ */
+const FLOW_LINE_PREVIEW_THUMB_CLIP_CLASS =
+  'relative z-[1] size-4 shrink-0 scale-[5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] md:size-5 lg:grayscale lg:transition-[filter] lg:duration-200 lg:ease-out lg:group-hover/showtell:grayscale-0 lg:group-data-[quadrant-in-view]/showtell:grayscale-0'
+
 /** Distinct idle loops per square (Show & tell). Hover resets to still + scale-up. */
 type IdleMotion = {
   animate: Record<string, number | number[]>
@@ -150,12 +158,32 @@ const arrowBtnClass =
 
 const SPOTLIGHT_EXPAND_S = 0.7
 const SPOTLIGHT_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
+
+/** Legacy normalized band (≈32% of line-root width) — used only until line-root width is measured. */
+const SPOTLIGHT_ZONE_FALLBACK = { z0: 0.34 as const, z1: 0.66 as const }
+
 /**
- * In line-root x (0 = left, 1 = right of the visible line band), the node center must fall in
- * this range to get the automatic hover (thumbnail) while the wave scrolls.
+ * Target **physical** width (CSS px) of the idle spotlight band at the center of the line.
+ * Mapped from viewport width; converted to normalized [z0,z1] using measured line-root width.
  */
-const SPOTLIGHT_ZONE_X0 = 0.34
-const SPOTLIGHT_ZONE_X1 = 0.66
+function spotlightTargetWidthPx(viewportWidth: number): number {
+  if (viewportWidth < 768) return 72
+  if (viewportWidth < 1024) return 110
+  return 160
+}
+
+/**
+ * In line-root x (0 = left, 1 = right of the visible band), the node center must fall in
+ * [z0,z1] to get the automatic hover (thumbnail) while the wave scrolls.
+ */
+function spotlightZoneNorm(lineRootWidthPx: number, viewportWidth: number): { z0: number; z1: number } {
+  const targetPx = spotlightTargetWidthPx(viewportWidth)
+  if (lineRootWidthPx <= 1) return SPOTLIGHT_ZONE_FALLBACK
+  const halfNorm = Math.min(0.49, targetPx / (2 * lineRootWidthPx))
+  const z0 = 0.5 - halfNorm
+  const z1 = 0.5 + halfNorm
+  return { z0, z1 }
+}
 
 /** Horizontal position of node `i`’s center in line-root space; track is 2× width, window is [0,1]. */
 function nodeCenterXInLineRoot(i: number, hUnit: number): number {
@@ -255,6 +283,35 @@ export function FlowingLine({
   const lineRootRef = sandLineRootRef ?? internalRootRef
   const trackRef = sandTrackRef ?? internalTrackRef
 
+  const [spotlightLayout, setSpotlightLayout] = useState(() => ({
+    lineW: 0,
+    vw: typeof window !== 'undefined' ? window.innerWidth : 1024,
+  }))
+
+  useLayoutEffect(() => {
+    const sync = () => {
+      const el = lineRootRef.current
+      setSpotlightLayout({
+        lineW: el?.clientWidth ?? 0,
+        vw: typeof window !== 'undefined' ? window.innerWidth : 1024,
+      })
+    }
+    sync()
+    const el = lineRootRef.current
+    const ro = new ResizeObserver(sync)
+    if (el) ro.observe(el)
+    window.addEventListener('resize', sync)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', sync)
+    }
+  }, [lineRootRef])
+
+  const spotlightZone = useMemo(
+    () => spotlightZoneNorm(spotlightLayout.lineW, spotlightLayout.vw),
+    [spotlightLayout.lineW, spotlightLayout.vw],
+  )
+
   const syncArrowLeft = () => {
     arrowLeftRef.current = leftPointerOverRef.current || leftPointerHeldRef.current
   }
@@ -313,8 +370,8 @@ export function FlowingLine({
   const idleZoneTargetIndex = useMemo((): number | null => {
     if (!runIdleSpot) return null
     if (hoveredIndex !== null) return null
-    return pickNodeInZone(hUnit, SPOTLIGHT_ZONE_X0, SPOTLIGHT_ZONE_X1)
-  }, [runIdleSpot, hoveredIndex, hUnit])
+    return pickNodeInZone(hUnit, spotlightZone.z0, spotlightZone.z1)
+  }, [runIdleSpot, hoveredIndex, hUnit, spotlightZone.z0, spotlightZone.z1])
 
   const spotlightDim = hoveredIndex !== null || (runIdleSpot && idleZoneTargetIndex !== null)
   const displayHoverIndex = hoveredIndex ?? idleZoneTargetIndex
@@ -441,7 +498,7 @@ export function FlowingLine({
                       className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-hud)_26%,transparent)] blur-[24px] md:h-[150px] md:w-[150px] md:blur-[30px]"
                     />
                     {previewSrc ? (
-                      <div className="relative z-[1] size-4 shrink-0 scale-[5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] md:size-5">
+                      <div className={FLOW_LINE_PREVIEW_THUMB_CLIP_CLASS}>
                         <FlowLineNodePreview src={previewSrc} />
                       </div>
                     ) : (
@@ -488,7 +545,7 @@ export function FlowingLine({
                         className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-hud)_26%,transparent)] blur-[24px] md:h-[150px] md:w-[150px] md:blur-[30px]"
                       />
                       {previewSrc ? (
-                        <div className="relative z-[1] size-4 shrink-0 scale-[5] overflow-hidden rounded-none ring-1 ring-fg/25 shadow-[0_0_14px_rgba(0,0,0,0.22)] md:size-5">
+                        <div className={FLOW_LINE_PREVIEW_THUMB_CLIP_CLASS}>
                           <FlowLineNodePreview src={previewSrc} />
                         </div>
                       ) : (

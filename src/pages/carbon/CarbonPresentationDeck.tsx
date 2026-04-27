@@ -29,6 +29,7 @@ import carbonPlanPageB2BC20 from '../../../CNC photos/c20.png'
 import carbonPlanPageB2CC20_1 from '../../../CNC photos/c20.1.png'
 import carbonPrototypeVideo from '../../../CNC photos/cnc video portfolio prototype 720p30.mp4'
 import mindExplosionGif from '../../../CNC photos/mindexplosion.gif'
+import { CARBON_SHOWCASE_HERO_H1, carbonHeroTurtleGif } from './carbonShowcaseIntroConstants'
 import {
   KpiAnimatedValue,
   ProblemStatementGlitchFramedBlock,
@@ -39,10 +40,7 @@ import {
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyPresentationOverlay'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
-import {
-  RotatingGradientCircle,
-  RotatingGradientCircleDotPlaceholder,
-} from '../../components/system/RotatingGradientCircle'
+import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 
 const chamferAnnotationToggleLabelOff = 'Show why this works'
 const chamferAnnotationToggleLabelOn = 'Hide annotations'
@@ -555,15 +553,21 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
           data-presentation-text-region
           className="min-w-0 flex-1 text-left text-[40px] font-normal leading-[1.12] tracking-[-0.03em] text-fg"
         >
-          Redesigning the carbon footprint to checkout flow that shifted the product from direct-to-consumer to company-funded memberships.
+          {CARBON_SHOWCASE_HERO_H1}
         </h1>
         <div data-presentation-media-region className="shrink-0 self-center lg:ml-auto">
           <RotatingGradientCircle
-            className="aspect-square w-[min(52vw,11rem)] shrink-0 md:w-[min(42vw,15rem)] lg:w-[min(34vw,17.5rem)]"
-            innerClassName="bg-bg"
+            className="aspect-square w-[min(52vw,11rem)] shrink-0 self-center md:w-[min(42vw,15rem)] lg:ml-auto lg:w-[min(34vw,17.5rem)]"
+            innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <RotatingGradientCircleDotPlaceholder />
+            <img
+              src={carbonHeroTurtleGif}
+              alt=""
+              className="pointer-events-none block h-full w-full object-cover object-center select-none"
+              loading="lazy"
+              decoding="async"
+            />
           </RotatingGradientCircle>
         </div>
       </div>

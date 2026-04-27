@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const LINKEDIN_URL = 'https://www.linkedin.com/in/dezchang'
 const INSTAGRAM_URL = 'https://www.instagram.com/dezsee'
 
@@ -19,12 +21,13 @@ export function SiteFooter() {
         Instagram
       </a>
 
-      <p
-        className="text-center text-[10px] tabular-nums tracking-tight text-fg-muted"
+      <Link
+        to="/"
+        className={`justify-self-center text-center tabular-nums ${footerLinkClass}`}
         suppressHydrationWarning
       >
         DEZC {year}
-      </p>
+      </Link>
 
       <a
         href={LINKEDIN_URL}
