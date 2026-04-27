@@ -254,7 +254,7 @@ export function Fake3DCube({ activeCaseIndex }: Fake3DCubeProps) {
       >
         {/* 2D scale wrapper: keep separate from 3D rotateY so `transform` does not get overwritten */}
         <div
-          className="h-full w-full origin-center transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:group-hover/cube-bezel:scale-100 group-hover/cube-bezel:scale-[1.02]"
+          className="h-full w-full origin-center transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:group-hover/cube-bezel:scale-100 motion-reduce:group-data-[quadrant-in-view]/right-quadrant:scale-100 group-hover/cube-bezel:scale-[1.02] group-data-[quadrant-in-view]/right-quadrant:scale-[1.02]"
         >
           <div
             className="relative h-full w-full [transform-style:preserve-3d]"

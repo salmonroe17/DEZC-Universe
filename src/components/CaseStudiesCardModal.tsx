@@ -59,6 +59,7 @@ export function CaseStudiesCardModal({ open, onClose }: CaseStudiesCardModalProp
         <ExperimentalCaseStudiesPanel
           layout="footer"
           footerColumn="modal-wide"
+          footerInViewMinRatio={0.35}
           topRightSlot={
             <button
               ref={closeBtnRef}

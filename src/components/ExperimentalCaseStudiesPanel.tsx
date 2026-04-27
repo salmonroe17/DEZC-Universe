@@ -1,7 +1,11 @@
-import { useCallback, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
+import { useMajorityInView } from '../hooks/useMajorityInView'
 import { CaseStudyList } from './CaseStudyList'
 import { Fake3DCube } from './Fake3DCube'
 import { quadrantHeadingClass } from './showTellQuadrantTypography'
+
+/** Aligns with Tailwind `lg` (1024px): effects apply on smaller widths only. */
+const MAX_LG_MEDIA = '(max-width: 1023px)'
 
 /** Chamfered border + fill via ::before/::after (see index.css). */
 const quadrantCell = 'quadrant-cell min-h-0 min-w-0'
@@ -43,6 +47,12 @@ export type ExperimentalCaseStudiesPanelProps = {
    * `modal-wide` uses a comfortable reading width up to 48rem.
    */
   footerColumn?: 'home-grid' | 'modal-wide'
+  /**
+   * `footer` only: min visible fraction of the chamfered shell for `data-quadrant-in-view` on narrow
+   * viewports (see {@link MAX_LG_MEDIA}). Modal uses a lower ratio so the glow appears while the
+   * panel is still partly scroll-clipped.
+   */
+  footerInViewMinRatio?: number
 }
 
 export function ExperimentalCaseStudiesPanel({
@@ -50,9 +60,28 @@ export function ExperimentalCaseStudiesPanel({
   layout = 'quadrant',
   topRightSlot,
   footerColumn = 'home-grid',
+  footerInViewMinRatio = 0.5,
 }: ExperimentalCaseStudiesPanelProps) {
   const [activeCaseIndex, setActiveCaseIndex] = useState(0)
   const [caseListPointerInside, setCaseListPointerInside] = useState(false)
+  const [footerShellEl, setFooterShellEl] = useState<HTMLDivElement | null>(null)
+  const [footerNarrowWidth, setFooterNarrowWidth] = useState(false)
+
+  useEffect(() => {
+    if (layout !== 'footer') return
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return
+    const mq = window.matchMedia(MAX_LG_MEDIA)
+    const sync = () => setFooterNarrowWidth(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [layout])
+
+  const footerNarrowMajorityInView = useMajorityInView(
+    layout === 'footer' ? footerShellEl : null,
+    layout === 'footer' && footerNarrowWidth,
+    footerInViewMinRatio,
+  )
 
   const onCaseAdvance = useCallback(() => {
     setActiveCaseIndex((i) => (i + 1) % 4)
@@ -87,7 +116,9 @@ export function ExperimentalCaseStudiesPanel({
 
   return (
     <div
+      ref={setFooterShellEl}
       className={`${quadrantCell} group/right-quadrant relative mx-auto flex ${footerWidthClass} ${footerPanelHeightClass} flex-col`}
+      data-quadrant-in-view={footerNarrowMajorityInView ? true : undefined}
     >
       {topRightSlot ? (
         <div className="pointer-events-auto absolute right-2 top-2 z-[15] md:right-3 md:top-3">
