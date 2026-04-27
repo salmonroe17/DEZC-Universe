@@ -1,10 +1,11 @@
 /**
  * Writes src/generated/deployVersion.ts for the secret "Who I am" tooltip.
  *
- * - Production Vercel build (VERCEL=1, VERCEL_ENV=production) + KV env:
- *   INCR dezc:site-deploy-version in Redis; label = v0.01 × counter.
- * - Other Vercel envs with KV: GET current counter (no bump).
- * - No KV: use deploy-version.json "counter" (integer hundredths step).
+ * - Any Vercel build (VERCEL=1) + KV env at build time:
+ *   INCR dezc:site-deploy-version; label = v0.01 × counter.
+ * - Local / no VERCEL: if KV env exists, GET only (no bump). Else deploy-version.json.
+ *
+ * KV vars must be enabled for "Build" in Vercel, or prebuild never sees them → v0.00 forever.
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
@@ -45,20 +46,24 @@ async function main() {
       const { Redis } = await import('@upstash/redis')
       const redis = new Redis({ url, token })
       const onVercel = process.env.VERCEL === '1'
-      const production = process.env.VERCEL_ENV === 'production'
 
-      if (onVercel && production) {
+      if (onVercel) {
         const n = await redis.incr(REDIS_KEY)
         counter = Number(n)
+        console.info('[deploy-version]', { incr: true, vercelEnv: process.env.VERCEL_ENV ?? '' })
       } else {
         const raw = await redis.get(REDIS_KEY)
         if (raw != null) {
           counter = Number(raw)
         }
+        console.info('[deploy-version]', { incr: false, readRedis: raw != null })
       }
     } catch {
+      console.info('[deploy-version]', { redisFailed: true })
       /* keep fallback */
     }
+  } else {
+    console.info('[deploy-version]', { hasKv: false })
   }
 
   if (!Number.isFinite(counter) || counter < 0) {
