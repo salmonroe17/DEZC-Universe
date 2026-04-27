@@ -210,7 +210,10 @@ export async function fetchLeaderboardTop(): Promise<HighScoreEntry[]> {
     const top = withIds(parsed)
     saveLocalLeaderboard(top)
     return top
-  } catch {
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.warn('[leaderboard] GET /api/leaderboard/top failed, using local cache', err)
+    }
     return topLeaderboardEntries(loadLocalLeaderboard(), LEADERBOARD_DISPLAY_LIMIT)
   }
 }
@@ -243,7 +246,10 @@ export async function submitLeaderboardEntry(
     const result = parseSubmitResponse(data)
     saveLocalLeaderboard(result.leaderboard)
     return result
-  } catch {
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.warn('[leaderboard] POST /api/leaderboard/submit failed, using offline merge', err)
+    }
     return mergeLocalLeaderboard(score, trimmed)
   }
 }

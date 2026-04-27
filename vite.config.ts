@@ -28,8 +28,19 @@ export default defineConfig(({ mode }) => {
 
   const faviconRev = publicAssetRev('public/metadata/favicon-24.png')
   const webclipRev = publicAssetRev('public/metadata/webclip-256.png')
+  /** When set, `npm run dev` proxies `/api/*` here (e.g. `http://127.0.0.1:3000` from `vercel dev`). */
+  const localApiProxy = (env.VITE_LOCAL_API_PROXY ?? '').trim().replace(/\/$/, '')
 
   return {
+  ...(localApiProxy
+    ? {
+        server: {
+          proxy: {
+            '/api': { target: localApiProxy, changeOrigin: true },
+          },
+        },
+      }
+    : {}),
   plugins: [
     react(),
     tailwindcss(),

@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 # Large archived Super walkthroughs (not referenced in app)
 Super assets/\[ARCHIVE\]/
+.vercel

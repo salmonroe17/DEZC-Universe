@@ -15,12 +15,31 @@
 import { Redis } from '@upstash/redis'
 
 let cached: Redis | null | undefined
+let loggedEnv = false
+
+function logRedisEnvOnce() {
+  if (loggedEnv) return
+  loggedEnv = true
+  const kvUrl = !!(process.env.KV_REST_API_URL?.trim())
+  const kvTok = !!(process.env.KV_REST_API_TOKEN?.trim())
+  const upUrl = !!(process.env.UPSTASH_REDIS_REST_URL?.trim())
+  const upTok = !!(process.env.UPSTASH_REDIS_REST_TOKEN?.trim())
+  const resolved = (kvUrl && kvTok) || (upUrl && upTok)
+  console.info('[leaderboard/redis] env presence (values not logged):', {
+    KV_REST_API_URL: kvUrl,
+    KV_REST_API_TOKEN: kvTok,
+    UPSTASH_REDIS_REST_URL: upUrl,
+    UPSTASH_REDIS_REST_TOKEN: upTok,
+    clientWillInitialize: resolved,
+  })
+}
 
 /**
  * Lazy singleton. Returns `null` when credentials are missing (safe for health checks).
  */
 export function getRedis(): Redis | null {
   if (cached !== undefined) return cached
+  logRedisEnvOnce()
   const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN
   cached = url && token ? new Redis({ url, token }) : null

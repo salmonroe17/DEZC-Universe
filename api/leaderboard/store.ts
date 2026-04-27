@@ -3,7 +3,8 @@
  * Use `getRedis()` from `lib/redis.ts` in route handlers.
  */
 
-export const LEADERBOARD_REDIS_KEY = 'dezc:portfolio:global-top3-v2'
+/** Single global leaderboard key (JSON array of entries, sorted desc by score, max 3). */
+export const LEADERBOARD_REDIS_KEY = 'leaderboard:scores'
 export const SESSION_LOCK_PREFIX = 'dezc:portfolio:lb-session:'
 /** One submit attempt per game session (client-generated id). */
 export const SESSION_LOCK_TTL_S = 600
@@ -18,6 +19,11 @@ export type TopRow = {
   rank: number
   codename: string
   score: number
+}
+
+export function sortEntries(a: StoredEntry, b: StoredEntry): number {
+  if (b.score !== a.score) return b.score - a.score
+  return a.createdAt - b.createdAt
 }
 
 export function parseStored(raw: unknown): StoredEntry[] {
@@ -36,7 +42,12 @@ export function parseStored(raw: unknown): StoredEntry[] {
     const o = item as Record<string, unknown>
     const c = typeof o.codename === 'string' ? o.codename.trim() : ''
     const s = o.score
-    const score = typeof s === 'number' && Number.isFinite(s) ? Math.floor(s) : NaN
+    const score =
+      typeof s === 'number' && Number.isFinite(s)
+        ? Math.floor(s)
+        : typeof s === 'string' && s.trim() !== ''
+          ? Math.floor(Number(s))
+          : NaN
     const createdAt =
       typeof o.createdAt === 'number' && Number.isFinite(o.createdAt)
         ? o.createdAt
@@ -46,12 +57,8 @@ export function parseStored(raw: unknown): StoredEntry[] {
     if (!c || !Number.isFinite(score)) continue
     out.push({ codename: c.slice(0, 120), score, createdAt })
   }
-  return out.slice(0, 8)
-}
-
-export function sortEntries(a: StoredEntry, b: StoredEntry): number {
-  if (b.score !== a.score) return b.score - a.score
-  return a.createdAt - b.createdAt
+  out.sort(sortEntries)
+  return out.slice(0, 3)
 }
 
 export function toTopRows(entries: StoredEntry[]): TopRow[] {

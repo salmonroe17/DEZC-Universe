@@ -955,6 +955,25 @@ export function HudShooterIntro() {
   }, [resetRun])
 
   const exitToIdle = useCallback(() => {
+    const ph = phaseRef.current
+    const shouldSubmitToLeaderboard =
+      (ph === 'game' || ph === 'winddown') && scoreRef.current > 0
+
+    if (shouldSubmitToLeaderboard) {
+      const fs = scoreRef.current
+      const fn = codenameRef.current
+      const sid = gameSessionIdRef.current
+      void (async () => {
+        const submitResult = await submitLeaderboardEntry(fs, fn, sid)
+        setLeaderboardRank(submitResult.rank)
+        const latest = await fetchLeaderboardTop()
+        setHighScores(latest)
+        persistLastTargetsHit(fs)
+        setLastTargetsHit(fs)
+        setCodename(generateUniqueCodename())
+      })()
+    }
+
     phaseRef.current = 'idle'
     wordsRef.current = []
     particlesRef.current = []
@@ -963,10 +982,13 @@ export function HudShooterIntro() {
     gameT0Ref.current = 0
     nextWordId.current = 0
     setScore(0)
+    scoreRef.current = 0
     setCombo(0)
     comboRef.current = 0
     lastHitRef.current = 0
-    setLeaderboardRank(null)
+    if (!shouldSubmitToLeaderboard) {
+      setLeaderboardRank(null)
+    }
     setUiPhase('idle')
     setCombatHud(false)
     enteredGameRef.current = false
@@ -1268,7 +1290,11 @@ export function HudShooterIntro() {
             }
             lastHitRef.current = tnow
             setCombo(comboRef.current)
-            setScore((s) => s + 1)
+            setScore((s) => {
+              const n = s + 1
+              scoreRef.current = n
+              return n
+            })
           }
         }
         lasers.splice(i, 1)

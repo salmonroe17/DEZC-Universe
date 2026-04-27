@@ -1,12 +1,11 @@
 /**
  * GET /api/leaderboard/test
- * Connectivity check: SET → GET → DEL a short-lived key (production-safe).
+ * Connectivity check: SET debug:test → GET debug:test (TTL 60s).
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { getRedis } from '../../lib/redis'
+import { getRedis } from '../../lib/redis.js'
 
-const TEST_PREFIX = 'dezc:portfolio:lb-ping:'
 const TEST_TTL_S = 60
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -25,19 +24,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   }
 
-  const suffix = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
-  const key = `${TEST_PREFIX}${suffix}`
-  const payload = `ok-${suffix}`
+  const DEBUG_KEY = 'debug:test'
+  const payload = 'ok'
 
   try {
-    await redis.set(key, payload, { ex: TEST_TTL_S })
-    const read = await redis.get<string>(key)
-    await redis.del(key)
+    await redis.set(DEBUG_KEY, payload, { ex: TEST_TTL_S })
+    const read = await redis.get<string>(DEBUG_KEY)
 
     if (read !== payload) {
       return res.status(500).json({
         ok: false,
         error: 'Round-trip mismatch',
+        key: DEBUG_KEY,
         expected: payload,
         got: read ?? null,
       })
@@ -45,8 +43,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({
       ok: true,
-      message: 'Redis connection and read/write verified',
-      key: TEST_PREFIX + '*',
+      message: 'Redis set(debug:test)/get(debug:test) verified',
+      key: DEBUG_KEY,
     })
   } catch (e) {
     const message = e instanceof Error ? e.message : 'Unknown error'
