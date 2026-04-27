@@ -57,10 +57,14 @@ export function ExperimentalGrid() {
     whoIamPointerInside || whoIamFocusInside || (noPrimaryHover && whoIamMajorityInView)
 
   const whoBioClass = [
-    'min-h-0 flex-1 px-4 py-3 text-left text-[11px] font-normal leading-relaxed tracking-[0.02em] text-fg transition-opacity duration-300 ease-out md:text-xs md:tracking-[0.015em]',
+    'px-4 py-3 text-left text-[11px] font-normal leading-relaxed tracking-[0.02em] text-fg transition-opacity duration-300 ease-out md:text-xs md:tracking-[0.015em]',
+    // Narrow / stacked quadrants: natural height — page scrolls, no inner scrollbox
+    'max-lg:flex-none max-lg:min-h-0 max-lg:overflow-visible max-lg:opacity-100',
+    // Desktop tile: fill remaining space; scroll only when quadrant is “active”
+    'min-h-0 flex-1',
     whoIamScrollActive
-      ? 'overflow-y-auto opacity-100'
-      : 'overflow-y-auto opacity-100 max-lg:opacity-100 max-lg:overflow-y-auto lg:overflow-hidden lg:opacity-30',
+      ? 'lg:overflow-y-auto lg:opacity-100'
+      : 'lg:overflow-hidden lg:opacity-30',
   ].join(' ')
 
   return (
@@ -105,7 +109,7 @@ export function ExperimentalGrid() {
         <motion.div
           ref={setWhoIamQEl}
           variants={cellVariants}
-          className={`${quadrantCell} relative flex h-full min-h-0 min-w-0 flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-2 lg:col-start-2 lg:row-start-2`}
+          className={`${quadrantCell} relative flex h-full min-h-0 min-w-0 max-lg:h-auto flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-2 lg:col-start-2 lg:row-start-2`}
           data-quadrant-in-view={noPrimaryHover && whoIamMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}
           onPointerEnter={() => setWhoIamPointerInside(true)}
@@ -118,8 +122,8 @@ export function ExperimentalGrid() {
             }
           }}
         >
-          <div className="relative z-10 flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-            <div className="flex h-full min-h-0 flex-1 flex-col">
+          <div className="relative z-10 flex h-full min-h-0 min-w-0 max-lg:h-auto flex-1 flex-col overflow-hidden max-lg:overflow-visible">
+            <div className="flex h-full min-h-0 max-lg:h-auto flex-1 flex-col">
               <div className="flex min-h-[5.25rem] shrink-0 basis-[26%] flex-col border-b border-cell-border md:min-h-0 md:basis-[25%]">
                 <div className="grid min-h-0 flex-1 grid-cols-[auto_1fr]">
                   <div className="flex h-full min-w-0 items-center justify-center border-r border-cell-border px-3 md:px-4">
