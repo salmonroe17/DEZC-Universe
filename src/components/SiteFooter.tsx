@@ -6,6 +6,10 @@ const INSTAGRAM_URL = 'https://www.instagram.com/dezsee'
 const footerLinkClass =
   'shrink-0 text-[10px] tracking-tight text-fg underline decoration-cell-border underline-offset-[3px] transition-colors hover:text-fg hover:decoration-hud'
 
+function scrollDocumentToTop() {
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+}
+
 /** Mirrored layout + chrome from {@link SiteTopBar}: three columns, same height, border + blur. */
 export function SiteFooter() {
   const year = new Date().getFullYear()
@@ -25,6 +29,7 @@ export function SiteFooter() {
         to="/"
         className={`justify-self-center text-center tabular-nums ${footerLinkClass}`}
         suppressHydrationWarning
+        onClick={scrollDocumentToTop}
       >
         DEZC {year}
       </Link>
