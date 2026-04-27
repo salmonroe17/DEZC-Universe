@@ -3,6 +3,9 @@ export const FLOW_PERIOD = 200
 export const FLOW_VB_H = 72
 export const FLOW_TOTAL_W = FLOW_PERIOD * 2
 export const FLOW_NODE_COUNT = 7
+
+/** Adjacent thumbnail centers in line-root space (track spans 2 units; nodes evenly spaced). */
+export const FLOW_NODE_CENTER_SPACING_NORM = 2 / FLOW_NODE_COUNT
 export const FLOW_MID = FLOW_VB_H / 2
 export const FLOW_AMP1 = 18
 export const FLOW_AMP2 = 4

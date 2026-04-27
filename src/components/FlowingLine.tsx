@@ -11,7 +11,14 @@ import {
   type RefObject,
 } from 'react'
 import { isSideQuestVideoUrl } from '../data/sidequests'
-import { FLOW_NODE_COUNT, FLOW_PERIOD, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from '../lib/flowingLineWave'
+import {
+  FLOW_NODE_CENTER_SPACING_NORM,
+  FLOW_NODE_COUNT,
+  FLOW_PERIOD,
+  FLOW_TOTAL_W,
+  FLOW_VB_H,
+  flowWaveY,
+} from '../lib/flowingLineWave'
 
 function FlowLineNodePreview({ src }: { src: string }) {
   const cls = 'h-full w-full object-cover'
@@ -159,8 +166,14 @@ const arrowBtnClass =
 const SPOTLIGHT_EXPAND_S = 0.7
 const SPOTLIGHT_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
-/** Legacy normalized band (≈32% of line-root width) — used only until line-root width is measured. */
-const SPOTLIGHT_ZONE_FALLBACK = { z0: 0.34 as const, z1: 0.66 as const }
+/**
+ * Legacy band before line-root width is measured — width ≥ {@link FLOW_NODE_CENTER_SPACING_NORM} so a
+ * node center can always intersect while scrolling.
+ */
+const SPOTLIGHT_ZONE_FALLBACK = ((): { z0: number; z1: number } => {
+  const half = Math.min(0.48, (FLOW_NODE_CENTER_SPACING_NORM + 0.02) / 2)
+  return { z0: 0.5 - half, z1: 0.5 + half }
+})()
 
 /**
  * Target **physical** width (CSS px) of the idle spotlight band at the center of the line.
@@ -179,7 +192,11 @@ function spotlightTargetWidthPx(viewportWidth: number): number {
 function spotlightZoneNorm(lineRootWidthPx: number, viewportWidth: number): { z0: number; z1: number } {
   const targetPx = spotlightTargetWidthPx(viewportWidth)
   if (lineRootWidthPx <= 1) return SPOTLIGHT_ZONE_FALLBACK
-  const halfNorm = Math.min(0.49, targetPx / (2 * lineRootWidthPx))
+  const pxWidthNorm = targetPx / lineRootWidthPx
+  // Wider than center-to-center spacing ⇒ no scroll phase where the band sits between two thumbnails.
+  const minWidthNorm = FLOW_NODE_CENTER_SPACING_NORM + 0.018
+  const widthNorm = Math.min(0.96, Math.max(minWidthNorm, pxWidthNorm))
+  const halfNorm = Math.min(0.48, widthNorm / 2)
   const z0 = 0.5 - halfNorm
   const z1 = 0.5 + halfNorm
   return { z0, z1 }
@@ -191,7 +208,19 @@ function nodeCenterXInLineRoot(i: number, hUnit: number): number {
   return -hUnit + 2 * t
 }
 
-function pickNodeInZone(hUnit: number, z0: number, z1: number): number | null {
+/**
+ * Picks the node whose center lies in [z0,z1] and is closest to horizontal center, with hysteresis: the
+ * previous pick stays while it remains in the band until another candidate is **clearly** closer.
+ * Stops rapid index flipping (jumpy spotlight / title) when two neighbors straddle the hotspot.
+ */
+const IDLE_SPOTLIGHT_SWITCH_MARGIN = 0.022
+
+function pickIdleSpotlightIndex(
+  hUnit: number,
+  z0: number,
+  z1: number,
+  sticky: number | null,
+): number | null {
   const candidates: number[] = []
   for (let i = 0; i < FLOW_NODE_COUNT; i++) {
     const x = nodeCenterXInLineRoot(i, hUnit)
@@ -199,11 +228,17 @@ function pickNodeInZone(hUnit: number, z0: number, z1: number): number | null {
   }
   if (candidates.length === 0) return null
   const mid = 0.5
-  return candidates.reduce((best, i) => {
-    const d = Math.abs(nodeCenterXInLineRoot(i, hUnit) - mid)
-    const db = Math.abs(nodeCenterXInLineRoot(best, hUnit) - mid)
-    return d < db ? i : best
-  })
+  const dist = (i: number) => Math.abs(nodeCenterXInLineRoot(i, hUnit) - mid)
+  let best = candidates[0]!
+  for (let k = 1; k < candidates.length; k++) {
+    const c = candidates[k]!
+    if (dist(c) < dist(best)) best = c
+  }
+  if (sticky !== null && candidates.includes(sticky)) {
+    if (dist(best) + IDLE_SPOTLIGHT_SWITCH_MARGIN < dist(sticky)) return best
+    return sticky
+  }
+  return best
 }
 
 export type FlowingLineSandProps = {
@@ -259,6 +294,11 @@ export function FlowingLine({
   /** Wave / timeline scroll — only the user’s own pointer on a node pauses it. */
   const linePaused = hoveredIndex !== null
   const linePausedRef = useRef(false)
+  const [idleSpotlightTarget, setIdleSpotlightTarget] = useState<number | null>(null)
+  const runIdleSpotRef = useRef(runIdleSpot)
+  const hoveredIndexRef = useRef(hoveredIndex)
+  const spotlightZoneRef = useRef<{ z0: number; z1: number }>(SPOTLIGHT_ZONE_FALLBACK)
+  const idleSpotlightHysteresisRef = useRef<number | null>(null)
 
   const [phaseTime, setPhaseTime] = useState(0)
   const phaseTimeRef = useRef(0)
@@ -312,6 +352,12 @@ export function FlowingLine({
     [spotlightLayout.lineW, spotlightLayout.vw],
   )
 
+  useLayoutEffect(() => {
+    runIdleSpotRef.current = runIdleSpot
+    hoveredIndexRef.current = hoveredIndex
+    spotlightZoneRef.current = spotlightZone
+  }, [runIdleSpot, hoveredIndex, spotlightZone])
+
   const syncArrowLeft = () => {
     arrowLeftRef.current = leftPointerOverRef.current || leftPointerHeldRef.current
   }
@@ -345,6 +391,19 @@ export function FlowingLine({
       const h = cycleMod(scrollCycleRef.current + userHOffsetRef.current)
       if (sandScrollHUnitRef) sandScrollHUnitRef.current = h
       setHUnit(h)
+
+      if (!runIdleSpotRef.current) {
+        if (idleSpotlightHysteresisRef.current !== null) {
+          idleSpotlightHysteresisRef.current = null
+          setIdleSpotlightTarget(null)
+        }
+      } else if (hoveredIndexRef.current === null) {
+        const { z0, z1 } = spotlightZoneRef.current
+        const next = pickIdleSpotlightIndex(h, z0, z1, idleSpotlightHysteresisRef.current)
+        idleSpotlightHysteresisRef.current = next
+        setIdleSpotlightTarget((prev) => (Object.is(prev, next) ? prev : next))
+      }
+
       id = requestAnimationFrame(tick)
     }
     id = requestAnimationFrame(tick)
@@ -367,11 +426,8 @@ export function FlowingLine({
 
   const leftPercent = -hUnit * 100
 
-  const idleZoneTargetIndex = useMemo((): number | null => {
-    if (!runIdleSpot) return null
-    if (hoveredIndex !== null) return null
-    return pickNodeInZone(hUnit, spotlightZone.z0, spotlightZone.z1)
-  }, [runIdleSpot, hoveredIndex, hUnit, spotlightZone.z0, spotlightZone.z1])
+  const idleZoneTargetIndex =
+    !runIdleSpot || hoveredIndex !== null ? null : idleSpotlightTarget
 
   const spotlightDim = hoveredIndex !== null || (runIdleSpot && idleZoneTargetIndex !== null)
   const displayHoverIndex = hoveredIndex ?? idleZoneTargetIndex
