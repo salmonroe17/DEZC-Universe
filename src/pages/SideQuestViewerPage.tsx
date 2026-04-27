@@ -655,6 +655,22 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
   )
 }
 
+function SideQuestViewerCopy({ current }: { current: SideQuestEntry }) {
+  return (
+    <div className="w-full max-w-full">
+      <p className="font-mono text-xs font-normal uppercase tracking-[0.22em] text-fg-subtle">
+        Sidequest:
+      </p>
+      <h1 className="mt-4 max-w-full text-balance font-mono text-[32px] font-normal leading-tight tracking-[-0.02em] text-fg">
+        {current.title}
+      </h1>
+      <p className="mt-4 max-w-full font-mono text-[12px] font-normal leading-[1.6] text-fg-muted">
+        {current.description}
+      </p>
+    </div>
+  )
+}
+
 function SideQuestViewerShell({
   current,
   selectedIndex,
@@ -820,22 +836,11 @@ function SideQuestViewerShell({
       >
         <section
           className={[
-            'box-border w-full shrink-0 border-b border-cell-border',
+            'box-border w-full shrink-0 border-b border-cell-border lg:hidden',
             'px-4 pb-6 pt-4',
-            'lg:px-4 lg:pb-5 lg:pt-[14px]',
           ].join(' ')}
         >
-          <div className="w-full max-w-full">
-            <p className="font-mono text-xs font-normal uppercase tracking-[0.22em] text-fg-subtle">
-              Sidequest:
-            </p>
-            <h1 className="mt-4 max-w-full text-balance font-mono text-[32px] font-normal leading-tight tracking-[-0.02em] text-fg">
-              {current.title}
-            </h1>
-            <p className="mt-4 max-w-full font-mono text-[12px] font-normal leading-[1.6] text-fg-muted">
-              {current.description}
-            </p>
-          </div>
+          <SideQuestViewerCopy current={current} />
         </section>
 
         <div
@@ -844,28 +849,33 @@ function SideQuestViewerShell({
             'lg:grid lg:min-h-0 lg:grid-cols-[minmax(0,68fr)_minmax(0,32fr)] lg:overflow-hidden',
           ].join(' ')}
         >
-          <div className="flex min-w-0 flex-col max-lg:flex-none lg:h-full lg:min-h-0 lg:self-stretch">
+          <div className="flex min-h-0 min-w-0 max-w-full flex-col max-lg:flex-none lg:h-full lg:self-stretch">
             <MainImageView key={mainKey} src={mainSrc} imageKey={mainKey} />
           </div>
 
           <aside
             className={[
-              'box-border flex w-full min-w-0',
+              'box-border flex w-full min-w-0 flex-col',
               'max-lg:flex-none',
               'border-t border-t-cell-border lg:border-t-0',
               'lg:border-l lg:border-l-cell-border',
-              'lg:min-h-0',
+              'lg:min-h-0 lg:overflow-hidden lg:self-stretch',
               'px-4 pb-4 pt-4',
-              'lg:h-full lg:max-h-full lg:self-stretch',
               'lg:pl-[26px] lg:pr-4 lg:pb-4 lg:pt-[14px]',
             ].join(' ')}
           >
+            <section
+              className={[
+                'hidden w-full shrink-0 border-b border-cell-border pb-5 lg:block',
+              ].join(' ')}
+            >
+              <SideQuestViewerCopy current={current} />
+            </section>
             <div
               className={[
                 'sidequest-viewer__scroll',
                 'w-full min-w-0',
-                'min-[1024px]:min-h-0 min-[1024px]:max-h-full min-[1024px]:flex-1',
-                'min-[1024px]:overflow-y-auto',
+                'lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pt-4',
               ].join(' ')}
             >
               <ThumbnailGrid

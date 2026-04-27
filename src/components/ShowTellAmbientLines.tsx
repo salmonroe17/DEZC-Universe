@@ -6,6 +6,11 @@ import {
   type MutableRefObject,
   type RefObject,
 } from 'react'
+import {
+  FLOW_AMBIENT_BLEND_W1,
+  FLOW_AMBIENT_BLEND_W2,
+  FLOW_AMBIENT_BLEND_W3,
+} from '../lib/flowingLineWave'
 const VB = 100
 const STEPS = 52
 
@@ -35,7 +40,7 @@ function buildPath(L: AmbientLine): string {
     const s1 = Math.sin(x * L.f1 + L.phase)
     const s2 = Math.sin(x * L.f2 - L.phase * 0.62)
     const s3 = Math.sin(x * (L.f1 + L.f2) * 0.85 + L.phase * 1.25)
-    const w = 0.42 * s1 + 0.34 * s2 + 0.24 * s3
+    const w = FLOW_AMBIENT_BLEND_W1 * s1 + FLOW_AMBIENT_BLEND_W2 * s2 + FLOW_AMBIENT_BLEND_W3 * s3
     const y = L.mid + L.amp * w
 
     parts.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`)
@@ -45,8 +50,8 @@ function buildPath(L: AmbientLine): string {
 
 function initLines(): AmbientLine[] {
   return [
-    { phase: 2.7, phaseVel: -0.42, mid: 52, midVel: 0, f1: 0.12, f2: 0.15, amp: 11 },
-    { phase: 5.1, phaseVel: 0.28, mid: 70, midVel: 0, f1: 0.088, f2: 0.2, amp: 11.5 },
+    { phase: 2.7, phaseVel: -0.42, mid: 52, midVel: 0, f1: 0.12, f2: 0.15, amp: 17 },
+    { phase: 5.1, phaseVel: 0.28, mid: 70, midVel: 0, f1: 0.088, f2: 0.2, amp: 18 },
   ]
 }
 
@@ -122,8 +127,8 @@ export function ShowTellAmbientLines({ scrollHUnitRef, hoveredNodeIndexRef }: Pr
     <div ref={hostRef} className="show-tell-ambient-lines" aria-hidden>
       <div
         ref={scrollWrapRef}
-        className="pointer-events-none absolute top-0 bottom-0 left-0 w-[200%] max-w-none will-change-[left]"
-        style={{ left: '0%' }}
+        className="pointer-events-none absolute top-0 bottom-0 left-0 max-w-none will-change-[left]"
+        style={{ left: '0%', width: '200%' }}
       >
         <svg
           className="absolute inset-0 block h-full w-full text-hud opacity-[0.14]"

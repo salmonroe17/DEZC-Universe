@@ -1,3 +1,5 @@
+import { FLOW_NODE_COUNT } from '../lib/flowingLineWave'
+
 /**
  * Side quest media in repo root `Side quest albums/<folder>/`.
  * Sorted paths: first file in each folder is the thumbnail (`coverImage` === `galleryImages[0]`).
@@ -129,6 +131,12 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     galleryImages: daisyMedia,
   },
 ]
+
+if (import.meta.env.DEV && SIDEQUESTS.length !== FLOW_NODE_COUNT) {
+  console.error(
+    `[sidequests] SIDEQUESTS.length (${SIDEQUESTS.length}) must equal FLOW_NODE_COUNT (${FLOW_NODE_COUNT}) — homepage wave will mismatch.`,
+  )
+}
 
 const byId = new Map(SIDEQUESTS.map((q) => [q.id, q] as const))
 

@@ -821,6 +821,8 @@ export function HudShooterIntro() {
   const comboRef = useRef(0)
   const scoreRef = useRef(0)
   const codenameRef = useRef('')
+  /** One UUID per run — sent with leaderboard submit to block duplicate POSTs for the same game. */
+  const gameSessionIdRef = useRef('')
 
   const [codename, setCodename] = useState(() => generateUniqueCodename())
   const [uiPhase, setUiPhase] = useState<'idle' | 'game' | 'end'>('idle')
@@ -910,6 +912,14 @@ export function HudShooterIntro() {
     }
 
     enteredGameRef.current = false
+    try {
+      gameSessionIdRef.current =
+        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `run-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+    } catch {
+      gameSessionIdRef.current = `run-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+    }
     setCombatHud(false)
     phaseRef.current = 'explode'
     explodeT0Ref.current = performance.now()
@@ -1387,13 +1397,16 @@ export function HudShooterIntro() {
           setFinalRunScore(fs)
           setFinalRunCodename(fn)
           setUiPhase('end')
-          void submitLeaderboardEntry(fs, fn).then(({ leaderboard, rank }) => {
-            setHighScores(leaderboard)
-            setLeaderboardRank(rank)
+          void (async () => {
+            const sid = gameSessionIdRef.current
+            const submitResult = await submitLeaderboardEntry(fs, fn, sid)
+            setLeaderboardRank(submitResult.rank)
+            const latest = await fetchLeaderboardTop()
+            setHighScores(latest)
             persistLastTargetsHit(fs)
             setLastTargetsHit(fs)
             setCodename(generateUniqueCodename())
-          })
+          })()
         }
       }
 
@@ -1578,7 +1591,7 @@ export function HudShooterIntro() {
                         <span className="text-white">{`#${n}`}</span>
                         <span>
                           {' '}
-                          {e.codename} —{' '}
+                          {e.codename.toUpperCase()} —{' '}
                         </span>
                         <span className="font-bold text-white">{e.score}</span>
                       </>

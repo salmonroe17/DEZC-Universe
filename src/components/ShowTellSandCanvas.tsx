@@ -1,5 +1,16 @@
 import { useEffect, useRef, type RefObject } from 'react'
-import { FLOW_NODE_COUNT, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from '../lib/flowingLineWave'
+import {
+  FLOW_LINE_CORE_W,
+  FLOW_LINE_TILE_SVG,
+  FLOW_LOOP_GAP_SVG,
+  FLOW_NODE_COUNT,
+  FLOW_TRACK_PHYSICAL_NODE_COUNT,
+  FLOW_TRACK_VIEW_W,
+  FLOW_VB_H,
+  flowPhysicalNodeCenterX,
+  flowWaveY,
+  flowWaveYAtTrackX,
+} from '../lib/flowingLineWave'
 
 export type ShowTellSandRefs = {
   lineRootRef: RefObject<HTMLDivElement | null>
@@ -41,15 +52,11 @@ function clamp(n: number, a: number, b: number): number {
   return Math.max(a, Math.min(b, n))
 }
 
-/** Repulsion from one curve y(x) in track CSS space. */
-function lineRepelSample(
-  lyCss: number,
-  vxb: number,
-  phase: number,
-  trackH: number,
-  waveFn: (x: number, t: number) => number,
-): number {
-  const waveYpx = (waveFn(vxb, phase) / FLOW_VB_H) * trackH
+/** Repulsion from the **visible** flowing stroke only (gaps → no force). */
+function lineRepelSample(lyCss: number, vxb: number, phase: number, trackH: number): number {
+  const ySvg = flowWaveYAtTrackX(vxb, phase)
+  if (ySvg === null) return 0
+  const waveYpx = (ySvg / FLOW_VB_H) * trackH
   const distLine = Math.abs(lyCss - waveYpx)
   if (distLine >= LINE_REPEL_CSS) return 0
   const t = 1 - distLine / LINE_REPEL_CSS
@@ -191,10 +198,15 @@ export function ShowTellSandCanvas({ sandRefs }: { sandRefs: ShowTellSandRefs })
       }
 
       const nodeView: { x: number; y: number }[] = []
-      for (let i = 0; i < FLOW_NODE_COUNT; i++) {
-        const vxb = ((i + 0.5) / FLOW_NODE_COUNT) * FLOW_TOTAL_W
-        const vyb = flowWaveY(vxb, phase)
-        const nx = (vxb / FLOW_TOTAL_W) * trackRect.width
+      for (let j = 0; j < FLOW_TRACK_PHYSICAL_NODE_COUNT; j++) {
+        const vxb = flowPhysicalNodeCenterX(j)
+        const localIdx = j % FLOW_NODE_COUNT
+        const along = ((localIdx + 0.5) / FLOW_NODE_COUNT) * FLOW_LINE_CORE_W
+        const wrapped =
+          ((along % FLOW_LINE_TILE_SVG) + FLOW_LINE_TILE_SVG) % FLOW_LINE_TILE_SVG
+        const sampleX = FLOW_LOOP_GAP_SVG + wrapped
+        const vyb = flowWaveY(sampleX, phase)
+        const nx = (vxb / FLOW_TRACK_VIEW_W) * trackRect.width
         const ny = (vyb / FLOW_VB_H) * trackRect.height
         nodeView.push({
           x: trackRect.left + nx,
@@ -217,11 +229,11 @@ export function ShowTellSandCanvas({ sandRefs }: { sandRefs: ShowTellSandRefs })
         ) {
           const lx = viewX - trackRect.left
           const ly = viewY - trackRect.top
-          const vxb = (lx / trackRect.width) * FLOW_TOTAL_W
-          fyc += lineRepelSample(ly, vxb, phase, trackRect.height, flowWaveY)
+          const vxb = (lx / trackRect.width) * FLOW_TRACK_VIEW_W
+          fyc += lineRepelSample(ly, vxb, phase, trackRect.height)
         }
 
-        for (let ni = 0; ni < FLOW_NODE_COUNT; ni++) {
+        for (let ni = 0; ni < FLOW_TRACK_PHYSICAL_NODE_COUNT; ni++) {
           const n = nodeView[ni]!
           const dx = viewX - n.x
           const dy = viewY - n.y
