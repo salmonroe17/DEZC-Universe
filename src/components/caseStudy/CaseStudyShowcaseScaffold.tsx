@@ -26,7 +26,10 @@ const caseStudiesNavButtonClass =
   'cursor-pointer border-0 bg-transparent p-0 font-[inherit] text-inherit underline decoration-cell-border underline-offset-[3px] hover:decoration-hud'
 
 /** Ignore tiny scroll deltas / layout nudges; require this much net movement to change chrome mode. */
-const CHROME_SCROLL_COMMIT_PX = 12
+const CHROME_SCROLL_COMMIT_PX = 22
+
+/** After a chrome expand/collapse, ignore scroll-driven mode toggles so layout settle doesn’t flip state. */
+const CHROME_SCROLL_MODE_COOLDOWN_MS = 420
 
 export type CaseStudyShowcaseScaffoldProps = {
   /** Short label above the TOC (case study name). */
@@ -190,6 +193,7 @@ export function CaseStudyShowcaseScaffold({
   }, [presentationMode])
 
   const scrollAccRef = useRef({ lastY: 0, down: 0, up: 0 })
+  const chromeScrollLockUntilRef = useRef(0)
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return
@@ -197,6 +201,14 @@ export function CaseStudyShowcaseScaffold({
     scrollAccRef.current.down = 0
     scrollAccRef.current.up = 0
   }, [presentationMode])
+
+  /** Spacer/header height jump resets scroll subtly — realign baseline so we don’t treat it as user direction. */
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined') return
+    scrollAccRef.current.lastY = window.scrollY
+    scrollAccRef.current.down = 0
+    scrollAccRef.current.up = 0
+  }, [showTopChromeRow])
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
@@ -213,6 +225,7 @@ export function CaseStudyShowcaseScaffold({
       }
 
       if (!mqlNarrow.matches) {
+        chromeScrollLockUntilRef.current = 0
         scrollAccRef.current.lastY = y
         scrollAccRef.current.down = 0
         scrollAccRef.current.up = 0
@@ -221,23 +234,31 @@ export function CaseStudyShowcaseScaffold({
       }
 
       const acc = scrollAccRef.current
+      const now = Date.now()
+      if (now < chromeScrollLockUntilRef.current) {
+        acc.lastY = y
+        return
+      }
+
       const dy = y - acc.lastY
       acc.lastY = y
 
       if (y < 20) {
+        chromeScrollLockUntilRef.current = 0
         acc.down = 0
         acc.up = 0
         setShowTopChromeRow(true)
         return
       }
 
-      if (Math.abs(dy) < 0.5) return
+      if (Math.abs(dy) < 0.75) return
 
       if (dy > 0) {
         acc.down += dy
         acc.up = 0
         if (acc.down >= CHROME_SCROLL_COMMIT_PX) {
           acc.down = 0
+          chromeScrollLockUntilRef.current = now + CHROME_SCROLL_MODE_COOLDOWN_MS
           setShowTopChromeRow((prev) => (prev ? false : prev))
         }
       } else {
@@ -245,6 +266,7 @@ export function CaseStudyShowcaseScaffold({
         acc.down = 0
         if (acc.up >= CHROME_SCROLL_COMMIT_PX) {
           acc.up = 0
+          chromeScrollLockUntilRef.current = now + CHROME_SCROLL_MODE_COOLDOWN_MS
           setShowTopChromeRow((prev) => (prev ? prev : true))
         }
       }
@@ -256,6 +278,7 @@ export function CaseStudyShowcaseScaffold({
     }
 
     const onLayoutChange = () => {
+      chromeScrollLockUntilRef.current = 0
       scrollAccRef.current.lastY = window.scrollY
       scrollAccRef.current.down = 0
       scrollAccRef.current.up = 0
@@ -280,7 +303,8 @@ export function CaseStudyShowcaseScaffold({
     <header className="site-frosted-nav fixed inset-x-0 top-0 z-[80] flex flex-col">
       <div
         className={[
-          'max-lg:min-h-0 max-lg:overflow-hidden max-lg:transition-[height] max-lg:duration-200 max-lg:ease-out motion-reduce:max-lg:transition-none',
+          /* No height/transform transition on narrow: animated clip fights scroll anchoring and causes mode flutter. */
+          'max-lg:min-h-0 max-lg:overflow-hidden max-lg:transition-none',
           'max-lg:h-[var(--cs-top-row-clip)]',
           'lg:h-auto lg:overflow-visible',
         ].join(' ')}
@@ -296,7 +320,7 @@ export function CaseStudyShowcaseScaffold({
         <div
           className={[
             'min-h-0 overflow-hidden [contain:content] lg:overflow-visible',
-            'max-lg:transition-transform max-lg:duration-200 max-lg:ease-out motion-reduce:max-lg:transition-none',
+            'max-lg:transition-none',
             collapseTopRowOnNarrow ? 'max-lg:-translate-y-full' : 'max-lg:translate-y-0',
             'lg:translate-y-0',
           ].join(' ')}

@@ -815,55 +815,67 @@ function SideQuestViewerShell({
         className={[
           'box-border flex w-full min-w-0 flex-col',
           'max-lg:flex-none max-lg:overflow-visible',
-          'min-[1024px]:grid min-[1024px]:min-h-0 min-[1024px]:flex-1 min-[1024px]:overflow-hidden',
-          'min-[1024px]:grid-cols-[minmax(0,68fr)_minmax(0,32fr)]',
-          'min-[1024px]:items-stretch min-[1024px]:gap-0',
+          'lg:min-h-0 lg:flex-1 lg:overflow-hidden',
         ].join(' ')}
       >
-        <div className="flex min-w-0 flex-col max-lg:flex-none min-[1024px]:h-full min-[1024px]:min-h-0 min-[1024px]:flex-1 min-[1024px]:self-stretch">
-          <MainImageView key={mainKey} src={mainSrc} imageKey={mainKey} />
-        </div>
-
-        <aside
+        <section
           className={[
-            'box-border flex w-full min-w-0',
-            'max-lg:flex-none',
-            'border-t border-t-cell-border min-[1024px]:border-t-0',
-            'min-[1024px]:border-l min-[1024px]:border-l-cell-border',
-            'min-[1024px]:min-h-0',
-            'pl-4 pr-4 pb-4 pt-4',
-            'min-[1024px]:h-full min-[1024px]:max-h-full min-[1024px]:self-stretch',
-            'min-[1024px]:pl-[26px] min-[1024px]:pr-4 min-[1024px]:pb-4 min-[1024px]:pt-[14px]',
+            'box-border w-full shrink-0 border-b border-cell-border',
+            'px-4 pb-6 pt-4',
+            'lg:px-4 lg:pb-5 lg:pt-[14px]',
           ].join(' ')}
         >
-          <div
+          <div className="w-full max-w-full">
+            <p className="font-mono text-xs font-normal uppercase tracking-[0.22em] text-fg-subtle">
+              Sidequest:
+            </p>
+            <h1 className="mt-4 max-w-full text-balance font-mono text-[32px] font-normal leading-tight tracking-[-0.02em] text-fg">
+              {current.title}
+            </h1>
+            <p className="mt-4 max-w-full font-mono text-[12px] font-normal leading-[1.6] text-fg-muted">
+              {current.description}
+            </p>
+          </div>
+        </section>
+
+        <div
+          className={[
+            'flex min-h-0 w-full min-w-0 flex-1 flex-col',
+            'lg:grid lg:min-h-0 lg:grid-cols-[minmax(0,68fr)_minmax(0,32fr)] lg:overflow-hidden',
+          ].join(' ')}
+        >
+          <div className="flex min-w-0 flex-col max-lg:flex-none lg:h-full lg:min-h-0 lg:self-stretch">
+            <MainImageView key={mainKey} src={mainSrc} imageKey={mainKey} />
+          </div>
+
+          <aside
             className={[
-              'sidequest-viewer__scroll',
-              'w-full min-w-0',
-              'min-[1024px]:min-h-0 min-[1024px]:max-h-full min-[1024px]:flex-1',
-              'min-[1024px]:overflow-y-auto',
+              'box-border flex w-full min-w-0',
+              'max-lg:flex-none',
+              'border-t border-t-cell-border lg:border-t-0',
+              'lg:border-l lg:border-l-cell-border',
+              'lg:min-h-0',
+              'px-4 pb-4 pt-4',
+              'lg:h-full lg:max-h-full lg:self-stretch',
+              'lg:pl-[26px] lg:pr-4 lg:pb-4 lg:pt-[14px]',
             ].join(' ')}
           >
-            <div className="w-full max-w-full border-b border-b-cell-border pb-6">
-              <p className="font-mono text-xs font-normal uppercase tracking-[0.22em] text-fg-subtle">
-                Sidequest:
-              </p>
-              <h1 className="mt-4 max-w-full text-balance font-mono text-[32px] font-normal leading-tight tracking-[-0.02em] text-fg">
-                {current.title}
-              </h1>
-              <p className="mt-4 max-w-full font-mono text-[12px] font-normal leading-[1.6] text-fg-muted">
-                {current.description}
-              </p>
-            </div>
-            <div className="mt-6 w-full">
+            <div
+              className={[
+                'sidequest-viewer__scroll',
+                'w-full min-w-0',
+                'min-[1024px]:min-h-0 min-[1024px]:max-h-full min-[1024px]:flex-1',
+                'min-[1024px]:overflow-y-auto',
+              ].join(' ')}
+            >
               <ThumbnailGrid
                 images={images}
                 selectedImageIndex={safeImageIndex}
                 onSelectImage={setImageIndex}
               />
             </div>
-          </div>
-        </aside>
+          </aside>
+        </div>
       </main>
 
       <CaseStudiesCardModal open={caseStudiesModalOpen} onClose={closeCaseStudiesModal} />

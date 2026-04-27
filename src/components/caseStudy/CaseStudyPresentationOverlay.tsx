@@ -44,8 +44,12 @@ const controlsBarTransformAnimClass =
 const TEXT_SCALE_MIN = 0.5
 const TEXT_SCALE_MAX = 3
 const TEXT_SCALE_STEP = 0.25
-/** Matches `textScale === 1` × body zoom factor on desktop; fixed on narrow viewports (no text +/- controls). */
+/** `textScale === 1` × this matches comfortable desktop reading in presentation (see width tiers below). */
 const PRESENTATION_TEXT_SLIDE_ZOOM_BASE = 1.5
+/** Below `lg`: extra shrink on text slides (tablet / small laptop). Applied on top of {@link PRESENTATION_TEXT_SLIDE_ZOOM_BASE} and user `textScale`. */
+const PRESENTATION_TEXT_ZOOM_LT_LG_FACTOR = 0.66
+/** Below `md`: no text +/- controls — fixed zoom uses base × this (phones). */
+const PRESENTATION_TEXT_ZOOM_LT_MD_FACTOR = 0.48
 const IMAGE_SCALE_MIN = 0.5
 const IMAGE_SCALE_MAX = 3
 const IMAGE_SCALE_STEP = 0.25
@@ -374,6 +378,9 @@ export function CaseStudyPresentationOverlay({
   const [presentationMdUp, setPresentationMdUp] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : true,
   )
+  const [presentationLgUp, setPresentationLgUp] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)').matches : true,
+  )
 
   const slideCaptureRootsRef = useRef<Array<HTMLDivElement | null>>([])
   const captureRunIdRef = useRef(0)
@@ -448,12 +455,27 @@ export function CaseStudyPresentationOverlay({
 
   useLayoutEffect(() => {
     if (!open) return
-    const mql = window.matchMedia('(min-width: 768px)')
-    const sync = () => setPresentationMdUp(mql.matches)
+    const mqlMd = window.matchMedia('(min-width: 768px)')
+    const mqlLg = window.matchMedia('(min-width: 1024px)')
+    const sync = () => {
+      setPresentationMdUp(mqlMd.matches)
+      setPresentationLgUp(mqlLg.matches)
+    }
     sync()
-    mql.addEventListener('change', sync)
-    return () => mql.removeEventListener('change', sync)
+    mqlMd.addEventListener('change', sync)
+    mqlLg.addEventListener('change', sync)
+    return () => {
+      mqlMd.removeEventListener('change', sync)
+      mqlLg.removeEventListener('change', sync)
+    }
   }, [open])
+
+  const presentationTextSlideZoom = useMemo(() => {
+    const base = PRESENTATION_TEXT_SLIDE_ZOOM_BASE
+    if (presentationLgUp) return textScale * base
+    if (presentationMdUp) return textScale * base * PRESENTATION_TEXT_ZOOM_LT_LG_FACTOR
+    return base * PRESENTATION_TEXT_ZOOM_LT_MD_FACTOR
+  }, [presentationLgUp, presentationMdUp, textScale])
 
   /** Per-slide preview only (no forward-fill) so image thumbnails stay aligned to the correct slide. */
   const resolvedThumbs = useMemo(
@@ -517,6 +539,7 @@ export function CaseStudyPresentationOverlay({
     open,
     textScale,
     presentationMdUp,
+    presentationLgUp,
     theme,
     imageScale,
     textSlidesVisible,
@@ -966,15 +989,10 @@ export function CaseStudyPresentationOverlay({
               aria-hidden={fullIndex !== safeFullIndex}
             >
               <div
-                className="presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-y-auto overflow-x-hidden px-5 py-8 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 md:py-10"
+                className="presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-y-auto overflow-x-hidden px-4 py-6 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 md:py-10"
                 style={{
-                  /* Text +/- (md+) only; below md use fixed base zoom to match desktop default. */
-                  zoom:
-                    slide.slideKind === 'text'
-                      ? presentationMdUp
-                        ? textScale * PRESENTATION_TEXT_SLIDE_ZOOM_BASE
-                        : PRESENTATION_TEXT_SLIDE_ZOOM_BASE
-                      : 1,
+                  /* lg+: full desktop zoom + text +/-; md–lg: scaled down; &lt;md: fixed smaller (no +/-). */
+                  zoom: slide.slideKind === 'text' ? presentationTextSlideZoom : 1,
                 }}
               >
                 {slide.slideKind !== 'text' ? (
