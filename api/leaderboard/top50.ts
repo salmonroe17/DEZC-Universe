@@ -1,16 +1,11 @@
 /**
- * GET /api/leaderboard/top
- * Returns: [{ rank, codename, score }, ...] (HUD: up to 3 rows; full list uses /api/leaderboard/top50)
+ * GET /api/leaderboard/top50
+ * Full public board: up to 50 rows with codename, score, playedAt (ISO), city (optional).
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyLeaderboardCors, preflightLeaderboard } from './cors.js'
-import {
-  LEADERBOARD_HUD_RESPONSE_LIMIT,
-  LEADERBOARD_REDIS_KEY,
-  parseStored,
-  toTopRows,
-} from './store.js'
+import { LEADERBOARD_REDIS_KEY, parseStored, toFullLeaderboardRows } from './store.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
@@ -30,15 +25,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!r.ok) {
       const isMissingEnv = r.error === REDIS_MISSING_ENV_MESSAGE
       return res.status(503).json(
-        isMissingEnv ? { error: 'Missing KV env vars' } : { error: r.error },
+        isMissingEnv ? { error: 'Missing KV env vars', entries: [] } : { error: r.error, entries: [] },
       )
     }
 
     const redis = r.client
     const raw = await redis.get(LEADERBOARD_REDIS_KEY)
-    const top = toTopRows(parseStored(raw), LEADERBOARD_HUD_RESPONSE_LIMIT)
-    res.setHeader('Cache-Control', 'public, s-maxage=5, stale-while-revalidate=30')
-    return res.status(200).json(top)
+    const entries = toFullLeaderboardRows(parseStored(raw))
+    res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=60')
+    return res.status(200).json({ entries })
   } catch (e) {
     try {
       applyLeaderboardCors(res)
@@ -46,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       /* noop */
     }
     const message = e instanceof Error ? e.message : 'Internal server error'
-    console.info('[leaderboard/top]', { handlerFailed: true })
-    return res.status(500).json({ error: message })
+    console.info('[leaderboard/top50]', { handlerFailed: true })
+    return res.status(500).json({ error: message, entries: [] })
   }
 }

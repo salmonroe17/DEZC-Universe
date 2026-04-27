@@ -7,10 +7,7 @@ import type { SideQuestTimelineController } from './useSideQuestTimelineControll
 
 export type SideQuestFlowingLineRailProps = {
   controller: SideQuestTimelineController
-  /**
-   * Horizontal chevron drift scale — use &gt; 1 in narrow shells (e.g. modal) so scrubbing matches
-   * the home quadrant feel (see {@link FlowingLine} `arrowDriftRateScale`).
-   */
+  /** Optional multiplier on chevron scrub; default 1 — same as home quadrant (see {@link FlowingLine}). */
   arrowDriftRateScale?: number
   lineBandClassName?: string
   lineTrackClassName?: string

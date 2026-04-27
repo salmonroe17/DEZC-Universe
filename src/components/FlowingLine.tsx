@@ -486,9 +486,15 @@ export function FlowingLine({
   const syncArrowRight = () => {
     arrowRightRef.current = rightPointerOverRef.current || rightPointerHeldRef.current
   }
+  /**
+   * Shared playback speed for auto drift + left/right chevrons (home quadrant, footer, modal).
+   * 1.5× faster than the original `115/3` loop + `0.065*1.5` arrow scrub.
+   */
+  const SIDE_QUEST_LINE_SPEED = 1.5
   /** One full horizontal loop (0→1 on `h`) in seconds — larger = slower drift. */
-  const H_SCROLL_S = 115 / 3
-  const ARROW_DRIFT_RATE = 0.065 * 1.5
+  const H_SCROLL_S = (115 / 3) / SIDE_QUEST_LINE_SPEED
+  /** Chevron hold scrub rate; legacy base was `0.065 * 1.5` before `SIDE_QUEST_LINE_SPEED`. */
+  const ARROW_DRIFT_RATE = 0.065 * 1.5 * SIDE_QUEST_LINE_SPEED
   const arrowDrift = ARROW_DRIFT_RATE * arrowDriftRateScale
 
   useEffect(() => {

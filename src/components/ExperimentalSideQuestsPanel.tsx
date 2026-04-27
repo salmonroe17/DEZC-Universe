@@ -49,8 +49,6 @@ export function ExperimentalSideQuestsPanel({
   topRightSlot,
 }: ExperimentalSideQuestsPanelProps) {
   const timeline = useSideQuestTimelineController()
-  /** Slightly faster nudge in narrow footer shells; base drift is slow — keep scale modest. */
-  const arrowDriftRateScale = layout === 'footer' ? 1.2 : 1
 
   const narrativeColumn = (
     <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col overflow-visible">
@@ -62,7 +60,7 @@ export function ExperimentalSideQuestsPanel({
       >
         Click squares to see visuals
       </p>
-      <SideQuestFlowingLineRail controller={timeline} arrowDriftRateScale={arrowDriftRateScale} />
+      <SideQuestFlowingLineRail controller={timeline} />
     </div>
   )
 

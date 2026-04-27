@@ -14,6 +14,8 @@ const DesignSystemsShowcasePage = lazy(() => import('./pages/DesignSystemsShowca
 const CaseStudyComponentsPage = lazy(() => import('./pages/CaseStudyComponentsPage'))
 const SideQuestViewerPage = lazy(() => import('./pages/SideQuestViewerPage'))
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const GlobalLeaderboardPage = lazy(() => import('./pages/GlobalLeaderboardPage'))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 
 function RouteFallback() {
   return (
@@ -46,6 +48,8 @@ export default function App() {
                     element={<CaseStudyComponentsPage />}
                   />
                   <Route path="sidequest/:sidequestId" element={<SideQuestViewerPage />} />
+                  <Route path="leaderboard" element={<GlobalLeaderboardPage />} />
+                  <Route path="privacy" element={<PrivacyPolicyPage />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Route>
               </Routes>

@@ -2,13 +2,17 @@
  * POST /api/leaderboard/submit
  * Body: { codename, score, sessionId? }
  *
- * Top 3 globally; same codename only improves if new score is strictly higher;
- * scores not in top 3 are not stored. Optional sessionId: when set, one POST per id (anti double-submit).
+ * Top {@link LEADERBOARD_MAX_ENTRIES} globally (one row per codename, personal best);
+ * optional sessionId: one POST per id (anti double-submit).
+ * Approximate city from Vercel `x-vercel-ip-city` when deployed.
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyLeaderboardCors, preflightLeaderboard } from './cors.js'
+import { inferCityFromVercelRequest } from './geo.js'
 import {
+  LEADERBOARD_HUD_RESPONSE_LIMIT,
+  LEADERBOARD_MAX_ENTRIES,
   LEADERBOARD_REDIS_KEY,
   SESSION_LOCK_PREFIX,
   SESSION_LOCK_TTL_S,
@@ -43,6 +47,13 @@ function readJsonBody(req: VercelRequest): Record<string, unknown> | undefined {
 
 function sessionLockAcquired(lockResult: unknown): boolean {
   return lockResult === 'OK' || lockResult === true
+}
+
+function newEntry(codename: string, scoreInt: number, req: VercelRequest): StoredEntry {
+  const city = inferCityFromVercelRequest(req)
+  const entry: StoredEntry = { codename, score: scoreInt, createdAt: Date.now() }
+  if (city) entry.city = city
+  return entry
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -103,7 +114,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             accepted: false,
             duplicateSession: true,
             rank: null,
-            top: toTopRows(parseStored(rawDup)),
+            top: toTopRows(parseStored(rawDup), LEADERBOARD_HUD_RESPONSE_LIMIT),
           })
         }
         lockKeyHeld = lockKey
@@ -122,31 +133,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           duplicateSession: false,
           reason: 'not_higher_than_personal_best',
           rank: null,
-          top: toTopRows(entries),
+          top: toTopRows(entries, LEADERBOARD_HUD_RESPONSE_LIMIT),
         })
       }
 
       const without: StoredEntry[] = entries.filter((e) => e.codename !== codenameRaw)
-      const candidate: StoredEntry[] = [
-        ...without,
-        { codename: codenameRaw, score: scoreInt, createdAt: Date.now() },
-      ]
+      const candidate: StoredEntry[] = [...without, newEntry(codenameRaw, scoreInt, req)]
       candidate.sort(sortEntries)
-      const top3 = candidate.slice(0, 3)
-      const inTop = top3.some((e) => e.codename === codenameRaw && e.score === scoreInt)
+      const topN = candidate.slice(0, LEADERBOARD_MAX_ENTRIES)
+      const inTop = topN.some((e) => e.codename === codenameRaw && e.score === scoreInt)
 
       if (!inTop) {
         return res.status(200).json({
           accepted: false,
           duplicateSession: false,
-          reason: 'below_top_three',
+          reason: 'below_leaderboard_cutoff',
           rank: null,
-          top: toTopRows(entries),
+          top: toTopRows(entries, LEADERBOARD_HUD_RESPONSE_LIMIT),
         })
       }
 
-      await redis.set(LEADERBOARD_REDIS_KEY, JSON.stringify(top3))
-      const top = toTopRows(top3)
+      await redis.set(LEADERBOARD_REDIS_KEY, JSON.stringify(topN))
+      const top = toTopRows(topN, LEADERBOARD_HUD_RESPONSE_LIMIT)
       const rank =
         top.find((r) => r.codename === codenameRaw && r.score === scoreInt)?.rank ?? null
 

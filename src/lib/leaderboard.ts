@@ -1,5 +1,6 @@
 /**
- * Global top-3 leaderboard (GET /api/leaderboard/top, POST /api/leaderboard/submit on Vercel + Upstash).
+ * Global leaderboard (GET /api/leaderboard/top = HUD top 3, GET /api/leaderboard/top50 = full board,
+ * POST /api/leaderboard/submit on Vercel + Upstash).
  *
  * Optional VITE_LEADERBOARD_API: site origin (no path) — defaults to same-origin /api/leaderboard/*.
  * Falls back to localStorage when the API is missing or unreachable (e.g. Vite dev without vercel dev).
@@ -11,6 +12,15 @@ export type LeaderboardTopRow = {
   rank: number
   codename: string
   score: number
+}
+
+/** Full board row (GET /api/leaderboard/top50). */
+export type LeaderboardFullRow = {
+  rank: number
+  codename: string
+  score: number
+  playedAt: string
+  city: string | null
 }
 
 /** Row with stable `id` for React keys (derived from rank + codename + score). */
@@ -31,7 +41,9 @@ function apiOrigin(): string {
   return env.trim().replace(/\/$/, '')
 }
 
-function url(path: '/api/leaderboard/top' | '/api/leaderboard/submit'): string {
+function url(
+  path: '/api/leaderboard/top' | '/api/leaderboard/submit' | '/api/leaderboard/top50',
+): string {
   const o = apiOrigin()
   return o ? `${o}${path}` : path
 }
@@ -194,6 +206,52 @@ export function mergeLocalLeaderboard(
     leaderboard,
     rank: rank > 0 ? rank : null,
     accepted: true,
+  }
+}
+
+function normalizeFullRow(raw: unknown, index: number): LeaderboardFullRow | null {
+  if (raw == null || typeof raw !== 'object') return null
+  const o = raw as Record<string, unknown>
+  const rankRaw = o.rank
+  const rank =
+    typeof rankRaw === 'number' && Number.isFinite(rankRaw)
+      ? Math.max(1, Math.floor(rankRaw))
+      : index + 1
+  const codename =
+    typeof o.codename === 'string' ? o.codename.trim().slice(0, 120) : ''
+  const score = o.score
+  const playedAt = typeof o.playedAt === 'string' ? o.playedAt : ''
+  if (!codename || typeof score !== 'number' || !Number.isFinite(score) || !playedAt) return null
+  const city =
+    o.city === null || o.city === undefined
+      ? null
+      : typeof o.city === 'string'
+        ? o.city.trim().slice(0, 80) || null
+        : null
+  return { rank, codename, score: Math.floor(score), playedAt, city }
+}
+
+export async function fetchLeaderboardTop50(): Promise<LeaderboardFullRow[]> {
+  const u = url('/api/leaderboard/top50')
+  try {
+    const res = await fetch(u, {
+      method: 'GET',
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+    })
+    if (!res.ok) throw new Error(`GET ${res.status}`)
+    const data: unknown = await res.json()
+    if (data == null || typeof data !== 'object' || !('entries' in data)) return []
+    const entries = (data as { entries: unknown }).entries
+    if (!Array.isArray(entries)) return []
+    return entries
+      .map((e, i) => normalizeFullRow(e, i))
+      .filter((e): e is LeaderboardFullRow => e != null)
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.warn('[leaderboard] GET /api/leaderboard/top50 failed', err)
+    }
+    return []
   }
 }
 
