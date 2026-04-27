@@ -36,6 +36,9 @@ const cellVariants = {
 /** Chamfered border + fill via ::before/::after (see index.css). */
 const quadrantCell = 'quadrant-cell min-h-0 min-w-0'
 
+/** Hero + Case Studies: same floor height below `lg` (1-col stack or 2-col row). Cleared at `lg` for `13fr/7fr` rows. */
+const topRowQuadrantMinMaxLg = 'max-lg:min-h-[500px] lg:min-h-0'
+
 export function ExperimentalGrid() {
   const noPrimaryHover = useNoPrimaryHoverDevice()
   const [heroQEl, setHeroQEl] = useState<HTMLDivElement | null>(null)
@@ -75,11 +78,11 @@ export function ExperimentalGrid() {
         <motion.div
           ref={setHeroQEl}
           variants={cellVariants}
-          className={`${quadrantCell} relative flex h-full min-h-0 sm:max-lg:col-start-1 sm:max-lg:row-start-1 lg:col-start-1 lg:row-start-1`}
+          className={`${quadrantCell} ${topRowQuadrantMinMaxLg} relative flex h-full min-h-0 sm:max-lg:col-start-1 sm:max-lg:row-start-1 lg:col-start-1 lg:row-start-1`}
           data-quadrant-in-view={noPrimaryHover && heroMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}
         >
-          <div className="relative z-10 flex h-full min-h-0 min-w-0 w-full max-lg:min-h-[500px] flex-1 overflow-hidden">
+          <div className="relative z-10 flex h-full min-h-0 min-w-0 w-full flex-1 overflow-hidden">
             <HudShooterIntro />
           </div>
         </motion.div>
@@ -88,7 +91,7 @@ export function ExperimentalGrid() {
         <motion.div
           ref={setCaseStudiesQEl}
           variants={cellVariants}
-          className={`group/right-quadrant ${quadrantCell} relative flex h-full min-h-0 min-w-0 flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-1 lg:col-start-2 lg:row-start-1`}
+          className={`group/right-quadrant ${quadrantCell} ${topRowQuadrantMinMaxLg} relative flex h-full min-h-0 min-w-0 flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-1 lg:col-start-2 lg:row-start-1`}
           data-quadrant-in-view={noPrimaryHover && caseStudiesMajorityInView ? true : undefined}
           style={{ willChange: 'opacity, transform' }}
         >

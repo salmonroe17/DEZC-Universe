@@ -11,16 +11,10 @@ import {
   type RefObject,
 } from 'react'
 import { isSideQuestVideoUrl } from '../data/sidequests'
-import {
-  FLOW_NODE_CENTER_SPACING_NORM,
-  FLOW_NODE_COUNT,
-  FLOW_PERIOD,
-  FLOW_TOTAL_W,
-  FLOW_VB_H,
-  flowWaveY,
-} from '../lib/flowingLineWave'
+import { FLOW_NODE_COUNT, FLOW_PERIOD, FLOW_TOTAL_W, FLOW_VB_H, flowWaveY } from '../lib/flowingLineWave'
 
-function FlowLineNodePreview({ src }: { src: string }) {
+/** When false (idle rail: magnified slot hidden), skip IO / playback so inactive nodes do not decode video in parallel. */
+function FlowLineNodePreview({ src, mediaActive = true }: { src: string; mediaActive?: boolean }) {
   const cls = 'h-full w-full object-cover'
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -28,6 +22,10 @@ function FlowLineNodePreview({ src }: { src: string }) {
     if (!isSideQuestVideoUrl(src)) return
     const video = videoRef.current
     if (!video) return
+    if (!mediaActive) {
+      video.pause()
+      return
+    }
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0]
@@ -42,7 +40,7 @@ function FlowLineNodePreview({ src }: { src: string }) {
     )
     observer.observe(video)
     return () => observer.disconnect()
-  }, [src])
+  }, [src, mediaActive])
 
   if (isSideQuestVideoUrl(src)) {
     return (
@@ -58,7 +56,7 @@ function FlowLineNodePreview({ src }: { src: string }) {
       />
     )
   }
-  return <img src={src} alt="" draggable={false} className={cls} />
+  return <img src={src} alt="" draggable={false} className={cls} loading={mediaActive ? 'eager' : 'lazy'} />
 }
 
 /**
@@ -114,6 +112,26 @@ function cycleMod(n: number): number {
   return ((n % 1) + 1) % 1
 }
 
+/** Horizontal position of node `i`’s center in line-root space; track is 2× width, window is [0,1]. */
+function nodeCenterXInLineRoot(i: number, hUnit: number): number {
+  const t = (i + 0.5) / FLOW_NODE_COUNT
+  return -hUnit + 2 * t
+}
+
+/** Idle autoplay: which tile’s center is nearest the line midpoint (matches what you see under center). */
+function closestNodeIndexToLineCenter(hUnit: number): number {
+  let best = 0
+  let bestD = Number.POSITIVE_INFINITY
+  for (let i = 0; i < FLOW_NODE_COUNT; i++) {
+    const d = Math.abs(nodeCenterXInLineRoot(i, hUnit) - 0.5)
+    if (d < bestD) {
+      bestD = d
+      best = i
+    }
+  }
+  return best
+}
+
 function buildSinePath(
   periods: number,
   period: number,
@@ -163,83 +181,19 @@ function ChevronRightIcon({ className }: { className?: string }) {
 const arrowBtnClass =
   'pointer-events-auto z-20 flex size-9 touch-none select-none items-center justify-center border border-cell-border/90 bg-bg/75 text-fg/70 shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-hud)_14%,transparent)] backdrop-blur-[2px] transition-[color,background-color,border-color] duration-150 hover:border-hud/35 hover:bg-elevated/90 hover:text-fg md:size-10'
 
-const SPOTLIGHT_EXPAND_S = 0.7
-const SPOTLIGHT_EASE: [number, number, number, number] = [0.25, 0.1, 0.25, 1]
 
 /**
- * Legacy band before line-root width is measured — width ≥ {@link FLOW_NODE_CENTER_SPACING_NORM} so a
- * node center can always intersect while scrolling.
+ * `h = cycleMod(raw)` can jump ~1 when `raw` crosses an integer while `|Δraw|` is tiny — skip that
+ * frame for picking (CSS still uses the new `h`).
  */
-const SPOTLIGHT_ZONE_FALLBACK = ((): { z0: number; z1: number } => {
-  const half = Math.min(0.48, (FLOW_NODE_CENTER_SPACING_NORM + 0.02) / 2)
-  return { z0: 0.5 - half, z1: 0.5 + half }
-})()
+const IDLE_SCROLL_WRAP_RAW_EPS = 0.08
+const IDLE_SCROLL_WRAP_H_JUMP = 0.35
 
-/**
- * Target **physical** width (CSS px) of the idle spotlight band at the center of the line.
- * Mapped from viewport width; converted to normalized [z0,z1] using measured line-root width.
- */
-function spotlightTargetWidthPx(viewportWidth: number): number {
-  if (viewportWidth < 768) return 72
-  if (viewportWidth < 1024) return 110
-  return 160
-}
+/** Require this many matching picks before committing — dampens 2-way ties at the midpoint. */
+const IDLE_PICK_STABLE_FRAMES = 3
 
-/**
- * In line-root x (0 = left, 1 = right of the visible band), the node center must fall in
- * [z0,z1] to get the automatic hover (thumbnail) while the wave scrolls.
- */
-function spotlightZoneNorm(lineRootWidthPx: number, viewportWidth: number): { z0: number; z1: number } {
-  const targetPx = spotlightTargetWidthPx(viewportWidth)
-  if (lineRootWidthPx <= 1) return SPOTLIGHT_ZONE_FALLBACK
-  const pxWidthNorm = targetPx / lineRootWidthPx
-  // Wider than center-to-center spacing ⇒ no scroll phase where the band sits between two thumbnails.
-  const minWidthNorm = FLOW_NODE_CENTER_SPACING_NORM + 0.018
-  const widthNorm = Math.min(0.96, Math.max(minWidthNorm, pxWidthNorm))
-  const halfNorm = Math.min(0.48, widthNorm / 2)
-  const z0 = 0.5 - halfNorm
-  const z1 = 0.5 + halfNorm
-  return { z0, z1 }
-}
-
-/** Horizontal position of node `i`’s center in line-root space; track is 2× width, window is [0,1]. */
-function nodeCenterXInLineRoot(i: number, hUnit: number): number {
-  const t = (i + 0.5) / FLOW_NODE_COUNT
-  return -hUnit + 2 * t
-}
-
-/**
- * Picks the node whose center lies in [z0,z1] and is closest to horizontal center, with hysteresis: the
- * previous pick stays while it remains in the band until another candidate is **clearly** closer.
- * Stops rapid index flipping (jumpy spotlight / title) when two neighbors straddle the hotspot.
- */
-const IDLE_SPOTLIGHT_SWITCH_MARGIN = 0.022
-
-function pickIdleSpotlightIndex(
-  hUnit: number,
-  z0: number,
-  z1: number,
-  sticky: number | null,
-): number | null {
-  const candidates: number[] = []
-  for (let i = 0; i < FLOW_NODE_COUNT; i++) {
-    const x = nodeCenterXInLineRoot(i, hUnit)
-    if (x >= z0 && x <= z1) candidates.push(i)
-  }
-  if (candidates.length === 0) return null
-  const mid = 0.5
-  const dist = (i: number) => Math.abs(nodeCenterXInLineRoot(i, hUnit) - mid)
-  let best = candidates[0]!
-  for (let k = 1; k < candidates.length; k++) {
-    const c = candidates[k]!
-    if (dist(c) < dist(best)) best = c
-  }
-  if (sticky !== null && candidates.includes(sticky)) {
-    if (dist(best) + IDLE_SPOTLIGHT_SWITCH_MARGIN < dist(sticky)) return best
-    return sticky
-  }
-  return best
-}
+const IDLE_SPOTLIGHT_CROSSFADE_CLASS =
+  'transition-opacity duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)] will-change-[opacity]'
 
 export type FlowingLineSandProps = {
   sandLineRootRef?: RefObject<HTMLDivElement | null>
@@ -297,8 +251,11 @@ export function FlowingLine({
   const [idleSpotlightTarget, setIdleSpotlightTarget] = useState<number | null>(null)
   const runIdleSpotRef = useRef(runIdleSpot)
   const hoveredIndexRef = useRef(hoveredIndex)
-  const spotlightZoneRef = useRef<{ z0: number; z1: number }>(SPOTLIGHT_ZONE_FALLBACK)
-  const idleSpotlightHysteresisRef = useRef<number | null>(null)
+  const idleScrollRawPrevRef = useRef<number | null>(null)
+  const idleScrollHPrevRef = useRef<number | null>(null)
+  const idlePickCandidateRef = useRef<number | null>(null)
+  const idlePickStableFramesRef = useRef(0)
+  const idlePickCommittedRef = useRef<number | null>(null)
 
   const [phaseTime, setPhaseTime] = useState(0)
   const phaseTimeRef = useRef(0)
@@ -323,40 +280,10 @@ export function FlowingLine({
   const lineRootRef = sandLineRootRef ?? internalRootRef
   const trackRef = sandTrackRef ?? internalTrackRef
 
-  const [spotlightLayout, setSpotlightLayout] = useState(() => ({
-    lineW: 0,
-    vw: typeof window !== 'undefined' ? window.innerWidth : 1024,
-  }))
-
-  useLayoutEffect(() => {
-    const sync = () => {
-      const el = lineRootRef.current
-      setSpotlightLayout({
-        lineW: el?.clientWidth ?? 0,
-        vw: typeof window !== 'undefined' ? window.innerWidth : 1024,
-      })
-    }
-    sync()
-    const el = lineRootRef.current
-    const ro = new ResizeObserver(sync)
-    if (el) ro.observe(el)
-    window.addEventListener('resize', sync)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', sync)
-    }
-  }, [lineRootRef])
-
-  const spotlightZone = useMemo(
-    () => spotlightZoneNorm(spotlightLayout.lineW, spotlightLayout.vw),
-    [spotlightLayout.lineW, spotlightLayout.vw],
-  )
-
   useLayoutEffect(() => {
     runIdleSpotRef.current = runIdleSpot
     hoveredIndexRef.current = hoveredIndex
-    spotlightZoneRef.current = spotlightZone
-  }, [runIdleSpot, hoveredIndex, spotlightZone])
+  }, [runIdleSpot, hoveredIndex])
 
   const syncArrowLeft = () => {
     arrowLeftRef.current = leftPointerOverRef.current || leftPointerHeldRef.current
@@ -372,13 +299,19 @@ export function FlowingLine({
   useEffect(() => {
     let id: number
     let last = performance.now()
+    let lastPhaseUiCommit = performance.now()
     const tick = (now: number) => {
       const dt = Math.min((now - last) / 1000, 0.064)
       last = now
       if (!linePausedRef.current) {
         scrollCycleRef.current -= dt / H_SCROLL_S
         phaseTimeRef.current += dt
-        setPhaseTime(phaseTimeRef.current)
+        // Throttle wave commits: full line still scrolls every frame via `hUnit`; phase alone was
+        // forcing 60 React commits/sec and compounded jitter with idle spotlight transitions.
+        if (now - lastPhaseUiCommit >= 32) {
+          lastPhaseUiCommit = now
+          setPhaseTime(phaseTimeRef.current)
+        }
       }
       if (arrowLeftRef.current) {
         userHOffsetRef.current += arrowDrift * dt
@@ -388,20 +321,58 @@ export function FlowingLine({
         setUserHOffset(userHOffsetRef.current)
       }
       if (sandPhaseRef) sandPhaseRef.current = phaseTimeRef.current
-      const h = cycleMod(scrollCycleRef.current + userHOffsetRef.current)
+      const raw = scrollCycleRef.current + userHOffsetRef.current
+      const h = cycleMod(raw)
       if (sandScrollHUnitRef) sandScrollHUnitRef.current = h
       setHUnit(h)
 
       if (!runIdleSpotRef.current) {
-        if (idleSpotlightHysteresisRef.current !== null) {
-          idleSpotlightHysteresisRef.current = null
-          setIdleSpotlightTarget(null)
+        idleScrollRawPrevRef.current = null
+        idleScrollHPrevRef.current = null
+        idlePickCandidateRef.current = null
+        idlePickStableFramesRef.current = 0
+        idlePickCommittedRef.current = null
+        setIdleSpotlightTarget(null)
+      } else if (hoveredIndexRef.current !== null) {
+        idleScrollRawPrevRef.current = null
+        idleScrollHPrevRef.current = null
+        idlePickCandidateRef.current = null
+        idlePickStableFramesRef.current = 0
+        idlePickCommittedRef.current = null
+      } else {
+        const rawPrev = idleScrollRawPrevRef.current
+        const hPrev = idleScrollHPrevRef.current
+        let hForPick = h
+        if (
+          rawPrev !== null &&
+          hPrev !== null &&
+          Math.abs(h - hPrev) > IDLE_SCROLL_WRAP_H_JUMP &&
+          Math.abs(raw - rawPrev) < IDLE_SCROLL_WRAP_RAW_EPS
+        ) {
+          hForPick = hPrev
         }
-      } else if (hoveredIndexRef.current === null) {
-        const { z0, z1 } = spotlightZoneRef.current
-        const next = pickIdleSpotlightIndex(h, z0, z1, idleSpotlightHysteresisRef.current)
-        idleSpotlightHysteresisRef.current = next
-        setIdleSpotlightTarget((prev) => (Object.is(prev, next) ? prev : next))
+        idleScrollRawPrevRef.current = raw
+        idleScrollHPrevRef.current = h
+
+        const pick = closestNodeIndexToLineCenter(hForPick)
+        let cand = idlePickCandidateRef.current
+        let n = idlePickStableFramesRef.current
+        if (pick !== cand) {
+          cand = pick
+          n = 0
+        } else {
+          n++
+        }
+        idlePickCandidateRef.current = cand
+        idlePickStableFramesRef.current = n
+
+        const committed = idlePickCommittedRef.current
+        const displayNext =
+          committed === null || n >= IDLE_PICK_STABLE_FRAMES ? cand : committed
+        if (committed === null || n >= IDLE_PICK_STABLE_FRAMES) {
+          idlePickCommittedRef.current = cand
+        }
+        setIdleSpotlightTarget((prev) => (prev === displayNext ? prev : displayNext))
       }
 
       id = requestAnimationFrame(tick)
@@ -438,6 +409,10 @@ export function FlowingLine({
 
   useLayoutEffect(() => {
     linePausedRef.current = linePaused
+  }, [linePaused])
+
+  useLayoutEffect(() => {
+    if (!linePaused) setPhaseTime(phaseTimeRef.current)
   }, [linePaused])
 
   const onNodePointerLeave = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -507,7 +482,6 @@ export function FlowingLine({
           const dimOthers = spotlightDim && !active
           const idle = FLOW_NODE_IDLE_MOTION[i]!
           const previewSrc = getNodePreviewSrc?.(i)
-          const magEase: Transition = { duration: SPOTLIGHT_EXPAND_S, ease: SPOTLIGHT_EASE }
           return (
             <div
               key={i}
@@ -563,14 +537,14 @@ export function FlowingLine({
                   </div>
                 ) : inIdlePath ? (
                   <div className="relative flex min-h-[1.5rem] min-w-[1.5rem] items-center justify-center">
-                    <motion.div
-                      className="absolute flex items-center justify-center will-change-transform"
+                    <div
+                      className={[
+                        'absolute flex items-center justify-center',
+                        IDLE_SPOTLIGHT_CROSSFADE_CLASS,
+                        inIdleZone ? 'pointer-events-none opacity-0' : 'opacity-100',
+                      ].join(' ')}
                       style={{ zIndex: 1 }}
-                      initial={false}
-                      animate={{
-                        opacity: inIdleZone ? 0 : 1,
-                      }}
-                      transition={magEase}
+                      aria-hidden={inIdleZone}
                     >
                       <motion.div
                         initial={false}
@@ -585,16 +559,14 @@ export function FlowingLine({
                         animate={idle.animate}
                         transition={idle.transition}
                       />
-                    </motion.div>
-                    <motion.div
-                      className="absolute flex items-center justify-center will-change-transform"
-                      style={{ zIndex: 2, pointerEvents: 'none' }}
-                      initial={false}
-                      animate={{
-                        opacity: inIdleZone ? 1 : 0,
-                        scale: inIdleZone ? 1 : 0.4,
-                      }}
-                      transition={magEase}
+                    </div>
+                    <div
+                      className={[
+                        'absolute flex items-center justify-center',
+                        IDLE_SPOTLIGHT_CROSSFADE_CLASS,
+                        inIdleZone ? 'opacity-100' : 'pointer-events-none opacity-0',
+                      ].join(' ')}
+                      style={{ zIndex: 2 }}
                     >
                       <div
                         aria-hidden
@@ -602,12 +574,12 @@ export function FlowingLine({
                       />
                       {previewSrc ? (
                         <div className={FLOW_LINE_PREVIEW_THUMB_CLIP_CLASS}>
-                          <FlowLineNodePreview src={previewSrc} />
+                          <FlowLineNodePreview src={previewSrc} mediaActive={inIdleZone} />
                         </div>
                       ) : (
                         <div className="relative z-[1] size-4 shrink-0 scale-[5] rounded-none bg-fg/92 brightness-110 md:size-5" />
                       )}
-                    </motion.div>
+                    </div>
                   </div>
                 ) : reducedMotion ? (
                   <div
@@ -643,13 +615,7 @@ export function FlowingLine({
       <AnimatePresence mode="wait">
         {hoveredTitle ? (
           <motion.div
-            key={
-              hoveredIndex !== null
-                ? `title-h-${hoveredIndex}`
-                : idleZoneTargetIndex !== null
-                  ? `title-z-${idleZoneTargetIndex}`
-                  : 'title-none'
-            }
+            key={hoveredIndex !== null ? `title-h-${hoveredIndex}` : 'title-idle-rail'}
             role="status"
             aria-live="polite"
             initial={reducedMotion ? false : { opacity: 0, y: 3 }}

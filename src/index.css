@@ -571,6 +571,8 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 
 .cube-face-glow {
   animation: cube-face-glow-pulse 4.8s ease-in-out infinite;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Experimental grid: chamfer top-right + bottom-left (hex-like silhouette) */

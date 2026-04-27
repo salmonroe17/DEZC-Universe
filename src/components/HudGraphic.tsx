@@ -245,7 +245,7 @@ export function HudGraphic({ cellTrackRef }: HudGraphicProps) {
         const cy = clamp(tr.y, 0, tr.h)
         const tx = cx - tr.w / 2
         const ty = cy - tr.h / 2
-        svg.style.transform = `translate(${tx}px, ${ty}px)`
+        svg.style.transform = `translate(${tx}px, ${ty}px) translateZ(0)`
         g.setAttribute('transform', 'translate(0, 0)')
         return
       }
@@ -257,7 +257,7 @@ export function HudGraphic({ cellTrackRef }: HudGraphicProps) {
       const k = PARALLAX_SMOOTH
       pc.x += (targetX - pc.x) * k
       pc.y += (targetY - pc.y) * k
-      svg.style.transform = `translate(${pc.x}px, ${pc.y}px)`
+      svg.style.transform = `translate(${pc.x}px, ${pc.y}px) translateZ(0)`
 
       const moving =
         performance.now() - lastMouseMoveRef.current < MOUSE_MOVE_WINDOW_MS

@@ -8,7 +8,12 @@ import {
   type RefObject,
 } from 'react'
 import { useHudShooterGame } from '../contexts/useHudShooterGame'
-import { ADJECTIVES, NOUNS } from '../data/codenameWords'
+import {
+  ADJECTIVES,
+  ADJECTIVES_SHORT,
+  NOUNS,
+  NOUNS_SHORT,
+} from '../data/codenameWords'
 import {
   fetchLeaderboardTop,
   LEADERBOARD_DISPLAY_LIMIT,
@@ -67,52 +72,49 @@ function IdleGreetingTypewriter({
 }) {
   const [text, setText] = useState('')
 
+  /** rAF-driven (not `setTimeout`) so typing keeps cadence while the browser is busy scrolling. */
   useEffect(() => {
-    const timeouts: ReturnType<typeof setTimeout>[] = []
+    let raf = 0
     let cancelled = false
-    const later = (ms: number, fn: () => void) => {
-      const id = setTimeout(() => {
-        if (!cancelled) fn()
-      }, ms)
-      timeouts.push(id)
-    }
-
     let lineIdx = 0
     let charCount = 0
     let phase: 'typing' | 'hold' | 'deleting' = 'typing'
+    let nextActionAt = 0
 
-    const step = () => {
+    const tick = (now: number) => {
       if (cancelled) return
+      raf = requestAnimationFrame(tick)
+      if (now < nextActionAt) return
+
       const full = IDLE_GREETINGS[lineIdx]!
 
       if (phase === 'typing') {
         if (charCount < full.length) {
           charCount += 1
           setText(full.slice(0, charCount))
-          later(TYPEWRITER_TYPE_MS, step)
+          nextActionAt = now + TYPEWRITER_TYPE_MS
         } else {
           phase = 'hold'
-          later(TYPEWRITER_HOLD_MS, step)
+          nextActionAt = now + TYPEWRITER_HOLD_MS
         }
       } else if (phase === 'hold') {
         phase = 'deleting'
-        later(TYPEWRITER_DELETE_MS, step)
+        nextActionAt = now + TYPEWRITER_DELETE_MS
       } else if (charCount > 0) {
         charCount -= 1
         setText(full.slice(0, charCount))
-        later(TYPEWRITER_DELETE_MS, step)
+        nextActionAt = now + TYPEWRITER_DELETE_MS
       } else {
         lineIdx = (lineIdx + 1) % IDLE_GREETINGS.length
         phase = 'typing'
-        later(TYPEWRITER_GAP_MS, step)
+        nextActionAt = now + TYPEWRITER_GAP_MS
       }
     }
 
-    step()
-
+    raf = requestAnimationFrame(tick)
     return () => {
       cancelled = true
-      for (const id of timeouts) clearTimeout(id)
+      cancelAnimationFrame(raf)
     }
   }, [])
 
@@ -169,10 +171,12 @@ function randomTag3(): string {
   return out[0]! + out[1]! + out[2]!
 }
 
-/** Adjective + noun + short random tag. */
+/** Adjective + noun + short random tag (each word ≤ {@link CODENAME_WORD_MAX_LEN} in pools). */
 function generateUniqueCodename(): string {
-  const a = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]
-  const n = NOUNS[Math.floor(Math.random() * NOUNS.length)]
+  const adjPool = ADJECTIVES_SHORT.length > 0 ? ADJECTIVES_SHORT : ADJECTIVES
+  const nounPool = NOUNS_SHORT.length > 0 ? NOUNS_SHORT : NOUNS
+  const a = adjPool[Math.floor(Math.random() * adjPool.length)]!
+  const n = nounPool[Math.floor(Math.random() * nounPool.length)]!
   return `${a} ${n} · ${randomTag3()}`
 }
 
@@ -1004,6 +1008,8 @@ export function HudShooterIntro() {
 
     let raf = 0
     let last = performance.now()
+    let fgCached = '#fafafa'
+    let lastFgSample = 0
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick)
       const dt = Math.min(0.05, (now - last) / 1000)
@@ -1017,10 +1023,13 @@ export function HudShooterIntro() {
       ctx.clearRect(0, 0, w, h)
 
       const warp = starfieldWarpRef.current
-      const fg =
-        getComputedStyle(document.documentElement)
-          .getPropertyValue('--color-fg')
-          .trim() || '#fafafa'
+      if (now - lastFgSample > 900) {
+        lastFgSample = now
+        fgCached =
+          getComputedStyle(document.documentElement).getPropertyValue('--color-fg').trim() ||
+          '#fafafa'
+      }
+      const fg = fgCached
       const cx = w / 2
       const cy = h / 2
       const stars = starsRef.current
@@ -1566,7 +1575,12 @@ export function HudShooterIntro() {
                   >
                     {e ? (
                       <>
-                        #{n} {e.codename} — {e.score}
+                        <span className="text-white">{`#${n}`}</span>
+                        <span>
+                          {' '}
+                          {e.codename} —{' '}
+                        </span>
+                        <span className="font-bold text-white">{e.score}</span>
                       </>
                     ) : (
                       '—'

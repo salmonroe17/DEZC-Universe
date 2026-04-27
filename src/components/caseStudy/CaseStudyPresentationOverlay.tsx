@@ -828,6 +828,34 @@ export function CaseStudyPresentationOverlay({
         </button>
       </div>
 
+      {/* Prev/next: always reachable at bottom; hidden while thumbnail strip is open (strip has its own). */}
+      {!controlsVisible ? (
+        <div
+          className="pointer-events-none fixed inset-x-0 bottom-0 z-[100004] flex items-end justify-between gap-4 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:px-5 md:pb-4"
+          role="navigation"
+          aria-label="Slide navigation"
+        >
+          <button
+            type="button"
+            aria-label="Previous slide"
+            disabled={activeVisibleIndex <= 0}
+            onClick={() => goRelative(-1, true)}
+            className={`pointer-events-auto ${ctrlBtnClass}`}
+          >
+            <CaretLeft {...iconInCtrl} aria-hidden />
+          </button>
+          <button
+            type="button"
+            aria-label="Next slide"
+            disabled={activeVisibleIndex >= visibleEntries.length - 1}
+            onClick={() => goRelative(1, true)}
+            className={`pointer-events-auto ${ctrlBtnClass}`}
+          >
+            <CaretRight {...iconInCtrl} aria-hidden />
+          </button>
+        </div>
+      ) : null}
+
       <div
         className={`relative z-[100003] grid shrink-0 overflow-hidden ${controlsBarGridAnimClass}`}
         style={{ gridTemplateRows: controlsVisible ? '1fr' : '0fr' }}

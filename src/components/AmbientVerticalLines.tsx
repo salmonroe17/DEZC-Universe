@@ -4,6 +4,9 @@ import { useEffect, useRef } from 'react'
 const LINE_COUNT = 4
 const BANDS = 5
 
+/** Minimum wobble (px scale) so lines keep drifting when the pointer is still (e.g. wheel scroll). */
+const AMBIENT_WOBBLE_BASE = 0.42
+
 /** Faint vertical dotted rules; subtle horizontal wobble on pointer movement. */
 export function AmbientVerticalLines() {
   const lineRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -13,6 +16,9 @@ export function AmbientVerticalLines() {
 
   useEffect(() => {
     const lines = lineRefs.current
+    const bump = (amount: number) => {
+      intensityRef.current = Math.min(1, intensityRef.current + amount)
+    }
     const onMove = (e: PointerEvent) => {
       const now = performance.now()
       const last = lastRef.current
@@ -21,14 +27,14 @@ export function AmbientVerticalLines() {
       const vy = (e.clientY - last.y) / dt
       lastRef.current = { x: e.clientX, y: e.clientY, t: now }
       const speed = Math.hypot(vx, vy)
-      intensityRef.current = Math.min(1, intensityRef.current + speed * 0.028)
+      bump(speed * 0.028)
     }
 
     let raf = 0
     const tick = () => {
       phaseRef.current += 0.055 + intensityRef.current * 0.12
       intensityRef.current *= 0.988
-      const amp = intensityRef.current * 4.2
+      const amp = AMBIENT_WOBBLE_BASE + intensityRef.current * 4.2
       for (let i = 0; i < LINE_COUNT; i += 1) {
         const el = lines[i]
         if (!el) continue
@@ -38,10 +44,13 @@ export function AmbientVerticalLines() {
       raf = requestAnimationFrame(tick)
     }
 
+    const onWheel = () => bump(0.055)
     window.addEventListener('pointermove', onMove, { passive: true })
+    window.addEventListener('wheel', onWheel, { passive: true })
     raf = requestAnimationFrame(tick)
     return () => {
       window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('wheel', onWheel)
       cancelAnimationFrame(raf)
     }
   }, [])

@@ -1,5 +1,8 @@
 /** Word pools for HUD shooter codenames (100 × 100 base pairs). */
 
+/** First + second words in generated codenames are drawn only from words ≤ this length. */
+export const CODENAME_WORD_MAX_LEN = 5
+
 export const ADJECTIVES = [
   'Silent',
   'Crimson',
@@ -205,3 +208,11 @@ export const NOUNS = [
   'Silo',
   'Skylight',
 ] as const
+
+export const ADJECTIVES_SHORT: readonly string[] = ADJECTIVES.filter(
+  (w) => w.length <= CODENAME_WORD_MAX_LEN,
+)
+
+export const NOUNS_SHORT: readonly string[] = NOUNS.filter(
+  (w) => w.length <= CODENAME_WORD_MAX_LEN,
+)
