@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "postinstall": "node scripts/write-deploy-version.mjs",
-    "prebuild": "node scripts/write-deploy-version.mjs",
     "dev": "node scripts/write-deploy-version.mjs && vite",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/write-deploy-version.mjs && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "metadata:sync": "mkdir -p public/metadata && cp 'Metadata/favicon 24 x 24.png' public/metadata/favicon-24.png && cp 'Metadata/webclip 256 x 256.png' public/metadata/webclip-256.png && cp 'Metadata/opengraph image.png' public/metadata/og.png"
