@@ -37,6 +37,10 @@ import {
   caseStudyChamferToggleLabelClassName,
   caseStudyScrollAnchorClass,
 } from '../../components/caseStudy/patterns'
+import {
+  caseStudyTradeConnectorHorizontal,
+  caseStudyTradeConnectorVertical,
+} from '../../components/caseStudy/CaseStudyFlowConnectors'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyPresentationOverlay'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
@@ -315,20 +319,6 @@ const FINAL_EXPERIENCE_BULLETS = [
   'Choose a level of action',
   'Complete the experience with confidence',
 ] as const
-
-const deckTradeRowConnector = (
-  <span className="relative flex w-full min-w-[2rem] max-w-full items-center md:min-h-[1.25em]" aria-hidden>
-    <span className="h-px min-w-0 flex-1 bg-fg" />
-    <svg
-      className="-ml-px h-[5px] w-[6px] shrink-0 text-fg"
-      viewBox="0 0 6 5"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
 
 function CarbonDeckPrototypeAutoplayVideo({ src }: { src: string }) {
   const ref = useRef<HTMLVideoElement>(null)
@@ -746,7 +736,12 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
               innerClassName="grid min-w-0 grid-cols-1 gap-3 bg-transparent px-4 py-3.5 md:grid-cols-[17rem_minmax(2.5rem,0.38fr)_minmax(0,1fr)] md:items-center md:gap-x-5 md:gap-y-0 md:px-5 md:py-4"
             >
               <p className="m-0 min-w-0 w-full text-left font-mono text-sm font-normal leading-snug text-fg md:text-base">{row.label}</p>
-              <div className="flex min-h-0 min-w-0 w-full items-center">{deckTradeRowConnector}</div>
+              <div className="hidden min-h-0 min-w-0 w-full items-center md:flex">
+                {caseStudyTradeConnectorHorizontal}
+              </div>
+              <div className="flex min-h-0 w-full justify-start py-0.5 md:hidden">
+                {caseStudyTradeConnectorVertical}
+              </div>
               <p className="m-0 min-w-0 w-full text-left font-mono text-xs font-normal leading-relaxed text-fg md:w-auto md:text-sm">{row.body}</p>
             </ChamferFrame>
           ))}

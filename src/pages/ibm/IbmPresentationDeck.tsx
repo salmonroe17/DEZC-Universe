@@ -35,7 +35,11 @@ import ibmBeforeAfterAp19Alt from '../../../IBM case study assets/ap19.1.png'
 import ibmActionPlansPrototypeVideo from '../../../IBM case study assets/IBM prototype video action plans 720p.mp4'
 import ibmRetrospectiveConfusedGif from '../../../IBM case study assets/confused.gif'
 import ibmHeroShipGif from '../../../IBM case study assets/ship.gif'
-import { caseStudyTeamConnectorHorizontal } from '../../components/caseStudy/CaseStudyFlowConnectors'
+import {
+  caseStudyTeamConnectorHorizontal,
+  caseStudyTradeConnectorHorizontal,
+  caseStudyTradeConnectorVertical,
+} from '../../components/caseStudy/CaseStudyFlowConnectors'
 import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
@@ -70,18 +74,6 @@ const deckMaxW = 'mx-auto w-full max-w-[min(100%,1156px)]'
 
 const chamferToggleStackLayerClass =
   'pointer-events-none absolute inset-0 h-full w-full max-w-full object-contain object-left object-top align-middle'
-
-const tradeRowConnector = (
-  <span
-    className="relative flex w-full min-w-[2rem] max-w-full items-center md:min-h-[1.25em]"
-    aria-hidden
-  >
-    <span className="h-px min-w-0 flex-1 bg-fg" />
-    <svg className="-ml-px h-[5px] w-[6px] shrink-0 text-fg" viewBox="0 0 6 5" fill="currentColor" aria-hidden>
-      <path d="M0 0 L6 2.5 L0 5 Z" />
-    </svg>
-  </span>
-)
 
 const ACTION_PLANS_FLOW_CREATING = [
   '1.\nSelect\ntemplate',
@@ -466,7 +458,8 @@ const IBM_PRESENTATION_SLIDES_BASE = [
               <p className="m-0 min-w-0 w-full text-left font-mono text-[20px] font-normal leading-snug text-fg">
                 {row.label}
               </p>
-              <div className="flex min-h-0 min-w-0 w-full items-center">{tradeRowConnector}</div>
+              <div className="hidden min-h-0 min-w-0 w-full items-center md:flex">{caseStudyTradeConnectorHorizontal}</div>
+              <div className="flex min-h-0 w-full justify-start py-0.5 md:hidden">{caseStudyTradeConnectorVertical}</div>
               <p className="m-0 min-w-0 w-full text-left font-mono text-[12px] font-normal leading-relaxed text-fg md:w-auto">
                 {row.body}
               </p>
