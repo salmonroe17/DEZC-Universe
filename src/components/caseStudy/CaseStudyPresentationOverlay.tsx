@@ -62,6 +62,12 @@ function snapScaleToStep(value: number, step: number): number {
 const PRESS_HOLD_DELAY_MS = 220
 const PRESS_HOLD_INTERVAL_MS = 48
 
+/** Hold this long → 2× (right) / rewind (left); shorter release → tap play/pause toggle. */
+const PRESENTATION_VIDEO_SCRUB_HOLD_MS = PRESS_HOLD_DELAY_MS
+const PRESENTATION_VIDEO_TAP_MAX_MS = 420
+const PRESENTATION_VIDEO_TAP_SLOP_PX = 14
+const PRESENTATION_VIDEO_SCRUB_FACTOR = 2
+
 export type PresentationTheme = 'gray' | 'turquoise' | 'pink' | 'blue' | 'white'
 
 const PRESENTATION_CAPTURE_BG: Record<PresentationTheme, string> = {
@@ -137,6 +143,83 @@ const PRESENTATION_SWATCH: Record<
 
 type PanPoint = { x: number; y: number }
 
+function videoFromEventTarget(target: EventTarget | null): HTMLVideoElement | null {
+  if (!target || typeof Node === 'undefined' || !(target instanceof Node)) return null
+  if (target instanceof HTMLVideoElement) return target
+  if (target instanceof Element) {
+    const v = target.closest('video')
+    return v instanceof HTMLVideoElement ? v : null
+  }
+  return null
+}
+
+type PresentationVideoHalves = 'left' | 'right'
+
+function presentationVideoHalfFromClient(video: HTMLVideoElement, clientX: number): PresentationVideoHalves {
+  const rect = video.getBoundingClientRect()
+  if (rect.width <= 1e-6) return 'right'
+  return clientX - rect.left < rect.width * 0.5 ? 'left' : 'right'
+}
+
+type PresentationVideoGrip = {
+  video: HTMLVideoElement
+  pointerId: number
+  savedPlaybackRate: number
+  sx: number
+  sy: number
+  scrubActive: boolean
+  holdTimer?: ReturnType<typeof setTimeout>
+  zone: PresentationVideoHalves
+  t0Ms: number
+  rewindRaf?: number
+}
+
+/** Clear rewind rAF and restore baseline playbackRate (during zone switch / release). */
+function clearPresentationVideoScrubArtifacts(video: HTMLVideoElement, grip: PresentationVideoGrip) {
+  if (grip.rewindRaf != null) {
+    cancelAnimationFrame(grip.rewindRaf)
+    grip.rewindRaf = undefined
+  }
+  video.playbackRate = grip.savedPlaybackRate
+}
+
+function runPresentationRewindRaf(
+  gripAlive: () => boolean,
+  video: HTMLVideoElement,
+  grip: PresentationVideoGrip,
+) {
+  video.pause()
+  let last = performance.now()
+  const tick = (t: number) => {
+    if (!gripAlive()) return
+    const dt = Math.min(0.05, (t - last) / 1000)
+    last = t
+    video.currentTime = Math.max(0, video.currentTime - PRESENTATION_VIDEO_SCRUB_FACTOR * dt)
+    grip.rewindRaf = requestAnimationFrame(tick)
+  }
+  grip.rewindRaf = requestAnimationFrame(tick)
+}
+
+function presentationApplyHoldScrub(
+  gripAlive: () => boolean,
+  video: HTMLVideoElement,
+  grip: PresentationVideoGrip,
+  zone: PresentationVideoHalves,
+): void {
+  clearPresentationVideoScrubArtifacts(video, grip)
+  grip.zone = zone
+
+  if (zone === 'right') {
+    video.playbackRate = PRESENTATION_VIDEO_SCRUB_FACTOR
+    void video.play().catch(() => {})
+    return
+  }
+
+  /* Left: negative playbackRate is not reliable for MP4 — pause and drive rewind via currentTime. */
+  video.playbackRate = grip.savedPlaybackRate
+  runPresentationRewindRaf(gripAlive, video, grip)
+}
+
 type ImageSlidePanViewportProps = {
   active: boolean
   imageScale: number
@@ -196,6 +279,8 @@ function ImageSlidePanViewport({ active, imageScale, pan, setPan, children }: Im
     if (e.button !== 0) return
     const t = e.target as HTMLElement | null
     if (t?.closest?.('button, a[href], input, textarea, select, [role="tab"], [role="switch"]')) return
+    /* Let clicks reach <video> for play/pause (handled on the slide body). */
+    if (t?.closest?.('video')) return
     dragRef.current = {
       pointerId: e.pointerId,
       sx: e.clientX,
@@ -444,6 +529,117 @@ export function CaseStudyPresentationOverlay({
   useEffect(() => {
     queueMicrotask(() => setImagePan({ x: 0, y: 0 }))
   }, [resolvedActiveFullIndex, imageScale])
+
+  const presentationVideoGripRef = useRef<PresentationVideoGrip | null>(null)
+
+  const cleanupPresentationVideoGrip = useCallback(() => {
+    const g = presentationVideoGripRef.current
+    if (!g) return
+    if (g.holdTimer != null) window.clearTimeout(g.holdTimer)
+    if (g.rewindRaf != null) cancelAnimationFrame(g.rewindRaf)
+    try {
+      clearPresentationVideoScrubArtifacts(g.video, g)
+    } catch {
+      /* */
+    }
+    void g.video.play().catch(() => {})
+    presentationVideoGripRef.current = null
+  }, [])
+
+  useEffect(() => {
+    if (!open) cleanupPresentationVideoGrip()
+  }, [open, cleanupPresentationVideoGrip])
+
+  /** Hold → 2× (right half) / rewind (left half); quick tap → play–pause toggle. Presentation overlay only. */
+  const onPresentationSlidePointerDown = useCallback(
+    (e: ReactPointerEvent<HTMLDivElement>) => {
+      cleanupPresentationVideoGrip()
+      const v = videoFromEventTarget(e.target)
+      if (!v || e.button !== 0) return
+      const targetEl = e.target as HTMLElement | null
+      if (
+        targetEl?.closest?.('button, a[href], input, textarea, select, [role="tab"], [role="switch"]')
+      )
+        return
+
+      try {
+        e.preventDefault()
+        v.setPointerCapture(e.pointerId)
+      } catch {
+        /* */
+      }
+
+      const zone = presentationVideoHalfFromClient(v, e.clientX)
+      const t0Ms = typeof performance !== 'undefined' ? performance.now() : Date.now()
+      const grip: PresentationVideoGrip = {
+        video: v,
+        pointerId: e.pointerId,
+        savedPlaybackRate: v.playbackRate,
+        sx: e.clientX,
+        sy: e.clientY,
+        scrubActive: false,
+        zone,
+        t0Ms,
+      }
+
+      grip.holdTimer = window.setTimeout(() => {
+        const cur = presentationVideoGripRef.current
+        if (!cur || cur.pointerId !== grip.pointerId || cur.video !== grip.video) return
+        cur.scrubActive = true
+        cur.holdTimer = undefined
+        presentationApplyHoldScrub(() => presentationVideoGripRef.current === cur, cur.video, cur, cur.zone)
+      }, PRESENTATION_VIDEO_SCRUB_HOLD_MS)
+
+      presentationVideoGripRef.current = grip
+    },
+    [cleanupPresentationVideoGrip],
+  )
+
+  const onPresentationSlidePointerMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
+    const g = presentationVideoGripRef.current
+    if (!g || g.pointerId !== e.pointerId) return
+    if (!g.scrubActive) return
+    const v = g.video
+    const zone = presentationVideoHalfFromClient(v, e.clientX)
+    if (zone !== g.zone) {
+      presentationApplyHoldScrub(() => presentationVideoGripRef.current === g, v, g, zone)
+    }
+  }, [])
+
+  const onPresentationSlidePointerUp = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
+    const g = presentationVideoGripRef.current
+    if (!g || g.pointerId !== e.pointerId) return
+
+    try {
+      g.video.releasePointerCapture(e.pointerId)
+    } catch {
+      /* */
+    }
+
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
+    if (g.holdTimer != null) window.clearTimeout(g.holdTimer)
+    g.holdTimer = undefined
+
+    if (g.scrubActive) {
+      clearPresentationVideoScrubArtifacts(g.video, g)
+      void g.video.play().catch(() => {})
+      presentationVideoGripRef.current = null
+      return
+    }
+
+    const elapsedMs = now - g.t0Ms
+    const dx = e.clientX - g.sx
+    const dy = e.clientY - g.sy
+    if (
+      elapsedMs <= PRESENTATION_VIDEO_TAP_MAX_MS &&
+      dx * dx + dy * dy <= PRESENTATION_VIDEO_TAP_SLOP_PX * PRESENTATION_VIDEO_TAP_SLOP_PX
+    ) {
+      if (g.video.paused) void g.video.play().catch(() => {})
+      else g.video.pause()
+    }
+
+    presentationVideoGripRef.current = null
+  }, [])
 
   useLayoutEffect(() => {
     if (!open) return
@@ -1021,6 +1217,10 @@ export function CaseStudyPresentationOverlay({
                   /* lg+: full desktop zoom + text +/-; md–lg: scaled down; &lt;md: fixed smaller (no +/-). */
                   zoom: slide.slideKind === 'text' ? presentationTextSlideZoom : 1,
                 }}
+                onPointerDown={onPresentationSlidePointerDown}
+                onPointerMove={onPresentationSlidePointerMove}
+                onPointerUp={onPresentationSlidePointerUp}
+                onPointerCancel={onPresentationSlidePointerUp}
               >
                 {slide.slideKind !== 'text' ? (
                   fullIndex === safeFullIndex ? (
