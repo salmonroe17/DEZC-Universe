@@ -238,6 +238,16 @@ const WORD_BOX_PAD_X = 12
 const WORD_BOX_PAD_Y = 10
 
 const GAME_DURATION_MS = 26_000
+
+/** HUD line: remaining time until the round ends (M:SS). */
+function formatGameCountdown(remainMs: number): string {
+  const s = Math.max(0, Math.ceil(remainMs / 1000))
+  const m = Math.floor(s / 60)
+  const sec = s % 60
+  const clock = `${m}:${sec.toString().padStart(2, '0')}`
+  return `Ends in ${clock}`
+}
+
 const MAX_WORDS = 13
 const MAX_PARTICLES = 960
 const EXPLODE_MS = 880
@@ -273,8 +283,8 @@ function wordFontSize(wScale: number, layout: number) {
 const WORD_FONT = (fs: number) => `100 ${fs}px "Space Mono", monospace`
 const COMBO_WINDOW_MS = 720
 const WINDDOWN_MAX_MS = 4500
-/** Hits before the word fully explodes (5th hit clears it). */
-const WORD_MAX_HEALTH = 5
+/** Each flying word survives this many landed hits before it is destroyed (`1` = one shot). */
+const WORD_MAX_HEALTH = 1
 /** Uniform pacing — not tied to player accuracy */
 const SPAWN_INTERVAL_SEC = 0.68
 const WORD_SPEED = 210
@@ -844,6 +854,11 @@ export function HudShooterIntro() {
   )
   /** Short-lived center hint after “Start game” (fades in, shows ~3s, fades out). */
   const [shootHintShow, setShootHintShow] = useState(false)
+  /** After shoot hint fades out — timer fades in (avoids flashing during first-frame flicker before hint mounts). */
+  const [countdownHudReady, setCountdownHudReady] = useState(false)
+  const shootHintReachedVisibleRef = useRef(false)
+  const [roundCountdownLabel, setRoundCountdownLabel] = useState('')
+  const roundCountdownSecRef = useRef<number | null>(null)
   const enteredGameRef = useRef(false)
   const gameMotionProfileRef = useRef<GameMotionProfile>(DEFAULT_GAME_MOTION)
 
@@ -891,6 +906,24 @@ export function HudShooterIntro() {
       window.clearTimeout(t)
     }
   }, [uiPhase])
+
+  useEffect(() => {
+    if (uiPhase !== 'game') {
+      shootHintReachedVisibleRef.current = false
+      setCountdownHudReady(false)
+      return
+    }
+    if (shootHintShow) {
+      shootHintReachedVisibleRef.current = true
+      setCountdownHudReady(false)
+      return
+    }
+    if (!shootHintReachedVisibleRef.current) return
+    const tid = window.setTimeout(() => {
+      setCountdownHudReady(true)
+    }, Math.round(SHOOT_HINT_FADE_S * 1000))
+    return () => window.clearTimeout(tid)
+  }, [uiPhase, shootHintShow])
 
   const syncHudActive = useCallback(() => {
     const p = phaseRef.current
@@ -1311,6 +1344,19 @@ export function HudShooterIntro() {
           ? now - gameT0Ref.current
           : 0
       const timeT = clamp(gameElapsed / GAME_DURATION_MS, 0, 1)
+
+      if (ph === 'game') {
+        const remain = Math.max(0, GAME_DURATION_MS - gameElapsed)
+        const sec = Math.ceil(remain / 1000)
+        if (roundCountdownSecRef.current !== sec) {
+          roundCountdownSecRef.current = sec
+          setRoundCountdownLabel(formatGameCountdown(remain))
+        }
+      } else if (roundCountdownSecRef.current !== null) {
+        roundCountdownSecRef.current = null
+        setRoundCountdownLabel('')
+      }
+
       const mot = gameMotionProfileRef.current
       const spawnInterval =
         lerp(SPAWN_INTERVAL_SEC, SPAWN_INTERVAL_SEC * 0.55, timeT) *
@@ -1680,6 +1726,26 @@ export function HudShooterIntro() {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {roundCountdownLabel !== '' && countdownHudReady && (
+          <motion.div
+            key="round-countdown-hud"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="pointer-events-none absolute inset-0 z-[24] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: SHOOT_HINT_FADE_S, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="text-center font-mono text-[16px] leading-tight tracking-[0.02em] text-white/30">
+              {roundCountdownLabel}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {uiPhase === 'game' && shootHintShow && (

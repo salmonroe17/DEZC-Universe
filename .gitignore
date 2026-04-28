@@ -27,3 +27,4 @@ Super assets/\[ARCHIVE\]/
 .vercel
 # Generated at build/dev time (scripts/write-deploy-version.mjs)
 src/generated/deployVersion.ts
+.env*.local
