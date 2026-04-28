@@ -31,7 +31,12 @@ function formatTorontoClock() {
   return `Toronto • ${dateStr} • ${timeStr}`
 }
 
-export function SiteTopBar() {
+type SiteTopBarProps = {
+  /** Stick to the viewport top while the page scrolls (home layout). */
+  sticky?: boolean
+}
+
+export function SiteTopBar({ sticky = false }: SiteTopBarProps) {
   const [clock, setClock] = useState(formatTorontoClock)
   const [caseStudiesModalOpen, setCaseStudiesModalOpen] = useState(false)
   const [sideQuestsModalOpen, setSideQuestsModalOpen] = useState(false)
@@ -75,7 +80,8 @@ export function SiteTopBar() {
         className={[
           'site-frosted-nav grid h-12 w-full shrink-0 items-center gap-3 border-b border-border px-3 sm:gap-4 sm:px-6',
           'max-lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]',
-        ].join(' ')}
+          sticky && 'sticky top-0 z-40',
+        ].filter(Boolean).join(' ')}
       >
         <nav
           className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] font-normal leading-none text-fg md:gap-x-2 md:text-[11px]"

@@ -28,7 +28,7 @@ export function RootLayout() {
         </div>
       </div>
       <div className="relative z-10 flex min-h-dvh w-full min-w-0 max-w-full flex-col overflow-x-clip">
-        {hideSiteTopBar ? null : <SiteTopBar />}
+        {hideSiteTopBar ? null : <SiteTopBar sticky={isHome} />}
         <div className="flex min-h-0 w-full flex-1 flex-col">
           <Outlet />
         </div>
