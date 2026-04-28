@@ -69,22 +69,10 @@ const mainImageZoomButtonClass = [
   'disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-elevated/90 disabled:hover:text-fg/70',
 ].join(' ')
 
-const phosphorInChrome = { size: 24 as const, weight: 'regular' as const, className: 'shrink-0 text-current' as const }
-
 /** Modifier+click on “Case studies” — same pattern as case study showcase pages. */
 const CASE_STUDIES_NAV_MODIFIER_TO = '/case-study/components'
 const caseStudiesNavButtonClass =
   'cursor-pointer border-0 bg-transparent p-0 font-[inherit] text-inherit underline decoration-cell-border underline-offset-[3px] hover:decoration-hud'
-
-const carouselArrowClass = [
-  'flex size-[38px] shrink-0 touch-none select-none items-center justify-center rounded-[2px]',
-  'font-mono font-normal',
-  FOCUS_1,
-  'border-0 bg-transparent text-fg/45',
-  'transition-[color,opacity,transform] ease-out duration-200',
-  'hover:scale-105 motion-reduce:hover:scale-100 hover:text-fg/72',
-  'active:opacity-90 active:scale-100',
-].join(' ')
 
 function mod(n: number, m: number): number {
   return ((n % m) + m) % m
@@ -182,13 +170,9 @@ function clampMainImagePan(
 function SideQuestCarousel({
   selectedIndex,
   onSelectIndex,
-  onPrev,
-  onNext,
 }: {
   selectedIndex: number
   onSelectIndex: (index: number) => void
-  onPrev: () => void
-  onNext: () => void
 }) {
   const reducedMotion = useReducedMotion() ?? false
   const n = SIDEQUESTS.length
@@ -211,13 +195,7 @@ function SideQuestCarousel({
         'pl-4 pr-4',
       ].join(' ')}
     >
-      <div className="flex w-[38px] shrink-0 items-center justify-center">
-        <button type="button" className={carouselArrowClass} aria-label="Previous sidequest" onClick={onPrev}>
-          <CaretLeft {...phosphorInChrome} aria-hidden />
-        </button>
-      </div>
-
-      <div className="relative min-h-0 min-w-0 flex-1 self-stretch">
+      <div className="relative min-h-0 min-w-0 w-full flex-1 self-stretch">
         <div
           className="pointer-events-none absolute inset-x-0 top-1/2 z-0 h-[1px] min-h-[1px] -translate-y-1/2"
           style={{
@@ -334,12 +312,6 @@ function SideQuestCarousel({
           </div>
         </div>
       </div>
-
-      <div className="flex w-[38px] shrink-0 items-center justify-center">
-        <button type="button" className={carouselArrowClass} aria-label="Next sidequest" onClick={onNext}>
-          <CaretRight {...phosphorInChrome} aria-hidden />
-        </button>
-      </div>
     </div>
   )
 }
@@ -432,7 +404,19 @@ function ThumbnailGrid({
 
 const zoomIconProps = { size: 16 as const, weight: 'regular' as const, className: 'shrink-0 text-current' as const }
 
-function MainImageView({ src, imageKey }: { src: string | null; imageKey: string }) {
+const mainImageNavIconProps = { size: 16 as const, weight: 'regular' as const, className: 'shrink-0 text-current' as const }
+
+function MainImageView({
+  src,
+  imageKey,
+  onNavigateImageLeft,
+  onNavigateImageRight,
+}: {
+  src: string | null
+  imageKey: string
+  onNavigateImageLeft?: () => void
+  onNavigateImageRight?: () => void
+}) {
   const reducedMotion = useReducedMotion() ?? false
   const [zoom, setZoom] = useState(MAIN_IMAGE_ZOOM_MIN)
   const [pan, setPan] = useState({ x: 0, y: 0 })
@@ -544,6 +528,9 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
   const canZoomOut = zoom > MAIN_IMAGE_ZOOM_MIN + 0.0001
   const isZoomed = zoom > MAIN_IMAGE_ZOOM_MIN
 
+  const canNavigateImages =
+    Boolean(src && onNavigateImageLeft && onNavigateImageRight)
+
   return (
     <div
       className={[
@@ -625,6 +612,34 @@ function MainImageView({ src, imageKey }: { src: string | null; imageKey: string
           </AnimatePresence>
         </div>
       </div>
+
+      {canNavigateImages ? (
+        <>
+          <button
+            type="button"
+            className={[
+              mainImageZoomButtonClass,
+              'pointer-events-auto absolute left-3 top-1/2 z-10 -translate-y-1/2',
+            ].join(' ')}
+            aria-label="Previous image"
+            onClick={onNavigateImageLeft}
+          >
+            <CaretLeft {...mainImageNavIconProps} aria-hidden />
+          </button>
+          <button
+            type="button"
+            className={[
+              mainImageZoomButtonClass,
+              'pointer-events-auto absolute right-3 top-1/2 z-10 -translate-y-1/2',
+            ].join(' ')}
+            aria-label="Next image"
+            onClick={onNavigateImageRight}
+          >
+            <CaretRight {...mainImageNavIconProps} aria-hidden />
+          </button>
+        </>
+      ) : null}
+
       {src ? (
         <div
           className="pointer-events-auto absolute bottom-3 left-3 z-10 flex items-center gap-1.5"
@@ -709,6 +724,18 @@ function SideQuestViewerShell({
   const onNext = useCallback(() => {
     goSidequest(selectedIndex + 1)
   }, [goSidequest, selectedIndex])
+
+  const mainImageNavigateLeft = useCallback(() => {
+    const nImg = current.galleryImages.length
+    if (nImg <= 1) return
+    setImageIndex((i) => mod(i - 1, nImg))
+  }, [current.galleryImages.length])
+
+  const mainImageNavigateRight = useCallback(() => {
+    const nImg = current.galleryImages.length
+    if (nImg <= 1) return
+    setImageIndex((i) => mod(i + 1, nImg))
+  }, [current.galleryImages.length])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -820,12 +847,7 @@ function SideQuestViewerShell({
         </div>
       </header>
 
-      <SideQuestCarousel
-        selectedIndex={selectedIndex}
-        onSelectIndex={goSidequest}
-        onPrev={onPrev}
-        onNext={onNext}
-      />
+      <SideQuestCarousel selectedIndex={selectedIndex} onSelectIndex={goSidequest} />
 
       <main
         className={[
@@ -850,7 +872,17 @@ function SideQuestViewerShell({
           ].join(' ')}
         >
           <div className="flex min-h-0 min-w-0 max-w-full flex-col max-lg:flex-none lg:h-full lg:self-stretch">
-            <MainImageView key={mainKey} src={mainSrc} imageKey={mainKey} />
+            <MainImageView
+              key={mainKey}
+              src={mainSrc}
+              imageKey={mainKey}
+              onNavigateImageLeft={
+                hasImages && images.length > 1 ? mainImageNavigateLeft : undefined
+              }
+              onNavigateImageRight={
+                hasImages && images.length > 1 ? mainImageNavigateRight : undefined
+              }
+            />
           </div>
 
           <aside
