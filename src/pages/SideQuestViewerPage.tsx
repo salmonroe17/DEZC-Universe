@@ -418,6 +418,7 @@ function MainImageView({
   onNavigateImageRight?: () => void
 }) {
   const reducedMotion = useReducedMotion() ?? false
+  const [showGalleryArrows, setShowGalleryArrows] = useState(true)
   const [zoom, setZoom] = useState(MAIN_IMAGE_ZOOM_MIN)
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [isPanning, setIsPanning] = useState(false)
@@ -613,7 +614,7 @@ function MainImageView({
         </div>
       </div>
 
-      {canNavigateImages ? (
+      {canNavigateImages && showGalleryArrows ? (
         <>
           <button
             type="button"
@@ -642,28 +643,62 @@ function MainImageView({
 
       {src ? (
         <div
-          className="pointer-events-auto absolute bottom-3 left-3 z-10 flex items-center gap-1.5"
+          className="pointer-events-auto absolute bottom-3 left-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-wrap items-center gap-x-3 gap-y-2"
           role="group"
-          aria-label="Image zoom controls"
+          aria-label="Main image toolbar"
         >
-          <button
-            type="button"
-            className={mainImageZoomButtonClass}
-            onClick={zoomOut}
-            disabled={!canZoomOut}
-            aria-label="Zoom out"
-          >
-            <MagnifyingGlassMinus {...zoomIconProps} aria-hidden />
-          </button>
-          <button
-            type="button"
-            className={mainImageZoomButtonClass}
-            onClick={zoomIn}
-            disabled={!canZoomIn}
-            aria-label="Zoom in"
-          >
-            <MagnifyingGlassPlus {...zoomIconProps} aria-hidden />
-          </button>
+          <div className="flex items-center gap-1.5" role="group" aria-label="Image zoom controls">
+            <button
+              type="button"
+              className={mainImageZoomButtonClass}
+              onClick={zoomOut}
+              disabled={!canZoomOut}
+              aria-label="Zoom out"
+            >
+              <MagnifyingGlassMinus {...zoomIconProps} aria-hidden />
+            </button>
+            <button
+              type="button"
+              className={mainImageZoomButtonClass}
+              onClick={zoomIn}
+              disabled={!canZoomIn}
+              aria-label="Zoom in"
+            >
+              <MagnifyingGlassPlus {...zoomIconProps} aria-hidden />
+            </button>
+          </div>
+          {canNavigateImages ? (
+            <label
+              className={[
+                'flex cursor-pointer select-none items-center gap-2 font-mono text-[10px] font-normal leading-none text-fg/85',
+                'touch-manipulation',
+              ].join(' ')}
+            >
+              <input
+                type="checkbox"
+                className="peer sr-only appearance-none"
+                checked={showGalleryArrows}
+                onChange={(e) => setShowGalleryArrows(e.target.checked)}
+              />
+              <span
+                className={[
+                  'flex h-4 w-8 shrink-0 items-center rounded-[2px] p-0.5 transition-[justify-content] duration-150 ease-out',
+                  LINE,
+                  'pointer-events-none justify-start bg-elevated/90 peer-checked:justify-end',
+                  'peer-focus-visible:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-fg)_25%,transparent)]',
+                ].join(' ')}
+                aria-hidden
+              >
+                <span
+                  className={[
+                    'block size-[0.6875rem] rounded-[2px] border border-fg/35',
+                    'bg-fg/80 shadow-sm',
+                  ].join(' ')}
+                />
+              </span>
+              <span className="min-w-0 whitespace-nowrap">Arrows</span>
+            </label>
+          ) : null}
         </div>
       ) : null}
     </div>
