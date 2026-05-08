@@ -125,7 +125,7 @@ export default function PrivacyPolicyPage() {
       <p className="mt-8 flex flex-wrap gap-x-4 gap-y-2">
         <Link
           to="/leaderboard"
-          className="text-xs text-fg underline decoration-cell-border underline-offset-[3px] transition-colors hover:decoration-hud"
+          className="cursor-default text-[10px] text-fg-muted/55 no-underline hover:text-fg-muted/55"
         >
           ← Global leaderboard
         </Link>

@@ -231,7 +231,62 @@ function normalizeFullRow(raw: unknown, index: number): LeaderboardFullRow | nul
   return { rank, codename, score: Math.floor(score), playedAt, city }
 }
 
+const PREVIEW_MINUTE_MS = 60_000
+const PREVIEW_YEAR_MS = 365 * 86_400_000
+
+/** Dummy Top 50 for local UI preview only — never hits the backend when mock is disabled for prod. */
+function previewMockLeaderboardTop50(): LeaderboardFullRow[] {
+  const now = Date.now()
+  const hr = 3_600_000
+  const day = 86_400_000
+  const iso = (offsetMs: number) => new Date(now + offsetMs).toISOString()
+
+  // Realistic mini-game range: double digits, top below ~50 (rare in actual play).
+  const raw: Omit<LeaderboardFullRow, 'rank'>[] = [
+    { codename: 'nebula drift', score: 47, playedAt: iso(-4 * day - 2 * hr), city: 'Austin' },
+    { codename: 'signal nine', score: 44, playedAt: iso(-1 * day - 11 * hr), city: 'Oslo' },
+    { codename: 'ghost ledger', score: 42, playedAt: iso(-18 * hr), city: 'Lisbon' },
+    { codename: 'tidal arc', score: 39, playedAt: iso(-52 * day), city: 'Tokyo' },
+    { codename: 'rust choir', score: 37, playedAt: iso(-6 * hr), city: null },
+    { codename: 'volt lane', score: 35, playedAt: iso(-90 * day - 5 * hr), city: 'Austin' },
+    { codename: 'quiet forge', score: 33, playedAt: iso(-3 * day), city: 'Berlin' },
+    { codename: 'paper moth', score: 31, playedAt: iso(-220 * day), city: null },
+    { codename: 'silver static', score: 30, playedAt: iso(-34 * hr), city: 'Lisbon' },
+    { codename: 'pixel hymn', score: 28, playedAt: iso(-14 * day), city: 'São Paulo' },
+    { codename: 'ocean grid', score: 26, playedAt: iso(-50 * hr), city: 'Oslo' },
+    { codename: 'calm flare', score: 25, playedAt: iso(-730 * day), city: 'Austin' },
+    { codename: 'echo strata', score: 24, playedAt: iso(-25 * PREVIEW_MINUTE_MS), city: 'Tokyo' },
+    { codename: 'thin mercury', score: 22, playedAt: iso(-401 * day), city: null },
+    { codename: 'soft comet', score: 21, playedAt: iso(-11 * hr), city: 'Berlin' },
+    { codename: 'winter cache', score: 19, playedAt: iso(-92 * PREVIEW_MINUTE_MS), city: 'Chicago' },
+    { codename: 'amber knot', score: 18, playedAt: iso(-7 * day - 40 * PREVIEW_MINUTE_MS), city: 'Chicago' },
+    { codename: 'lucky vector', score: 16, playedAt: iso(-410 * hr), city: 'Austin' },
+    { codename: 'cold bloom', score: 14, playedAt: iso(-2 * PREVIEW_YEAR_MS), city: null },
+    { codename: 'minor orbit', score: 12, playedAt: iso(-19 * day), city: 'Lisbon' },
+  ]
+
+  return raw
+    .sort((a, b) => b.score - a.score || a.codename.localeCompare(b.codename))
+    .map((r, i) => ({ ...r, rank: i + 1 }))
+}
+
+function usePreviewMockLeaderboardTop50(): boolean {
+  const v = import.meta.env.VITE_LEADERBOARD_PREVIEW_MOCK as string | undefined
+  if (v === '1' || v === 'true') return true
+  if (v === '0' || v === 'false') return false
+  return import.meta.env.DEV
+}
+
 export async function fetchLeaderboardTop50(): Promise<LeaderboardFullRow[]> {
+  if (usePreviewMockLeaderboardTop50()) {
+    if (import.meta.env.DEV) {
+      console.info(
+        '[leaderboard] Top 50: using preview mock data (set VITE_LEADERBOARD_PREVIEW_MOCK=0 to call the real API in dev)',
+      )
+    }
+    return previewMockLeaderboardTop50()
+  }
+
   const u = url('/api/leaderboard/top50')
   try {
     const res = await fetch(u, {

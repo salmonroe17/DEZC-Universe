@@ -1667,7 +1667,7 @@ export function HudShooterIntro() {
               ) : (
                 <Link
                   to="/leaderboard"
-                  className="pointer-events-auto inline text-fg/65 underline decoration-transparent underline-offset-2 transition-[color,text-decoration-color] hover:text-fg/80 hover:decoration-fg/35 focus-visible:rounded-sm focus-visible:text-fg/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hud/35 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                  className="pointer-events-auto inline cursor-default select-none text-fg/65 opacity-55 underline decoration-transparent underline-offset-2 hover:text-fg/65 hover:decoration-transparent hover:opacity-55 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hud/25 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
                   aria-label="Open full global leaderboard (top 50)"
                 >
                   Global leaderboard:
