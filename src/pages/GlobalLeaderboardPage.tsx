@@ -302,8 +302,8 @@ export default function GlobalLeaderboardPage() {
 
           {status === 'ok' && summary && (
             <>
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded border border-cell-border/80 bg-elevated/30 p-4">
+              <div className="hide-scrollbar-thumb mt-8 -mx-4 flex gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:gap-3 sm:overflow-visible sm:px-0 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="flex w-[min(16.5rem,calc(100vw-3.5rem))] shrink-0 snap-start flex-col rounded border border-cell-border/80 bg-elevated/30 p-4 sm:w-auto sm:min-w-0 sm:snap-none">
                   <p className="m-0 text-[10px] uppercase tracking-[0.1em] text-fg-muted">
                     Last played
                   </p>
@@ -320,7 +320,7 @@ export default function GlobalLeaderboardPage() {
                     {formatPlayedAt(summary.latest.playedAt)}
                   </p>
                 </div>
-                <div className="rounded border border-cell-border/80 bg-elevated/30 p-4">
+                <div className="flex w-[min(16.5rem,calc(100vw-3.5rem))] shrink-0 snap-start flex-col rounded border border-cell-border/80 bg-elevated/30 p-4 sm:w-auto sm:min-w-0 sm:snap-none">
                   <p className="m-0 text-[10px] uppercase tracking-[0.1em] text-fg-muted">
                     Players on board
                   </p>
@@ -331,7 +331,7 @@ export default function GlobalLeaderboardPage() {
                     {summary.knownCityCount} cities with a location
                   </p>
                 </div>
-                <div className="rounded border border-cell-border/80 bg-elevated/30 p-4">
+                <div className="flex w-[min(16.5rem,calc(100vw-3.5rem))] shrink-0 snap-start flex-col rounded border border-cell-border/80 bg-elevated/30 p-4 sm:w-auto sm:min-w-0 sm:snap-none">
                   <p className="m-0 text-[10px] uppercase tracking-[0.1em] text-fg-muted">
                     Top score
                   </p>
@@ -342,7 +342,7 @@ export default function GlobalLeaderboardPage() {
                     Avg {summary.avgScore.toFixed(1)}
                   </p>
                 </div>
-                <div className="rounded border border-cell-border/80 bg-elevated/30 p-4">
+                <div className="flex w-[min(16.5rem,calc(100vw-3.5rem))] shrink-0 snap-start flex-col rounded border border-cell-border/80 bg-elevated/30 p-4 sm:w-auto sm:min-w-0 sm:snap-none">
                   <p className="m-0 text-[10px] uppercase tracking-[0.1em] text-fg-muted">
                     Cities
                   </p>
@@ -365,7 +365,7 @@ export default function GlobalLeaderboardPage() {
               <div
                 role="region"
                 aria-label="Players by city, top locations"
-                className="mt-4 -mx-4 flex gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-3 sm:overflow-visible sm:px-0 lg:grid-cols-4"
+                className="hide-scrollbar-thumb mt-4 -mx-4 flex gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-3 sm:overflow-visible sm:px-0 lg:grid-cols-4"
               >
                 {summary.playersByCityCards.map((c) => (
                   <div
