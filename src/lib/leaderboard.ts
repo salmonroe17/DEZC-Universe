@@ -42,7 +42,11 @@ function apiOrigin(): string {
 }
 
 function url(
-  path: '/api/leaderboard/top' | '/api/leaderboard/submit' | '/api/leaderboard/top50',
+  path:
+    | '/api/leaderboard/top'
+    | '/api/leaderboard/submit'
+    | '/api/leaderboard/top50'
+    | '/api/leaderboard/session-city',
 ): string {
   const o = apiOrigin()
   return o ? `${o}${path}` : path
@@ -270,15 +274,38 @@ function previewMockLeaderboardTop50(): LeaderboardFullRow[] {
     .map((r, i) => ({ ...r, rank: i + 1 }))
 }
 
-function usePreviewMockLeaderboardTop50(): boolean {
+function previewMockLeaderboardTop50Enabled(): boolean {
   const v = import.meta.env.VITE_LEADERBOARD_PREVIEW_MOCK as string | undefined
   if (v === '1' || v === 'true') return true
   if (v === '0' || v === 'false') return false
   return import.meta.env.DEV
 }
 
+/** Approximate viewer city from deployed API (Vercel IP headers); `null` offline or unknown. */
+export async function fetchLeaderboardViewerCity(): Promise<string | null> {
+  const u = url('/api/leaderboard/session-city')
+  try {
+    const res = await fetch(u, {
+      method: 'GET',
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+    })
+    if (!res.ok) return null
+    const data: unknown = await res.json()
+    if (data == null || typeof data !== 'object' || !('city' in data)) return null
+    const c = (data as { city: unknown }).city
+    if (typeof c !== 'string' || c.trim() === '') return null
+    return c.trim().slice(0, 80)
+  } catch {
+    if (import.meta.env.DEV) {
+      console.warn('[leaderboard] GET /api/leaderboard/session-city failed')
+    }
+    return null
+  }
+}
+
 export async function fetchLeaderboardTop50(): Promise<LeaderboardFullRow[]> {
-  if (usePreviewMockLeaderboardTop50()) {
+  if (previewMockLeaderboardTop50Enabled()) {
     if (import.meta.env.DEV) {
       console.info(
         '[leaderboard] Top 50: using preview mock data (set VITE_LEADERBOARD_PREVIEW_MOCK=0 to call the real API in dev)',

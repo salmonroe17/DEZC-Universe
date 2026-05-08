@@ -910,12 +910,12 @@ export function HudShooterIntro() {
   useEffect(() => {
     if (uiPhase !== 'game') {
       shootHintReachedVisibleRef.current = false
-      setCountdownHudReady(false)
+      queueMicrotask(() => setCountdownHudReady(false))
       return
     }
     if (shootHintShow) {
       shootHintReachedVisibleRef.current = true
-      setCountdownHudReady(false)
+      queueMicrotask(() => setCountdownHudReady(false))
       return
     }
     if (!shootHintReachedVisibleRef.current) return

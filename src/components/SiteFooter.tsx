@@ -32,7 +32,7 @@ export function SiteFooter() {
         className={`justify-self-start ${footerLinkClass}`}
         onClick={scrollDocumentToTop}
       >
-        Privacy
+        Legal
       </Link>
 
       <Link

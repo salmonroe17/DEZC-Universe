@@ -9,6 +9,7 @@ import { CaretDown, CaretUp } from '@phosphor-icons/react'
 import { LeaderboardCityFilter } from '../components/LeaderboardCityFilter'
 import {
   fetchLeaderboardTop50,
+  fetchLeaderboardViewerCity,
   type LeaderboardFullRow,
 } from '../lib/leaderboard'
 import {
@@ -17,9 +18,12 @@ import {
   saveExcludedCitiesToStorage,
   toExcludedCityLowerSet,
 } from '../lib/leaderboardExcludeCities'
+import {
+  persistLeaderboardPasswordUnlock,
+  sessionAuthAllowsLeaderboardAccess,
+} from '../lib/globalLeaderboardSessionAuth'
 
 const LEADERBOARD_ACCESS_PASSWORD = 'g'
-const LEADERBOARD_UNLOCK_STORAGE_KEY = 'dezc-global-leaderboard-unlocked-v1'
 
 type LeaderboardSummary = {
   latest: LeaderboardFullRow | null
@@ -123,13 +127,9 @@ function sortRows(
 }
 
 export default function GlobalLeaderboardPage() {
-  const [unlocked, setUnlocked] = useState(() => {
-    try {
-      return sessionStorage.getItem(LEADERBOARD_UNLOCK_STORAGE_KEY) === '1'
-    } catch {
-      return false
-    }
-  })
+  const [geoReady, setGeoReady] = useState(false)
+  const [viewerCity, setViewerCity] = useState<string | null>(null)
+  const [authTicker, setAuthTicker] = useState(0)
   const [passwordInput, setPasswordInput] = useState('')
   const [authError, setAuthError] = useState(false)
 
@@ -137,6 +137,34 @@ export default function GlobalLeaderboardPage() {
   const [status, setStatus] = useState<'loading' | 'ok' | 'empty' | 'error'>('loading')
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir } | null>(null)
   const [excludedCities, setExcludedCities] = useState(loadExcludedCitiesFromStorage)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchLeaderboardViewerCity()
+      .then((city) => {
+        if (!cancelled) setViewerCity(city)
+      })
+      .catch(() => {
+        if (!cancelled) setViewerCity(null)
+      })
+      .finally(() => {
+        if (!cancelled) setGeoReady(true)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(() => setAuthTicker((n) => n + 1), 60_000)
+    return () => clearInterval(id)
+  }, [])
+
+  const unlocked = useMemo(() => {
+    void authTicker
+    if (!geoReady) return false
+    return sessionAuthAllowsLeaderboardAccess(viewerCity)
+  }, [geoReady, viewerCity, authTicker])
 
   useEffect(() => {
     try {
@@ -151,9 +179,11 @@ export default function GlobalLeaderboardPage() {
     [excludedCities],
   )
 
+  const gatedRows = useMemo(() => (unlocked ? rows : []), [unlocked, rows])
+
   const filteredRows = useMemo(
-    () => rows.filter((r) => !cityRowIsExcluded(r.city, excludedCitySet)),
-    [rows, excludedCitySet],
+    () => gatedRows.filter((r) => !cityRowIsExcluded(r.city, excludedCitySet)),
+    [gatedRows, excludedCitySet],
   )
 
   useEffect(() => {
@@ -180,7 +210,7 @@ export default function GlobalLeaderboardPage() {
   }, [unlocked])
 
   const summary = useMemo((): LeaderboardSummary | null => {
-    if (rows.length === 0) return null
+    if (gatedRows.length === 0) return null
     const data = filteredRows
 
     if (data.length === 0) {
@@ -266,7 +296,7 @@ export default function GlobalLeaderboardPage() {
       playersByCityCards,
       knownCityCount: citiesWithCoords,
     }
-  }, [rows, filteredRows])
+  }, [gatedRows, filteredRows])
 
   const displayRows = useMemo(() => sortRows(filteredRows, sort), [filteredRows, sort])
 
@@ -281,14 +311,10 @@ export default function GlobalLeaderboardPage() {
   function handleUnlock(e: FormEvent) {
     e.preventDefault()
     if (passwordInput === LEADERBOARD_ACCESS_PASSWORD) {
-      try {
-        sessionStorage.setItem(LEADERBOARD_UNLOCK_STORAGE_KEY, '1')
-      } catch {
-        /* ignore quota / private mode */
-      }
+      persistLeaderboardPasswordUnlock()
       setAuthError(false)
-      setUnlocked(true)
       setPasswordInput('')
+      setAuthTicker((n) => n + 1)
       return
     }
     setAuthError(true)
@@ -308,10 +334,15 @@ export default function GlobalLeaderboardPage() {
         Global leaderboard
       </h1>
 
-      {!unlocked ? (
+      {!geoReady ? (
+        <p className="mt-3 max-w-2xl text-sm text-fg-muted">Checking region…</p>
+      ) : !unlocked ? (
         <>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
-            This page is password protected. Enter the password to view the top 50.
+            This page is password protected. Enter the password to view the top 50. If you’re in
+            Stouffville or Markham (as detected from your connection), access lasts for this browser
+            tab only. From other locations, or if your city can’t be detected, you’ll need the
+            password again every 6 hours while this tab stays open.
           </p>
           <form
             onSubmit={handleUnlock}
@@ -364,7 +395,7 @@ export default function GlobalLeaderboardPage() {
             </p>
             <div className="w-full min-w-0 md:max-w-[min(22rem,45%)] lg:max-w-sm xl:max-w-md">
               <LeaderboardCityFilter
-                boardRows={rows}
+                boardRows={gatedRows}
                 excludedCities={excludedCities}
                 onExcludedCitiesChange={setExcludedCities}
               />
@@ -536,7 +567,7 @@ export default function GlobalLeaderboardPage() {
                       No scores yet. Play the mini-game on the home page to get on the board.
                     </td>
                   </tr>
-                ) : status === 'ok' && rows.length > 0 && filteredRows.length === 0 ? (
+                ) : status === 'ok' && gatedRows.length > 0 && filteredRows.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="px-4 py-8 text-center text-fg-muted">
                       Every row matches a hidden city. Change or clear &ldquo;Hide cities&rdquo; to
