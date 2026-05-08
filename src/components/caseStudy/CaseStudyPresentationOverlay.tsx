@@ -1377,6 +1377,7 @@ export function CaseStudyPresentationOverlay({
               slide.slideKind !== 'text' &&
               fullIndex === safeFullIndex &&
               imageScale > 1.001
+            const isTextSlide = slide.slideKind === 'text'
             return (
             <div
               key={fullIndex}
@@ -1385,7 +1386,11 @@ export function CaseStudyPresentationOverlay({
               aria-hidden={fullIndex !== safeFullIndex}
             >
               <div
-                className={`presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-x-hidden px-4 py-6 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 md:py-10 ${
+                className={`presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-x-hidden px-4 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 ${
+                  isTextSlide
+                    ? 'max-lg:py-[calc(1.5rem+40px)] md:max-lg:py-[calc(2.5rem+40px)] lg:py-10'
+                    : 'py-6 md:py-10'
+                } ${
                   zoomedActiveImageSlide
                     ? 'overflow-y-hidden overscroll-none touch-none'
                     : 'overflow-y-auto'
