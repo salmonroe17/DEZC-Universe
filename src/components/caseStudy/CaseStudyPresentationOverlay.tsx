@@ -48,7 +48,7 @@ const TEXT_SCALE_STEP = 0.25
 const PRESENTATION_TEXT_SLIDE_ZOOM_BASE = 1.5
 /** Below `lg`: extra shrink on text slides (tablet / small laptop). Applied on top of {@link PRESENTATION_TEXT_SLIDE_ZOOM_BASE} and user `textScale`. */
 const PRESENTATION_TEXT_ZOOM_LT_LG_FACTOR = 0.66
-/** Below `md`: no text +/- controls — fixed zoom uses base × this (phones). */
+/** Below `md`: default text zoom uses base × this; user `textScale` still applies (compact +/- when controls hidden). */
 const PRESENTATION_TEXT_ZOOM_LT_MD_FACTOR = 0.48
 const IMAGE_SCALE_MIN = 0.5
 const IMAGE_SCALE_MAX = 3
@@ -669,7 +669,7 @@ export function CaseStudyPresentationOverlay({
     const base = PRESENTATION_TEXT_SLIDE_ZOOM_BASE
     if (presentationLgUp) return textScale * base
     if (presentationMdUp) return textScale * base * PRESENTATION_TEXT_ZOOM_LT_LG_FACTOR
-    return base * PRESENTATION_TEXT_ZOOM_LT_MD_FACTOR
+    return textScale * base * PRESENTATION_TEXT_ZOOM_LT_MD_FACTOR
   }, [presentationLgUp, presentationMdUp, textScale])
 
   /** Per-slide preview only (no forward-fill) so image thumbnails stay aligned to the correct slide. */
@@ -971,6 +971,10 @@ export function CaseStudyPresentationOverlay({
   const safeFullIndex = Math.min(Math.max(0, resolvedActiveFullIndex), slides.length - 1)
   const activeVisibleIndex = Math.max(0, visibleIndexFromFull(safeFullIndex))
 
+  /** Compact footer +/- targets text vs image scales based on active deck slide kind. */
+  const compactZoomUsesText =
+    visibleEntries.length > 0 && visibleEntries[activeVisibleIndex]?.slide.slideKind === 'text'
+
   const overlayClass = [
     'case-study-presentation-overlay port-presentation-viewport fixed left-0 top-0 z-[100000] box-border flex h-[100dvh] w-full min-w-0 max-w-full cursor-auto flex-col overflow-hidden font-mono text-fg antialiased transition-[color,background-color] duration-200 ease-out motion-reduce:transition-none',
     `presentation-theme-${theme}`,
@@ -1027,28 +1031,101 @@ export function CaseStudyPresentationOverlay({
       {/* Prev/next: always reachable at bottom; hidden while thumbnail strip is open (strip has its own). */}
       {!controlsVisible ? (
         <div
-          className="pointer-events-none fixed inset-x-0 bottom-0 z-[100004] flex items-end justify-between gap-4 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:px-5 md:pb-4"
+          className="pointer-events-none fixed inset-x-0 bottom-0 z-[100004] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 md:px-5 md:pb-4"
           role="navigation"
           aria-label="Slide navigation"
         >
-          <button
-            type="button"
-            aria-label="Previous slide"
-            disabled={activeVisibleIndex <= 0}
-            onClick={() => goRelative(-1, true)}
-            className={`pointer-events-auto ${ctrlBtnClass}`}
-          >
-            <CaretLeft {...iconInCtrl} aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="Next slide"
-            disabled={activeVisibleIndex >= visibleEntries.length - 1}
-            onClick={() => goRelative(1, true)}
-            className={`pointer-events-auto ${ctrlBtnClass}`}
-          >
-            <CaretRight {...iconInCtrl} aria-hidden />
-          </button>
+          <div className="relative flex w-full items-end justify-between gap-4">
+            <button
+              type="button"
+              aria-label="Previous slide"
+              disabled={activeVisibleIndex <= 0}
+              onClick={() => goRelative(-1, true)}
+              className={`pointer-events-auto relative z-[1] ${ctrlBtnClass}`}
+            >
+              <CaretLeft {...iconInCtrl} aria-hidden />
+            </button>
+            <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 flex -translate-x-1/2 -translate-y-1/2 items-center">
+              <div
+                className="pointer-events-auto flex items-center gap-1.5"
+                role="group"
+                aria-label={compactZoomUsesText ? 'Zoom text slide' : 'Zoom image slide'}
+              >
+                {compactZoomUsesText ? (
+                  <>
+                    <button
+                      type="button"
+                      className={ctrlBtnClass}
+                      aria-label="Decrease text size"
+                      {...textMinusHold}
+                      disabled={textScale <= TEXT_SCALE_MIN + 1e-6}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter' && e.key !== ' ') return
+                        e.preventDefault()
+                        bumpTextScale(-TEXT_SCALE_STEP)
+                      }}
+                    >
+                      <Minus {...iconInCtrl} aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      className={ctrlBtnClass}
+                      aria-label="Increase text size"
+                      {...textPlusHold}
+                      disabled={textScale >= TEXT_SCALE_MAX - 1e-6}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter' && e.key !== ' ') return
+                        e.preventDefault()
+                        bumpTextScale(TEXT_SCALE_STEP)
+                      }}
+                    >
+                      <Plus {...iconInCtrl} aria-hidden />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className={ctrlBtnClass}
+                      aria-label="Decrease image scale"
+                      {...imageMinusHold}
+                      disabled={imageScale <= IMAGE_SCALE_MIN + 1e-6}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter' && e.key !== ' ') return
+                        e.preventDefault()
+                        bumpImageScale(-IMAGE_SCALE_STEP)
+                      }}
+                    >
+                      <Minus {...iconInCtrl} aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      className={ctrlBtnClass}
+                      aria-label="Increase image scale"
+                      {...imagePlusHold}
+                      disabled={imageScale >= IMAGE_SCALE_MAX - 1e-6}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Enter' && e.key !== ' ') return
+                        e.preventDefault()
+                        bumpImageScale(IMAGE_SCALE_STEP)
+                      }}
+                    >
+                      <Plus {...iconInCtrl} aria-hidden />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+            <button
+              type="button"
+              aria-label="Next slide"
+              disabled={activeVisibleIndex >= visibleEntries.length - 1}
+              onClick={() => goRelative(1, true)}
+              className={`pointer-events-auto relative z-[1] ${ctrlBtnClass}`}
+            >
+              <CaretRight {...iconInCtrl} aria-hidden />
+            </button>
+          </div>
         </div>
       ) : null}
 
@@ -1202,7 +1279,14 @@ export function CaseStudyPresentationOverlay({
         <div
           ref={scrollRef}
           onScroll={onScroll}
-          className="relative z-[1] flex min-h-0 w-full flex-1 flex-row overflow-x-auto overflow-y-hidden"
+          className={
+            /* Below lg the deck must not scroll horizontally via touch/trackpad —
+             * pinch-zoom browser pan / image drag fights `overflow-x-auto` on this rail.
+             * Slides still change via prev-next, thumbnails, keyboard; `scrollLeft` sync still applies. */
+            presentationLgUp
+              ? 'relative z-[1] flex min-h-0 w-full flex-1 flex-row overflow-x-auto overflow-y-hidden'
+              : 'relative z-[1] flex min-h-0 w-full flex-1 flex-row overflow-x-hidden overflow-y-hidden overscroll-x-contain'
+          }
         >
           {visibleEntries.map(({ slide, fullIndex }) => (
             <div
@@ -1214,7 +1298,7 @@ export function CaseStudyPresentationOverlay({
               <div
                 className="presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-y-auto overflow-x-hidden px-4 py-6 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 md:py-10"
                 style={{
-                  /* lg+: full desktop zoom + text +/-; md–lg: scaled down; &lt;md: fixed smaller (no +/-). */
+                  /* lg+: full desktop zoom + text +/-; md–lg: scaled down; &lt;md: smaller baseline + footer +/- when chrome hidden */
                   zoom: slide.slideKind === 'text' ? presentationTextSlideZoom : 1,
                 }}
                 onPointerDown={onPresentationSlidePointerDown}
