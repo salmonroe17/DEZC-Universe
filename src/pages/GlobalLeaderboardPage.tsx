@@ -6,13 +6,41 @@ import {
 } from 'react'
 import { Link } from 'react-router-dom'
 import { CaretDown, CaretUp } from '@phosphor-icons/react'
+import { LeaderboardCityFilter } from '../components/LeaderboardCityFilter'
 import {
   fetchLeaderboardTop50,
   type LeaderboardFullRow,
 } from '../lib/leaderboard'
+import {
+  cityRowIsExcluded,
+  loadExcludedCitiesFromStorage,
+  saveExcludedCitiesToStorage,
+  toExcludedCityLowerSet,
+} from '../lib/leaderboardExcludeCities'
 
 const LEADERBOARD_ACCESS_PASSWORD = 'g'
 const LEADERBOARD_UNLOCK_STORAGE_KEY = 'dezc-global-leaderboard-unlocked-v1'
+
+type LeaderboardSummary = {
+  latest: LeaderboardFullRow | null
+  topScore: number
+  avgScore: number
+  totalPlayers: number
+  cityCards: Array<{
+    cityLabel: string
+    players: number
+    topScore: number
+    lastPlayedAgo: string
+  }>
+  playersByCityCards: Array<{
+    cityLabel: string
+    players: number
+    topScore: number
+    lastPlayedAgo: string
+  }>
+  knownCityCount: number
+  filteredEmpty?: boolean
+}
 
 type SortKey = 'rank' | 'codename' | 'score' | 'playedAt' | 'city'
 type SortDir = 'asc' | 'desc'
@@ -108,6 +136,25 @@ export default function GlobalLeaderboardPage() {
   const [rows, setRows] = useState<LeaderboardFullRow[]>([])
   const [status, setStatus] = useState<'loading' | 'ok' | 'empty' | 'error'>('loading')
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir } | null>(null)
+  const [excludedCities, setExcludedCities] = useState(loadExcludedCitiesFromStorage)
+
+  useEffect(() => {
+    try {
+      saveExcludedCitiesToStorage(excludedCities)
+    } catch {
+      /* private mode */
+    }
+  }, [excludedCities])
+
+  const excludedCitySet = useMemo(
+    () => toExcludedCityLowerSet(excludedCities),
+    [excludedCities],
+  )
+
+  const filteredRows = useMemo(
+    () => rows.filter((r) => !cityRowIsExcluded(r.city, excludedCitySet)),
+    [rows, excludedCitySet],
+  )
 
   useEffect(() => {
     if (!unlocked) return
@@ -132,24 +179,39 @@ export default function GlobalLeaderboardPage() {
     }
   }, [unlocked])
 
-  const summary = useMemo(() => {
+  const summary = useMemo((): LeaderboardSummary | null => {
     if (rows.length === 0) return null
-    let latest = rows[0]
-    let latestTs = new Date(rows[0].playedAt).getTime()
-    for (const r of rows) {
+    const data = filteredRows
+
+    if (data.length === 0) {
+      return {
+        filteredEmpty: true,
+        latest: null,
+        topScore: 0,
+        avgScore: 0,
+        totalPlayers: 0,
+        cityCards: [],
+        playersByCityCards: [],
+        knownCityCount: 0,
+      }
+    }
+
+    let latest = data[0]
+    let latestTs = new Date(data[0].playedAt).getTime()
+    for (const r of data) {
       const ts = new Date(r.playedAt).getTime()
       if (!Number.isNaN(ts) && ts >= latestTs) {
         latestTs = ts
         latest = r
       }
     }
-    let topScore = rows[0].score
+    let topScore = data[0].score
     let sumScore = 0
     const byCity = new Map<
       string,
       { rows: LeaderboardFullRow[] }
     >()
-    for (const r of rows) {
+    for (const r of data) {
       sumScore += r.score
       topScore = Math.max(topScore, r.score)
       const label =
@@ -193,20 +255,20 @@ export default function GlobalLeaderboardPage() {
       ...(unknownCityCard && unknownCityCard.players > 0 ? [unknownCityCard] : []),
     ]
 
-    const citiesWithCoords = summaryCountKnownCities(rows)
+    const citiesWithCoords = summaryCountKnownCities(data)
 
     return {
       latest,
       topScore,
-      avgScore: sumScore / rows.length,
-      totalPlayers: rows.length,
+      avgScore: sumScore / data.length,
+      totalPlayers: data.length,
       cityCards,
       playersByCityCards,
       knownCityCount: citiesWithCoords,
     }
-  }, [rows])
+  }, [rows, filteredRows])
 
-  const displayRows = useMemo(() => sortRows(rows, sort), [rows, sort])
+  const displayRows = useMemo(() => sortRows(filteredRows, sort), [filteredRows, sort])
 
   function cycleSort(key: SortKey) {
     setSort((prev) => {
@@ -295,10 +357,19 @@ export default function GlobalLeaderboardPage() {
         </>
       ) : (
         <div>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
-            Top 50 personal-best scores. Codenames are generated per run; times are stored in UTC and
-            shown in your local timezone.
-          </p>
+          <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8 xl:gap-10">
+            <p className="max-w-2xl shrink-0 text-sm leading-relaxed text-fg-muted md:min-w-0 md:max-w-[min(36rem,50%)]">
+              Top 50 personal-best scores. Codenames are generated per run; times are stored in UTC
+              and shown in your local timezone.
+            </p>
+            <div className="w-full min-w-0 md:max-w-[min(22rem,45%)] lg:max-w-sm xl:max-w-md">
+              <LeaderboardCityFilter
+                boardRows={rows}
+                excludedCities={excludedCities}
+                onExcludedCitiesChange={setExcludedCities}
+              />
+            </div>
+          </div>
 
           {status === 'ok' && summary && (
             <>
@@ -307,18 +378,30 @@ export default function GlobalLeaderboardPage() {
                   <p className="m-0 text-[10px] uppercase tracking-[0.1em] text-fg-muted">
                     Last played
                   </p>
-                  <p className="mt-2 text-lg font-semibold tabular-nums text-fg">
-                    {formatRelativeAgo(summary.latest.playedAt)}
-                  </p>
-                  <p className="mt-1 text-[11px] leading-snug text-fg-muted">
-                    {summary.latest.city && summary.latest.city.trim() !== ''
-                      ? `${summary.latest.city} · `
-                      : ''}
-                    {summary.latest.codename.toUpperCase()}
-                  </p>
-                  <p className="mt-2 text-[10px] text-fg-subtle">
-                    {formatPlayedAt(summary.latest.playedAt)}
-                  </p>
+                  {summary.filteredEmpty ? (
+                    <>
+                      <p className="mt-2 text-lg font-semibold tabular-nums text-fg-muted">—</p>
+                      <p className="mt-1 text-[11px] leading-snug text-fg-muted">
+                        No matching rows — adjust the Hide cities filter.
+                      </p>
+                      <p className="mt-2 text-[10px] text-fg-subtle">&nbsp;</p>
+                    </>
+                  ) : summary.latest ? (
+                    <>
+                      <p className="mt-2 text-lg font-semibold tabular-nums text-fg">
+                        {formatRelativeAgo(summary.latest.playedAt)}
+                      </p>
+                      <p className="mt-1 text-[11px] leading-snug text-fg-muted">
+                        {summary.latest.city && summary.latest.city.trim() !== ''
+                          ? `${summary.latest.city} · `
+                          : ''}
+                        {summary.latest.codename.toUpperCase()}
+                      </p>
+                      <p className="mt-2 text-[10px] text-fg-subtle">
+                        {formatPlayedAt(summary.latest.playedAt)}
+                      </p>
+                    </>
+                  ) : null}
                 </div>
                 <div className="flex w-[min(16.5rem,calc(100vw-3.5rem))] shrink-0 snap-start flex-col rounded border border-cell-border/80 bg-elevated/30 p-4 sm:w-auto sm:min-w-0 sm:snap-none">
                   <p className="m-0 text-[10px] uppercase tracking-[0.1em] text-fg-muted">
@@ -451,6 +534,13 @@ export default function GlobalLeaderboardPage() {
                   <tr>
                     <td colSpan={5} className="px-4 py-8 text-center text-fg-muted">
                       No scores yet. Play the mini-game on the home page to get on the board.
+                    </td>
+                  </tr>
+                ) : status === 'ok' && rows.length > 0 && filteredRows.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-8 text-center text-fg-muted">
+                      Every row matches a hidden city. Change or clear &ldquo;Hide cities&rdquo; to
+                      see players.
                     </td>
                   </tr>
                 ) : (

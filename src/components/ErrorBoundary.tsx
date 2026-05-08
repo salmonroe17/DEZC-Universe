@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { NotFound404Glyph } from './NotFound404Glyph'
 
 type ErrorBoundaryProps = {
   children: ReactNode
@@ -22,7 +23,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render() {
     if (this.state.error) {
       return (
-        <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-bg px-6 py-12 font-mono text-fg">
+        <div className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-bg px-6 py-12 font-mono text-fg">
+          <p className="m-0 font-normal leading-none">
+            <NotFound404Glyph />
+          </p>
           <p className="m-0 max-w-md text-center text-sm text-fg-muted">Something went wrong.</p>
           <button
             type="button"
