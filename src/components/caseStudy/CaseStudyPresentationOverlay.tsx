@@ -229,11 +229,21 @@ type ImageSlidePanViewportProps = {
 }
 
 /** Wheel + drag pan for scaled image slides; clamps so empty margin stays minimal. */
-function ImageSlidePanViewport({ active, imageScale, pan, setPan, children }: ImageSlidePanViewportProps) {
+function ImageSlidePanViewport({
+  active,
+  imageScale,
+  pan,
+  setPan,
+  children,
+}: ImageSlidePanViewportProps) {
   const rootRef = useRef<HTMLDivElement>(null)
   const innerRef = useRef<HTMLDivElement>(null)
   const panRef = useRef(pan)
-  const dragRef = useRef<{ pointerId: number; sx: number; sy: number; ox: number; oy: number } | null>(null)
+  const dragRef = useRef<{ pointerId: number; sx: number; sy: number; ox: number; oy: number } | null>(
+    null,
+  )
+
+  const scaledUp = imageScale > 1 + 1e-5
 
   useLayoutEffect(() => {
     panRef.current = pan
@@ -274,6 +284,20 @@ function ImageSlidePanViewport({ active, imageScale, pan, setPan, children }: Im
     if (!active) return
     setPan((p) => clampPan(p.x, p.y))
   }, [active, clampPan, imageScale, setPan])
+
+  /** iOS Safari: stop parent `overflow-y` scroll buckets from swallowing translated pan while zoomed. */
+  useEffect(() => {
+    if (!active || !scaledUp) return
+    const el = rootRef.current
+    if (!el) return
+    const blockChromeScroll = (e: TouchEvent) => {
+      if (e.cancelable && e.targetTouches.length < 3) {
+        e.preventDefault()
+      }
+    }
+    el.addEventListener('touchmove', blockChromeScroll, { passive: false })
+    return () => el.removeEventListener('touchmove', blockChromeScroll)
+  }, [active, scaledUp])
 
   const onPointerDown = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return
@@ -319,7 +343,11 @@ function ImageSlidePanViewport({ active, imageScale, pan, setPan, children }: Im
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
-      className="relative flex min-h-full min-w-full flex-1 cursor-grab overflow-hidden active:cursor-grabbing"
+      className={
+        scaledUp
+          ? 'relative flex min-h-full min-w-full flex-1 cursor-grab overflow-hidden overscroll-none touch-none active:cursor-grabbing'
+          : 'relative flex min-h-full min-w-full flex-1 cursor-grab overflow-hidden touch-manipulation active:cursor-grabbing'
+      }
     >
       <div
         ref={innerRef}
@@ -447,6 +475,7 @@ export function CaseStudyPresentationOverlay({
 }: CaseStudyPresentationOverlayProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const controlsToggleRef = useRef<HTMLButtonElement>(null)
+  const presentationOverlayShellRef = useRef<HTMLDivElement>(null)
   const ignoreScrollEmitRef = useRef(false)
   const lastEmittedFullIndexRef = useRef(activeIndex)
   const scrollRafRef = useRef<number | null>(null)
@@ -842,12 +871,66 @@ export function CaseStudyPresentationOverlay({
 
   useLayoutEffect(() => {
     if (!open) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    document.body.classList.add(PRESENTATION_BODY_CLASS)
+
+    const html = document.documentElement
+    const body = document.body
+    const scrollY = window.scrollY
+
+    html.style.overflow = 'hidden'
+
+    body.classList.add(PRESENTATION_BODY_CLASS)
+    body.style.overflow = 'hidden'
+    body.style.position = 'fixed'
+    body.style.top = `-${scrollY}px`
+    body.style.left = '0'
+    body.style.right = '0'
+    body.style.width = '100%'
+
+    const overlay = presentationOverlayShellRef.current
+    const vv = window.visualViewport
+
+    const syncOverlayToViewport = () => {
+      if (!overlay) return
+      if (vv && vv.height >= 48 && vv.width >= 48) {
+        overlay.style.top = `${vv.offsetTop}px`
+        overlay.style.left = `${vv.offsetLeft}px`
+        overlay.style.width = `${vv.width}px`
+        overlay.style.height = `${vv.height}px`
+      } else {
+        overlay.style.top = '0px'
+        overlay.style.left = '0px'
+        overlay.style.width = `${typeof window !== 'undefined' ? window.innerWidth : '100'}px`
+        overlay.style.height = `${typeof window !== 'undefined' ? window.innerHeight : '100'}px`
+      }
+    }
+
+    if (overlay) {
+      syncOverlayToViewport()
+      vv?.addEventListener('resize', syncOverlayToViewport)
+      vv?.addEventListener('scroll', syncOverlayToViewport)
+      window.addEventListener('resize', syncOverlayToViewport)
+    }
+
     return () => {
-      document.body.style.overflow = prev
-      document.body.classList.remove(PRESENTATION_BODY_CLASS)
+      if (overlay) {
+        vv?.removeEventListener('resize', syncOverlayToViewport)
+        vv?.removeEventListener('scroll', syncOverlayToViewport)
+        window.removeEventListener('resize', syncOverlayToViewport)
+        overlay.style.top = ''
+        overlay.style.left = ''
+        overlay.style.width = ''
+        overlay.style.height = ''
+      }
+
+      html.style.overflow = ''
+      body.classList.remove(PRESENTATION_BODY_CLASS)
+      body.style.overflow = ''
+      body.style.position = ''
+      body.style.top = ''
+      body.style.left = ''
+      body.style.right = ''
+      body.style.width = ''
+      window.scrollTo(0, scrollY)
     }
   }, [open])
 
@@ -976,7 +1059,7 @@ export function CaseStudyPresentationOverlay({
     visibleEntries.length > 0 && visibleEntries[activeVisibleIndex]?.slide.slideKind === 'text'
 
   const overlayClass = [
-    'case-study-presentation-overlay port-presentation-viewport fixed left-0 top-0 z-[100000] box-border flex h-[100dvh] w-full min-w-0 max-w-full cursor-auto flex-col overflow-hidden font-mono text-fg antialiased transition-[color,background-color] duration-200 ease-out motion-reduce:transition-none',
+    'case-study-presentation-overlay port-presentation-viewport fixed left-0 top-0 z-[100000] box-border flex min-h-0 min-w-0 w-full max-w-full cursor-auto flex-col overflow-hidden overscroll-none supports-[height:100dvh]:min-h-[100dvh] font-mono text-fg antialiased transition-[color,background-color] duration-200 ease-out motion-reduce:transition-none',
     `presentation-theme-${theme}`,
   ].join(' ')
 
@@ -995,6 +1078,7 @@ export function CaseStudyPresentationOverlay({
 
   return createPortal(
     <div
+      ref={presentationOverlayShellRef}
       className={overlayClass}
       role="dialog"
       aria-modal="true"
@@ -1288,7 +1372,12 @@ export function CaseStudyPresentationOverlay({
               : 'relative z-[1] flex min-h-0 w-full flex-1 flex-row overflow-x-hidden overflow-y-hidden overscroll-x-contain'
           }
         >
-          {visibleEntries.map(({ slide, fullIndex }) => (
+          {visibleEntries.map(({ slide, fullIndex }) => {
+            const zoomedActiveImageSlide =
+              slide.slideKind !== 'text' &&
+              fullIndex === safeFullIndex &&
+              imageScale > 1.001
+            return (
             <div
               key={fullIndex}
               className="box-border flex h-full min-h-0 shrink-0 cursor-auto"
@@ -1296,7 +1385,11 @@ export function CaseStudyPresentationOverlay({
               aria-hidden={fullIndex !== safeFullIndex}
             >
               <div
-                className="presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-y-auto overflow-x-hidden px-4 py-6 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 md:py-10"
+                className={`presentation-slide-body relative z-[1] box-border h-full min-h-0 w-full min-w-0 cursor-auto overflow-x-hidden px-4 py-6 transition-[zoom] duration-200 ease-out motion-reduce:transition-none md:px-10 md:py-10 ${
+                  zoomedActiveImageSlide
+                    ? 'overflow-y-hidden overscroll-none touch-none'
+                    : 'overflow-y-auto'
+                }`}
                 style={{
                   /* lg+: full desktop zoom + text +/-; md–lg: scaled down; &lt;md: smaller baseline + footer +/- when chrome hidden */
                   zoom: slide.slideKind === 'text' ? presentationTextSlideZoom : 1,
@@ -1353,7 +1446,8 @@ export function CaseStudyPresentationOverlay({
                 )}
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
 
         <div

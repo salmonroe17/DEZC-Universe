@@ -358,6 +358,10 @@ textarea {
   -ms-overflow-style: none;
 }
 
+.case-study-presentation-overlay {
+  overscroll-behavior: none;
+}
+
 .case-study-presentation-overlay::-webkit-scrollbar,
 .case-study-presentation-overlay *::-webkit-scrollbar {
   display: none;
@@ -369,6 +373,7 @@ html:has(body.case-study-presentation-overlay-open),
 html:has(body.case-study-presentation-overlay-open) body {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overscroll-behavior: none;
 }
 
 html:has(body.case-study-presentation-overlay-open)::-webkit-scrollbar,
