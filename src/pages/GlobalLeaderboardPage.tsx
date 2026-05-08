@@ -338,12 +338,7 @@ export default function GlobalLeaderboardPage() {
         <p className="mt-3 max-w-2xl text-sm text-fg-muted">Checking region…</p>
       ) : !unlocked ? (
         <>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
-            This page is password protected. Enter the password to view the top 50. If you’re in
-            Stouffville or Markham (as detected from your connection), access lasts for this browser
-            tab only. From other locations, or if your city can’t be detected, you’ll need the
-            password again every 6 hours while this tab stays open.
-          </p>
+          <p className="mt-3 max-w-2xl text-sm text-fg-muted">This page is password protected.</p>
           <form
             onSubmit={handleUnlock}
             className="mt-8 max-w-sm rounded border border-cell-border/80 bg-elevated/30 p-4"
