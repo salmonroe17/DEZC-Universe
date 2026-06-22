@@ -1,4 +1,5 @@
 import { FLOW_NODE_COUNT } from '../lib/flowingLineWave'
+import { sideQuestCoverPreview } from '../lib/sideQuestPreviewPaths'
 
 /**
  * Side quest media in repo root `Side quest albums/<folder>/`.
@@ -63,8 +64,10 @@ export type SideQuestEntry = {
   id: string
   title: string
   description: string
-  /** First file in album (thumbnail): carousel + flowing-line node preview */
+  /** First file in album (thumbnail): carousel + sidequest viewer */
   coverImage: string
+  /** Small WebP for homepage flowing-line squares (see scripts/generate-sidequest-thumbs.mjs) */
+  coverPreview: string
   /** All album files in sort order, including video */
   galleryImages: string[]
 }
@@ -80,6 +83,7 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     description:
       'A playful character series I created with my wife, turning bubble tea flavors into tiny ghost personalities inspired by our relationship. Built for comics, jokes, and documenting everyday moments with charm.',
     coverImage: bobaghosteasMedia[0] ?? '',
+    coverPreview: sideQuestCoverPreview('bobaghosteas'),
     galleryImages: bobaghosteasMedia,
   },
   {
@@ -88,6 +92,7 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     description:
       'A collection of one-line neon illustrations focused on sneakers, Raptors themes, and everyday obsessions. An exploration of simplicity, glow, and nostalgic arcade energy.',
     coverImage: neonDrawingsMedia[0] ?? '',
+    coverPreview: sideQuestCoverPreview('neon-drawings'),
     galleryImages: neonDrawingsMedia,
   },
   {
@@ -96,6 +101,7 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     description:
       'A photo journal dedicated to my favorite place in the world. Moments, streets, food, and memories captured across trips through Japan.',
     coverImage: japanPhotosMedia[0] ?? '',
+    coverPreview: sideQuestCoverPreview('japan-adventures'),
     galleryImages: japanPhotosMedia,
   },
   {
@@ -104,6 +110,7 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     description:
       'A visual archive of unforgettable live shows and music memories. Featuring highlights like BTS, Coldplay, Childish Gambino, Jeremy Zucker, and more.',
     coverImage: concertPhotosMedia[0] ?? '',
+    coverPreview: sideQuestCoverPreview('concert-adventures'),
     galleryImages: concertPhotosMedia,
   },
   {
@@ -112,6 +119,7 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     description:
       'A 40-page illustrated storybook I created for my wife before proposing. It documented a surprise one-day New York adventure that ended with the proposal itself.',
     coverImage: marriageProposalMedia[0] ?? '',
+    coverPreview: sideQuestCoverPreview('a-marriage-proposal'),
     galleryImages: marriageProposalMedia,
   },
   {
@@ -120,6 +128,7 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     description:
       'A reflective social app concept where thoughts grow into living plants inside a personal digital garden. I used it to pitch co-founders through Y Combinator matching and explore calmer alternatives to modern social media.',
     coverImage: eedennMedia[0] ?? '',
+    coverPreview: sideQuestCoverPreview('eedenn'),
     galleryImages: eedennMedia,
   },
   {
@@ -128,6 +137,7 @@ export const SIDEQUESTS: readonly SideQuestEntry[] = [
     description:
       'Short for Design AI System, an AI-powered platform that generates and maintains full design systems from screenshots, ideas, or URLs. Built to help teams create components faster, detect inconsistencies, and scale product design with less friction.',
     coverImage: daisyMedia[0] ?? '',
+    coverPreview: sideQuestCoverPreview('daisy'),
     galleryImages: daisyMedia,
   },
 ]

@@ -1,4 +1,5 @@
 import { FlowingLine } from '../FlowingLine'
+import { usePrefetchSideQuestPreviews } from './usePrefetchSideQuestPreviews'
 import {
   SIDE_QUEST_LINE_BAND_CLASS,
   SIDE_QUEST_LINE_TRACK_CLASS,
@@ -24,6 +25,8 @@ export function SideQuestFlowingLineRail({
   lineBandClassName = SIDE_QUEST_LINE_BAND_CLASS,
   lineTrackClassName = SIDE_QUEST_LINE_TRACK_CLASS,
 }: SideQuestFlowingLineRailProps) {
+  usePrefetchSideQuestPreviews()
+
   return (
     <div className={lineBandClassName}>
       <FlowingLine
@@ -34,6 +37,7 @@ export function SideQuestFlowingLineRail({
         sandScrollHUnitRef={controller.sandScrollHUnitRef}
         onNodeClick={controller.onNodeClick}
         getNodePreviewSrc={controller.getNodePreviewSrc}
+        getNodePreviewPoster={controller.getNodePreviewPoster}
         getNodeTitle={controller.getNodeTitle}
         arrowDriftRateScale={arrowDriftRateScale}
         idleSpotlightAutoplay

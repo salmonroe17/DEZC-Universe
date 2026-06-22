@@ -27,7 +27,15 @@ import {
 } from '../lib/flowingLineWave'
 
 /** When false (idle rail: magnified slot hidden), skip IO / playback so inactive nodes do not decode video in parallel. */
-function FlowLineNodePreview({ src, mediaActive = true }: { src: string; mediaActive?: boolean }) {
+function FlowLineNodePreview({
+  src,
+  poster,
+  mediaActive = true,
+}: {
+  src: string
+  poster?: string
+  mediaActive?: boolean
+}) {
   const cls = 'h-full w-full object-cover'
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -60,16 +68,27 @@ function FlowLineNodePreview({ src, mediaActive = true }: { src: string; mediaAc
       <video
         ref={videoRef}
         src={src}
+        poster={poster}
         className={cls}
         muted
         playsInline
         loop
-        preload="metadata"
+        preload={mediaActive ? 'auto' : 'none'}
         aria-hidden
       />
     )
   }
-  return <img src={src} alt="" draggable={false} className={cls} loading={mediaActive ? 'eager' : 'lazy'} />
+  return (
+    <img
+      src={src}
+      alt=""
+      draggable={false}
+      className={cls}
+      loading={mediaActive ? 'eager' : 'lazy'}
+      decoding="async"
+      fetchPriority={mediaActive ? 'high' : 'low'}
+    />
+  )
 }
 
 /**
@@ -363,8 +382,10 @@ export type FlowingLineSandProps = {
   sandScrollHUnitRef?: MutableRefObject<number>
   /** Primary click on a Show & tell square — e.g. open Sidequest viewer for that index. */
   onNodeClick?: (nodeIndex: number) => void
-  /** Hovered node shows this image (e.g. first sidequest gallery frame) instead of a solid highlight. */
+  /** Hovered node shows this image (e.g. sidequest preview) instead of a solid highlight. */
   getNodePreviewSrc?: (nodeIndex: number) => string | undefined
+  /** Optional poster for video previews (small WebP while the clip loads). */
+  getNodePreviewPoster?: (nodeIndex: number) => string | undefined
   /** Hovered node title, shown bottom-center aligned with the scroll arrow controls. */
   getNodeTitle?: (nodeIndex: number) => string | undefined
   /**
@@ -393,6 +414,7 @@ export function FlowingLine({
   sandScrollHUnitRef,
   onNodeClick,
   getNodePreviewSrc,
+  getNodePreviewPoster,
   getNodeTitle,
   arrowDriftRateScale = 1,
   idleSpotlightAutoplay = false,
@@ -687,6 +709,8 @@ export function FlowingLine({
       : null
   const idleMagnifyPreviewSrc =
     idleMagnifyLogical !== null ? getNodePreviewSrc?.(idleMagnifyLogical) : undefined
+  const idleMagnifyPreviewPoster =
+    idleMagnifyLogical !== null ? getNodePreviewPoster?.(idleMagnifyLogical) : undefined
 
   return (
     <div
@@ -805,7 +829,10 @@ export function FlowingLine({
                     />
                     {previewSrc ? (
                       <div className={`${FLOW_LINE_PREVIEW_THUMB_CLIP_CLASS} pointer-events-none`}>
-                        <FlowLineNodePreview src={previewSrc} />
+                        <FlowLineNodePreview
+                          src={previewSrc}
+                          poster={getNodePreviewPoster?.(projectIdx)}
+                        />
                       </div>
                     ) : (
                       <div className="pointer-events-none relative z-[1] size-4 shrink-0 scale-[5] rounded-none bg-fg/92 brightness-110 md:size-5" />
@@ -884,7 +911,11 @@ export function FlowingLine({
               />
               {idleMagnifyPreviewSrc ? (
                 <div className={`${FLOW_LINE_PREVIEW_THUMB_CLIP_CLASS} pointer-events-none`}>
-                  <FlowLineNodePreview src={idleMagnifyPreviewSrc} mediaActive />
+                  <FlowLineNodePreview
+                    src={idleMagnifyPreviewSrc}
+                    poster={idleMagnifyPreviewPoster}
+                    mediaActive
+                  />
                 </div>
               ) : (
                 <div className="pointer-events-none relative z-[1] size-4 shrink-0 scale-[5] rounded-none bg-fg/92 brightness-110 md:size-5" />

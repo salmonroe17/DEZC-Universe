@@ -6,7 +6,7 @@ import {
   type RefObject,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { SIDEQUESTS } from '../../data/sidequests'
+import { SIDEQUESTS, isSideQuestVideoUrl } from '../../data/sidequests'
 
 export type SideQuestTimelineController = {
   sandLineRootRef: RefObject<HTMLDivElement | null>
@@ -22,6 +22,7 @@ export type SideQuestTimelineController = {
   }
   onNodeClick: (nodeIndex: number) => void
   getNodePreviewSrc: (nodeIndex: number) => string | undefined
+  getNodePreviewPoster: (nodeIndex: number) => string | undefined
   getNodeTitle: (nodeIndex: number) => string | undefined
 }
 
@@ -44,7 +45,20 @@ export function useSideQuestTimelineController(): SideQuestTimelineController {
     (nodeIndex: number) => {
       if (sidequestN === 0) return undefined
       const sq = SIDEQUESTS[nodeIndex % sidequestN]!
-      return sq.galleryImages[0] ?? sq.coverImage
+      const cover = sq.galleryImages[0] ?? sq.coverImage
+      if (isSideQuestVideoUrl(cover)) return cover
+      return sq.coverPreview || cover
+    },
+    [sidequestN],
+  )
+
+  const getNodePreviewPoster = useCallback(
+    (nodeIndex: number) => {
+      if (sidequestN === 0) return undefined
+      const sq = SIDEQUESTS[nodeIndex % sidequestN]!
+      const cover = sq.galleryImages[0] ?? sq.coverImage
+      if (!isSideQuestVideoUrl(cover)) return undefined
+      return sq.coverPreview || undefined
     },
     [sidequestN],
   )
@@ -82,6 +96,7 @@ export function useSideQuestTimelineController(): SideQuestTimelineController {
     sandRefs,
     onNodeClick,
     getNodePreviewSrc,
+    getNodePreviewPoster,
     getNodeTitle,
   }
 }
