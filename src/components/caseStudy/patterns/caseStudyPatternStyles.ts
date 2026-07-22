@@ -23,6 +23,37 @@ export const caseStudyNarrowProseClass =
 export const caseStudyChamferToggleLabelClassName =
   'font-mono text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)] font-normal leading-snug text-fg sm:leading-none'
 
+/**
+ * Pill switch track/knob on chamfer annotation bars.
+ * Uses `fg`/`bg` (not hardcoded white) so light presentation theme stays visible;
+ * dark themes keep a light knob via `--color-fg`.
+ */
+const caseStudyChamferToggleTrackBaseClassName =
+  'group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow,opacity] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55'
+
+const caseStudyChamferToggleTrackOnClassName =
+  'border-fg bg-fg hover:opacity-90 hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
+
+const caseStudyChamferToggleTrackOffClassName =
+  'border-fg bg-transparent hover:bg-fg/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
+
+const caseStudyChamferToggleKnobBaseClassName =
+  'pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100'
+
+export function caseStudyChamferToggleTrackClassName(on: boolean): string {
+  return `${caseStudyChamferToggleTrackBaseClassName} ${
+    on ? caseStudyChamferToggleTrackOnClassName : caseStudyChamferToggleTrackOffClassName
+  }`
+}
+
+export function caseStudyChamferToggleKnobClassName(on: boolean): string {
+  return `${caseStudyChamferToggleKnobBaseClassName} ${
+    on
+      ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
+      : 'left-1 bg-fg'
+  }`
+}
+
 /** Team list under Overview – spacing only; font role/title is per page. */
 export const caseStudyTeamRowListClass = 'mt-7 flex flex-col gap-6 md:mt-8 md:gap-7'
 

@@ -38,7 +38,9 @@ import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
+  caseStudyChamferToggleKnobClassName,
   caseStudyChamferToggleLabelClassName,
+  caseStudyChamferToggleTrackClassName,
   caseStudyScrollAnchorClass,
   caseStudyTeamResponsibilityTextClass,
   caseStudyTeamRoleColumnClass,
@@ -653,18 +655,10 @@ export default function CarbonNeutralClubShowcasePage() {
             aria-checked={seeWhereUsersStruggled}
             aria-labelledby="struggle-toggle-label"
             onClick={() => setSeeWhereUsersStruggled((v) => !v)}
-            className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-              seeWhereUsersStruggled
-                ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-            }`}
+            className={caseStudyChamferToggleTrackClassName(seeWhereUsersStruggled)}
           >
             <span
-              className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                seeWhereUsersStruggled
-                  ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                  : 'left-1 bg-white'
-              }`}
+              className={caseStudyChamferToggleKnobClassName(seeWhereUsersStruggled)}
               aria-hidden
             />
           </button>
@@ -983,18 +977,10 @@ export default function CarbonNeutralClubShowcasePage() {
               aria-checked={showCalculatorWhyWorks}
               aria-labelledby="calculator-why-toggle-label"
               onClick={() => setShowCalculatorWhyWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showCalculatorWhyWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showCalculatorWhyWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showCalculatorWhyWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showCalculatorWhyWorks)}
                 aria-hidden
               />
             </button>
@@ -1049,18 +1035,10 @@ export default function CarbonNeutralClubShowcasePage() {
               aria-checked={showCalculatorC13Alt}
               aria-labelledby="calculator-c13-toggle-label"
               onClick={() => setShowCalculatorC13Alt((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showCalculatorC13Alt
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showCalculatorC13Alt)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showCalculatorC13Alt
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showCalculatorC13Alt)}
                 aria-hidden
               />
             </button>
@@ -1141,18 +1119,10 @@ export default function CarbonNeutralClubShowcasePage() {
               aria-checked={showResultMeaningfulAlt}
               aria-labelledby="result-meaningful-toggle-label"
               onClick={() => setShowResultMeaningfulAlt((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showResultMeaningfulAlt
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showResultMeaningfulAlt)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showResultMeaningfulAlt
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showResultMeaningfulAlt)}
                 aria-hidden
               />
             </button>
@@ -1233,18 +1203,10 @@ export default function CarbonNeutralClubShowcasePage() {
               aria-checked={showPricingPlanAlt}
               aria-labelledby="pricing-plan-toggle-label"
               onClick={() => setShowPricingPlanAlt((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showPricingPlanAlt
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showPricingPlanAlt)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showPricingPlanAlt
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showPricingPlanAlt)}
                 aria-hidden
               />
             </button>
@@ -1309,18 +1271,10 @@ export default function CarbonNeutralClubShowcasePage() {
               aria-checked={showPricingTrustProjectsAlt}
               aria-labelledby="pricing-trust-offset-toggle-label"
               onClick={() => setShowPricingTrustProjectsAlt((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showPricingTrustProjectsAlt
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showPricingTrustProjectsAlt)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showPricingTrustProjectsAlt
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showPricingTrustProjectsAlt)}
                 aria-hidden
               />
             </button>
@@ -1375,18 +1329,10 @@ export default function CarbonNeutralClubShowcasePage() {
               aria-checked={showPricingCostBreakdownAlt}
               aria-labelledby="pricing-cost-breakdown-toggle-label"
               onClick={() => setShowPricingCostBreakdownAlt((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showPricingCostBreakdownAlt
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showPricingCostBreakdownAlt)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showPricingCostBreakdownAlt
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showPricingCostBreakdownAlt)}
                 aria-hidden
               />
             </button>

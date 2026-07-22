@@ -36,7 +36,9 @@ import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
+  caseStudyChamferToggleKnobClassName,
   caseStudyChamferToggleLabelClassName,
+  caseStudyChamferToggleTrackClassName,
   caseStudyScrollAnchorClass,
   caseStudyTeamResponsibilityTextClass,
   caseStudyTeamRoleColumnClass,
@@ -562,18 +564,10 @@ export default function IbmEnviziShowcasePage() {
             aria-checked={seeWhereUsersStruggled}
             aria-labelledby="struggle-toggle-label"
             onClick={() => setSeeWhereUsersStruggled((v) => !v)}
-            className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-              seeWhereUsersStruggled
-                ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-            }`}
+            className={caseStudyChamferToggleTrackClassName(seeWhereUsersStruggled)}
           >
             <span
-              className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                seeWhereUsersStruggled
-                  ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                  : 'left-1 bg-white'
-              }`}
+              className={caseStudyChamferToggleKnobClassName(seeWhereUsersStruggled)}
               aria-hidden
             />
           </button>
@@ -876,18 +870,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showActionLayerWhatWorks}
               aria-labelledby="action-layer-what-works-label"
               onClick={() => setShowActionLayerWhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showActionLayerWhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showActionLayerWhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showActionLayerWhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showActionLayerWhatWorks)}
                 aria-hidden
               />
             </button>
@@ -984,18 +970,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showCriteriaSelectionWhatWorks}
               aria-labelledby="criteria-selection-what-works-label"
               onClick={() => setShowCriteriaSelectionWhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showCriteriaSelectionWhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showCriteriaSelectionWhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showCriteriaSelectionWhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showCriteriaSelectionWhatWorks)}
                 aria-hidden
               />
             </button>
@@ -1094,18 +1072,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showDefineSuccessWhatWorks}
               aria-labelledby="define-success-what-works-label"
               onClick={() => setShowDefineSuccessWhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showDefineSuccessWhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showDefineSuccessWhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showDefineSuccessWhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showDefineSuccessWhatWorks)}
                 aria-hidden
               />
             </button>
@@ -1204,18 +1174,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showExecuteActionsWhatWorks}
               aria-labelledby="execute-actions-what-works-label"
               onClick={() => setShowExecuteActionsWhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showExecuteActionsWhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showExecuteActionsWhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showExecuteActionsWhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showExecuteActionsWhatWorks)}
                 aria-hidden
               />
             </button>
@@ -1314,18 +1276,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showTrackProgressWhatWorks}
               aria-labelledby="track-progress-what-works-label"
               onClick={() => setShowTrackProgressWhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showTrackProgressWhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showTrackProgressWhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showTrackProgressWhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showTrackProgressWhatWorks)}
                 aria-hidden
               />
             </button>
@@ -1456,18 +1410,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showEmissionsChangesWhatWorks}
               aria-labelledby="emissions-changes-what-works-label"
               onClick={() => setShowEmissionsChangesWhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showEmissionsChangesWhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showEmissionsChangesWhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showEmissionsChangesWhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showEmissionsChangesWhatWorks)}
                 aria-hidden
               />
             </button>
@@ -1573,18 +1519,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showOtherHalfAp15WhatWorks}
               aria-labelledby="other-half-ap15-what-works-label"
               onClick={() => setShowOtherHalfAp15WhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showOtherHalfAp15WhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showOtherHalfAp15WhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showOtherHalfAp15WhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showOtherHalfAp15WhatWorks)}
                 aria-hidden
               />
             </button>
@@ -1632,18 +1570,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showOtherHalfAp16WhatWorks}
               aria-labelledby="other-half-ap16-what-works-label"
               onClick={() => setShowOtherHalfAp16WhatWorks((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showOtherHalfAp16WhatWorks
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showOtherHalfAp16WhatWorks)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showOtherHalfAp16WhatWorks
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showOtherHalfAp16WhatWorks)}
                 aria-hidden
               />
             </button>
@@ -1749,18 +1679,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showAllMethodFlows}
               aria-labelledby="method-flows-toggle-label"
               onClick={() => setShowAllMethodFlows((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showAllMethodFlows
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showAllMethodFlows)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showAllMethodFlows
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showAllMethodFlows)}
                 aria-hidden
               />
             </button>
@@ -1855,18 +1777,10 @@ export default function IbmEnviziShowcasePage() {
               aria-checked={showBeforeAfterDetails}
               aria-labelledby="before-after-details-toggle-label"
               onClick={() => setShowBeforeAfterDetails((v) => !v)}
-              className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-                showBeforeAfterDetails
-                  ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                  : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-              }`}
+              className={caseStudyChamferToggleTrackClassName(showBeforeAfterDetails)}
             >
               <span
-                className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                  showBeforeAfterDetails
-                    ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                    : 'left-1 bg-white'
-                }`}
+                className={caseStudyChamferToggleKnobClassName(showBeforeAfterDetails)}
                 aria-hidden
               />
             </button>
