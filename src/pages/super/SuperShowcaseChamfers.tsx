@@ -6,7 +6,11 @@ import superSuperCashHomeSection from '../../../Super assets/s10.png'
 import superSuperCashDedicated from '../../../Super assets/s10.1.png'
 import superTrueHomeOld from '../../../Super assets/s9.png'
 import superTrueHomeNew from '../../../Super assets/s9.1.png'
-import { caseStudyChamferToggleLabelClassName } from '../../components/caseStudy/patterns/caseStudyPatternStyles'
+import {
+  caseStudyChamferToggleKnobClassName,
+  caseStudyChamferToggleLabelClassName,
+  caseStudyChamferToggleTrackClassName,
+} from '../../components/caseStudy/patterns/caseStudyPatternStyles'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 
 export const superChamferToggleStackSpacerClass =
@@ -61,18 +65,10 @@ export function SuperToggleImageChamfer({
             aria-checked={showWhatWorks}
             aria-labelledby={toggleId}
             onClick={() => setShowWhatWorks((v) => !v)}
-            className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-              showWhatWorks
-                ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-            }`}
+            className={caseStudyChamferToggleTrackClassName(showWhatWorks)}
           >
             <span
-              className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                showWhatWorks
-                  ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                  : 'left-1 bg-white'
-              }`}
+              className={caseStudyChamferToggleKnobClassName(showWhatWorks)}
               aria-hidden
             />
           </button>
@@ -171,18 +167,10 @@ export function SuperProblemOldScreensChamfer({
             aria-checked={showStruggles}
             aria-labelledby={toggleId}
             onClick={() => setShowStruggles((v) => !v)}
-            className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-              showStruggles
-                ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-                : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-            }`}
+            className={caseStudyChamferToggleTrackClassName(showStruggles)}
           >
             <span
-              className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-                showStruggles
-                  ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg'
-                  : 'left-1 bg-white'
-              }`}
+              className={caseStudyChamferToggleKnobClassName(showStruggles)}
               aria-hidden
             />
           </button>

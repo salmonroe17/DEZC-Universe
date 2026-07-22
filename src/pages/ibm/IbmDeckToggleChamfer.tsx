@@ -1,5 +1,9 @@
 import { useState } from 'react'
-import { caseStudyChamferToggleLabelClassName } from '../../components/caseStudy/patterns'
+import {
+  caseStudyChamferToggleKnobClassName,
+  caseStudyChamferToggleLabelClassName,
+  caseStudyChamferToggleTrackClassName,
+} from '../../components/caseStudy/patterns'
 import { IbmToggleAspectSpacer } from '../../components/caseStudy/IbmChamferMediaPlaceholder'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 
@@ -35,16 +39,10 @@ export function IbmDeckToggleChamfer({
           role="switch"
           aria-checked={toggled}
           onClick={() => setToggled((v) => !v)}
-          className={`group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 ${
-            toggled
-              ? 'border-white bg-white hover:bg-[#f2f2f2] hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'
-              : 'border-white bg-transparent hover:bg-white/[0.12] hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-hud)_35%,transparent)]'
-          }`}
+          className={caseStudyChamferToggleTrackClassName(toggled)}
         >
           <span
-            className={`pointer-events-none absolute top-1/2 size-5 -translate-y-1/2 rounded-full shadow-none transition-[left,background-color,transform] duration-200 ease-out group-hover:scale-[1.06] motion-reduce:group-hover:scale-100 ${
-              toggled ? 'left-[calc(100%-0.25rem-1.25rem)] bg-bg' : 'left-1 bg-white'
-            }`}
+            className={caseStudyChamferToggleKnobClassName(toggled)}
             aria-hidden
           />
         </button>
