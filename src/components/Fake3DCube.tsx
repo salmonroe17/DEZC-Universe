@@ -1,5 +1,9 @@
 /**
  * CSS faux 3D cube (4 faces). Rotation follows controlled activeCaseIndex.
+ *
+ * Navigation: a flat 2D Link overlay on the bezel (not the 3D faces). Preserve-3d faces plus
+ * ancestor `overflow: hidden` / `filter` break hit-testing in Chromium & WebKit — clicks on the
+ * graphic would miss the face Links. Overlay targets the same path as the active list “View”.
  */
 
 import {
@@ -36,8 +40,8 @@ const ROTATION_BY_FACE = [0, -90, -180, -270] as const
  */
 /* Outer face = 3D transform + chamfer var only. `cube-face-glow` is on an inner block so the stroke
  * layer is never under `filter: drop-shadow` (which breaks / eats SVG in many browsers). */
-const face3dLink =
-  'absolute inset-0 min-h-0 min-w-0 [backface-visibility:hidden] [--quadrant-chamfer:clamp(14px,1.75vmin,30px)] block cursor-pointer no-underline text-inherit outline-none focus-visible:ring-2 focus-visible:ring-fg/30 focus-visible:ring-offset-2 focus-visible:ring-offset-bg'
+const face3dShell =
+  'pointer-events-none absolute inset-0 min-h-0 min-w-0 [backface-visibility:hidden] [--quadrant-chamfer:clamp(14px,1.75vmin,30px)]'
 
 const FACE_ARIA = [
   `Open case study: ${PRIMARY_CASE_STUDY.title}`,
@@ -45,6 +49,10 @@ const FACE_ARIA = [
   `Open case study: ${IBM_ENVIZI_CASE_STUDY.title}`,
   'Open design system reference: Systems behind the screens',
 ] as const
+
+/** Flat hit target over the cube — avoids broken 3D face pointer events. */
+const cubeNavOverlayClass =
+  'absolute inset-0 z-20 block cursor-pointer bg-transparent no-underline outline-none focus-visible:ring-2 focus-visible:ring-fg/30 focus-visible:ring-offset-2 focus-visible:ring-offset-bg'
 
 const faceContentGlow = 'cube-face-glow absolute inset-0 min-h-0 min-w-0'
 
@@ -135,22 +143,15 @@ function CubeFaceChamferInnerStroke({ measureRef }: { measureRef: RefObject<HTML
 function CubeChamferFace({
   transform,
   innerClassName,
-  faceIndex,
   children,
 }: {
   transform: string
   innerClassName: string
-  faceIndex: 0 | 1 | 2 | 3
   children: ReactNode
 }) {
   const strokeMeasureRef = useRef<HTMLDivElement | null>(null)
   return (
-    <Link
-      to={CASE_STUDY_FACE_PATHS[faceIndex]}
-      className={face3dLink}
-      style={{ transform }}
-      aria-label={FACE_ARIA[faceIndex]}
-    >
+    <div className={face3dShell} style={{ transform }} aria-hidden>
       <div className={faceContentGlow}>
         <div className={faceContentDim}>
           <div className={faceChamferShell}>
@@ -163,7 +164,7 @@ function CubeChamferFace({
       <div ref={strokeMeasureRef} className="cube-face-stroke-clip">
         <CubeFaceChamferInnerStroke measureRef={strokeMeasureRef} />
       </div>
-    </Link>
+    </div>
   )
 }
 
@@ -171,7 +172,6 @@ const CubeFaces = memo(function CubeFaces() {
   return (
     <>
       <CubeChamferFace
-        faceIndex={0}
         transform={`rotateY(0deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -183,10 +183,8 @@ const CubeFaces = memo(function CubeFaces() {
           decoding="async"
         />
         <div className={caseStudyImageFaceVignette} aria-hidden />
-        <span className="sr-only">Case 1</span>
       </CubeChamferFace>
       <CubeChamferFace
-        faceIndex={1}
         transform={`rotateY(90deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -198,10 +196,8 @@ const CubeFaces = memo(function CubeFaces() {
           decoding="async"
         />
         <div className={caseStudyImageFaceVignette} aria-hidden />
-        <span className="sr-only">Case 2</span>
       </CubeChamferFace>
       <CubeChamferFace
-        faceIndex={2}
         transform={`rotateY(180deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -213,10 +209,8 @@ const CubeFaces = memo(function CubeFaces() {
           decoding="async"
         />
         <div className={caseStudyImageFaceVignette} aria-hidden />
-        <span className="sr-only">IBM Envizi</span>
       </CubeChamferFace>
       <CubeChamferFace
-        faceIndex={3}
         transform={`rotateY(-90deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -228,7 +222,6 @@ const CubeFaces = memo(function CubeFaces() {
           decoding="async"
         />
         <div className={caseStudyImageFaceVignette} aria-hidden />
-        <span className="sr-only">Design systems: Systems behind the screens</span>
       </CubeChamferFace>
     </>
   )
@@ -245,6 +238,7 @@ export type Fake3DCubeProps = {
 export function Fake3DCube({ activeCaseIndex }: Fake3DCubeProps) {
   const idx = clampCaseIndex(activeCaseIndex)
   const rotateY = ROTATION_BY_FACE[idx] ?? 0
+  const href = CASE_STUDY_FACE_PATHS[idx]
 
   return (
     <div className="flex h-full min-h-0 w-full flex-1 items-center justify-center p-4">
@@ -252,9 +246,11 @@ export function Fake3DCube({ activeCaseIndex }: Fake3DCubeProps) {
         className="group/cube-bezel relative [perspective:1000px]"
         style={{ width: EDGE, height: EDGE }}
       >
+        {/* Flat overlay: same destination as active list “View”; reliable across viewports */}
+        <Link to={href} className={cubeNavOverlayClass} aria-label={FACE_ARIA[idx]} />
         {/* 2D scale wrapper: keep separate from 3D rotateY so `transform` does not get overwritten */}
         <div
-          className="h-full w-full origin-center transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:group-hover/cube-bezel:scale-100 motion-reduce:group-data-[quadrant-in-view]/right-quadrant:scale-100 group-hover/cube-bezel:scale-[1.02] group-data-[quadrant-in-view]/right-quadrant:scale-[1.02]"
+          className="pointer-events-none h-full w-full origin-center transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:group-hover/cube-bezel:scale-100 motion-reduce:group-data-[quadrant-in-view]/right-quadrant:scale-100 group-hover/cube-bezel:scale-[1.02] group-data-[quadrant-in-view]/right-quadrant:scale-[1.02]"
         >
           <div
             className="relative h-full w-full [transform-style:preserve-3d]"
