@@ -559,6 +559,32 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   animation: hud-glow-pulse 4.2s ease-in-out infinite;
 }
 
+/* Route fallback: 1px rail + traveling meteor (same idea as case-study scroll progress) */
+.hud-loading-meteor-svg {
+  overflow: visible;
+}
+
+.hud-loading-meteor-rail {
+  stroke: color-mix(in srgb, var(--color-fg) 8%, transparent);
+}
+
+.hud-loading-meteor-path {
+  shape-rendering: geometricPrecision;
+  stroke-dasharray: 14 86;
+  animation: rotating-circle-meteor-dash 2.8s linear infinite;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-hud) 80%, transparent))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-hud) 45%, transparent))
+    drop-shadow(0 0 28px color-mix(in srgb, var(--color-hud) 28%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-loading-meteor-path {
+    animation: none;
+    stroke-dasharray: 18 82;
+    stroke-dashoffset: 0;
+  }
+}
+
 /* Case study list: active-row progress (duration set inline to match auto-rotate) */
 @keyframes case-study-progress {
   from {

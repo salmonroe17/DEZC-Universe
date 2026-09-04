@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CustomCursor } from './components/CustomCursor'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { HudLoadingScreen } from './components/HudLoadingScreen'
 import { HudShooterProvider } from './contexts/HudShooterProvider'
 import { SiteThemeProvider } from './contexts/SiteThemeProvider'
 import { RootLayout } from './layouts/RootLayout'
@@ -19,11 +20,7 @@ const GlobalLeaderboardPage = lazyWithRetry(() => import('./pages/GlobalLeaderbo
 const PrivacyPolicyPage = lazyWithRetry(() => import('./pages/PrivacyPolicyPage'))
 
 function RouteFallback() {
-  return (
-    <div className="flex min-h-[40vh] items-center justify-center font-mono text-xs text-fg-muted">
-      Loading…
-    </div>
-  )
+  return <HudLoadingScreen />
 }
 
 export default function App() {
