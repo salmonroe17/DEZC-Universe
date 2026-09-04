@@ -42,6 +42,7 @@ import {
 } from '../../components/caseStudy/patterns'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyShowcaseScaffold'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
+import { CaseStudyLazyVideo } from '../../components/caseStudy/CaseStudyLazyVideo'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 import {
@@ -222,12 +223,10 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
             innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <img
+            <CaseStudyLazyVideo
               src={superHeroDrivingGif}
-              alt=""
+              ariaHidden
               className="pointer-events-none block h-full w-full object-cover object-center select-none"
-              loading="lazy"
-              decoding="async"
             />
           </RotatingGradientCircle>
         </div>

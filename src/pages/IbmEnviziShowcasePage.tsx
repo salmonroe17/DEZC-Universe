@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import ibmHeroAp1 from '../../IBM case study assets/ap1.png'
 import ibmOverviewAp2 from '../../IBM case study assets/ap2.png'
 import ibmOverviewAp3 from '../../IBM case study assets/ap3.png'
@@ -52,6 +52,7 @@ import {
   caseStudyTradeConnectorHorizontal,
   caseStudyTradeConnectorVertical,
 } from '../components/caseStudy/CaseStudyFlowConnectors'
+import { CaseStudyLazyVideo } from '../components/caseStudy/CaseStudyLazyVideo'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
 import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStudiesPanel'
 import { ChamferFrame } from '../components/system/ChamferFrame'
@@ -59,7 +60,6 @@ import { FigmaGrid12 } from '../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../components/system/RotatingGradientCircle'
 
 import { IBM_ENVIZI_CASE_STUDY } from '../constants/caseStudyCatalog'
-import { usePreloadImages } from '../hooks/usePreloadImages'
 import {
   ACTION_LAYER_STEP_1,
   BEFORE_VS_AFTER,
@@ -80,33 +80,6 @@ import {
 
 const ibmRetrospectiveGifImgClass =
   'block size-24 max-h-24 max-w-24 shrink-0 object-cover object-center md:size-28 md:max-h-28 md:max-w-28'
-
-/** IBM showcase images used in crossfades — preloaded so toggles don’t hitch. */
-const IBM_PAGE_PRELOAD_IMAGES = [
-  ibmProblemSurfaceAp4,
-  ibmProblemSurfaceAp4Alt,
-  ibmActionLayerAp8,
-  ibmActionLayerAp8Alt,
-  ibmCriteriaSelectionAp9,
-  ibmCriteriaSelectionAp9Alt,
-  ibmDefineSuccessAp10,
-  ibmDefineSuccessAp10Alt,
-  ibmExecuteActionsAp11,
-  ibmExecuteActionsAp11Alt,
-  ibmTrackProgressAp12,
-  ibmTrackProgressAp12Alt,
-  ibmTrackProgressAp13,
-  ibmEmissionsComparisonAp14,
-  ibmEmissionsComparisonAp14Alt,
-  ibmPartnerPortalAp15,
-  ibmPartnerPortalAp15Alt,
-  ibmPartnerPortalAp16,
-  ibmPartnerPortalAp16Alt,
-  ibmMethodFlowsAp18,
-  ibmMethodFlowsAp18Alt,
-  ibmBeforeAfterAp19,
-  ibmBeforeAfterAp19Alt,
-] as const
 
 /**
  * Layer clone for crossfade — matches Carbon `img` (object-contain, top-left). Spacer is
@@ -266,49 +239,7 @@ const ALIGNMENT_FOCUS_BOXES = [
   'Which patterns could be shared across branches to keep the system coherent',
 ] as const
 
-function IbmActionPlansAutoplayVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const video = ref.current
-    if (!video) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        if (!entry) return
-        if (entry.isIntersecting) {
-          video.currentTime = 0
-          void video.play().catch(() => {})
-        } else {
-          video.pause()
-        }
-      },
-      { threshold: 0.25 },
-    )
-
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <video
-      ref={ref}
-      className="block h-auto w-full max-w-full align-middle"
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-label="Screen recording: IBM Envizi action plans prototype"
-    >
-      <source src={src} type="video/mp4" />
-    </video>
-  )
-}
-
 export default function IbmEnviziShowcasePage() {
-  usePreloadImages(IBM_PAGE_PRELOAD_IMAGES)
-
   const [seeWhereUsersStruggled, setSeeWhereUsersStruggled] = useState(false)
   const [showCriteriaSelectionWhatWorks, setShowCriteriaSelectionWhatWorks] = useState(false)
   const [showDefineSuccessWhatWorks, setShowDefineSuccessWhatWorks] = useState(false)
@@ -341,6 +272,8 @@ export default function IbmEnviziShowcasePage() {
           src={ibmHeroAp1}
           alt="IBM Envizi product UI — action plans, supplier PCFs, emissions overview, and iMac view"
           decoding="async"
+          loading="eager"
+          fetchPriority="high"
           className="block h-auto w-full max-w-full select-none align-middle"
         />
       </ChamferFrame>
@@ -357,12 +290,10 @@ export default function IbmEnviziShowcasePage() {
           innerClassName="bg-bg p-0"
           aria-hidden
         >
-          <img
+          <CaseStudyLazyVideo
             src={ibmHeroShipGif}
-            alt=""
+            ariaHidden
             className="pointer-events-none block h-full w-full object-cover object-center select-none"
-            loading="lazy"
-            decoding="async"
           />
         </RotatingGradientCircle>
       </div>
@@ -372,7 +303,11 @@ export default function IbmEnviziShowcasePage() {
         className="chamfer-media-border w-full"
         innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
       >
-        <IbmActionPlansAutoplayVideo src={ibmActionPlansPrototypeVideo} />
+        <CaseStudyLazyVideo
+          src={ibmActionPlansPrototypeVideo}
+          poster="/case-study-media/posters/ibm-action-plans.webp"
+          ariaLabel="Screen recording: IBM Envizi action plans prototype"
+        />
       </ChamferFrame>
 
       <section aria-labelledby="overview-section">
@@ -586,8 +521,7 @@ export default function IbmEnviziShowcasePage() {
             src={ibmProblemSurfaceAp4}
             alt="IBM Envizi — Emissions dashboard, overview"
             decoding="async"
-            loading="eager"
-            fetchPriority="high"
+            loading="lazy"
             className={`${chamferToggleStackLayerClass} z-0 ${
               seeWhereUsersStruggled ? 'opacity-0' : 'opacity-100'
             }`}
@@ -596,7 +530,7 @@ export default function IbmEnviziShowcasePage() {
             src={ibmProblemSurfaceAp4Alt}
             alt="IBM Envizi — Emissions dashboard, alternate view"
             decoding="async"
-            loading="eager"
+            loading="lazy"
             className={`${chamferToggleStackLayerClass} z-10 ${
               seeWhereUsersStruggled ? 'opacity-100' : 'opacity-0'
             }`}
@@ -890,7 +824,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmActionLayerAp8}
               alt="IBM Envizi — select action plan type, template cards"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showActionLayerWhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -899,7 +833,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmActionLayerAp8Alt}
               alt="IBM Envizi — select action plan type, alternate view"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showActionLayerWhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -992,7 +926,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmCriteriaSelectionAp9}
               alt="IBM Envizi — criteria selection, supplier-specific method and treemap"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showCriteriaSelectionWhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1001,7 +935,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmCriteriaSelectionAp9Alt}
               alt="IBM Envizi — criteria selection, alternate view"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showCriteriaSelectionWhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1094,7 +1028,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmDefineSuccessAp10}
               alt="IBM Envizi — set a goal, program summary, and estimated program milestones"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showDefineSuccessWhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1103,7 +1037,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmDefineSuccessAp10Alt}
               alt="IBM Envizi — define success, alternate view"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showDefineSuccessWhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1196,7 +1130,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmExecuteActionsAp11}
               alt="IBM Envizi action plan — configure program actions, select one or more actions to accomplish the goals of this program"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showExecuteActionsWhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1205,7 +1139,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmExecuteActionsAp11Alt}
               alt="IBM Envizi action plan — configure actions, alternate view"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showExecuteActionsWhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1298,7 +1232,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmTrackProgressAp12}
               alt="IBM Envizi program dashboard — progress, PCF requests and responses, supplier activity, emissions comparison, and action status"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showTrackProgressWhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1307,7 +1241,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmTrackProgressAp12Alt}
               alt="IBM Envizi program dashboard — alternate view with annotations"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showTrackProgressWhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1326,7 +1260,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmTrackProgressAp13}
               alt="IBM Envizi — detailed view of program metrics, charts, emissions comparison, and actions table"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={chamferToggleStackLayerClass}
             />
           </div>
@@ -1432,7 +1366,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmEmissionsComparisonAp14}
               alt="IBM Envizi — PCF data request and comparison view, current vs updated product carbon footprint with change percentage"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showEmissionsChangesWhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1441,7 +1375,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmEmissionsComparisonAp14Alt}
               alt="IBM Envizi — comparison and recalculation experience, annotated"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showEmissionsChangesWhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1541,7 +1475,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmPartnerPortalAp15}
               alt="IBM partner portal — welcome dashboard, PCF and SBTi requests, supplier emissions overview"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showOtherHalfAp15WhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1550,7 +1484,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmPartnerPortalAp15Alt}
               alt="IBM partner portal — product carbon footprint request detail, alternate view"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showOtherHalfAp15WhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1592,7 +1526,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmPartnerPortalAp16}
               alt="IBM partner portal — PCF request metrics, completion rate, and open requests"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showOtherHalfAp16WhatWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1601,7 +1535,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmPartnerPortalAp16Alt}
               alt="IBM partner portal — request metrics and cards, alternate view"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showOtherHalfAp16WhatWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1699,7 +1633,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmMethodFlowsAp18}
               alt="IBM Envizi — four parallel action-plan method flows, supplier-specific path highlighted"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showAllMethodFlows ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1708,7 +1642,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmMethodFlowsAp18Alt}
               alt="IBM Envizi — all four method flows visible, parallel branching comparison"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showAllMethodFlows ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1799,7 +1733,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmBeforeAfterAp19}
               alt="IBM Envizi — before action plans, manual fragmented process vs after, guided in-product workflow"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showBeforeAfterDetails ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1808,7 +1742,7 @@ export default function IbmEnviziShowcasePage() {
               src={ibmBeforeAfterAp19Alt}
               alt="IBM Envizi — before vs after process comparison, full detail"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showBeforeAfterDetails ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1859,7 +1793,11 @@ export default function IbmEnviziShowcasePage() {
           className="chamfer-media-border mt-8 w-full min-w-0 md:mt-10"
           innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
         >
-          <IbmActionPlansAutoplayVideo src={ibmActionPlansPrototypeVideo} />
+          <CaseStudyLazyVideo
+          src={ibmActionPlansPrototypeVideo}
+          poster="/case-study-media/posters/ibm-action-plans.webp"
+          ariaLabel="Screen recording: IBM Envizi action plans prototype"
+        />
         </ChamferFrame>
       </section>
 
@@ -1908,11 +1846,9 @@ export default function IbmEnviziShowcasePage() {
               className="chamfer-tradeoff-outline mt-8 w-fit max-w-full shrink-0"
               innerClassName="flex min-h-0 min-w-0 items-center justify-start overflow-hidden bg-bg p-0"
             >
-              <img
+              <CaseStudyLazyVideo
                 src={ibmRetrospectiveConfusedGif}
-                alt="Confused reaction"
-                decoding="async"
-                loading="lazy"
+                ariaLabel="Confused reaction"
                 className={ibmRetrospectiveGifImgClass}
               />
             </ChamferFrame>
