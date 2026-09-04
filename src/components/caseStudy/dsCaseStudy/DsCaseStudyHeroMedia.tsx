@@ -26,6 +26,7 @@ export function DsCaseStudyChamferCollage() {
         src={ds1Hero}
         alt={COLLAGE_ALT}
         decoding="async"
+        loading="eager"
         fetchPriority="high"
         className="block h-auto w-full max-w-full align-middle"
       />

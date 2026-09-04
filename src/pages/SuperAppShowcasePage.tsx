@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import superHeroS1 from '../../Super assets/s1.png'
 import superOverviewS2 from '../../Super assets/s2.png'
 import superProblemTwoUp from '../../Super assets/s3.png'
@@ -9,10 +8,6 @@ import superAlignmentVenn from '../../Super assets/s5.png'
 import superWorkshopBoard from '../../Super assets/s6.png'
 import superWorkshopFindings from '../../Super assets/s7.png'
 import superNavigationChange from '../../Super assets/s8.png'
-import superTrueHomeOld from '../../Super assets/s9.png'
-import superTrueHomeNew from '../../Super assets/s9.1.png'
-import superSuperCashHomeSection from '../../Super assets/s10.png'
-import superSuperCashDedicated from '../../Super assets/s10.1.png'
 import superNotificationsOverview from '../../Super assets/s13.png'
 import superNotificationsSystem from '../../Super assets/s13.1.png'
 import superRewardsProfileOld from '../../Super assets/s14.png'
@@ -25,7 +20,7 @@ import superImpactHandoff from '../../Super assets/s18.png'
 import superImpactHandoffEnabled from '../../Super assets/s18.1.png'
 import superWalkthrough1080 from '../../Super assets/Super app walkthrough 1080p.mp4'
 import { SUPER_SHOWCASE_HERO_H1, superHeroDrivingGif } from './super/superShowcaseIntroConstants'
-import { usePreloadImages } from '../hooks/usePreloadImages'
+import { CaseStudyLazyVideo } from '../components/caseStudy/CaseStudyLazyVideo'
 import { SUPER_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { SUPER_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
 import {
@@ -66,26 +61,6 @@ import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStud
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../components/system/RotatingGradientCircle'
-
-/** Chamfer toggle image pairs — preloaded so instant swaps don’t hitch on first flip (same as Carbon). */
-const SUPER_CHAMFER_CROSSFADE_IMAGE_URLS = [
-  superProblemTwoUp,
-  superProblemTwoUpStruggles,
-  superProblemThreeUp,
-  superProblemThreeUpStruggles,
-  superTrueHomeOld,
-  superTrueHomeNew,
-  superSuperCashHomeSection,
-  superSuperCashDedicated,
-  superNotificationsOverview,
-  superNotificationsSystem,
-  superRewardsProfileOld,
-  superRewardsProfileNew,
-  superRewardsSystemOld,
-  superRewardsSystemNew,
-  superImpactHandoff,
-  superImpactHandoffEnabled,
-] as const
 
 const TEAM_ROWS: { role: string; responsibility: string }[] = [
   {
@@ -205,50 +180,7 @@ const SUPER_NEW_NAV_DESTINATIONS: { step: number; title: string; description: st
 ]
 
 
-/** Autoplay when in view — same pattern as Carbon showcase prototype video. */
-function SuperShowcaseAutoplayVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const video = ref.current
-    if (!video) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        if (!entry) return
-        if (entry.isIntersecting) {
-          video.currentTime = 0
-          void video.play().catch(() => {})
-        } else {
-          video.pause()
-        }
-      },
-      { threshold: 0.25 },
-    )
-
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <video
-      ref={ref}
-      className="block h-auto w-full max-w-full align-middle"
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-label="Screen recording of the Super app walkthrough"
-    >
-      <source src={src} type="video/mp4" />
-    </video>
-  )
-}
-
 export default function SuperAppShowcasePage() {
-  usePreloadImages(SUPER_CHAMFER_CROSSFADE_IMAGE_URLS)
-
   return (
     <CaseStudyShowcaseScaffold
       sidebarKicker={SUPER_CASE_STUDY.title}
@@ -267,6 +199,8 @@ export default function SuperAppShowcasePage() {
           src={superHeroS1}
           alt="Super app — hero"
           decoding="async"
+          loading="eager"
+          fetchPriority="high"
           className="block h-auto w-full max-w-full align-middle"
         />
       </ChamferFrame>
@@ -288,12 +222,10 @@ export default function SuperAppShowcasePage() {
           innerClassName="bg-bg p-0"
           aria-hidden
         >
-          <img
+          <CaseStudyLazyVideo
             src={superHeroDrivingGif}
-            alt=""
+            ariaHidden
             className="pointer-events-none block h-full w-full object-cover object-center select-none"
-            loading="lazy"
-            decoding="async"
           />
         </RotatingGradientCircle>
         </div>
@@ -303,7 +235,11 @@ export default function SuperAppShowcasePage() {
         className="chamfer-media-border w-full"
         innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
       >
-        <SuperShowcaseAutoplayVideo src={superWalkthrough1080} />
+        <CaseStudyLazyVideo
+          src={superWalkthrough1080}
+          poster="/case-study-media/posters/super-walkthrough.webp"
+          ariaLabel="Screen recording of the Super app walkthrough"
+        />
       </ChamferFrame>
 
       <section aria-labelledby="super-overview-section">
@@ -1013,7 +949,11 @@ export default function SuperAppShowcasePage() {
               className="chamfer-media-border w-full"
               innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
             >
-              <SuperShowcaseAutoplayVideo src={superWalkthrough1080} />
+              <CaseStudyLazyVideo
+          src={superWalkthrough1080}
+          poster="/case-study-media/posters/super-walkthrough.webp"
+          ariaLabel="Screen recording of the Super app walkthrough"
+        />
             </ChamferFrame>
           </div>
         </FigmaGrid12>

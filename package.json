@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "postinstall": "node scripts/write-deploy-version.mjs",
-    "dev": "node scripts/write-deploy-version.mjs && node scripts/generate-sidequest-thumbs.mjs && vite",
-    "build": "node scripts/write-deploy-version.mjs && node scripts/generate-sidequest-thumbs.mjs && tsc -b && vite build",
+    "dev": "node scripts/write-deploy-version.mjs && node scripts/generate-sidequest-thumbs.mjs && node scripts/optimize-case-study-media.mjs && vite",
+    "build": "node scripts/write-deploy-version.mjs && node scripts/generate-sidequest-thumbs.mjs && node scripts/optimize-case-study-media.mjs && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "sidequest:thumbs": "node scripts/generate-sidequest-thumbs.mjs",
+    "case-study:media": "node scripts/optimize-case-study-media.mjs",
     "metadata:sync": "mkdir -p public/metadata && cp 'Metadata/favicon 24 x 24.png' public/metadata/favicon-24.png && cp 'Metadata/webclip 256 x 256.png' public/metadata/webclip-256.png && cp 'Metadata/opengraph image.png' public/metadata/og.png",
     "leaderboard:clear": "node scripts/clear-leaderboard.mjs"
   },

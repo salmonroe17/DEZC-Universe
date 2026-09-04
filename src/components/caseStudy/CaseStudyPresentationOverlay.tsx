@@ -1486,10 +1486,11 @@ export function CaseStudyPresentationOverlay({
                     const captured = capturedThumbs[fullIndex]
                     const isTextSlide = slide.slideKind === 'text'
                     const label = slide.thumbnailLabel?.trim()
-                    const showVideoThumb = slide.thumbnailIsVideo === true
+                    const thumbSrc = staticThumb ?? captured
+                    const thumbIsVideoFile = /\.mp4(?:[?#]|$)/i.test(thumbSrc ?? '')
+                    const showVideoThumb = slide.thumbnailIsVideo === true || thumbIsVideoFile
                     const showStripLabel =
                       !!label && (isTextSlide || slide.thumbnailStripUseLabel === true)
-                    const thumbSrc = staticThumb ?? captured
                     return (
                       <button
                         key={fullIndex}

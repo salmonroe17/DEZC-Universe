@@ -1,7 +1,7 @@
 /**
  * Shared chamfer toggles for the Super case study page and presentation deck.
  */
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import superSuperCashHomeSection from '../../../Super assets/s10.png'
 import superSuperCashDedicated from '../../../Super assets/s10.1.png'
 import superTrueHomeOld from '../../../Super assets/s9.png'
@@ -11,6 +11,7 @@ import {
   caseStudyChamferToggleLabelClassName,
   caseStudyChamferToggleTrackClassName,
 } from '../../components/caseStudy/patterns/caseStudyPatternStyles'
+import { usePreloadImages } from '../../hooks/usePreloadImages'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 
 export const superChamferToggleStackSpacerClass =
@@ -50,6 +51,8 @@ export function SuperToggleImageChamfer({
 }) {
   const toggleId = useId()
   const [showWhatWorks, setShowWhatWorks] = useState(false)
+  const mediaRef = useRef<HTMLDivElement>(null)
+  usePreloadImages([baseSrc, toggledSrc], mediaRef)
 
   return (
     <ChamferFrame
@@ -77,7 +80,7 @@ export function SuperToggleImageChamfer({
           </span>
         </div>
       </div>
-      <div className="relative isolate w-full bg-gradient-to-b from-[#d8d8d8]/95 via-[#dedede]/90 to-[#e6e6e6]">
+      <div ref={mediaRef} className="relative isolate w-full bg-gradient-to-b from-[#d8d8d8]/95 via-[#dedede]/90 to-[#e6e6e6]">
         <img
           src={baseSrc}
           alt=""
@@ -89,8 +92,7 @@ export function SuperToggleImageChamfer({
           src={baseSrc}
           alt={baseAlt}
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-0 ${
             showWhatWorks ? 'opacity-0' : 'opacity-100'
           }`}
@@ -99,7 +101,7 @@ export function SuperToggleImageChamfer({
           src={toggledSrc}
           alt={toggledAlt}
           decoding="async"
-          loading="eager"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-10 ${
             showWhatWorks ? 'opacity-100' : 'opacity-0'
           }`}
@@ -152,6 +154,8 @@ export function SuperProblemOldScreensChamfer({
 }) {
   const toggleId = useId()
   const [showStruggles, setShowStruggles] = useState(false)
+  const mediaRef = useRef<HTMLDivElement>(null)
+  usePreloadImages([baseSrc, strugglesSrc], mediaRef)
 
   return (
     <ChamferFrame
@@ -179,7 +183,7 @@ export function SuperProblemOldScreensChamfer({
           </span>
         </div>
       </div>
-      <div className="relative isolate w-full bg-gradient-to-b from-[#eaeaea]/35 via-surface/25 to-bg">
+      <div ref={mediaRef} className="relative isolate w-full bg-gradient-to-b from-[#eaeaea]/35 via-surface/25 to-bg">
         <img
           src={baseSrc}
           alt=""
@@ -191,8 +195,7 @@ export function SuperProblemOldScreensChamfer({
           src={baseSrc}
           alt={altBase}
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-0 ${
             showStruggles ? 'opacity-0' : 'opacity-100'
           }`}
@@ -201,7 +204,7 @@ export function SuperProblemOldScreensChamfer({
           src={strugglesSrc}
           alt={altStruggles}
           decoding="async"
-          loading="eager"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-10 ${
             showStruggles ? 'opacity-100' : 'opacity-0'
           }`}

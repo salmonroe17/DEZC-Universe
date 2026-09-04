@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { usePreloadImages } from '../../hooks/usePreloadImages'
 import {
   caseStudyChamferToggleKnobClassName,
   caseStudyChamferToggleLabelClassName,
@@ -28,6 +29,8 @@ export function IbmDeckToggleChamfer({
   toggleLabelOn: string
 }) {
   const [toggled, setToggled] = useState(false)
+  const mediaRef = useRef<HTMLDivElement>(null)
+  usePreloadImages([baseSrc, toggledSrc], mediaRef)
   return (
     <ChamferFrame
       className={`chamfer-media-border ${deckMaxW}`}
@@ -50,20 +53,20 @@ export function IbmDeckToggleChamfer({
           {toggled ? toggleLabelOn : toggleLabelOff}
         </span>
       </div>
-      <div className="relative isolate w-full">
+      <div ref={mediaRef} className="relative isolate w-full">
         <IbmToggleAspectSpacer pixelWidth={2880} pixelHeight={1800} />
         <img
           src={baseSrc}
           alt={baseAlt}
           decoding="async"
-          loading="eager"
+          loading="lazy"
           className={`${chamferToggleStackLayerClass} z-0 ${toggled ? 'opacity-0' : 'opacity-100'}`}
         />
         <img
           src={toggledSrc}
           alt={toggledAlt}
           decoding="async"
-          loading="eager"
+          loading="lazy"
           className={`${chamferToggleStackLayerClass} z-10 ${toggled ? 'opacity-100' : 'opacity-0'}`}
         />
       </div>
