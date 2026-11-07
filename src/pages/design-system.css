@@ -464,7 +464,7 @@ body.custom-cursor-active .ds-image-dialog,body.custom-cursor-active .ds-image-d
 .ds-state-dialog p { color:var(--color-fg-muted); font-size:11px; line-height:1.8; margin:16px 0; }
 @media(max-width:900px) { .ds-state-grid,.ds-responsive-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:767px) { .ds-showcase-view .ds-content { padding:12px; } .ds-showcase-site-nav .site-frosted-nav { padding:0 10px; } .ds-state-grid,.ds-responsive-cards,.ds-state-descriptions { grid-template-columns:1fr; } .ds-corner-examples { gap:8px; } .ds-document-tabs button { font-size:10px; padding:8px; } .ds-doc-quick-reference>div { grid-template-columns:1fr; } .ds-reticle-display { height:76px; } }
-.ds-showcase-masonry { grid-auto-rows:8px; grid-auto-flow:dense; }
+.ds-showcase-masonry { grid-auto-rows:8px; grid-auto-flow:row; }
 .ds-showcase-grid-item { min-width:0; align-self:start; }
 .ds-state-loading { width:100%; }
 .ds-state-loading>div { min-height:150px; }
@@ -536,3 +536,6 @@ body.custom-cursor-active .ds-image-dialog,body.custom-cursor-active .ds-image-d
 
 .ds-tile-preview { display: block; height: 320px; overflow: auto; padding: 12px; }
 .ds-gallery-inspect { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; color: var(--color-fg); text-align: left; font-size: 12px; }
+
+.ds-showcase-masonry + .ds-showcase-masonry { margin-top: 24px; }
+.ds-showcase-type-foundation { border-top: 0; padding-top: 0; }
