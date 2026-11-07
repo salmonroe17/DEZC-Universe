@@ -162,3 +162,9 @@ const inventory = {
 fs.mkdirSync(path.join(root, 'src/generated'), { recursive: true })
 fs.writeFileSync(path.join(root, 'src/generated/designSystemInventory.json'), JSON.stringify(inventory))
 console.log('[design-system] ' + JSON.stringify(inventory.stats))
+
+// Explicit URL imports let Vite fingerprint catalog media for production too.
+const catalogAssets = assets.filter(a => !a.file.startsWith('public/') && fs.existsSync(a.file) && /\.(png|jpe?g|gif|svg|webp|avif|mp4|webm|woff2?)$/i.test(a.file))
+const imports = catalogAssets.map((a,i) => `import asset${i} from ${JSON.stringify('../../' + a.file + '?url')}`)
+const entries = catalogAssets.map((a,i) => `${JSON.stringify(a.file)}: asset${i}`)
+fs.writeFileSync('src/generated/designSystemAssets.ts', imports.join('\n') + '\nexport default {\n' + entries.join(',\n') + '\n} as Record<string, string>\n')

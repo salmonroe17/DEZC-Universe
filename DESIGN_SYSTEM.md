@@ -1,12 +1,12 @@
 # Portfolio design system
 
-Run `npm run dev`, open Global leaderboard, then enter `D` in the password form and submit. You can also press `D` while on the leaderboard when focus is outside a text field. The existing `G` flow is preserved.
+On the published site or in `npm run dev`, open Global leaderboard, then enter `D` in the password form and submit. You can also press `D` while on the leaderboard when focus is outside a text field. The existing `G` flow is preserved.
 
-The workbench exists only in Vite development mode. Its route, source inventory, preview editor and D handler are excluded from production. The local D gate is a convenience, not authentication. Keep the development server bound to localhost. A deployed private workbench would require server-side authentication.
+The workbench is included as a lazy-loaded production route at `/design-system`. Direct visits without the session discovery flag redirect to the leaderboard. Entering D unlocks it in that browser session. This hidden entry point is a convenience, not server-side authentication.
 
 ## Theme configuration
 
-`src/design-system/theme.ts` defines the published `portfolioTheme.activeTheme`, semantic palettes, paired media colors and labels. Change `activeTheme` to apply a palette to the entire published site. The current default is `grey`. Local preview selection persists only for an unlocked editing session; production ignores stored visitor preferences and rejects UI theme changes.
+`src/design-system/theme.ts` defines the published `portfolioTheme.activeTheme`, semantic palettes, paired media colors and labels. Change `activeTheme` to apply a palette to the entire published site. The current default is `grey`. Preview selection is available only after unlocking the design system and affects the current browser. It never changes the published configuration for other visitors. Visitors without an unlocked session use the published theme.
 
 The same provider drives site chrome, cards, case studies, presentation decks, SVG token consumers and canvas token consumers. Presentation themes no longer override the global theme independently. Visitor theme controls are inert and visually hidden while preserving their occupied space in the existing layout.
 
@@ -20,7 +20,7 @@ The workbench opens on Overview, with a card-based dashboard on the right and a 
 
 ## Visual component library
 
-The primary library is visual. Thirty-five curated entries organize actual controls and patterns into Actions, Forms, Navigation, Surfaces, Data display, Feedback, Overlays, Media, Content patterns and Page sections. Entries show interactive rendered examples, with native fields/buttons shared with the leaderboard gate, tabs shared with the legal page, existing reusable portfolio components, and live embedded homepage sections. Sample content is labeled where used. Source records remain in collapsed Technical reference sections. Helper functions and implementation modules are no longer navigation entries.
+The primary library is visual. Thirty-two curated entries organize actual controls and patterns into Actions, Forms, Navigation, Surfaces, Data display, Feedback, Overlays, Media, Content patterns and Page sections. Entries show interactive rendered examples, with native fields/buttons shared with the leaderboard gate, tabs shared with the legal page, existing reusable portfolio components, and live embedded homepage sections. Sample content is labeled where used. Source records remain in collapsed Technical reference sections. Helper functions and implementation modules are no longer navigation entries.
 
 Pages open real interactive previews, with Fit width, Desktop and Mobile views, full-page links and named section navigation. Foundations show visual color, typography, spacing, grid, border and motion examples before technical token data.
 
@@ -90,3 +90,7 @@ The main catalog now includes only implementations with production consumers (32
 `CaseStudySwitch` is used by 24 annotation controls across Carbon, Super, IBM and presentation decks, as well as the catalog. `PresentationIconButton` is used by 16 presentation actions and re-exported to the catalog. Existing event handlers, accessibility labels, refs and contextual classes are retained. The linkage audit fails if a catalog entry lacks a production consumer, and resolves barrel exports. This checks shared implementation; it does not claim that every unrelated button in the site has the same visual variant.
 
 Validated catalog and real Super case-study switch toggles, mixed-mode presentation opening and next-slide navigation after consolidation.
+
+## Production availability
+
+The production build includes the design-system route, hidden D entry and lazy-loaded inventory. `designSystemAssets.ts` is generated from the asset inventory with explicit Vite URL imports, so catalog media uses valid fingerprinted build URLs rather than development source paths. The build regenerates both inventories and the asset manifest. The checker now requires the production workbench chunk and discovery gate. Verified the production preview redirects a locked direct visit, opens Overview after entering D in the leaderboard gate, and loads the fingerprinted Super app preview image.

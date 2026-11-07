@@ -1,6 +1,6 @@
 import { Children, isValidElement, useEffect, useRef, useState, type ReactNode } from 'react'
 import { ArrowUpRight } from '@phosphor-icons/react'
-import inventory from '../generated/designSystemInventory.json'
+import inventory from './inventory'
 import { useSiteTheme } from '../contexts/useSiteTheme'
 import { themePalettes } from './theme'
 import { LeaderboardGate } from '../components/LeaderboardGate'

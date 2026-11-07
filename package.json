@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "node scripts/write-deploy-version.mjs",
     "dev": "node scripts/write-deploy-version.mjs && node scripts/generate-sidequest-thumbs.mjs && node scripts/optimize-case-study-media.mjs && npm run design-system:audit && vite",
-    "build": "node scripts/write-deploy-version.mjs && node scripts/generate-sidequest-thumbs.mjs && node scripts/optimize-case-study-media.mjs && node scripts/audit-component-fidelity.mjs && tsc -b && vite build",
+    "build": "node scripts/write-deploy-version.mjs && node scripts/generate-sidequest-thumbs.mjs && node scripts/optimize-case-study-media.mjs && npm run design-system:audit && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "sidequest:thumbs": "node scripts/generate-sidequest-thumbs.mjs",

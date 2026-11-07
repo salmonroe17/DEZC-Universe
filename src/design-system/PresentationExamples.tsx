@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, ImageSquare, TextAa, Minus, Plus, X } from '@phosphor-icons/react'
-import inventory from '../generated/designSystemInventory.json'
+import inventory from './inventory'
 import { CaseStudyPresentationOverlay, type CaseStudyPresentationSlide } from '../components/caseStudy/CaseStudyPresentationOverlay'
 import { PortfolioButton } from '../components/system/PortfolioControls'
 

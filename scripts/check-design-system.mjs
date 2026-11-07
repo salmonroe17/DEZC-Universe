@@ -34,8 +34,6 @@ for (const album of ['Bobaghosteas', 'Neon drawings', 'Japan photos', 'Concert P
   assert.ok(inventory.assets.some((a) => a.file.includes(`Side quest albums/${album}/`) && a.usedBy.includes('src/data/sidequests.ts')), `Album missing from import.meta.glob references: ${album}`)
 }
 const distFiles = fs.existsSync('dist/assets') ? fs.readdirSync('dist/assets').filter((p) => p.endsWith('.js')) : []
-for (const file of distFiles) {
-  const source = fs.readFileSync(`dist/assets/${file}`, 'utf8')
-  assert.ok(!source.includes('ds-workbench') && !source.includes('schemaVersion') && !source.includes('design-system-editor-v1'), `Local editor leaked into production: ${file}`)
-}
-console.log(`Design system checks passed: ${pairs} theme contrast pairs, 2 fixed surface pairs, ${inventory.routes.length} routes, 7 albums; editor excluded from ${distFiles.length} production JS bundles.`)
+assert.ok(distFiles.some(file => file.startsWith('DesignSystemPage-')), 'Production design-system chunk must exist')
+assert.ok(distFiles.some(file => fs.readFileSync(`dist/assets/${file}`, 'utf8').includes('design-system-editor-v1')), 'Production discovery gate must exist')
+console.log(`Design system checks passed: ${pairs} theme contrast pairs, 2 fixed surface pairs, ${inventory.routes.length} portfolio routes, 7 albums; production design-system route and discovery gate included.`)

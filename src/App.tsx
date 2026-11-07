@@ -18,9 +18,7 @@ const SideQuestViewerPage = lazyWithRetry(() => import('./pages/SideQuestViewerP
 const NotFoundPage = lazyWithRetry(() => import('./pages/NotFoundPage'))
 const GlobalLeaderboardPage = lazyWithRetry(() => import('./pages/GlobalLeaderboardPage'))
 const PrivacyPolicyPage = lazyWithRetry(() => import('./pages/PrivacyPolicyPage'))
-const DesignSystemPage = import.meta.env.DEV
-  ? lazyWithRetry(() => import('./pages/DesignSystemPage'))
-  : null
+const DesignSystemPage = lazyWithRetry(() => import('./pages/DesignSystemPage'))
 
 function RouteFallback() {
   return <HudLoadingScreen />

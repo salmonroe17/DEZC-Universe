@@ -10,7 +10,7 @@ export function RootLayout() {
   const isHome = location.pathname === '/'
   const isLeaderboard = location.pathname === '/leaderboard'
   const isPrivacy = location.pathname === '/privacy'
-  const isDesignSystem = import.meta.env.DEV && location.pathname === '/design-system'
+  const isDesignSystem = location.pathname === '/design-system'
   const isSideQuestViewer = /^\/sidequest(\/|$)/.test(location.pathname)
 
   /** React Router does not reset scroll; case-study (and other) navigations would keep the old offset. */

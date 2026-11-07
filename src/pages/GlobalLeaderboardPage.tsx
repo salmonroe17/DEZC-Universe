@@ -131,7 +131,6 @@ function sortRows(
 export default function GlobalLeaderboardPage() {
   const navigate = useNavigate()
   useEffect(() => {
-    if (!import.meta.env.DEV) return
     const onKey = (event: KeyboardEvent) => {
       if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) return
       const target = event.target
@@ -327,7 +326,7 @@ export default function GlobalLeaderboardPage() {
 
   function handleUnlock(e: FormEvent) {
     e.preventDefault()
-    if (import.meta.env.DEV && passwordInput.trim().toLowerCase() === 'd' && unlockDesignSystem()) {
+    if (passwordInput.trim().toLowerCase() === 'd' && unlockDesignSystem()) {
       navigate('/design-system')
       return
     }
