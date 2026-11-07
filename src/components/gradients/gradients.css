@@ -20,3 +20,15 @@
 
 .gradient-field-color { position:absolute; inset:-6%; background:var(--gradient-paint); }
 @media(prefers-reduced-motion:reduce) { .gradient-field-color { animation:none!important; transform:none; } }
+.optical-field { position:absolute; inset:0; width:100%; height:100%; display:block; z-index:-1; pointer-events:none; background:#080d25; }
+.optical-field-fallback { background:var(--gradient-paint); }
+.gradient-field { background:var(--gradient-paint); }
+.refracted-stage { background:#f0f3f9; }
+.refracted-wing { height:350px; top:85px; width:290px; }
+.refracted-wing-left { right:calc(50% + 190px); transform:rotateY(35deg) scaleX(1.75); }
+.refracted-wing-right { left:calc(50% + 190px); transform:rotateY(-35deg) scaleX(1.75); }
+.refracted-wing .gradient-field { border-radius:32px; }
+.refracted-wing::after { background:linear-gradient(90deg,transparent 30%,#298eff66 45%,#fff9 50%,#ae36ff66 55%,transparent 70%); filter:blur(13px); opacity:.8; }
+@media(max-width:600px) { .refracted-wing-left { right:calc(50% + 145px); } .refracted-wing-right { left:calc(50% + 145px); } }
+
+.optical-field[data-optical-shape=soft] { filter:blur(18px); transform:scale(1.12); opacity:.92; }

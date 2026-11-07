@@ -101,6 +101,7 @@ Static source linkage audit. Imports establish shared implementation, not visual
 | ProblemStatementFrame | `src/components/caseStudy/patterns/ProblemStatementFrame.tsx` | 1 | statement |
 | TimelinePillsRow | `src/components/caseStudy/patterns/TimelinePillsRow.tsx` | 2 | timeline |
 | GradientField | `src/components/gradients/GradientField.tsx` | 1 | Live pages only |
+| OpticalField | `src/components/gradients/OpticalField.tsx` | 1 | Live pages only |
 | RefractedCard | `src/components/gradients/RefractedCard.tsx` | 0 | Live pages only |
 | ComparisonSection | `src/components/sections/ComparisonSection.tsx` | 1 | Live pages only |
 | DecisionSection | `src/components/sections/DecisionSection.tsx` | 1 | decisions |

@@ -1007,6 +1007,14 @@
       "stories": []
     },
     {
+      "source": "src/components/gradients/OpticalField.tsx",
+      "symbol": "OpticalField",
+      "consumers": [
+        "src/components/gradients/GradientField.tsx"
+      ],
+      "stories": []
+    },
+    {
       "source": "src/components/gradients/RefractedCard.tsx",
       "symbol": "RefractedCard",
       "consumers": [],

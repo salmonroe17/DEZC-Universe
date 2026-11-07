@@ -4,5 +4,5 @@ export const presentationIconButtonClass = 'flex size-6 shrink-0 items-center ju
 
 /** Actual presentation toolbar action, shared by the deck and design system. */
 export function PresentationIconButton({ className = '', ...props }: ComponentPropsWithRef<'button'>) {
-  return <button type="button" {...props} className={`${presentationIconButtonClass} ${className}`}/>
+  return <button type="button" {...props} data-ui="icon-button" className={`${presentationIconButtonClass} ${className}`}/>
 }

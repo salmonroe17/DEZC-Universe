@@ -83,7 +83,7 @@ function OrbCell({
             src={src}
             alt=""
             draggable={false}
-            className="h-full w-full select-none object-contain object-center transition-[filter,transform] duration-200 group-hover/orb:brightness-[1.12] group-hover/orb:contrast-[1.05] group-hover/orb:drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-hud)_18%,transparent)]"
+            className="who-iam-orb-art h-full w-full select-none object-contain object-center transition-[filter,transform] duration-200 group-hover/orb:brightness-[1.12] group-hover/orb:contrast-[1.05] group-hover/orb:drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-hud)_18%,transparent)]"
           />
         ) : (
           <div className="h-full w-full shrink-0" aria-hidden />

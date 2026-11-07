@@ -22,6 +22,10 @@ for (const [name, palette] of Object.entries(themePalettes)) {
   }
   for (const color of themeGlyphColors[name]) assert.ok(contrastRatio(color, palette.bg) >= 3, `${name}: animated 404 glyph must remain legible`)
 }
+// Luma fixed glass/text backing and meaningful control boundaries.
+assert.ok(contrastRatio('#62797b', '#c9e2de') >= 3, 'Luma glass control boundary')
+assert.ok(contrastRatio('#123445', '#abd4d8') >= 4.5, 'Luma primary glass action')
+assert.ok(contrastRatio('#92f8ff', '#06152e') >= 4.5, 'Luma optical field text backing')
 assert.ok(contrastRatio(fixedColors['on-media-paper'], fixedColors['media-paper']) >= 4.5)
 assert.ok(contrastRatio(fixedColors['on-scrim'], fixedColors.scrim) >= 4.5)
 const inventory = JSON.parse(fs.readFileSync('src/generated/designSystemInventory.json', 'utf8'))

@@ -97,8 +97,22 @@ The production build includes the design-system route, hidden D entry and lazy-l
 
 ## Luma theme study
 
-**Luma** is the new light, gradient-led direction, available under **Luma · theme study** in the explorer. Its prototype is scoped to its own warm-white palette even while the editor uses Original. Published `portfolioTheme.activeTheme` remains `grey`; no global theme cutover has been made. The study's preview action, or the theme selector, can opt this browser into Luma across existing site components.
+**Luma** is the new light, gradient-led direction, available under **Luma · theme study** in the explorer. Its prototype is scoped to its own cool-white palette even while the editor uses Original. Published `portfolioTheme.activeTheme` remains `grey`; no global theme cutover has been made. The study's preview action, or the theme selector, can opt this browser into Luma across existing site components.
 
-Luma adds Inter typography, 24px shared rounded frames, cobalt focus/action roles and three reusable gradient recipes: Azure, Iris and Solar. `GradientField` supports mesh/ring surfaces, pointer response, optional ambient motion, touch fallback and reduced motion. `RefractedCard` adds perspective and SVG-displaced side reflections while keeping central text and inputs undistorted. This is an interpretation of the supplied stills; the animation is a prototype for review. New effects are exposed in the theme study, not misrepresented as existing production portfolio components in the main catalog.
+Luma adds DM Sans typography, 24px shared rounded frames, cobalt focus/action roles and three reusable gradient recipes: Azure, Iris and Solar. `GradientField` supports mesh/ring surfaces, pointer response, optional ambient motion, touch fallback and reduced motion. `RefractedCard` adds perspective and SVG-displaced side reflections while keeping central text and inputs undistorted. This is an interpretation of the supplied stills; the animation is a prototype for review. New effects are exposed in the theme study, not misrepresented as existing production portfolio components in the main catalog.
 
 Interactive specimen controls include family selection, reflection and motion toggles, a working range input and the actual shared buttons, input, switch and frame. Text on gradients uses fixed dark backing, and base semantic text colors are checked by `design-system:check`. Case-study media keeps its original colors.
+
+### Optical rebuild
+
+The first flat-gradient/turbulence prototype has been replaced with `OpticalField`: WebGL ray marching of signed-distance geometry, finite-difference surface normals, iridescent lighting, nonlinear UV stretching and curved reflected edges. Shapes include a softly blurred volume, sculpted blob, torus, layered wave ribbons and a split spectral beam. Rendering is capped at 30fps and 900px internal width, stops outside the viewport, and honors reduced motion. CSS recipes remain as non-WebGL fallbacks.
+
+Luma now uses DM Sans, cool white/slate surfaces, shared glass buttons/fields/switches, and consistent 24px surfaces / 12px controls. Native cursors replace the reticle and particle trail in Luma. The actual Who I am dot-art images are rendered dark on light surfaces; existing alpha text roles resolve to opaque foreground roles in Luma. These changes are scoped to Luma; Original remains the published default.
+
+### Frosted optical glass and diffusion
+
+`src/design-system/luma-material.css` defines the shared frosted material: translucent fill, separate refractive rims, inset edge highlights, soft directional cast shadows and transmitted mint/coral light. The material is applied to the real site frames, overview cards, buttons, fields, legal tabs, switches and range controls in Luma. Focus outlines stay cobalt; meaningful control boundaries retain contrast against tinted surfaces.
+
+All optical forms and reflections are diffused: 14px blur for the 3D blob, torus, ribbons and split beam, and 28px for the atmospheric volume. The central UI is frosted glass over the geometry rather than an opaque gradient card.
+
+The final rendered Luma audit (`docs/design-system/contrast-luma.json`) checked 1,187 text samples across 16 route/album views: zero computed below-threshold results and no load errors. It flagged 398 effect/gradient cases for visual review. This is not a full WCAG certification; the checker cannot certify image/canvas text or arbitrary optical composites. Actual homepage dot-art filtering, native cursor behavior, WebGL forms, blur values and glass controls were separately inspected in the browser. Build, lint (existing FlowingLine warning only), theme checks and whitespace checks passed.

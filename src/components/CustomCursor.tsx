@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useSiteTheme } from '../contexts/useSiteTheme'
 
 type Particle = {
   x: number
@@ -153,6 +154,7 @@ function shouldEnlargeReticle(clientX: number, clientY: number): boolean {
 }
 
 export function CustomCursor() {
+  const { theme } = useSiteTheme()
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
@@ -163,6 +165,9 @@ export function CustomCursor() {
   const lastExpandedRef = useRef<boolean | null>(null)
 
   useEffect(() => {
+    hasMovedRef.current = false
+    particlesRef.current = []
+    if (theme === 'luma') { document.body.classList.remove('custom-cursor-active'); return }
     const wrap = wrapRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
@@ -287,8 +292,9 @@ export function CustomCursor() {
       mq.removeEventListener('change', onMqChange)
       document.body.classList.remove('custom-cursor-active')
     }
-  }, [])
+  }, [theme])
 
+  if (theme === 'luma') return null
   return (
     <div className="custom-cursor-root">
       <canvas

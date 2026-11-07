@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './port-foundation.css';
+@import './design-system/luma-material.css';
 
 /* Design system: dark-first neutral palette, spacing, type scale */
 @theme {
@@ -1515,3 +1516,33 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 }
 :where([data-theme=luma], .luma-prototype) .chamfer-meteor-ring { display:none; }
 :where([data-theme=luma], .luma-prototype) :is(button,input,select,textarea).rounded { border-radius:12px; }
+
+/* Luma optical surfaces: shared controls, stable contrast, native input cursors. */
+:where([data-theme=luma],.luma-prototype) [data-ui=button],
+:where([data-theme=luma],.luma-prototype) [data-ui=icon-button] {
+  border-radius:12px; min-height:40px; border-color:#71829f; color:#15243d;
+  background:linear-gradient(145deg,#fffffff2,#e4ebf6e8);
+  box-shadow:inset 0 1px 0 #fff,0 4px 14px #17355c0c;
+  backdrop-filter:blur(18px) saturate(140%); -webkit-backdrop-filter:blur(18px) saturate(140%);
+}
+:where([data-theme=luma],.luma-prototype) [data-ui=button][data-variant=solid] { background:linear-gradient(140deg,#213eac,#173086); color:#fff; border-color:#173086; }
+:where([data-theme=luma],.luma-prototype) [data-ui=button]:not(:disabled):hover { box-shadow:inset 0 1px 0 #fff9,0 5px 20px #1d447b20; }
+:where([data-theme=luma],.luma-prototype) [data-ui=field] { border-color:#71829f; border-radius:12px; min-height:44px; background:#ffffffed; color:#15243d; }
+:where([data-theme=luma],.luma-prototype) [data-ui=switch] { height:30px; width:52px; border-color:#607492; background:linear-gradient(145deg,#ffffffed,#dce5f2ef); box-shadow:inset 0 1px 3px #19345520,0 1px 0 #fff; backdrop-filter:blur(16px); }
+:where([data-theme=luma],.luma-prototype) [data-ui=switch]>span { background:#324767; box-shadow:0 1px 4px #15243d40,inset 0 1px 0 #ffffff80; }
+:where([data-theme=luma],.luma-prototype) [data-ui=switch][aria-checked=true] { background:linear-gradient(145deg,#3159cf,#18358e); border-color:#173086; }
+:where([data-theme=luma],.luma-prototype) [data-ui=switch][aria-checked=true]>span { background:#fff; }
+html[data-theme=luma] .who-iam-orb-art { filter:brightness(0) saturate(0); }
+html[data-theme=luma] .custom-cursor-root { display:none; }
+html[data-theme=luma] .ds-showcase-tile { border-radius:24px; background:#ffffffb8; border-color:#d2d9e6; }
+html[data-theme=luma] .problem-statement-glitch-ghost { display:none; }
+/* Dark-theme alpha text must not become faint labels on Luma's light surfaces. */
+html[data-theme=luma] [class*="text-fg/"] { color:var(--color-fg); }
+html[data-theme=luma] [class*="text-fg-muted/"] { color:var(--color-fg-muted); }
+html[data-theme=luma] [class*="text-fg-subtle/"] { color:var(--color-fg-subtle); }
+
+:where([data-theme=luma],.luma-prototype) [data-ui=icon-button] { width:44px; height:44px; }
+:where([data-theme=luma],.luma-prototype) [data-ui=button] { min-height:44px; }
+:where([data-theme=luma],.luma-prototype) [data-ui=field]::placeholder { color:#575967; opacity:1; }
+
+:where([data-theme=luma],.luma-prototype) [data-ui=switch]:disabled { opacity:.45; cursor:not-allowed; }

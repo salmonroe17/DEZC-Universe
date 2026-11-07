@@ -1,0 +1,3678 @@
+{
+  "theme": "luma",
+  "viewport": "1440 × 1000",
+  "capturedAt": "2026-11-07T04:41:18.467Z",
+  "results": [
+    {
+      "path": "/",
+      "checked": 36,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 11:40:07 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Introduction / Mini-game",
+          "selector": "div.mb-1.font-normal.normal-case",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "YOUR CODENAME:",
+          "selector": "div.uppercase.tracking-[0.14em].text-fg/75",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "STORM FLUX · V8S",
+          "selector": "div.uppercase.tracking-[0.14em].text-fg/75",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Hello, my name is Dez. I like t",
+          "selector": "p.max-w-full.whitespace-pre-line.text-[2.4rem]",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Start game",
+          "selector": "button.pointer-events-auto.relative.z-10",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Global leaderboard:",
+          "selector": "a.pointer-events-auto.inline.cursor-default",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "—",
+          "selector": "div.tabular-nums.leading-relaxed",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "0",
+          "selector": "div.text-2xl.font-medium.tabular-nums",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Targets hit",
+          "selector": "div.mt-0.5.uppercase.tracking-[0.1em]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case Studies",
+          "selector": "h2.shrink-0.w-full.min-w-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon Neutral Club, B2C → B2B",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "Super app unify verticals",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "IBM Envizi: From Reporting to Action",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Systems behind the screens",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Who",
+          "selector": "h2.text-center.text-[11px].font-semibold",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I",
+          "selector": "span.group/ver.relative.inline",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "am",
+          "selector": "h2.text-center.text-[11px].font-semibold",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Hello! My name is Dez.",
+          "selector": "p.mb-3.last:mb-0.md:mb-3.5",
+          "ratio": 5.32,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I'm a Lead Product Designer & design systems connoisseur in the wonderful city of Toronto (#WeTheNorth).",
+          "selector": "p.mb-3.last:mb-0.md:mb-3.5",
+          "ratio": 5.32,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Besides product design, my passions include creating all sorts of things, whether that be creating art, illustrating, animating, making video games, board games",
+          "selector": "p.mb-3.last:mb-0.md:mb-3.5",
+          "ratio": 5.32,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "For business inquiries or my resume, you can contact me on",
+          "selector": "p.",
+          "ratio": 5.32,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "LinkedIn",
+          "selector": "a.text-fg.underline.decoration-cell-border",
+          "ratio": 5.32,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": ".",
+          "selector": "p.",
+          "ratio": 5.32,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "My multiple timelines of side quests",
+          "selector": "h2.shrink-0.w-full.min-w-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Click squares to see visuals",
+          "selector": "p.shrink-0.w-full.min-w-0",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Concert Adventures",
+          "selector": "span.line-clamp-2.w-full.font-mono",
+          "ratio": 7.5,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/carbon-neutral-club",
+      "checked": 219,
+      "findings": [
+        {
+          "text": "Carbon Neutral Club helps users understand and offset their carbon footprint through a paid membership.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What started as a conversion and clarity problem became something much bigger:",
+          "selector": "p.mb-0.mt-4.md:mt-5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The flow revealed a better business model, and helped shift the company from individual purchase → employer-funded memberships.",
+          "selector": "p.mb-0.mt-4.md:mt-5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I led the redesign of the core journey:",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Calculating a user's footprint",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Interpreting the result",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Choosing a plan",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Completing checkout",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Timeline: 7 weeks",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Scope details:",
+          "selector": "p.mb-0.mt-4.font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon footprint calculator redesign",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon footprint reveal / results",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Payment plan selection",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Quick & understandable checkout",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "System thinking",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Design QA",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The footprint felt abstract",
+          "selector": "p.m-0.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users got a number, but not enough meaning.",
+          "selector": "p.mb-0.mt-2.text-xs",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The price felt disconnected",
+          "selector": "p.m-0.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The cost existed, but its logic wasn't immediately clear.",
+          "selector": "p.mb-0.mt-2.text-xs",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Checkout created hesitation",
+          "selector": "p.m-0.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The final step asked for commitment before full confidence had been built.",
+          "selector": "p.mb-0.mt-2.text-xs",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show user struggles",
+          "selector": "span#struggle-toggle-label.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "We saw:",
+          "selector": "p.m-0.text-[22px].font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Strong engagement with the calculator itself",
+          "selector": "li.relative.pl-4.before:absolute",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Confusion around the final footprint number",
+          "selector": "li.relative.pl-4.before:absolute",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Uncertainty when choosing between plans",
+          "selector": "li.relative.pl-4.before:absolute",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Hesitation when entering the payment stage",
+          "selector": "li.relative.pl-4.before:absolute",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Clarity vs speed",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "More explanation could build trust, but also slow users down.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Simplicity vs transparency",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Fewer details reduced friction, but also weakened confidence.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Education vs conversion",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users needed context, but the business still needed them to complete checkout.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "1",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Calculator",
+          "selector": "p.m-0.text-sm.font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What is my impact?",
+          "selector": "p.mb-0.mt-2.text-xs",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "2",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Result",
+          "selector": "p.m-0.text-sm.font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What does that impact mean?",
+          "selector": "p.mb-0.mt-2.text-xs",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "3",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Plan",
+          "selector": "p.m-0.text-sm.font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What should I do about it?",
+          "selector": "p.mb-0.mt-2.text-xs",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "4",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Checkout",
+          "selector": "p.m-0.text-sm.font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What am I actually paying for?",
+          "selector": "p.mb-0.mt-2.text-xs",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Make the number meaningful",
+          "selector": "h3.m-0.text-[16px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users need context before a footprint score becomes actionable.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Add national average for comparison; have the footprint tracker move up and down based on calculator decisions.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Build trust before payment",
+          "selector": "h3.m-0.text-[16px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Transparency must come before financial commitment.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show a full breakdown of what is included and why.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Reduce decision friction",
+          "selector": "h3.m-0.text-[16px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Choices should feel guided, not overwhelming.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Use a progress stepper so expectations stay clear.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Connect cost to impact",
+          "selector": "h3.m-0.text-[16px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users should understand what they are paying for and why.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Surface what membership includes on the choose-your-plan step.",
+          "selector": "li.",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show why this works",
+          "selector": "span#calculator-why-toggle-label.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "End of 7 week project, 3 months later",
+          "selector": "p.m-0.max-w-[56rem].text-center",
+          "ratio": 19.75,
+          "required": 3,
+          "foreground": "rgb(0, 0, 0)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "B2B Plan page",
+          "selector": "button#what-changed-tab-b2b.min-h-[44px].flex-1.px-4",
+          "ratio": 13.1,
+          "required": 4.5,
+          "foreground": "rgb(18, 52, 69)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "B2C Plan page",
+          "selector": "button#what-changed-tab-b2c.min-h-[44px].flex-1.px-4",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "Retrospective",
+          "selector": "h2#retro-title.text-left.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "This project reinforced three things for me:",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Clarity builds trust more effectively than simplicity alone",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Checkout is often a product strategy problem, not just a UI problem",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Small experience shifts can reshape an entire business model",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The most important part of this work wasn't just making the flow feel cleaner.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "It was designing a system that helped users understand enough to act, and that gave the company a better way to grow.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case Studies",
+          "selector": "h2.shrink-0.w-full.min-w-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon Neutral Club, B2C → B2B",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "Super app unify verticals",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "IBM Envizi: From Reporting to Action",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Systems behind the screens",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/super-app",
+      "checked": 224,
+      "findings": [
+        {
+          "text": "Travel — hotel & flight bookings",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Fintech — debit card & cashback system",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Ecommerce — selling warehouse returned products",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I was brought in to define how these products should work as one system.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Mapping the end-to-end experience across all three verticals",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Identifying breakdowns in navigation, discovery, and value clarity",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Running cross-functional workshops to align product, design, and leadership",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Proposing a unified product direction and prioritized roadmap",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "This wasn't a surface-level redesign, it was about reframing the product at a system level",
+          "selector": "p.mb-0.mt-4.md:mt-5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Timeline: 9 business days",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Scope details:",
+          "selector": "p.mb-0.mt-4.font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "System-level UX across all verticals",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Navigation and information architecture",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Cross-product discovery and entry points",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Feature prioritization for upcoming roadmap",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Missed opportunities across verticals",
+          "selector": "p.m-0.text-[16px].font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The product failed to connect its offerings, preventing users from discovering value beyond a single entry point.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users didn’t understand the full product",
+          "selector": "p.m-0.text-[16px].font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Most users didn’t even realize the ecosystem existed.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Inconsistent experiences",
+          "selector": "p.m-0.text-[16px].font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Each vertical felt like a separate product, with mismatched navigation, layouts, and interaction patterns.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Duplicated patterns",
+          "selector": "p.m-0.text-[16px].font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users had to relearn the same actions across different parts of the product.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show user struggles",
+          "selector": "span#_r_h_.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "Autonomy vs Consistency",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Teams moved fast, but the experience fractured.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Focus vs discovery",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users came for one thing, but missed everything else.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Identity vs Standardization",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Each vertical felt strong alone, but weak together.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "1",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Home",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "A unified overview of the ecosystem, surfacing key actions, status, and entry points across all verticals.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "2",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Discover",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "A dedicated space to explore everything Super offers, enabling cross-vertical discovery and universal search.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "3",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Cash",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "A focused hub for all financial interactions, separating transactional behavior from broader product exploration.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "4",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Rewards",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "A centralized system for incentives and engagement, connecting user actions across verticals into long-term value.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "5",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "My Super",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "A personal control center for account, activity, and preferences, tying together the user's full relationship with the product.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show what works",
+          "selector": "span#_r_17_.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "Retrospective",
+          "selector": "h2#super-retrospective-heading.text-left.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What I'd push further",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "If I continued the work, I'd push deeper into:",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Seasonal / trend-led discovery",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Better travel + commerce bundling",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "More ambitious assistive / AI features",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Stronger performance measurement after rollout",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The work proved the direction.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The next step would be compounding it.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case Studies",
+          "selector": "h2.shrink-0.w-full.min-w-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon Neutral Club, B2C → B2B",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "IBM Envizi: From Reporting to Action",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Systems behind the screens",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/ibm-envizi",
+      "checked": 284,
+      "findings": [
+        {
+          "text": "IBM Envizi",
+          "selector": "span.text-fg",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "is an enterprise sustainability platform used by global organizations to track and report emissions data.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Scope 1 – direct operational emissions",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Scope 2 – purchased energy",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Scope 3 – supply chain & external operations",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I was brought in to lead the design of a new workflow layer — one that didn't yet exist inside the product.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Primary designer, end-to-end",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Defined flows across four calculation methods",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Not a redesign — a new category of workflow.",
+          "selector": "p.mb-0.mt-4.text-fg/90",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Timeline: ~6 months",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Scope details",
+          "selector": "p.mb-0.mt-4.text-fg",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "0 -> 1 workflow inside a shipped product",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Four branching method flows",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Supplier outreach, tracking, comparison",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon (React) -> Angular constraints",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "No action layer inside the product",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Dashboards showed emissions totals. Nothing offered a path to improve them. Seeing the problem and fixing it lived in separate worlds.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Supplier outreach was off-platform",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Email chains. Personal spreadsheets. No shared state. Every quarter rebuilt the same coordination system from scratch.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Calculation methods were invisible",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users didn't know which method powered a given estimate or how to upgrade it. The data quality gap was real – and entirely unsurfaced.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "No memory between cycles",
+          "selector": "p.m-0.text-[20px].font-medium",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "No record of last quarter's outreach. No sense of who had responded. Teams repeated the same work, every cycle.",
+          "selector": "p.mb-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show the goals",
+          "selector": "span#struggle-toggle-label.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "Rigor vs. Usability",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon accounting demands precision. Users aren't master carbon accountants.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Coverage vs. Coherence",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Four methods, branching logic. One pattern held it together.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Flexibility vs. Guidance",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Control without guardrails corrupts downstream reporting.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Design system vs. Product stack",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "IBM Carbon was React. The product was Angular.",
+          "selector": "p.m-0.min-w-0.w-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "1",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What users were actually struggling with inside the reporting cycle",
+          "selector": "p.m-0.min-w-0.text-[16px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "2",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Which problems existed across every calculation method, not just one",
+          "selector": "p.m-0.min-w-0.text-[16px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "3",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What opportunities were worth exploring, and which ones were distractions",
+          "selector": "p.m-0.min-w-0.text-[16px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "4",
+          "selector": "span.flex.size-9.shrink-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Which patterns could be shared across branches to keep the system coherent",
+          "selector": "p.m-0.min-w-0.text-[16px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Select a template",
+          "selector": "h3.m-0.font-mono.text-[17px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Core flow - Step 1",
+          "selector": "p.m-0.mt-1.5.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "One of the first problems users faced was not knowing where to begin.",
+          "selector": "p.m-0.[text-wrap:pretty]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I designed a template system that converted technical sustainability goals into clear starting points.",
+          "selector": "p.m-0.[text-wrap:pretty]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Users start from a predefined path such as:",
+          "selector": "p.m-0.[text-wrap:pretty]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Improve calculation method",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Collect supplier emissions data",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Increase coverage",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Strengthen supplier-specific reporting",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show what works",
+          "selector": "span#action-layer-what-works-label.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "Criteria selection",
+          "selector": "h2#criteria-selection-heading.m-0.font-mono.text-[20px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Core flow - Step 2",
+          "selector": "p.m-0.mt-1.5.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Not every supplier creates equal impact.",
+          "selector": "p.m-0.text-[12px].leading-relaxed",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "This shifted teams from broad manual outreach to focused, high-value engagement.",
+          "selector": "p.m-0.text-[12px].leading-relaxed",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Choose which suppliers or products to target based on:",
+          "selector": "p.m-0.[text-wrap:pretty]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Missing data",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Weak methods",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Category priority",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Strategic suppliers",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Define measurable success",
+          "selector": "h2#define-measurable-success-heading.m-0.font-mono.text-[20px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Core flow - Step 3",
+          "selector": "p.m-0.mt-1.5.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Without a clear outcome, supplier engagement becomes endless activity.",
+          "selector": "p.m-0.text-[12px].leading-relaxed",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "This gave teams a reason to act and a way to measure progress.",
+          "selector": "p.m-0.text-[12px].leading-relaxed",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Define what success looks like:",
+          "selector": "p.m-0.[text-wrap:pretty]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Stronger methods adopted",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Suppliers engaged",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Coverage improved",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "More accurate data",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Reduced emissions",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Execute actions",
+          "selector": "h2#execute-actions-heading.m-0.font-mono.text-[20px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Core flow - Step 4",
+          "selector": "p.m-0.mt-1.5.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Instead of expecting users to invent their own process, I designed guided actions tied to each calculation method and workflow state.",
+          "selector": "p.m-0.text-[12px].leading-relaxed",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Because each emissions method required different actions, this involved significant branching logic and edge-case design.",
+          "selector": "p.m-0.text-[12px].leading-relaxed",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The system guides next steps:",
+          "selector": "p.m-0.[text-wrap:pretty]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Request documents",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Request PCF data",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Send reminders",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Review submissions",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Approve evidence",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Track progress",
+          "selector": "h2#track-progress-heading.m-0.font-mono.text-[20px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Core flow - Step 5",
+          "selector": "p.m-0.mt-1.5.text-[12px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Once plans were live, users needed to know whether anything was actually improving. This transformed emissions improvement from guesswork into a visible operati",
+          "selector": "p.m-0.text-[12px].leading-relaxed",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I designed tracking states that allowed teams to monitor:",
+          "selector": "p.m-0.[text-wrap:pretty]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Supplier responses",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Completion rates",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Workflow status",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Stronger method adoption",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Progress toward goals",
+          "selector": "li.[text-wrap:pretty].pl-0.5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Spend-Based",
+          "selector": "h3.m-0.font-mono.text-[17px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The default path: use financial spend and category factors when detailed activity data is not available.",
+          "selector": "p.m-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Most common",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Lowest accuracy",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Average-data",
+          "selector": "h3.m-0.font-mono.text-[17px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Fills gaps with industry-average emission factors when spend or category data is the best available signal.",
+          "selector": "p.m-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Industry factors",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Mid accuracy",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Hybrid",
+          "selector": "h3.m-0.font-mono.text-[17px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Combines different calculation stages and data sources in one footprint when no single method covers the whole product.",
+          "selector": "p.m-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Mixed methods",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Highest complexity",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Supplier-specific",
+          "selector": "h3.m-0.font-mono.text-[17px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Uses supplier-reported, product-level or facility-level data when partners can submit and maintain primary evidence.",
+          "selector": "p.m-0.mt-2.text-[12px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Direct data",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Gold standard",
+          "selector": "span.inline-flex.items-center.rounded-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Show all method flows",
+          "selector": "span#method-flows-toggle-label.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "Show before vs after details",
+          "selector": "span#before-after-details-toggle-label.font-mono.text-[clamp(0.8125rem,calc(0.35rem+1.5vw),1rem)].font-normal",
+          "ratio": 17.55,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(255, 255, 255)",
+          "review": true
+        },
+        {
+          "text": "Retrospective",
+          "selector": "h2#ibm-retrospective-heading.text-left.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What I learned",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Complex systems stall when no one owns the ambiguity.",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Main flows are easy. Real usability happens in exceptions.",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "In expert-heavy domains, users need confidence more than options.",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Dashboards explain problems. Systems solve them.",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What I'd explore next",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Automated supplier follow-up",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Smarter validation checks",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Benchmarking supplier maturity",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Pathways from measurement to reduction",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case Studies",
+          "selector": "h2.shrink-0.w-full.min-w-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon Neutral Club, B2C → B2B",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "Super app unify verticals",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Systems behind the screens",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/design-systems",
+      "checked": 187,
+      "findings": [
+        {
+          "text": "Over the years, I've created, rebuilt, and maintained 8+ design systems across mobile apps, web platforms, startups, and enterprise products.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Some systems were built from scratch. Others were inherited in chaos and restructured to scale.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I treat design systems as products, not libraries.",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Design systems built for products such as:",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Anchr",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "IBM",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon Neutral Club",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Sherpa",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Super",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Drop",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "HomeVisit",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Corelogic",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Sensibill",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Thriver",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Across B2B, B2C, mobile, web, fintech, climate, travel, and enterprise.",
+          "selector": "p.mb-0.mt-4.md:mt-5",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Problems when building without a DS",
+          "selector": "p.m-0.text-sm.font-normal",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Duplicate components",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Inconsistent UI",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Slower design cycles",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Unclear developer handoff",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Rework across teams",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Product debt hidden in plain sight",
+          "selector": "li.",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "The best systems are not the biggest. They are the most adopted.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "These decisions reduce hundreds of future micro-decisions.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Uses atomic design to build slot-based systems that swap elements efficiently and reduce variant complexity.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "This is where quality lives.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "This helps teams make good decisions without asking permission constantly.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Strong systems need to scale globally.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "My goal is fewer Slack questions and faster builds.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "I structure design files so teams can move quickly.",
+          "selector": "p.m-0.max-w-none.text-balance",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Retrospective",
+          "selector": "h2#retro-title.text-left.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "What I've learned most:",
+          "selector": "p.m-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Adoption matters more than perfection",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Documentation matters as much as visuals",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Simplicity beats over-engineering",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Maintenance is part of design",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Systems should accelerate people, not slow them down",
+          "selector": "li.pl-1",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case Studies",
+          "selector": "h2.shrink-0.w-full.min-w-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon Neutral Club, B2C → B2B",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "Super app unify verticals",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "IBM Envizi: From Reporting to Action",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/components",
+      "checked": 84,
+      "findings": [
+        {
+          "text": "Hero media — chamfered top-right & bottom-left (10-col width)",
+          "selector": "span.px-4.text-center.text-[10px]",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "[my role description lorem ipsum dolor sit amid consecteur lorem ipsum dolor sit amid consecteur lorem ipsum dolor sit amid consecteur]",
+          "selector": "div.min-h-0.min-w-0.size-full",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Feature visual",
+          "selector": "span.text-[10px].text-fg-subtle",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "1",
+          "selector": "span.text-[10px].text-fg-subtle",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "2",
+          "selector": "span.text-[10px].text-fg-subtle",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "3",
+          "selector": "span.text-[10px].text-fg-subtle",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Before",
+          "selector": "button.comparison-toggle-btn-before.absolute.inset-y-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(246, 248, 252)",
+          "background": "rgb(23, 24, 39)",
+          "review": true
+        },
+        {
+          "text": "After",
+          "selector": "button.comparison-toggle-btn-after.absolute.inset-y-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Before state visual",
+          "selector": "span.text-sm.text-fg-subtle",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Decision card",
+          "selector": "h3.text-sm.font-medium.text-fg",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "1",
+          "selector": "h3.text-sm.font-medium.text-fg",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Short description under the title — Figma decision column cards.",
+          "selector": "p.mt-2.text-xs.leading-relaxed",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "2",
+          "selector": "h3.text-sm.font-medium.text-fg",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "3",
+          "selector": "h3.text-sm.font-medium.text-fg",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Retrospective",
+          "selector": "h2#retro-title.text-center.text-base.font-normal",
+          "ratio": 16.51,
+          "required": 3,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Centered retrospective body copy — what shipped, what we'd revisit, and how the case study closes. Keep it short and legible inside the bordered container.",
+          "selector": "p.mx-auto.mt-8.max-w-2xl",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Small centered image / diagram at foot of retrospective",
+          "selector": "span.text-center.text-[11px].text-fg-subtle",
+          "ratio": 5.72,
+          "required": 4.5,
+          "foreground": "rgb(98, 97, 109)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case Studies",
+          "selector": "h2.shrink-0.w-full.min-w-0",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Carbon Neutral Club, B2C → B2B",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 14.38,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(231, 232, 237)",
+          "review": true
+        },
+        {
+          "text": "Super app unify verticals",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "View",
+          "selector": "span.shrink-0.underline.underline-offset-[3px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "IBM Envizi: From Reporting to Action",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Systems behind the screens",
+          "selector": "span.min-w-0.flex-1.text-left",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/sidequest/bobaghosteas",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/leaderboard",
+      "checked": 14,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 11:40:24 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "View leaderboard",
+          "selector": "button.rounded.border.px-4",
+          "ratio": 16.24,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(244, 246, 251)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/privacy",
+      "checked": 78,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 11:40:26 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Privacy policy",
+          "selector": "button#privacy-tab.flex-1.min-w-[10rem].rounded",
+          "ratio": 12.15,
+          "required": 4.5,
+          "foreground": "rgb(18, 52, 69)",
+          "background": "rgb(244, 246, 252)",
+          "review": true
+        },
+        {
+          "text": "Terms & conditions",
+          "selector": "button#terms-tab.flex-1.min-w-[10rem].rounded",
+          "ratio": 10.22,
+          "required": 4.5,
+          "foreground": "rgb(36, 63, 81)",
+          "background": "rgb(244, 246, 252)",
+          "review": true
+        },
+        {
+          "text": "Cookie policy",
+          "selector": "button#cookies-tab.flex-1.min-w-[10rem].rounded",
+          "ratio": 10.22,
+          "required": 4.5,
+          "foreground": "rgb(36, 63, 81)",
+          "background": "rgb(244, 246, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/contrast-check-not-found",
+      "checked": 12,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 16.51,
+          "required": 4.5,
+          "foreground": "rgb(23, 24, 39)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 11:40:29 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 6.52,
+          "required": 4.5,
+          "foreground": "rgb(87, 89, 103)",
+          "background": "rgb(246, 248, 252)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/sidequest/neon-drawings",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/japan-adventures",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/concert-adventures",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/a-marriage-proposal",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/eedenn",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/daisy",
+      "checked": 7,
+      "findings": []
+    }
+  ]
+}

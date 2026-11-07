@@ -5,7 +5,7 @@ export type ThemeId = 'grey' | 'cyan' | 'magenta' | 'blue' | 'light' | 'luma'
 export type ThemePalette = Record<string, string>
 
 export const themePalettes: Record<ThemeId, ThemePalette> = {
-  luma: { bg:'#f7f7f2', surface:'#ffffff', elevated:'#eeeee8', border:'#dedfdc', fg:'#171827', 'fg-muted':'#575967', 'fg-subtle':'#62616d', hud:'#234dcc', 'cell-border':'#c7c9cf', 'cell-hover':'#234dcc' },
+  luma: { bg:'#f6f8fc', surface:'#ffffff', elevated:'#edf1f8', border:'#d2d9e6', fg:'#171827', 'fg-muted':'#575967', 'fg-subtle':'#62616d', hud:'#234dcc', 'cell-border':'#c7c9cf', 'cell-hover':'#234dcc' },
   grey: { bg: '#101010', surface: '#0a0a0a', elevated: '#141414', border: '#27272a', fg: '#fafafa', 'fg-muted': '#a1a1aa', 'fg-subtle': '#888891', hud: '#ffffff', 'cell-border': '#414141', 'cell-hover': '#ffffff' },
   cyan: { bg: '#0b1312', surface: '#0e1715', elevated: '#152320', border: '#2a5850', fg: '#dffaf6', 'fg-muted': '#78c9b8', 'fg-subtle': '#69ae9f', hud: '#3cdbcb', 'cell-border': '#335f56', 'cell-hover': '#6ae8d4' },
   magenta: { bg: '#100a12', surface: '#140d16', elevated: '#1c1220', border: '#4a2a52', fg: '#ffe8ff', 'fg-muted': '#c896d4', 'fg-subtle': '#b184bd', hud: '#e879f9', 'cell-border': '#553060', 'cell-hover': '#f0a8ff' },
@@ -30,7 +30,7 @@ export const themeGlyphColors: Record<ThemeId, string[]> = {
 }
 
 export function themeVariables(id: ThemeId): Record<string, string> {
-  return { ...Object.fromEntries(Object.entries({ ...fixedColors, ...themePalettes[id] }).map(([key, value]) => [`--color-${key}`, value])), '--font-sans': id === 'luma' ? '"Inter", sans-serif' : '"Space Mono", monospace', '--font-mono': id === 'luma' ? '"Inter", sans-serif' : '"Space Mono", monospace', '--surface-radius': id === 'luma' ? '24px' : '0px' }
+  return { ...Object.fromEntries(Object.entries({ ...fixedColors, ...themePalettes[id] }).map(([key, value]) => [`--color-${key}`, value])), '--font-sans': id === 'luma' ? '"DM Sans", sans-serif' : '"Space Mono", monospace', '--font-mono': id === 'luma' ? '"DM Sans", sans-serif' : '"Space Mono", monospace', '--surface-radius': id === 'luma' ? '24px' : '0px' }
 }
 
 export function isThemeId(value: string | null): value is ThemeId {

@@ -1,4 +1,4 @@
-.luma-prototype { background:var(--color-bg); color:var(--color-fg); padding:44px; border-radius:28px; font-family:var(--font-sans); --surface-radius:24px; }
+.luma-prototype { background:var(--color-bg); color:var(--color-fg); padding:44px; border-radius:24px; font-family:var(--font-sans); --surface-radius:24px; }
 .luma-prototype * { box-sizing:border-box; }
 .luma-kicker,.luma-label,.luma-stage-caption,.luma-section-title>span,.luma-foot { font-size:10px; letter-spacing:.09em; font-weight:500; }
 .luma-kicker { display:flex; align-items:center; gap:9px; }
@@ -11,9 +11,9 @@
 .luma-intro-note>span { font-size:9px; color:var(--color-fg-subtle); letter-spacing:.1em; }
 .luma-intro .luma-intro-note>p { font-size:12px; line-height:1.7; letter-spacing:0; margin-top:12px; }
 .luma-intro-note button { margin-top:18px; display:flex; align-items:center; gap:12px; font-size:11px; border-bottom:1px solid #a4a5aa; padding-bottom:5px; text-align:left; }
-.luma-hero { background:#efefeb; border:1px solid #e3e3dc; border-radius:28px; overflow:hidden; }
+.luma-hero { background:#edf2fa; border:1px solid #d2d9e6; border-radius:24px; overflow:hidden; }
 .luma-stage-caption { display:flex; justify-content:space-between; gap:20px; padding:22px 24px 0; font-size:8px; color:var(--color-fg-muted); }
-.luma-tone-card { padding:30px 25px; height:100%; display:flex; flex-direction:column; justify-content:space-between; font-family:"Inter",sans-serif; }
+.luma-tone-card { padding:30px 25px; height:100%; display:flex; flex-direction:column; justify-content:space-between; font-family:"DM Sans",sans-serif; }
 .luma-tone-top { display:flex; justify-content:space-between; font-size:12px; line-height:1.4; }
 .luma-tone-value { padding-top:25px; }
 .luma-tone-value output { display:block; text-align:center; font-size:96px; font-weight:400; letter-spacing:-.09em; color:#92f8ff; line-height:1.2; }
@@ -72,3 +72,16 @@
 .luma-tone-value output { font-size:80px; }
 .luma-tone-value output>span { font-size:32px; margin-top:14px; }
 .luma-recipe-card>span { background:#06152ee6; color:#fff; border-radius:999px; padding:6px 10px; font-size:12px; }
+
+.luma-forms { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.luma-forms>article { min-width:0; }
+.luma-forms>article:last-child { grid-column:1/-1; }
+.luma-form-render { height:300px; position:relative; overflow:hidden; isolation:isolate; border-radius:24px; background:#f4f6fb; }
+.luma-forms h4 { font-size:16px; font-weight:500; margin:14px 0 6px; letter-spacing:-.03em; }
+.luma-forms p { font-size:12px; color:var(--color-fg-muted); line-height:1.6; }
+.luma-forms .optical-field { z-index:0; }
+.luma-tone-card { font-family:"DM Sans",sans-serif; background:linear-gradient(#050b20b8,transparent 30%,transparent 70%,#050b20df); }
+.luma-tone-value { background:#06132ae8; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-radius:20px; }
+.luma-stage-toolbar button { background:#ffffffb8; border:1px solid #71829f; color:#303a50; box-shadow:inset 0 1px 0 #fff,0 3px 10px #2032580b; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); min-height:40px; }
+.luma-stage-toolbar button[aria-pressed=true] { background:#e0e9ff; border-color:#234dcc; color:#17399b; }
+@media(max-width:600px) { .luma-forms { grid-template-columns:1fr; } .luma-form-render { height:260px; } }

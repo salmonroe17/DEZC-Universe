@@ -3,13 +3,14 @@ import { ArrowUpRight } from '@phosphor-icons/react'
 import inventory from './inventory'
 import { useSiteTheme } from '../contexts/useSiteTheme'
 import { themePalettes } from './theme'
+import { CaseStudySwitch } from '../components/system/CaseStudySwitch'
 import { LeaderboardGate } from '../components/LeaderboardGate'
 import { HudLoadingScreen } from '../components/HudLoadingScreen'
 import { CaseStudyLazyVideo } from '../components/caseStudy/CaseStudyLazyVideo'
 import { PresentationExamples } from './PresentationExamples'
 import { VisualPagePreview } from './VisualLibrary'
 import { CursorStates, CursorPlayground, CardCornerExamples } from './InteractionExamples'
-import { PortfolioButton, PortfolioTextField } from '../components/system/PortfolioControls'
+import { PortfolioButton, PortfolioIconButton, PortfolioTextField } from '../components/system/PortfolioControls'
 import { PortfolioTab } from '../components/system/PortfolioTabs'
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { SiteTopBar } from '../components/SiteTopBar'
@@ -47,6 +48,7 @@ function Tile({ title, story, children, inspect, className='' }: {title:string;s
 }
 export function OverviewShowcase({ inspect }: {inspect:(id:string)=>void}) {
   const {theme}=useSiteTheme()
+  const [glassEnabled,setGlassEnabled]=useState(true)
   const [name,setName]=useState('')
   const [tab,setTab]=useState(0)
   const [active,setActive]=useState('intro')
@@ -55,8 +57,9 @@ export function OverviewShowcase({ inspect }: {inspect:(id:string)=>void}) {
   const [saved,setSaved]=useState(false)
   return <div className="ds-showcase-root"><div className="ds-showcase-site-nav"><SiteTopBar/></div><ShowcaseColumns>
     <Tile title="Theme palette" story="@colors" inspect={inspect}><div className="ds-showcase-colors">{Object.entries(themePalettes[theme]).map(([role,color])=><div key={role} title={`${role}: ${color}`}><span style={{background:color}}/><small>{role}</small></div>)}</div></Tile>
-    <Tile title="Typography" story="@typography" inspect={inspect}><div className="ds-showcase-type ds-showcase-type-foundation"><span className="text-fg-subtle">{theme==='luma'?'Inter':'Space Mono'} · 400 / 700</span><strong>Aa Bb Cc</strong><p style={{fontSize:'var(--text-title)',lineHeight:'var(--text-title--line-height)'}}>Systems behind the screens.</p><p style={{fontSize:'var(--text-body)',lineHeight:'var(--text-body--line-height)'}}>Clear words, consistent rhythm.</p><p className="font-bold">Bold emphasis · 700</p><small>Primary text · Muted text · Subtle text</small></div></Tile>
+    <Tile title="Typography" story="@typography" inspect={inspect}><div className="ds-showcase-type ds-showcase-type-foundation"><span className="text-fg-subtle">{theme==='luma'?'DM Sans':'Space Mono'} · 400 / 700</span><strong>Aa Bb Cc</strong><p style={{fontSize:'var(--text-title)',lineHeight:'var(--text-title--line-height)'}}>Systems behind the screens.</p><p style={{fontSize:'var(--text-body)',lineHeight:'var(--text-body--line-height)'}}>Clear words, consistent rhythm.</p><p className="font-bold">Bold emphasis · 700</p><small>Primary text · Muted text · Subtle text</small></div></Tile>
   </ShowcaseColumns><ShowcaseColumns>
+    {theme==='luma'&&<Tile title="Glass controls" story="buttons" inspect={inspect}><div className="ds-showcase-inline"><PortfolioButton variant="solid">Primary action</PortfolioButton><PortfolioButton>Glass button</PortfolioButton><PortfolioIconButton aria-label="Open glass action"><ArrowUpRight size={18}/></PortfolioIconButton></div><div className="ds-showcase-inline"><span>Ambient light</span><CaseStudySwitch checked={glassEnabled} aria-label="Overview ambient light" onClick={()=>setGlassEnabled(!glassEnabled)}/><CaseStudySwitch checked={false} aria-label="Unavailable glass setting" disabled/></div><PortfolioTextField aria-label="Glass field" placeholder="Focus to inspect the glass field"/></Tile>}
     <Tile title="Leaderboard gate" story="password" inspect={inspect}><LeaderboardGate password={name} onPasswordChange={setName} onSubmit={event=>{event.preventDefault();setSaved(true)}}/>{saved&&<p className="ds-showcase-caption">Preview submitted locally.</p>}</Tile>
     <Tile title="Legal tabs" story="tabs" inspect={inspect}><div className="ds-showcase-tabs" role="tablist" aria-label="Showcase tabs">{['Privacy','Terms','Cookies'].map((label,i)=><PortfolioTab id={`overview-tab-${i}`} controls="overview-tab-panel" selected={tab===i} onSelect={()=>setTab(i)} key={label}>{label}</PortfolioTab>)}</div><div role="tabpanel" id="overview-tab-panel" aria-labelledby={`overview-tab-${tab}`} className="ds-showcase-tab-panel">{['Privacy policy','Terms & conditions','Cookie policy'][tab]}</div></Tile>
     <Tile title="Card corners" story="card-corners" inspect={inspect}><CardCornerExamples compact/><ChamferFrame meteorTrail innerClassName="bg-elevated p-5"><p className="font-mono text-xs text-fg">One shared outline.</p><p className="mt-2 font-mono text-[10px] text-fg-muted">Inset border + clipped fill + optional meteor.</p></ChamferFrame></Tile>
