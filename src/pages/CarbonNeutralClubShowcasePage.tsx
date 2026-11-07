@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { CaseStudySwitch } from '../components/system/CaseStudySwitch'
+import { useState, type ReactNode } from 'react'
 import carbonHeroC1 from '../../CNC photos/c1.png'
 import carbonOverviewC2 from '../../CNC photos/c2.png'
 import carbonOverviewC3 from '../../CNC photos/c3.png'
@@ -30,7 +31,6 @@ import carbonPlanPageB2CC20_1 from '../../CNC photos/c20.1.png'
 import carbonPrototypeVideo from '../../CNC photos/cnc video portfolio prototype 720p30.mp4'
 import mindExplosionGif from '../../CNC photos/mindexplosion.gif'
 import { CARBON_SHOWCASE_HERO_H1, carbonHeroTurtleGif } from './carbon/carbonShowcaseIntroConstants'
-import { usePreloadImages } from '../hooks/usePreloadImages'
 import { PRIMARY_CASE_STUDY } from '../constants/caseStudyCatalog'
 import { CARBON_CASE_STUDY_SHOWCASE_NAV } from '../data/caseStudyShowcaseNav'
 import {
@@ -38,9 +38,7 @@ import {
   ProblemStatementFrame,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
-  caseStudyChamferToggleKnobClassName,
   caseStudyChamferToggleLabelClassName,
-  caseStudyChamferToggleTrackClassName,
   caseStudyScrollAnchorClass,
   caseStudyTeamResponsibilityTextClass,
   caseStudyTeamRoleColumnClass,
@@ -54,6 +52,7 @@ import {
   caseStudyTradeConnectorVertical,
 } from '../components/caseStudy/CaseStudyFlowConnectors'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
+import { CaseStudyLazyVideo } from '../components/caseStudy/CaseStudyLazyVideo'
 import {
   CARBON_PRESENTATION_MEDIA_TO_SLIDE,
   CARBON_PRESENTATION_SLIDES,
@@ -63,28 +62,6 @@ import { ExperimentalCaseStudiesPanel } from '../components/ExperimentalCaseStud
 import { ChamferFrame } from '../components/system/ChamferFrame'
 import { FigmaGrid12 } from '../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../components/system/RotatingGradientCircle'
-
-/** Chamfer toggle image pairs — preloaded so instant swaps don’t hitch on first flip. */
-const CARBON_CHAMFER_CROSSFADE_IMAGE_URLS = [
-  carbonProblemProductSurface,
-  carbonProblemProductSurfaceStruggles,
-  carbonCalculatorMockup,
-  carbonCalculatorWhyMockup,
-  carbonCalculatorC13,
-  carbonCalculatorC13Alt,
-  carbonResultMeaningfulC14,
-  carbonResultMeaningfulC14Alt,
-  carbonPricingPlanC15,
-  carbonPricingPlanC15Alt,
-  carbonTrustOffsetProjectsC16,
-  carbonTrustOffsetProjectsC16Alt,
-  carbonCostBreakdownC17,
-  carbonCostBreakdownC17Alt,
-  carbonCheckoutTrustC18,
-  carbonTurningPointC19,
-  carbonPlanPageB2BC20,
-  carbonPlanPageB2CC20_1,
-] as const
 
 /** Locks aspect/size; base + alt paint in the same box (no shift between exports). */
 const chamferToggleStackSpacerClass =
@@ -379,46 +356,6 @@ const USER_VS_BUSINESS_TRADEOFFS: { label: string; body: string }[] = [
   },
 ]
 
-function CarbonPrototypeAutoplayVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const video = ref.current
-    if (!video) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        if (!entry) return
-        if (entry.isIntersecting) {
-          video.currentTime = 0
-          void video.play().catch(() => {})
-        } else {
-          video.pause()
-        }
-      },
-      { threshold: 0.25 },
-    )
-
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <video
-      ref={ref}
-      className="block h-auto w-full max-w-full align-middle"
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-label="Screen recording of the Carbon Neutral Club product prototype"
-    >
-      <source src={src} type="video/mp4" />
-    </video>
-  )
-}
-
 /** Deck-only crossfade chamfer (local toggle state; matches on-page annotation blocks). */
 export default function CarbonNeutralClubShowcasePage() {
   const [seeWhereUsersStruggled, setSeeWhereUsersStruggled] = useState(false)
@@ -429,8 +366,6 @@ export default function CarbonNeutralClubShowcasePage() {
   const [showPricingTrustProjectsAlt, setShowPricingTrustProjectsAlt] = useState(false)
   const [showPricingCostBreakdownAlt, setShowPricingCostBreakdownAlt] = useState(false)
   const [whatChangedPlanIsB2C, setWhatChangedPlanIsB2C] = useState(false)
-
-  usePreloadImages(CARBON_CHAMFER_CROSSFADE_IMAGE_URLS)
 
   return (
     <CaseStudyShowcaseScaffold
@@ -451,6 +386,8 @@ export default function CarbonNeutralClubShowcasePage() {
           src={carbonHeroC1}
           alt="Carbon Neutral Club — hero"
           decoding="async"
+          loading="eager"
+          fetchPriority="high"
           className="block h-auto w-full max-w-full align-middle"
         />
       </ChamferFrame>
@@ -467,12 +404,10 @@ export default function CarbonNeutralClubShowcasePage() {
           innerClassName="bg-bg p-0"
           aria-hidden
         >
-          <img
+          <CaseStudyLazyVideo
             src={carbonHeroTurtleGif}
-            alt=""
+            ariaHidden
             className="pointer-events-none block h-full w-full object-cover object-center select-none"
-            loading="lazy"
-            decoding="async"
           />
         </RotatingGradientCircle>
       </div>
@@ -481,7 +416,11 @@ export default function CarbonNeutralClubShowcasePage() {
         className="chamfer-media-border w-full"
         innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
       >
-        <CarbonPrototypeAutoplayVideo src={carbonPrototypeVideo} />
+        <CaseStudyLazyVideo
+          src={carbonPrototypeVideo}
+          poster="/case-study-media/posters/carbon-prototype.webp"
+          ariaLabel="Screen recording of the Carbon Neutral Club product prototype"
+        />
       </ChamferFrame>
 
       <section aria-labelledby="overview-section">
@@ -649,19 +588,7 @@ export default function CarbonNeutralClubShowcasePage() {
         innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
       >
         <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-          <button
-            type="button"
-            role="switch"
-            aria-checked={seeWhereUsersStruggled}
-            aria-labelledby="struggle-toggle-label"
-            onClick={() => setSeeWhereUsersStruggled((v) => !v)}
-            className={caseStudyChamferToggleTrackClassName(seeWhereUsersStruggled)}
-          >
-            <span
-              className={caseStudyChamferToggleKnobClassName(seeWhereUsersStruggled)}
-              aria-hidden
-            />
-          </button>
+          <CaseStudySwitch checked={seeWhereUsersStruggled} type="button" aria-labelledby="struggle-toggle-label" onClick={() => setSeeWhereUsersStruggled((v) => !v)}/>
           <span
             id="struggle-toggle-label"
             className={caseStudyChamferToggleLabelClassName}
@@ -677,15 +604,14 @@ export default function CarbonNeutralClubShowcasePage() {
             alt=""
             aria-hidden
             decoding="async"
-            loading="eager"
+            loading="lazy"
             className={chamferToggleStackSpacerClass}
           />
           <img
             src={carbonProblemProductSurface}
             alt="Carbon Neutral Club — problem and product surface context"
             decoding="async"
-            loading="eager"
-            fetchPriority="high"
+            loading="lazy"
             className={`${chamferToggleStackLayerClass} z-0 ${
               seeWhereUsersStruggled ? 'opacity-0' : 'opacity-100'
             }`}
@@ -694,7 +620,7 @@ export default function CarbonNeutralClubShowcasePage() {
             src={carbonProblemProductSurfaceStruggles}
             alt="Carbon Neutral Club — where users struggled (annotated)"
             decoding="async"
-            loading="eager"
+            loading="lazy"
             className={`${chamferToggleStackLayerClass} z-10 ${
               seeWhereUsersStruggled ? 'opacity-100' : 'opacity-0'
             }`}
@@ -854,7 +780,7 @@ export default function CarbonNeutralClubShowcasePage() {
                 className="chamfer-tradeoff-outline w-full"
                 innerClassName="flex gap-4 bg-transparent p-5 md:gap-5 md:p-6"
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-[#414141] text-sm font-normal tabular-nums text-fg md:size-10 md:text-base">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-cell-border text-sm font-normal tabular-nums text-fg md:size-10 md:text-base">
                   {stage.step}
                 </span>
                 <div className="min-w-0">
@@ -971,19 +897,7 @@ export default function CarbonNeutralClubShowcasePage() {
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
           <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={showCalculatorWhyWorks}
-              aria-labelledby="calculator-why-toggle-label"
-              onClick={() => setShowCalculatorWhyWorks((v) => !v)}
-              className={caseStudyChamferToggleTrackClassName(showCalculatorWhyWorks)}
-            >
-              <span
-                className={caseStudyChamferToggleKnobClassName(showCalculatorWhyWorks)}
-                aria-hidden
-              />
-            </button>
+            <CaseStudySwitch checked={showCalculatorWhyWorks} type="button" aria-labelledby="calculator-why-toggle-label" onClick={() => setShowCalculatorWhyWorks((v) => !v)}/>
             <span
               id="calculator-why-toggle-label"
               className={caseStudyChamferToggleLabelClassName}
@@ -999,15 +913,14 @@ export default function CarbonNeutralClubShowcasePage() {
               alt=""
               aria-hidden
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={chamferToggleStackSpacerClass}
             />
             <img
               src={carbonCalculatorMockup}
               alt="Carbon Neutral Club calculator landing: estimate footprint hero, stepper, and laptop mockup"
               decoding="async"
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showCalculatorWhyWorks ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1016,7 +929,7 @@ export default function CarbonNeutralClubShowcasePage() {
               src={carbonCalculatorWhyMockup}
               alt="Carbon Neutral Club calculator — rationale for progressive steps and flow structure"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showCalculatorWhyWorks ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1029,19 +942,7 @@ export default function CarbonNeutralClubShowcasePage() {
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
           <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={showCalculatorC13Alt}
-              aria-labelledby="calculator-c13-toggle-label"
-              onClick={() => setShowCalculatorC13Alt((v) => !v)}
-              className={caseStudyChamferToggleTrackClassName(showCalculatorC13Alt)}
-            >
-              <span
-                className={caseStudyChamferToggleKnobClassName(showCalculatorC13Alt)}
-                aria-hidden
-              />
-            </button>
+            <CaseStudySwitch checked={showCalculatorC13Alt} type="button" aria-labelledby="calculator-c13-toggle-label" onClick={() => setShowCalculatorC13Alt((v) => !v)}/>
             <span
               id="calculator-c13-toggle-label"
               className={caseStudyChamferToggleLabelClassName}
@@ -1057,15 +958,14 @@ export default function CarbonNeutralClubShowcasePage() {
               alt=""
               aria-hidden
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={chamferToggleStackSpacerClass}
             />
             <img
               src={carbonCalculatorC13}
               alt="Carbon Neutral Club calculator — extended flow or interface detail"
               decoding="async"
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showCalculatorC13Alt ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1074,7 +974,7 @@ export default function CarbonNeutralClubShowcasePage() {
               src={carbonCalculatorC13Alt}
               alt="Carbon Neutral Club calculator — alternate or annotated view for the extended flow"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showCalculatorC13Alt ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1113,19 +1013,7 @@ export default function CarbonNeutralClubShowcasePage() {
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
           <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={showResultMeaningfulAlt}
-              aria-labelledby="result-meaningful-toggle-label"
-              onClick={() => setShowResultMeaningfulAlt((v) => !v)}
-              className={caseStudyChamferToggleTrackClassName(showResultMeaningfulAlt)}
-            >
-              <span
-                className={caseStudyChamferToggleKnobClassName(showResultMeaningfulAlt)}
-                aria-hidden
-              />
-            </button>
+            <CaseStudySwitch checked={showResultMeaningfulAlt} type="button" aria-labelledby="result-meaningful-toggle-label" onClick={() => setShowResultMeaningfulAlt((v) => !v)}/>
             <span
               id="result-meaningful-toggle-label"
               className={caseStudyChamferToggleLabelClassName}
@@ -1141,15 +1029,14 @@ export default function CarbonNeutralClubShowcasePage() {
               alt=""
               aria-hidden
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={chamferToggleStackSpacerClass}
             />
             <img
               src={carbonResultMeaningfulC14}
               alt="Carbon Neutral Club footprint result: comparison to national average, range bar, and tonnes per year"
               decoding="async"
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showResultMeaningfulAlt ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1158,7 +1045,7 @@ export default function CarbonNeutralClubShowcasePage() {
               src={carbonResultMeaningfulC14Alt}
               alt="Carbon Neutral Club footprint result — annotated view explaining comparison and framing"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showResultMeaningfulAlt ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1197,19 +1084,7 @@ export default function CarbonNeutralClubShowcasePage() {
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
           <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={showPricingPlanAlt}
-              aria-labelledby="pricing-plan-toggle-label"
-              onClick={() => setShowPricingPlanAlt((v) => !v)}
-              className={caseStudyChamferToggleTrackClassName(showPricingPlanAlt)}
-            >
-              <span
-                className={caseStudyChamferToggleKnobClassName(showPricingPlanAlt)}
-                aria-hidden
-              />
-            </button>
+            <CaseStudySwitch checked={showPricingPlanAlt} type="button" aria-labelledby="pricing-plan-toggle-label" onClick={() => setShowPricingPlanAlt((v) => !v)}/>
             <span
               id="pricing-plan-toggle-label"
               className={caseStudyChamferToggleLabelClassName}
@@ -1225,15 +1100,14 @@ export default function CarbonNeutralClubShowcasePage() {
               alt=""
               aria-hidden
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={chamferToggleStackSpacerClass}
             />
             <img
               src={carbonPricingPlanC15}
               alt="Carbon Neutral Club plan selection: footprint summary, tier cards, and monthly or yearly pricing"
               decoding="async"
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showPricingPlanAlt ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1242,7 +1116,7 @@ export default function CarbonNeutralClubShowcasePage() {
               src={carbonPricingPlanC15Alt}
               alt="Carbon Neutral Club plan selection — annotated view explaining tiers and pricing rationale"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showPricingPlanAlt ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1265,19 +1139,7 @@ export default function CarbonNeutralClubShowcasePage() {
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
           <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={showPricingTrustProjectsAlt}
-              aria-labelledby="pricing-trust-offset-toggle-label"
-              onClick={() => setShowPricingTrustProjectsAlt((v) => !v)}
-              className={caseStudyChamferToggleTrackClassName(showPricingTrustProjectsAlt)}
-            >
-              <span
-                className={caseStudyChamferToggleKnobClassName(showPricingTrustProjectsAlt)}
-                aria-hidden
-              />
-            </button>
+            <CaseStudySwitch checked={showPricingTrustProjectsAlt} type="button" aria-labelledby="pricing-trust-offset-toggle-label" onClick={() => setShowPricingTrustProjectsAlt((v) => !v)}/>
             <span
               id="pricing-trust-offset-toggle-label"
               className={caseStudyChamferToggleLabelClassName}
@@ -1293,15 +1155,14 @@ export default function CarbonNeutralClubShowcasePage() {
               alt=""
               aria-hidden
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={chamferToggleStackSpacerClass}
             />
             <img
               src={carbonTrustOffsetProjectsC16}
               alt="Carbon Neutral Club — Want to know more: offset projects tab, project cards, and trust framing"
               decoding="async"
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showPricingTrustProjectsAlt ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1310,7 +1171,7 @@ export default function CarbonNeutralClubShowcasePage() {
               src={carbonTrustOffsetProjectsC16Alt}
               alt="Carbon Neutral Club offset projects — annotated view for trust and transparency"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showPricingTrustProjectsAlt ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1323,19 +1184,7 @@ export default function CarbonNeutralClubShowcasePage() {
           innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
         >
           <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={showPricingCostBreakdownAlt}
-              aria-labelledby="pricing-cost-breakdown-toggle-label"
-              onClick={() => setShowPricingCostBreakdownAlt((v) => !v)}
-              className={caseStudyChamferToggleTrackClassName(showPricingCostBreakdownAlt)}
-            >
-              <span
-                className={caseStudyChamferToggleKnobClassName(showPricingCostBreakdownAlt)}
-                aria-hidden
-              />
-            </button>
+            <CaseStudySwitch checked={showPricingCostBreakdownAlt} type="button" aria-labelledby="pricing-cost-breakdown-toggle-label" onClick={() => setShowPricingCostBreakdownAlt((v) => !v)}/>
             <span
               id="pricing-cost-breakdown-toggle-label"
               className={caseStudyChamferToggleLabelClassName}
@@ -1351,15 +1200,14 @@ export default function CarbonNeutralClubShowcasePage() {
               alt=""
               aria-hidden
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={chamferToggleStackSpacerClass}
             />
             <img
               src={carbonCostBreakdownC17}
               alt="Carbon Neutral Club cost breakdown: plan tiers, segmented fees, and monthly total"
               decoding="async"
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-0 ${
                 showPricingCostBreakdownAlt ? 'opacity-0' : 'opacity-100'
               }`}
@@ -1368,7 +1216,7 @@ export default function CarbonNeutralClubShowcasePage() {
               src={carbonCostBreakdownC17Alt}
               alt="Carbon Neutral Club cost breakdown — annotated view explaining fees and transparency"
               decoding="async"
-              loading="eager"
+              loading="lazy"
               className={`${chamferToggleStackLayerClass} z-10 ${
                 showPricingCostBreakdownAlt ? 'opacity-100' : 'opacity-0'
               }`}
@@ -1410,8 +1258,7 @@ export default function CarbonNeutralClubShowcasePage() {
             src={carbonCheckoutTrustC18}
             alt="Carbon Neutral Club checkout: order summary with line items, express pay, card form, and pay now"
             decoding="async"
-            loading="eager"
-            fetchPriority="high"
+            loading="lazy"
             className="block h-auto w-full max-w-full align-middle"
           />
         </ChamferFrame>
@@ -1419,9 +1266,9 @@ export default function CarbonNeutralClubShowcasePage() {
         <ChamferFrame
           fitContentHeight
           className="chamfer-media-border mt-[48px] w-full"
-          innerClassName="flex min-h-0 min-w-0 flex-col items-center justify-center overflow-hidden bg-white px-6 py-4 md:px-10 md:py-5"
+          innerClassName="flex min-h-0 min-w-0 flex-col items-center justify-center overflow-hidden bg-media-paper px-6 py-4 md:px-10 md:py-5"
         >
-          <p className="m-0 max-w-[56rem] text-center font-mono text-[24px] font-normal leading-snug tracking-tight text-black">
+          <p className="m-0 max-w-[56rem] text-center font-mono text-[24px] font-normal leading-snug tracking-tight text-on-media-paper">
             End of 7 week project, 3 months later
           </p>
         </ChamferFrame>
@@ -1576,7 +1423,7 @@ export default function CarbonNeutralClubShowcasePage() {
               aria-labelledby={
                 whatChangedPlanIsB2C ? 'what-changed-tab-b2c' : 'what-changed-tab-b2b'
               }
-              className="relative isolate w-full bg-[#f9f6f0]"
+              className="relative isolate w-full bg-media-cream"
             >
               <img
                 src={carbonPlanPageB2BC20}
@@ -1648,7 +1495,11 @@ export default function CarbonNeutralClubShowcasePage() {
             className="chamfer-media-border mt-6 w-full min-w-0 md:mt-8"
             innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0"
           >
-            <CarbonPrototypeAutoplayVideo src={carbonPrototypeVideo} />
+            <CaseStudyLazyVideo
+          src={carbonPrototypeVideo}
+          poster="/case-study-media/posters/carbon-prototype.webp"
+          ariaLabel="Screen recording of the Carbon Neutral Club product prototype"
+        />
           </ChamferFrame>
         </div>
       </section>
@@ -1747,11 +1598,9 @@ export default function CarbonNeutralClubShowcasePage() {
             className="chamfer-tradeoff-outline mt-8 w-fit max-w-full shrink-0"
             innerClassName="flex min-h-0 min-w-0 items-center justify-start overflow-hidden bg-bg p-0"
           >
-            <img
+            <CaseStudyLazyVideo
               src={mindExplosionGif}
-              alt=""
-              decoding="async"
-              loading="lazy"
+              ariaHidden
               className="block h-auto w-24 max-w-[6.5rem] object-contain object-left md:w-28 md:max-w-[7.5rem]"
             />
           </ChamferFrame>

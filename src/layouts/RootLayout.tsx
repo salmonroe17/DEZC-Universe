@@ -10,12 +10,15 @@ export function RootLayout() {
   const isHome = location.pathname === '/'
   const isLeaderboard = location.pathname === '/leaderboard'
   const isPrivacy = location.pathname === '/privacy'
+  const isDesignSystem = import.meta.env.DEV && location.pathname === '/design-system'
   const isSideQuestViewer = /^\/sidequest(\/|$)/.test(location.pathname)
 
   /** React Router does not reset scroll; case-study (and other) navigations would keep the old offset. */
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [location.pathname])
+
+  if (isDesignSystem) return <Outlet />
 
   return (
     <>
@@ -33,7 +36,7 @@ export function RootLayout() {
           <Outlet />
         </div>
         {/* Progressive bottom-edge blur: off on home so the grid isn’t capped by a frosted “peak”. */}
-        {isHome || isLeaderboard || isPrivacy || isSideQuestViewer ? null : (
+        {isHome || isLeaderboard || isPrivacy || isSideQuestViewer || isDesignSystem ? null : (
           <div className="viewport-bottom-blur-stack" aria-hidden>
             <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--1" />
             <div className="viewport-bottom-blur-layer viewport-bottom-blur-layer--2" />

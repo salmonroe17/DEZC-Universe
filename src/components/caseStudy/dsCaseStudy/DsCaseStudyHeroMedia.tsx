@@ -21,11 +21,12 @@ const COLLAGE_ALT =
  */
 export function DsCaseStudyChamferCollage() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds1Hero}
         alt={COLLAGE_ALT}
         decoding="async"
+        loading="eager"
         fetchPriority="high"
         className="block h-auto w-full max-w-full align-middle"
       />
@@ -41,7 +42,7 @@ const DS2_ALT =
  */
 export function DsCaseStudyChamferDs2() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds2Hero}
         alt={DS2_ALT}
@@ -61,7 +62,7 @@ const DS3_ALT =
  */
 export function DsCaseStudyChamferDs3() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds3Hero}
         alt={DS3_ALT}
@@ -81,7 +82,7 @@ const DS4_ALT =
  */
 export function DsCaseStudyChamferDs4() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds4Hero}
         alt={DS4_ALT}
@@ -101,7 +102,7 @@ const DS5_ALT =
  */
 export function DsCaseStudyChamferDs5() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds5Hero}
         alt={DS5_ALT}
@@ -121,7 +122,7 @@ const DS6_ALT =
  */
 export function DsCaseStudyChamferDs6() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds6Hero}
         alt={DS6_ALT}
@@ -141,7 +142,7 @@ const DS7_ALT =
  */
 export function DsCaseStudyChamferDs7() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds7Hero}
         alt={DS7_ALT}
@@ -161,7 +162,7 @@ const DS8_ALT =
  */
 export function DsCaseStudyChamferDs8() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds8Hero}
         alt={DS8_ALT}
@@ -181,7 +182,7 @@ const DS9_ALT =
  */
 export function DsCaseStudyChamferDs9() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds9Hero}
         alt={DS9_ALT}
@@ -201,7 +202,7 @@ const DS10_ALT =
  */
 export function DsCaseStudyChamferDs10() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds10Hero}
         alt={DS10_ALT}
@@ -221,7 +222,7 @@ const DS11_ALT =
  */
 export function DsCaseStudyChamferDs11() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds11Hero}
         alt={DS11_ALT}
@@ -241,7 +242,7 @@ const DS12_ALT =
  */
 export function DsCaseStudyChamferDs12() {
   return (
-    <div className="relative w-full min-w-0 overflow-hidden bg-[#0a0a0a]">
+    <div className="relative w-full min-w-0 overflow-hidden bg-media-dark">
       <img
         src={ds12Hero}
         alt={DS12_ALT}

@@ -1,14 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
-
-const COLOR_CYCLE = [
-  '#ff2d95',
-  '#00ffc8',
-  '#ffd000',
-  '#6eb0ff',
-  '#e879f9',
-  '#3cdbcb',
-  '#ff2d95',
-] as const
+import { useContext } from 'react'
+import { SiteThemeContext } from '../contexts/siteThemeContext'
+import { portfolioTheme, themeGlyphColors } from '../design-system/theme'
 
 const DANCE_TIMES = [0, 0.12, 0.28, 0.44, 0.58, 0.72, 0.86, 1] as const
 
@@ -18,6 +11,8 @@ const glyphClass =
 /** Rainbow animated “404” (glitch chroma CSS in `index.css`) — reused on /404 and ErrorBoundary. */
 export function NotFound404Glyph() {
   const reduceMotion = useReducedMotion()
+  // ErrorBoundary can render this outside the provider; use the configured palette there.
+  const theme = useContext(SiteThemeContext)?.theme ?? portfolioTheme.activeTheme
 
   if (reduceMotion) {
     return <span className={`${glyphClass} text-fg-subtle`}>404</span>
@@ -27,7 +22,7 @@ export function NotFound404Glyph() {
     <motion.span
       className={`not-found-404-glitch inline-block ${glyphClass}`}
       data-text="404"
-      animate={{ color: [...COLOR_CYCLE] }}
+      animate={{ color: themeGlyphColors[theme] }}
       transition={{ duration: 4.5, repeat: Infinity, ease: 'linear' }}
     >
       <motion.span

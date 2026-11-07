@@ -1,3 +1,4 @@
+import { PresentationIconButton, presentationIconButtonClass } from '../system/PresentationIconButton'
 import type { Dispatch, PointerEvent as ReactPointerEvent, ReactNode, SetStateAction } from 'react'
 import {
   useCallback,
@@ -20,6 +21,9 @@ import {
   TextAa,
   X,
 } from '@phosphor-icons/react'
+import { useSiteTheme } from '../../contexts/useSiteTheme'
+import { hasDesignSystemAccess } from '../../design-system/editorAccess'
+import { themePalettes } from '../../design-system/theme'
 import { AmbientVerticalLines } from '../AmbientVerticalLines'
 import {
   ThemeSwatchSelectedIndicator,
@@ -71,11 +75,11 @@ const PRESENTATION_VIDEO_SCRUB_FACTOR = 2
 export type PresentationTheme = 'gray' | 'turquoise' | 'pink' | 'blue' | 'white'
 
 const PRESENTATION_CAPTURE_BG: Record<PresentationTheme, string> = {
-  gray: '#101010',
-  turquoise: '#0b1312',
-  pink: '#100a12',
-  blue: '#0a0e16',
-  white: '#ffffff',
+  gray: themePalettes.grey.bg,
+  turquoise: themePalettes.cyan.bg,
+  pink: themePalettes.magenta.bg,
+  blue: themePalettes.blue.bg,
+  white: themePalettes.light.bg,
 }
 
 function BarDivider() {
@@ -98,8 +102,7 @@ function idleFrame(): Promise<void> {
   })
 }
 
-const ctrlBtnClass =
-  'flex size-6 shrink-0 items-center justify-center rounded border border-cell-border bg-elevated/90 text-sm font-medium text-fg shadow-sm transition-[background-color,opacity,transform] duration-200 ease-out hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 motion-reduce:transition-none disabled:pointer-events-none disabled:opacity-35'
+const ctrlBtnClass = presentationIconButtonClass
 
 const thumbStripMiniLabelClass =
   'flex h-full w-full items-center justify-center px-1 text-center text-[6px] font-medium leading-tight text-fg line-clamp-2'
@@ -400,6 +403,8 @@ type CaseStudyPresentationOverlayProps = {
    * Default true so text sections are included; pass false for an image-first deck only.
    */
   initialTextSlidesVisible?: boolean
+  /** Documentation may open with controls expanded; production retains the collapsed default. */
+  initialControlsVisible?: boolean
 }
 
 function isSlideVisibleInDeck(slide: CaseStudyPresentationSlide, textSlidesVisible: boolean): boolean {
@@ -472,6 +477,7 @@ export function CaseStudyPresentationOverlay({
   onClose,
   onActiveIndexChange,
   initialTextSlidesVisible = true,
+  initialControlsVisible = false,
 }: CaseStudyPresentationOverlayProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const controlsToggleRef = useRef<HTMLButtonElement>(null)
@@ -486,7 +492,9 @@ export function CaseStudyPresentationOverlay({
   const [textSlidesVisible, setTextSlidesVisible] = useState(true)
   const [textScale, setTextScale] = useState(1)
   const [imageScale, setImageScale] = useState(1)
-  const [theme, setTheme] = useState<PresentationTheme>('gray')
+  const { theme: siteTheme, setTheme: setSiteTheme } = useSiteTheme()
+  const theme: PresentationTheme = ({ grey: 'gray', cyan: 'turquoise', magenta: 'pink', blue: 'blue', light: 'white' } as const)[siteTheme]
+  const setTheme = (value: PresentationTheme) => setSiteTheme(({ gray: 'grey', turquoise: 'cyan', pink: 'magenta', blue: 'blue', white: 'light' } as const)[value])
   const [imagePan, setImagePan] = useState<PanPoint>({ x: 0, y: 0 })
   const [presentationMdUp, setPresentationMdUp] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : true,
@@ -514,14 +522,13 @@ export function CaseStudyPresentationOverlay({
     if (!wasOpenRef.current) {
       wasOpenRef.current = true
       queueMicrotask(() => {
-        setControlsVisible(false)
+        setControlsVisible(initialControlsVisible)
         setTextSlidesVisible(initialTextSlidesVisible)
         setTextScale(1)
         setImageScale(1)
-        setTheme('gray')
       })
     }
-  }, [open, initialTextSlidesVisible])
+  }, [open, initialTextSlidesVisible, initialControlsVisible])
 
   const visibleEntries = useMemo(
     () =>
@@ -1064,7 +1071,7 @@ export function CaseStudyPresentationOverlay({
   ].join(' ')
 
   const renderControlsToggle = (className?: string) => (
-    <button
+    <PresentationIconButton
       ref={controlsToggleRef}
       type="button"
       className={className ?? ctrlBtnClass}
@@ -1073,7 +1080,7 @@ export function CaseStudyPresentationOverlay({
       onClick={() => setControlsVisible((v) => !v)}
     >
       <SlidersHorizontal {...iconInCtrl} aria-hidden />
-    </button>
+    </PresentationIconButton>
   )
 
   return createPortal(
@@ -1102,14 +1109,14 @@ export function CaseStudyPresentationOverlay({
       ) : null}
 
       <div className="pointer-events-auto fixed right-2 top-2 z-[100006] md:right-3 md:top-3">
-        <button
+        <PresentationIconButton
           type="button"
           aria-label="Close presentation"
           onClick={onClose}
           className={ctrlBtnClass}
         >
           <X {...iconInCtrl} aria-hidden />
-        </button>
+        </PresentationIconButton>
       </div>
 
       {/* Prev/next: always reachable at bottom; hidden while thumbnail strip is open (strip has its own). */}
@@ -1120,7 +1127,7 @@ export function CaseStudyPresentationOverlay({
           aria-label="Slide navigation"
         >
           <div className="relative flex w-full items-end justify-between gap-4">
-            <button
+            <PresentationIconButton
               type="button"
               aria-label="Previous slide"
               disabled={activeVisibleIndex <= 0}
@@ -1128,7 +1135,7 @@ export function CaseStudyPresentationOverlay({
               className={`pointer-events-auto relative z-[1] ${ctrlBtnClass}`}
             >
               <CaretLeft {...iconInCtrl} aria-hidden />
-            </button>
+            </PresentationIconButton>
             <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 flex -translate-x-1/2 -translate-y-1/2 items-center">
               <div
                 className="pointer-events-auto flex items-center gap-1.5"
@@ -1137,7 +1144,7 @@ export function CaseStudyPresentationOverlay({
               >
                 {compactZoomUsesText ? (
                   <>
-                    <button
+                    <PresentationIconButton
                       type="button"
                       className={ctrlBtnClass}
                       aria-label="Decrease text size"
@@ -1150,8 +1157,8 @@ export function CaseStudyPresentationOverlay({
                       }}
                     >
                       <Minus {...iconInCtrl} aria-hidden />
-                    </button>
-                    <button
+                    </PresentationIconButton>
+                    <PresentationIconButton
                       type="button"
                       className={ctrlBtnClass}
                       aria-label="Increase text size"
@@ -1164,11 +1171,11 @@ export function CaseStudyPresentationOverlay({
                       }}
                     >
                       <Plus {...iconInCtrl} aria-hidden />
-                    </button>
+                    </PresentationIconButton>
                   </>
                 ) : (
                   <>
-                    <button
+                    <PresentationIconButton
                       type="button"
                       className={ctrlBtnClass}
                       aria-label="Decrease image scale"
@@ -1181,8 +1188,8 @@ export function CaseStudyPresentationOverlay({
                       }}
                     >
                       <Minus {...iconInCtrl} aria-hidden />
-                    </button>
-                    <button
+                    </PresentationIconButton>
+                    <PresentationIconButton
                       type="button"
                       className={ctrlBtnClass}
                       aria-label="Increase image scale"
@@ -1195,12 +1202,12 @@ export function CaseStudyPresentationOverlay({
                       }}
                     >
                       <Plus {...iconInCtrl} aria-hidden />
-                    </button>
+                    </PresentationIconButton>
                   </>
                 )}
               </div>
             </div>
-            <button
+            <PresentationIconButton
               type="button"
               aria-label="Next slide"
               disabled={activeVisibleIndex >= visibleEntries.length - 1}
@@ -1208,7 +1215,7 @@ export function CaseStudyPresentationOverlay({
               className={`pointer-events-auto relative z-[1] ${ctrlBtnClass}`}
             >
               <CaretRight {...iconInCtrl} aria-hidden />
-            </button>
+            </PresentationIconButton>
           </div>
         </div>
       ) : null}
@@ -1242,20 +1249,20 @@ export function CaseStudyPresentationOverlay({
                 onClick={() => setTextSlidesVisible((v) => !v)}
                 className={`relative mx-0.5 h-5 w-9 shrink-0 rounded-full border transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 motion-reduce:transition-none ${
                   textSlidesVisible
-                    ? 'border-black bg-white shadow-sm'
-                    : 'border-white bg-black shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-hud)_22%,transparent)]'
+                    ? 'border-fg bg-fg shadow-sm'
+                    : 'border-fg bg-bg shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--color-hud)_22%,transparent)]'
                 }`}
               >
                 <span
                   className={`absolute left-[3px] top-1/2 size-3 rounded-full shadow-sm transition-transform duration-200 ease-out motion-reduce:transition-none ${
-                    textSlidesVisible ? 'bg-black' : 'bg-white'
+                    textSlidesVisible ? 'bg-bg' : 'bg-fg'
                   }`}
                   style={{
                     transform: textSlidesVisible ? 'translate(1.125rem, -50%)' : 'translate(0, -50%)',
                   }}
                 />
               </button>
-              <button
+              <PresentationIconButton
                 type="button"
                 className={`${ctrlBtnClass} hidden md:flex`}
                 aria-label="Increase text size"
@@ -1268,8 +1275,8 @@ export function CaseStudyPresentationOverlay({
                 }}
               >
                 <Plus {...iconInCtrl} aria-hidden />
-              </button>
-              <button
+              </PresentationIconButton>
+              <PresentationIconButton
                 type="button"
                 className={`${ctrlBtnClass} hidden md:flex`}
                 aria-label="Decrease text size"
@@ -1282,22 +1289,22 @@ export function CaseStudyPresentationOverlay({
                 }}
               >
                 <Minus {...iconInCtrl} aria-hidden />
-              </button>
-              <button
+              </PresentationIconButton>
+              <PresentationIconButton
                 type="button"
                 className={`${ctrlBtnClass} hidden md:flex`}
                 aria-label="Reset text size"
                 onClick={() => setTextScale(1)}
               >
                 <ArrowClockwise {...iconInCtrl} aria-hidden />
-              </button>
+              </PresentationIconButton>
 
               <BarDivider />
 
               <span className="flex shrink-0 pl-0.5 text-fg-muted" aria-hidden>
                 <ImageIcon {...iconInCtrl} />
               </span>
-              <button
+              <PresentationIconButton
                 type="button"
                 className={ctrlBtnClass}
                 aria-label="Increase image scale"
@@ -1310,8 +1317,8 @@ export function CaseStudyPresentationOverlay({
                 }}
               >
                 <Plus {...iconInCtrl} aria-hidden />
-              </button>
-              <button
+              </PresentationIconButton>
+              <PresentationIconButton
                 type="button"
                 className={ctrlBtnClass}
                 aria-label="Decrease image scale"
@@ -1324,14 +1331,14 @@ export function CaseStudyPresentationOverlay({
                 }}
               >
                 <Minus {...iconInCtrl} aria-hidden />
-              </button>
-              <button type="button" className={ctrlBtnClass} aria-label="Reset image scale" onClick={() => setImageScale(1)}>
+              </PresentationIconButton>
+              <PresentationIconButton type="button" className={ctrlBtnClass} aria-label="Reset image scale" onClick={() => setImageScale(1)}>
                 <ArrowClockwise {...iconInCtrl} aria-hidden />
-              </button>
+              </PresentationIconButton>
 
               <BarDivider />
 
-              <div className="flex shrink-0 items-center gap-1.5 pl-0.5" role="group" aria-label="Presentation theme">
+              <div style={{ visibility: hasDesignSystemAccess() ? undefined : 'hidden' }} inert={!hasDesignSystemAccess()} aria-hidden={!hasDesignSystemAccess()} className="flex shrink-0 items-center gap-1.5 pl-0.5" role="group" aria-label="Presentation theme">
                 {(['gray', 'turquoise', 'pink', 'blue', 'white'] as const).map((t) => {
                   const sw = PRESENTATION_SWATCH[t]
                   return (
@@ -1470,7 +1477,7 @@ export function CaseStudyPresentationOverlay({
               style={{ height: THUMB_STRIP_H }}
             >
               <div className="flex h-full min-h-0 w-full items-stretch gap-2 px-2 py-2 md:gap-3 md:px-3">
-                <button
+                <PresentationIconButton
                   type="button"
                   aria-label="Previous slide"
                   disabled={activeVisibleIndex <= 0}
@@ -1478,7 +1485,7 @@ export function CaseStudyPresentationOverlay({
                   className={`${ctrlBtnClass} my-auto self-center`}
                 >
                   <CaretLeft {...iconInCtrl} aria-hidden />
-                </button>
+                </PresentationIconButton>
                 <div className="flex min-h-0 min-w-0 flex-1 items-center gap-2 overflow-x-auto overflow-y-hidden md:gap-2.5">
                   {visibleEntries.map(({ slide, fullIndex }, vi) => {
                     const active = fullIndex === safeFullIndex
@@ -1486,10 +1493,11 @@ export function CaseStudyPresentationOverlay({
                     const captured = capturedThumbs[fullIndex]
                     const isTextSlide = slide.slideKind === 'text'
                     const label = slide.thumbnailLabel?.trim()
-                    const showVideoThumb = slide.thumbnailIsVideo === true
+                    const thumbSrc = staticThumb ?? captured
+                    const thumbIsVideoFile = /\.mp4(?:[?#]|$)/i.test(thumbSrc ?? '')
+                    const showVideoThumb = slide.thumbnailIsVideo === true || thumbIsVideoFile
                     const showStripLabel =
                       !!label && (isTextSlide || slide.thumbnailStripUseLabel === true)
-                    const thumbSrc = staticThumb ?? captured
                     return (
                       <button
                         key={fullIndex}
@@ -1525,7 +1533,7 @@ export function CaseStudyPresentationOverlay({
                     )
                   })}
                 </div>
-                <button
+                <PresentationIconButton
                   type="button"
                   aria-label="Next slide"
                   disabled={activeVisibleIndex >= visibleEntries.length - 1}
@@ -1533,7 +1541,7 @@ export function CaseStudyPresentationOverlay({
                   className={`${ctrlBtnClass} my-auto self-center`}
                 >
                   <CaretRight {...iconInCtrl} aria-hidden />
-                </button>
+                </PresentationIconButton>
               </div>
             </div>
           </div>

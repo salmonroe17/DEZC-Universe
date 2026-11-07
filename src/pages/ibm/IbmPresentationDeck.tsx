@@ -53,6 +53,7 @@ import {
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyShowcaseScaffold'
 import { IbmToggleAspectSpacer } from '../../components/caseStudy/IbmChamferMediaPlaceholder'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
+import { CaseStudyLazyVideo } from '../../components/caseStudy/CaseStudyLazyVideo'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 import {
@@ -211,7 +212,7 @@ const IBM_PRESENTATION_SLIDES_BASE = [
     content: (
       <ChamferFrame
         className={`chamfer-media-border ${deckMaxW}`}
-        innerClassName="flex min-w-0 justify-center overflow-hidden bg-[#d9d5cf]/50 p-0 dark:bg-surface/25"
+        innerClassName="flex min-w-0 justify-center overflow-hidden bg-media-warm/50 p-0 dark:bg-surface/25"
       >
         <img
           src={ibmHeroAp1}
@@ -240,12 +241,10 @@ const IBM_PRESENTATION_SLIDES_BASE = [
             innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <img
+            <CaseStudyLazyVideo
               src={ibmHeroShipGif}
-              alt=""
+              ariaHidden
               className="pointer-events-none block h-full w-full object-cover object-center select-none"
-              loading="lazy"
-              decoding="async"
             />
           </RotatingGradientCircle>
         </div>
@@ -505,7 +504,7 @@ const IBM_PRESENTATION_SLIDES_BASE = [
               className="chamfer-tradeoff-outline w-full"
               innerClassName="flex gap-4 bg-transparent p-4 text-left text-fg md:gap-5 md:p-5"
             >
-              <span className="flex size-9 shrink-0 items-center justify-center self-start rounded-full border-[0.5px] border-solid border-[#414141] text-[12px] font-normal leading-[1.55] tabular-nums md:size-10">
+              <span className="flex size-9 shrink-0 items-center justify-center self-start rounded-full border-[0.5px] border-solid border-cell-border text-[12px] font-normal leading-[1.55] tabular-nums md:size-10">
                 {i + 1}
               </span>
               <p className="m-0 min-w-0 text-[16px] font-normal leading-[1.55] [text-wrap:pretty] md:leading-relaxed">
@@ -583,7 +582,7 @@ const IBM_PRESENTATION_SLIDES_BASE = [
     content: (
       <ChamferFrame
         className={`chamfer-media-border ${deckMaxW}`}
-        innerClassName="flex min-w-0 justify-center overflow-hidden bg-[#d9d5cf]/50 p-0 dark:bg-surface/25"
+        innerClassName="flex min-w-0 justify-center overflow-hidden bg-media-warm/50 p-0 dark:bg-surface/25"
       >
         <img
           src={ibmActionPlansWorkflowAp7}
@@ -781,7 +780,7 @@ const IBM_PRESENTATION_SLIDES_BASE = [
             src={ibmTrackProgressAp13}
             alt="IBM Envizi — detailed view of program metrics, charts, emissions comparison, and actions table"
             decoding="async"
-            loading="eager"
+            loading="lazy"
             className={chamferToggleStackLayerClass}
           />
         </div>
@@ -1123,11 +1122,9 @@ const IBM_PRESENTATION_SLIDES_BASE = [
           className="chamfer-tradeoff-outline mt-6 w-fit max-w-full shrink-0 md:mt-8"
           innerClassName="flex min-h-0 min-w-0 items-center justify-start overflow-hidden bg-bg p-0"
         >
-          <img
+          <CaseStudyLazyVideo
             src={ibmRetrospectiveConfusedGif}
-            alt="Confused reaction"
-            decoding="async"
-            loading="lazy"
+            ariaLabel="Confused reaction"
             className={ibmRetrospectiveGifImgClass}
           />
         </ChamferFrame>

@@ -5,6 +5,7 @@ import {
   caseStudyScrollAnchorClass,
 } from '../../components/caseStudy/patterns'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
+import { CaseStudyLazyVideo } from '../../components/caseStudy/CaseStudyLazyVideo'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 import { DS_HERO_MANIFEST_LINES, dsCalculatorGif, dsPuzzleGif } from '../../components/caseStudy/dsCaseStudy/dsCaseStudyHeroAssets'
@@ -50,12 +51,10 @@ export function dsScrollOrderTextSlide(k: number): ReactNode {
             innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <img
+            <CaseStudyLazyVideo
               src={dsCalculatorGif}
-              alt=""
+              ariaHidden
               className="pointer-events-none block h-full w-full object-cover object-center select-none"
-              loading="lazy"
-              decoding="async"
             />
           </RotatingGradientCircle>
         </div>,
@@ -494,11 +493,9 @@ export function dsScrollOrderTextSlide(k: number): ReactNode {
               className="chamfer-tradeoff-outline mt-8 w-fit max-w-full shrink-0"
               innerClassName="flex min-h-0 min-w-0 items-center justify-start overflow-hidden bg-bg p-0"
             >
-              <img
+              <CaseStudyLazyVideo
                 src={dsPuzzleGif}
-                alt=""
-                decoding="async"
-                loading="lazy"
+                ariaHidden
                 className="block h-auto w-24 max-w-[6.5rem] object-contain object-left md:w-28 md:max-w-[7.5rem]"
               />
             </ChamferFrame>

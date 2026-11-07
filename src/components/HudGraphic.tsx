@@ -1,5 +1,6 @@
-import type { MutableRefObject, ReactNode } from 'react'
+import type { MutableRefObject } from 'react'
 import { useEffect, useRef } from 'react'
+import { HAIRLINE, HUD_STROKE, HudDialMarks, R_MAIN } from './HudDialMarks'
 
 /** When `active`, HUD reticle center follows `(x,y)` inside a `w×h` box (cell-local px). */
 export type HudCellTrack = {
@@ -15,15 +16,8 @@ export type HudCellTrack = {
  * Coordinates: viewBox centered at 0,0; SVG y-axis positive downward.
  */
 
-const HUD_STROKE = 'var(--color-hud)'
-const HAIRLINE = 0.65
 const THIN = 1
-const ARC_STROKE = 3.25
 
-const R_MAIN = 275
-const R_TICK_IN = 268
-const R_TICK_OUT = 284
-const TICK_COUNT = 120
 const WING_LEN = 420
 const VIEWBOX_WIDTH = 1440
 /** Base horizontal wing pulse past tip (SVG user units). */
@@ -44,42 +38,6 @@ const R_INNER_RING = 58
 const PLUS_ARM = 11
 const PLUS_STROKE = 1.1
 
-/** Degrees clockwise from 3 o'clock (SVG); gaps at 6 and 12 o'clock */
-const CIRCLE_GAP_HALF_DEG = 4
-
-function circlePoint(deg: number, r: number) {
-  const t = (deg * Math.PI) / 180
-  return { x: r * Math.cos(t), y: r * Math.sin(t) }
-}
-
-/** Thin main ring as two arcs — no continuous stroke through top/bottom poles */
-function MainCircleRing() {
-  const g0 = 90 - CIRCLE_GAP_HALF_DEG
-  const g1 = 90 + CIRCLE_GAP_HALF_DEG
-  const g2 = 270 - CIRCLE_GAP_HALF_DEG
-  const g3 = 270 + CIRCLE_GAP_HALF_DEG
-  const a = circlePoint(g1, R_MAIN)
-  const b = circlePoint(g2, R_MAIN)
-  const c = circlePoint(g3, R_MAIN)
-  const endRight = circlePoint(g0, R_MAIN)
-  return (
-    <>
-      <path
-        d={`M ${a.x} ${a.y} A ${R_MAIN} ${R_MAIN} 0 0 1 ${b.x} ${b.y}`}
-        stroke={HUD_STROKE}
-        strokeWidth={HAIRLINE}
-        strokeLinecap="round"
-      />
-      <path
-        d={`M ${c.x} ${c.y} A ${R_MAIN} ${R_MAIN} 0 0 1 ${endRight.x} ${endRight.y}`}
-        stroke={HUD_STROKE}
-        strokeWidth={HAIRLINE}
-        strokeLinecap="round"
-      />
-    </>
-  )
-}
-
 /** Full rotation period (seconds) — dial (1.2× faster than prior 80/1.2s, i.e. 1.44× vs 80s base) */
 const DIAL_ROTATION_DURATION_SEC = 80 / (1.2 * 1.2)
 
@@ -90,29 +48,6 @@ const MOUSE_MOVE_WINDOW_MS = 200
 const PARALLAX_MAX_PX = 16
 /** Higher = snappier follow */
 const PARALLAX_SMOOTH = 0.14
-
-function tickLines() {
-  const lines: ReactNode[] = []
-  for (let i = 0; i < TICK_COUNT; i++) {
-    const deg = (i / TICK_COUNT) * 360
-    const rad = (deg * Math.PI) / 180
-    const c = Math.cos(rad)
-    const s = Math.sin(rad)
-    lines.push(
-      <line
-        key={i}
-        x1={R_TICK_IN * c}
-        y1={R_TICK_IN * s}
-        x2={R_TICK_OUT * c}
-        y2={R_TICK_OUT * s}
-        stroke={HUD_STROKE}
-        strokeWidth={HAIRLINE}
-        strokeLinecap="round"
-      />,
-    )
-  }
-  return lines
-}
 
 /** Inner cluster: three equal vertical ticks between reticle and main ring */
 function InnerVerticalCluster({ side }: { side: -1 | 1 }) {
@@ -329,22 +264,7 @@ export function HudGraphic({ cellTrackRef }: HudGraphicProps) {
             dur={`${DIAL_ROTATION_DURATION_SEC}s`}
             repeatCount="indefinite"
           />
-          {tickLines()}
-          <MainCircleRing />
-          <path
-            d={`M 0 ${-R_MAIN} A ${R_MAIN} ${R_MAIN} 0 0 1 ${R_MAIN} 0`}
-            fill="none"
-            stroke={HUD_STROKE}
-            strokeWidth={ARC_STROKE}
-            strokeLinecap="round"
-          />
-          <path
-            d={`M 0 ${R_MAIN} A ${R_MAIN} ${R_MAIN} 0 0 1 ${-R_MAIN} 0`}
-            fill="none"
-            stroke={HUD_STROKE}
-            strokeWidth={ARC_STROKE}
-            strokeLinecap="round"
-          />
+          <HudDialMarks />
         </g>
 
         <g ref={horizontalAxisRef}>

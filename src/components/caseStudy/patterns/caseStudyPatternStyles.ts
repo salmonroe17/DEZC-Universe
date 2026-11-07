@@ -29,7 +29,7 @@ export const caseStudyChamferToggleLabelClassName =
  * dark themes keep a light knob via `--color-fg`.
  */
 const caseStudyChamferToggleTrackBaseClassName =
-  'group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow,opacity] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55'
+  'group relative h-7 w-12 shrink-0 cursor-pointer rounded-full border p-0 transition-[background-color,border-color,box-shadow,opacity] duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg/55 data-[preview-state=focus-visible]:outline data-[preview-state=focus-visible]:outline-2 data-[preview-state=focus-visible]:outline-offset-2 data-[preview-state=focus-visible]:outline-fg/55'
 
 const caseStudyChamferToggleTrackOnClassName =
   'border-fg bg-fg hover:opacity-90 hover:shadow-[0_1px_8px_color-mix(in_srgb,var(--color-hud)_14%,transparent)]'

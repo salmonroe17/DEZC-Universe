@@ -739,7 +739,7 @@ export function FlowingLine({
         aria-hidden
       >
         <svg
-          className="absolute inset-0 block h-full w-full overflow-visible text-white"
+          className="absolute inset-0 block h-full w-full overflow-visible text-fg"
           viewBox={`0 0 ${FLOW_TRACK_VIEW_W} ${FLOW_VB_H}`}
           preserveAspectRatio="none"
           overflow="visible"

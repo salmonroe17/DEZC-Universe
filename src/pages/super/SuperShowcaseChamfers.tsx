@@ -1,16 +1,16 @@
+import { CaseStudySwitch } from '../../components/system/CaseStudySwitch'
 /**
  * Shared chamfer toggles for the Super case study page and presentation deck.
  */
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import superSuperCashHomeSection from '../../../Super assets/s10.png'
 import superSuperCashDedicated from '../../../Super assets/s10.1.png'
 import superTrueHomeOld from '../../../Super assets/s9.png'
 import superTrueHomeNew from '../../../Super assets/s9.1.png'
 import {
-  caseStudyChamferToggleKnobClassName,
   caseStudyChamferToggleLabelClassName,
-  caseStudyChamferToggleTrackClassName,
 } from '../../components/caseStudy/patterns/caseStudyPatternStyles'
+import { usePreloadImages } from '../../hooks/usePreloadImages'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
 
 export const superChamferToggleStackSpacerClass =
@@ -50,6 +50,8 @@ export function SuperToggleImageChamfer({
 }) {
   const toggleId = useId()
   const [showWhatWorks, setShowWhatWorks] = useState(false)
+  const mediaRef = useRef<HTMLDivElement>(null)
+  usePreloadImages([baseSrc, toggledSrc], mediaRef)
 
   return (
     <ChamferFrame
@@ -59,25 +61,13 @@ export function SuperToggleImageChamfer({
     >
       <div className="flex w-full shrink-0 flex-col items-stretch border-b border-fg/[0.12] bg-surface">
         <div className="flex w-full shrink-0 items-center justify-center gap-3 py-3 md:gap-4 md:py-3.5">
-          <button
-            type="button"
-            role="switch"
-            aria-checked={showWhatWorks}
-            aria-labelledby={toggleId}
-            onClick={() => setShowWhatWorks((v) => !v)}
-            className={caseStudyChamferToggleTrackClassName(showWhatWorks)}
-          >
-            <span
-              className={caseStudyChamferToggleKnobClassName(showWhatWorks)}
-              aria-hidden
-            />
-          </button>
+          <CaseStudySwitch checked={showWhatWorks} type="button" aria-labelledby={toggleId} onClick={() => setShowWhatWorks((v) => !v)}/>
           <span id={toggleId} className={caseStudyChamferToggleLabelClassName}>
             {showWhatWorks ? toggleLabelOn : toggleLabelOff}
           </span>
         </div>
       </div>
-      <div className="relative isolate w-full bg-gradient-to-b from-[#d8d8d8]/95 via-[#dedede]/90 to-[#e6e6e6]">
+      <div ref={mediaRef} className="relative isolate w-full bg-gradient-to-b from-[#d8d8d8]/95 via-[#dedede]/90 to-[#e6e6e6]">
         <img
           src={baseSrc}
           alt=""
@@ -89,8 +79,7 @@ export function SuperToggleImageChamfer({
           src={baseSrc}
           alt={baseAlt}
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-0 ${
             showWhatWorks ? 'opacity-0' : 'opacity-100'
           }`}
@@ -99,7 +88,7 @@ export function SuperToggleImageChamfer({
           src={toggledSrc}
           alt={toggledAlt}
           decoding="async"
-          loading="eager"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-10 ${
             showWhatWorks ? 'opacity-100' : 'opacity-0'
           }`}
@@ -152,6 +141,8 @@ export function SuperProblemOldScreensChamfer({
 }) {
   const toggleId = useId()
   const [showStruggles, setShowStruggles] = useState(false)
+  const mediaRef = useRef<HTMLDivElement>(null)
+  usePreloadImages([baseSrc, strugglesSrc], mediaRef)
 
   return (
     <ChamferFrame
@@ -161,25 +152,13 @@ export function SuperProblemOldScreensChamfer({
     >
       <div className="flex w-full shrink-0 flex-col items-stretch border-b border-fg/[0.12] bg-surface">
         <div className="flex w-full shrink-0 items-center justify-center gap-3 py-3 md:gap-4 md:py-3.5">
-          <button
-            type="button"
-            role="switch"
-            aria-checked={showStruggles}
-            aria-labelledby={toggleId}
-            onClick={() => setShowStruggles((v) => !v)}
-            className={caseStudyChamferToggleTrackClassName(showStruggles)}
-          >
-            <span
-              className={caseStudyChamferToggleKnobClassName(showStruggles)}
-              aria-hidden
-            />
-          </button>
+          <CaseStudySwitch checked={showStruggles} type="button" aria-labelledby={toggleId} onClick={() => setShowStruggles((v) => !v)}/>
           <span id={toggleId} className={caseStudyChamferToggleLabelClassName}>
             {showStruggles ? SUPER_TOGGLE_LABEL_ON : SUPER_PROBLEM_TOGGLE_LABEL_OFF}
           </span>
         </div>
       </div>
-      <div className="relative isolate w-full bg-gradient-to-b from-[#eaeaea]/35 via-surface/25 to-bg">
+      <div ref={mediaRef} className="relative isolate w-full bg-gradient-to-b from-media-highlight/35 via-surface/25 to-bg">
         <img
           src={baseSrc}
           alt=""
@@ -191,8 +170,7 @@ export function SuperProblemOldScreensChamfer({
           src={baseSrc}
           alt={altBase}
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-0 ${
             showStruggles ? 'opacity-0' : 'opacity-100'
           }`}
@@ -201,7 +179,7 @@ export function SuperProblemOldScreensChamfer({
           src={strugglesSrc}
           alt={altStruggles}
           decoding="async"
-          loading="eager"
+          loading="lazy"
           className={`${superChamferToggleStackLayerClass} z-10 ${
             showStruggles ? 'opacity-100' : 'opacity-0'
           }`}

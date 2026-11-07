@@ -176,7 +176,7 @@ export function CaseStudyMobileSectionsModal({
           transition={reduceMotion ? { duration: 0.01 } : { duration: 0.22 }}
         >
           <div
-            className="absolute inset-0 bg-black/82 backdrop-blur-md"
+            className="absolute inset-0 bg-scrim/82 backdrop-blur-md"
             aria-hidden
             onClick={onClose}
           />

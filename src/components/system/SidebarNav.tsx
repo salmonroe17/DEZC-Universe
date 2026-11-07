@@ -47,7 +47,7 @@ export function SidebarNav({
                 className={`flex w-full min-w-0 flex-nowrap items-start gap-x-1.5 text-left text-[10px] leading-snug tracking-[0.02em] text-fg md:text-[11px] md:leading-snug ${
                   isActive
                     ? 'sidebar-nav-active-breathe'
-                    : 'opacity-[0.55] transition-opacity hover:opacity-90'
+                    : 'opacity-[0.65] transition-opacity hover:opacity-90'
                 }`}
               >
                 <span className="min-w-0 flex-1 break-words [overflow-wrap:anywhere]">

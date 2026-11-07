@@ -1,3 +1,4 @@
+import { hasDesignSystemAccess } from '../design-system/editorAccess'
 import type { SiteTheme } from '../contexts/siteThemeContext'
 import { useSiteTheme } from '../contexts/useSiteTheme'
 
@@ -32,6 +33,7 @@ const SWATCH: Record<SiteTheme, { selected: string; idle: string; selectedDot: s
     idle: 'border-2 border-fuchsia-400 bg-transparent',
     selectedDot: themeSwatchSelectedDotOnColorClass,
   },
+  light: { selected: 'bg-white', idle: 'border border-zinc-400 bg-transparent', selectedDot: themeSwatchSelectedDotOnLightFillClass },
   blue: {
     selected: 'bg-blue-400',
     idle: 'border-2 border-blue-400 bg-transparent',
@@ -59,6 +61,9 @@ export function ThemeSwatches({ className = '' }: ThemeSwatchesProps) {
   return (
     <div
       className={`flex shrink-0 items-center gap-1.5 ${className}`}
+      style={{ visibility: hasDesignSystemAccess() ? undefined : 'hidden' }}
+      inert={!hasDesignSystemAccess()}
+      aria-hidden={!hasDesignSystemAccess()}
       role="group"
       aria-label="Theme color"
     >

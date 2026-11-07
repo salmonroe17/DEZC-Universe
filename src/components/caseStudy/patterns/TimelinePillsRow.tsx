@@ -1,13 +1,13 @@
 import { ArrowDown } from '@phosphor-icons/react'
 
 const pillClassSingle =
-  'inline-flex shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-2 text-[12px] font-normal leading-none tracking-[0.02em] text-fg md:px-5 md:py-2.5'
+  'inline-flex shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-cell-border bg-transparent px-4 py-2 text-[12px] font-normal leading-none tracking-[0.02em] text-fg md:px-5 md:py-2.5'
 
 const pillClassMultiline =
-  'inline-flex max-w-[5.5rem] shrink-0 items-center justify-center self-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-3.5 text-center text-[12px] font-normal leading-snug tracking-[0.02em] text-fg whitespace-pre-line sm:max-w-[6rem] md:px-5 md:py-4'
+  'inline-flex max-w-[5.5rem] shrink-0 items-center justify-center self-center rounded-full border-[0.5px] border-solid border-cell-border bg-transparent px-4 py-3.5 text-center text-[12px] font-normal leading-snug tracking-[0.02em] text-fg whitespace-pre-line sm:max-w-[6rem] md:px-5 md:py-4'
 
 const mobileStackPillMultiline =
-  'inline-flex w-auto max-w-full shrink-0 items-center justify-center self-center rounded-full border-[0.5px] border-solid border-[#414141] bg-transparent px-4 py-3.5 text-center text-[12px] font-normal leading-snug tracking-[0.02em] text-fg whitespace-pre-line md:px-5 md:py-4'
+  'inline-flex w-auto max-w-full shrink-0 items-center justify-center self-center rounded-full border-[0.5px] border-solid border-cell-border bg-transparent px-4 py-3.5 text-center text-[12px] font-normal leading-snug tracking-[0.02em] text-fg whitespace-pre-line md:px-5 md:py-4'
 
 type TimelinePillsRowProps = {
   stepLabels: readonly string[]

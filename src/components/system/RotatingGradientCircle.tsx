@@ -32,7 +32,7 @@ export function RotatingGradientCircle({
           <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--color-hud)" stopOpacity={0.2} />
             <stop offset="36%" stopColor="var(--color-hud)" stopOpacity={0.88} />
-            <stop offset="58%" stopColor="#ffffff" stopOpacity={0.95} />
+            <stop offset="58%" stopColor="var(--color-fg)" stopOpacity={0.95} />
             <stop offset="100%" stopColor="var(--color-cell-border)" stopOpacity={0.7} />
           </linearGradient>
         </defs>

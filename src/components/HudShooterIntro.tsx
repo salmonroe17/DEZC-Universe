@@ -1659,15 +1659,15 @@ export function HudShooterIntro() {
           </div>
 
           <div className="mt-auto flex w-full items-end justify-between gap-2 text-[10px] text-fg/70">
-              <div className="min-w-0 max-w-[58%] text-fg/50">
+              <div className="min-w-0 max-w-[58%] text-fg-muted">
               {uiPhase === 'game' ? (
-                <span className="inline cursor-default text-fg/65 opacity-55 select-none">
+                <span className="inline cursor-default text-fg/65 opacity-100 select-none">
                   Global leaderboard:
                 </span>
               ) : (
                 <Link
                   to="/leaderboard"
-                  className="pointer-events-auto inline cursor-default select-none text-fg/65 opacity-55 underline decoration-transparent underline-offset-2 hover:text-fg/65 hover:decoration-transparent hover:opacity-55 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hud/25 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+                  className="pointer-events-auto inline cursor-default select-none text-fg/65 opacity-100 underline decoration-transparent underline-offset-2 hover:text-fg/65 hover:decoration-transparent hover:opacity-100 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hud/25 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
                   aria-label="Open full global leaderboard (top 50)"
                 >
                   Global leaderboard:
@@ -1683,12 +1683,12 @@ export function HudShooterIntro() {
                   >
                     {e ? (
                       <>
-                        <span className="text-white">{`#${n}`}</span>
+                        <span className="text-fg">{`#${n}`}</span>
                         <span>
                           {' '}
                           {e.codename.toUpperCase()} —{' '}
                         </span>
-                        <span className="font-bold text-white">{e.score}</span>
+                        <span className="font-bold text-fg">{e.score}</span>
                       </>
                     ) : (
                       '—'
@@ -1707,7 +1707,7 @@ export function HudShooterIntro() {
                     ? finalRunScore
                     : score}
               </div>
-              <div className="mt-0.5 uppercase tracking-[0.1em] text-fg/55">
+              <div className="mt-0.5 uppercase tracking-[0.1em] text-fg-muted">
                 {uiPhase === 'idle' && lastTargetsHit != null
                   ? 'Targets hit last'
                   : 'Targets hit'}
@@ -1740,7 +1740,7 @@ export function HudShooterIntro() {
             exit={{ opacity: 0 }}
             transition={{ duration: SHOOT_HINT_FADE_S, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-center font-mono text-[16px] leading-tight tracking-[0.02em] text-white/30">
+            <p className="text-center font-mono text-[16px] leading-tight tracking-[0.02em] text-fg-muted">
               {roundCountdownLabel}
             </p>
           </motion.div>

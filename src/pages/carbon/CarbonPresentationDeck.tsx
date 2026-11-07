@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import { CaseStudySwitch } from '../../components/system/CaseStudySwitch'
+import { useId, useRef, useState, type ReactNode } from 'react'
 import carbonHeroC1 from '../../../CNC photos/c1.png'
 import carbonOverviewC2 from '../../../CNC photos/c2.png'
 import carbonOverviewC3 from '../../../CNC photos/c3.png'
@@ -34,9 +35,7 @@ import {
   KpiAnimatedValue,
   ProblemStatementGlitchFramedBlock,
   TimelinePillsRow,
-  caseStudyChamferToggleKnobClassName,
   caseStudyChamferToggleLabelClassName,
-  caseStudyChamferToggleTrackClassName,
   caseStudyScrollAnchorClass,
 } from '../../components/caseStudy/patterns'
 import {
@@ -45,6 +44,8 @@ import {
 } from '../../components/caseStudy/CaseStudyFlowConnectors'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyPresentationOverlay'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
+import { CaseStudyLazyVideo } from '../../components/caseStudy/CaseStudyLazyVideo'
+import { usePreloadImages } from '../../hooks/usePreloadImages'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 
@@ -322,46 +323,6 @@ const FINAL_EXPERIENCE_BULLETS = [
   'Complete the experience with confidence',
 ] as const
 
-function CarbonDeckPrototypeAutoplayVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const video = ref.current
-    if (!video) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-        if (!entry) return
-        if (entry.isIntersecting) {
-          video.currentTime = 0
-          void video.play().catch(() => {})
-        } else {
-          video.pause()
-        }
-      },
-      { threshold: 0.25 },
-    )
-
-    observer.observe(video)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <video
-      ref={ref}
-      className="block h-auto w-full max-w-full align-middle"
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-label="Screen recording of the Carbon Neutral Club product prototype"
-    >
-      <source src={src} type="video/mp4" />
-    </video>
-  )
-}
-
 export function CarbonDeckCrossfadeChamfer({
   baseSrc,
   baseAlt,
@@ -380,52 +341,40 @@ export function CarbonDeckCrossfadeChamfer({
 }) {
   const labelId = useId()
   const [showAlt, setShowAlt] = useState(false)
+  const mediaRef = useRef<HTMLDivElement>(null)
+  usePreloadImages([baseSrc, altSrc], mediaRef)
   return (
     <ChamferFrame
       className="chamfer-media-border mx-auto w-full max-w-[min(100%,1156px)]"
       innerClassName="flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface/20 p-0"
     >
       <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-fg/[0.12] bg-surface py-3 md:gap-4 md:py-3.5">
-        <button
-          type="button"
-          role="switch"
-          aria-checked={showAlt}
-          aria-labelledby={labelId}
-          onClick={() => setShowAlt((v) => !v)}
-          className={caseStudyChamferToggleTrackClassName(showAlt)}
-        >
-          <span
-            className={caseStudyChamferToggleKnobClassName(showAlt)}
-            aria-hidden
-          />
-        </button>
+        <CaseStudySwitch checked={showAlt} type="button" aria-labelledby={labelId} onClick={() => setShowAlt((v) => !v)}/>
         <span id={labelId} className={caseStudyChamferToggleLabelClassName}>
           {showAlt ? toggleLabelOn : toggleLabelOff}
         </span>
       </div>
-      <div className="relative isolate w-full">
+      <div ref={mediaRef} className="relative isolate w-full">
         <img
           src={baseSrc}
           alt=""
           aria-hidden
           decoding="async"
-          loading="eager"
+          loading="lazy"
           className={chamferToggleStackSpacerClass}
         />
         <img
           src={baseSrc}
           alt={baseAlt}
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           className={`${chamferToggleStackLayerClass} z-0 ${showAlt ? 'opacity-0' : 'opacity-100'}`}
         />
         <img
           src={altSrc}
           alt={altAlt}
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           className={`${chamferToggleStackLayerClass} z-10 ${showAlt ? 'opacity-100' : 'opacity-0'}`}
         />
       </div>
@@ -482,7 +431,7 @@ export function CarbonDeckPlanB2B2CChamfer() {
         id={panelId}
         role="tabpanel"
         aria-labelledby={planIsB2C ? tabB2cId : tabB2bId}
-        className="relative isolate w-full bg-[#f9f6f0]"
+        className="relative isolate w-full bg-media-cream"
       >
         <img
           src={carbonPlanPageB2BC20}
@@ -547,12 +496,10 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
             innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <img
+            <CaseStudyLazyVideo
               src={carbonHeroTurtleGif}
-              alt=""
+              ariaHidden
               className="pointer-events-none block h-full w-full object-cover object-center select-none"
-              loading="lazy"
-              decoding="async"
             />
           </RotatingGradientCircle>
         </div>
@@ -562,7 +509,11 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
   {
     content: (
       <ChamferFrame className={`chamfer-media-border ${deckMaxW}`} innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0">
-        <CarbonDeckPrototypeAutoplayVideo src={carbonPrototypeVideo} />
+        <CaseStudyLazyVideo
+          src={carbonPrototypeVideo}
+          poster="/case-study-media/posters/carbon-prototype.webp"
+          ariaLabel="Screen recording of the Carbon Neutral Club product prototype"
+        />
       </ChamferFrame>
     ),
   },
@@ -779,7 +730,7 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
         <div className="col-span-12 mt-8 grid grid-cols-1 gap-4 font-mono md:grid-cols-2 md:gap-5">
           {SYSTEM_DESIGNED_STAGES.map((stage) => (
             <ChamferFrame key={stage.step} className="chamfer-tradeoff-outline w-full" innerClassName="flex gap-4 bg-transparent p-5 md:gap-5 md:p-6">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-[#414141] text-sm font-normal tabular-nums text-fg md:size-10 md:text-base">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-cell-border text-sm font-normal tabular-nums text-fg md:size-10 md:text-base">
                 {stage.step}
               </span>
               <div className="min-w-0">
@@ -983,8 +934,7 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
           src={carbonCheckoutTrustC18}
           alt="Carbon Neutral Club checkout: order summary with line items, express pay, card form, and pay now"
           decoding="async"
-          loading="eager"
-          fetchPriority="high"
+          loading="lazy"
           className="block h-auto w-full max-w-full align-middle"
         />
       </ChamferFrame>
@@ -1082,7 +1032,11 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
   {
     content: (
       <ChamferFrame className={`chamfer-media-border ${deckMaxW}`} innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/20 p-0">
-        <CarbonDeckPrototypeAutoplayVideo src={carbonPrototypeVideo} />
+        <CaseStudyLazyVideo
+          src={carbonPrototypeVideo}
+          poster="/case-study-media/posters/carbon-prototype.webp"
+          ariaLabel="Screen recording of the Carbon Neutral Club product prototype"
+        />
       </ChamferFrame>
     ),
   },
@@ -1162,11 +1116,9 @@ const CARBON_PRESENTATION_SLIDES_BASE = [
             className="chamfer-tradeoff-outline mt-8 w-fit max-w-full shrink-0"
             innerClassName="flex min-h-0 min-w-0 items-center justify-start overflow-hidden bg-bg p-0"
           >
-            <img
+            <CaseStudyLazyVideo
               src={mindExplosionGif}
-              alt=""
-              decoding="async"
-              loading="lazy"
+              ariaHidden
               className="block h-auto w-24 max-w-[6.5rem] object-contain object-left md:w-28 md:max-w-[7.5rem]"
             />
           </ChamferFrame>

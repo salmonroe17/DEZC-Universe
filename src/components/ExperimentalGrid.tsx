@@ -64,7 +64,7 @@ export function ExperimentalGrid() {
     'min-h-0 flex-1',
     whoIamScrollActive
       ? 'lg:overflow-y-auto lg:opacity-100'
-      : 'lg:overflow-hidden lg:opacity-30',
+      : 'lg:overflow-hidden lg:opacity-65',
   ].join(' ')
 
   return (
@@ -82,6 +82,7 @@ export function ExperimentalGrid() {
         {/* 1 — Hero / mini-game (desktop top-left) */}
         <motion.div
           ref={setHeroQEl}
+          data-design-section="hero"
           variants={cellVariants}
           className={`${quadrantCell} ${topRowQuadrantMinMaxLg} relative flex h-full min-h-0 sm:max-lg:col-start-1 sm:max-lg:row-start-1 lg:col-start-1 lg:row-start-1`}
           data-quadrant-in-view={noPrimaryHover && heroMajorityInView ? true : undefined}
@@ -95,6 +96,7 @@ export function ExperimentalGrid() {
         {/* 2 — Case Studies (desktop top-right) */}
         <motion.div
           ref={setCaseStudiesQEl}
+          data-design-section="case-studies"
           variants={cellVariants}
           className={`group/right-quadrant ${quadrantCell} ${topRowQuadrantMinMaxLg} relative flex h-full min-h-0 min-w-0 flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-1 lg:col-start-2 lg:row-start-1`}
           data-quadrant-in-view={noPrimaryHover && caseStudiesMajorityInView ? true : undefined}
@@ -108,6 +110,7 @@ export function ExperimentalGrid() {
         {/* 3 — Who I am (desktop bottom-right) */}
         <motion.div
           ref={setWhoIamQEl}
+          data-design-section="biography"
           variants={cellVariants}
           className={`${quadrantCell} relative flex h-full min-h-0 min-w-0 max-lg:h-auto flex-col sm:max-lg:col-start-2 sm:max-lg:row-start-2 lg:col-start-2 lg:row-start-2`}
           data-quadrant-in-view={noPrimaryHover && whoIamMajorityInView ? true : undefined}

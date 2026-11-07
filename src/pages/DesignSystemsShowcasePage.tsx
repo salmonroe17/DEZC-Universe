@@ -6,6 +6,7 @@ import {
   caseStudyScrollAnchorClass,
 } from '../components/caseStudy/patterns'
 import { CaseStudyShowcaseScaffold } from '../components/caseStudy/CaseStudyShowcaseScaffold'
+import { CaseStudyLazyVideo } from '../components/caseStudy/CaseStudyLazyVideo'
 import {
   DS_PRESENTATION_MEDIA_TO_SLIDE,
   DS_PRESENTATION_SLIDES,
@@ -85,12 +86,10 @@ export default function DesignSystemsShowcasePage() {
           innerClassName="bg-bg p-0"
           aria-hidden
         >
-          <img
+          <CaseStudyLazyVideo
             src={dsCalculatorGif}
-            alt=""
+            ariaHidden
             className="pointer-events-none block h-full w-full object-cover object-center select-none"
-            loading="lazy"
-            decoding="async"
           />
         </RotatingGradientCircle>
       </div>
@@ -739,11 +738,9 @@ export default function DesignSystemsShowcasePage() {
               className="chamfer-tradeoff-outline mt-8 w-fit max-w-full shrink-0"
               innerClassName="flex min-h-0 min-w-0 items-center justify-start overflow-hidden bg-bg p-0"
             >
-              <img
+              <CaseStudyLazyVideo
                 src={dsPuzzleGif}
-                alt=""
-                decoding="async"
-                loading="lazy"
+                ariaHidden
                 className="block h-auto w-24 max-w-[6.5rem] object-contain object-left md:w-28 md:max-w-[7.5rem]"
               />
             </ChamferFrame>

@@ -1,0 +1,1464 @@
+{
+  "scope": "Static source linkage audit. Imports establish shared implementation, not visual equivalence of every prop, state or wrapper. Components without a dedicated story remain accessible through live page previews.",
+  "stories": [
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "source": "src/components/CustomCursor.tsx",
+      "symbols": [
+        "CursorReticle",
+        "CustomCursor"
+      ],
+      "consumers": [
+        "src/App.tsx"
+      ]
+    },
+    {
+      "id": "cursor-interactions",
+      "name": "Cursor interactions",
+      "source": "src/components/CustomCursor.tsx",
+      "symbols": [
+        "CursorReticle",
+        "CustomCursor"
+      ],
+      "consumers": [
+        "src/App.tsx"
+      ]
+    },
+    {
+      "id": "card-corners",
+      "name": "Card corners & borders",
+      "source": "src/components/system/ChamferFrame.tsx",
+      "symbols": [
+        "ChamferFrame"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/components/caseStudy/patterns/BeforeAfterToggle.tsx",
+        "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+        "src/components/sections/DecisionSection.tsx",
+        "src/components/system/PlaceholderVisual.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/ibm/ibmEnviziContentComponents.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx",
+        "src/pages/super/SuperShowcaseChamfers.tsx"
+      ]
+    },
+    {
+      "id": "buttons",
+      "name": "Buttons",
+      "source": "src/components/system/PortfolioControls.tsx",
+      "symbols": [
+        "PortfolioButton",
+        "PortfolioTextField",
+        "PortfolioSelect",
+        "PortfolioChoice"
+      ],
+      "consumers": [
+        "src/components/LeaderboardGate.tsx"
+      ]
+    },
+    {
+      "id": "icon-buttons",
+      "name": "Icon buttons",
+      "source": "src/components/system/PresentationIconButton.tsx",
+      "symbols": [
+        "PresentationIconButton"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyPresentationOverlay.tsx",
+        "src/components/system/PortfolioControls.tsx"
+      ]
+    },
+    {
+      "id": "links",
+      "name": "Links",
+      "source": "src/components/SiteTopBar.tsx",
+      "symbols": [
+        "SiteTopBar"
+      ],
+      "consumers": [
+        "src/layouts/RootLayout.tsx"
+      ]
+    },
+    {
+      "id": "text-fields",
+      "name": "Text fields",
+      "source": "src/components/system/PortfolioControls.tsx",
+      "symbols": [
+        "PortfolioButton",
+        "PortfolioTextField",
+        "PortfolioSelect",
+        "PortfolioChoice"
+      ],
+      "consumers": [
+        "src/components/LeaderboardGate.tsx"
+      ]
+    },
+    {
+      "id": "password",
+      "name": "Password field",
+      "source": "src/components/LeaderboardGate.tsx",
+      "symbols": [
+        "LeaderboardGate"
+      ],
+      "consumers": [
+        "src/pages/GlobalLeaderboardPage.tsx"
+      ]
+    },
+    {
+      "id": "search",
+      "name": "Search & filtering",
+      "source": "src/components/LeaderboardCityFilter.tsx",
+      "symbols": [
+        "LeaderboardCityFilter"
+      ],
+      "consumers": [
+        "src/pages/GlobalLeaderboardPage.tsx"
+      ]
+    },
+    {
+      "id": "switch",
+      "name": "Switches",
+      "source": "src/components/system/CaseStudySwitch.tsx",
+      "symbols": [
+        "CaseStudySwitch"
+      ],
+      "consumers": [
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+        "src/pages/super/SuperShowcaseChamfers.tsx"
+      ]
+    },
+    {
+      "id": "header",
+      "name": "Site header",
+      "source": "src/components/SiteTopBar.tsx",
+      "symbols": [
+        "SiteTopBar"
+      ],
+      "consumers": [
+        "src/layouts/RootLayout.tsx"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "name": "Section sidebar",
+      "source": "src/components/system/SidebarNav.tsx",
+      "symbols": [
+        "SidebarNav"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ]
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs",
+      "source": "src/components/system/PortfolioTabs.tsx",
+      "symbols": [
+        "PortfolioTab"
+      ],
+      "consumers": [
+        "src/pages/PrivacyPolicyPage.tsx"
+      ]
+    },
+    {
+      "id": "footer",
+      "name": "Footer",
+      "source": "src/components/SiteFooter.tsx",
+      "symbols": [
+        "SiteFooter"
+      ],
+      "consumers": [
+        "src/layouts/RootLayout.tsx"
+      ]
+    },
+    {
+      "id": "card",
+      "name": "Cards",
+      "source": "src/components/system/ChamferFrame.tsx",
+      "symbols": [
+        "ChamferFrame"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/components/caseStudy/patterns/BeforeAfterToggle.tsx",
+        "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+        "src/components/sections/DecisionSection.tsx",
+        "src/components/system/PlaceholderVisual.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/ibm/ibmEnviziContentComponents.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx",
+        "src/pages/super/SuperShowcaseChamfers.tsx"
+      ]
+    },
+    {
+      "id": "rows",
+      "name": "Rows & lists",
+      "source": "src/components/ExperimentalCaseStudiesPanel.tsx",
+      "symbols": [
+        "ExperimentalCaseStudiesPanel"
+      ],
+      "consumers": [
+        "src/components/CaseStudiesCardModal.tsx",
+        "src/components/ExperimentalGrid.tsx",
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx"
+      ]
+    },
+    {
+      "id": "metrics",
+      "name": "Metrics",
+      "source": "src/components/caseStudy/patterns/KpiMetricsGrid.tsx",
+      "symbols": [
+        "KpiAnimatedValue",
+        "KpiMetricsGrid"
+      ],
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts",
+        "src/components/sections/KPISection.tsx"
+      ]
+    },
+    {
+      "id": "progress",
+      "name": "Reading progress",
+      "source": "src/components/caseStudy/CaseStudyScrollProgressBar.tsx",
+      "symbols": [
+        "CaseStudyScrollProgressBar"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyPresentationOverlay.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ]
+    },
+    {
+      "id": "loading",
+      "name": "Loading state",
+      "source": "src/components/HudLoadingScreen.tsx",
+      "symbols": [
+        "HudLoadingScreen"
+      ],
+      "consumers": [
+        "src/App.tsx"
+      ]
+    },
+    {
+      "id": "not-found",
+      "name": "Not-found state",
+      "source": "src/components/NotFound404Glyph.tsx",
+      "symbols": [
+        "NotFound404Glyph"
+      ],
+      "consumers": [
+        "src/components/ErrorBoundary.tsx",
+        "src/pages/NotFoundPage.tsx"
+      ]
+    },
+    {
+      "id": "presentation",
+      "name": "Case-study presentation",
+      "source": "src/components/caseStudy/CaseStudyPresentationOverlay.tsx",
+      "symbols": [
+        "CaseStudyPresentationOverlay"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ]
+    },
+    {
+      "id": "lightbox",
+      "name": "Lightboxes & dialogs",
+      "source": "src/components/CaseStudiesCardModal.tsx",
+      "symbols": [
+        "CaseStudiesCardModal"
+      ],
+      "consumers": [
+        "src/components/SiteTopBar.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/pages/SideQuestViewerPage.tsx"
+      ]
+    },
+    {
+      "id": "image",
+      "name": "Image frames",
+      "source": "src/components/system/ChamferFrame.tsx",
+      "symbols": [
+        "ChamferFrame"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/components/caseStudy/patterns/BeforeAfterToggle.tsx",
+        "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+        "src/components/sections/DecisionSection.tsx",
+        "src/components/system/PlaceholderVisual.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/ibm/ibmEnviziContentComponents.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx",
+        "src/pages/super/SuperShowcaseChamfers.tsx"
+      ]
+    },
+    {
+      "id": "video",
+      "name": "Video",
+      "source": "src/components/caseStudy/CaseStudyLazyVideo.tsx",
+      "symbols": [
+        "CaseStudyLazyVideo"
+      ],
+      "consumers": [
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmDeckAutoplayVideo.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/super/SuperDeckAutoplayVideo.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ]
+    },
+    {
+      "id": "timeline",
+      "name": "Timelines",
+      "source": "src/components/caseStudy/patterns/TimelinePillsRow.tsx",
+      "symbols": [
+        "TimelinePillsRow"
+      ],
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts",
+        "src/components/sections/StepperSection.tsx"
+      ]
+    },
+    {
+      "id": "comparison",
+      "name": "Before & after",
+      "source": "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+      "symbols": [
+        "ComparisonShowcase"
+      ],
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts"
+      ]
+    },
+    {
+      "id": "statement",
+      "name": "Problem statements",
+      "source": "src/components/caseStudy/patterns/ProblemStatementFrame.tsx",
+      "symbols": [
+        "ProblemStatementGlitchFramedBlock",
+        "ProblemStatementGlitchedCopy",
+        "ProblemStatementFrame"
+      ],
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts"
+      ]
+    },
+    {
+      "id": "decisions",
+      "name": "Decision cards",
+      "source": "src/components/sections/DecisionSection.tsx",
+      "symbols": [
+        "DecisionSection"
+      ],
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ]
+    },
+    {
+      "id": "case-study-card",
+      "name": "Case-study card",
+      "source": "src/components/ExperimentalCaseStudiesPanel.tsx",
+      "symbols": [
+        "ExperimentalCaseStudiesPanel"
+      ],
+      "consumers": [
+        "src/components/CaseStudiesCardModal.tsx",
+        "src/components/ExperimentalGrid.tsx",
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx"
+      ]
+    },
+    {
+      "id": "hero",
+      "name": "Introduction & game",
+      "source": "src/components/HudShooterIntro.tsx",
+      "symbols": [
+        "HudShooterIntro"
+      ],
+      "consumers": [
+        "src/components/ExperimentalGrid.tsx"
+      ]
+    },
+    {
+      "id": "biography",
+      "name": "Biography",
+      "source": "src/components/ExperimentalGrid.tsx",
+      "symbols": [
+        "ExperimentalGrid"
+      ],
+      "consumers": [
+        "src/pages/Home.tsx"
+      ]
+    },
+    {
+      "id": "side-quests",
+      "name": "Side-quest timeline",
+      "source": "src/components/ExperimentalSideQuestsPanel.tsx",
+      "symbols": [
+        "ExperimentalSideQuestsPanel"
+      ],
+      "consumers": [
+        "src/components/ExperimentalGrid.tsx",
+        "src/components/ShowTellQuadrantModal.tsx"
+      ]
+    }
+  ],
+  "components": [
+    {
+      "source": "src/App.tsx",
+      "symbol": "App",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/components/AmbientVerticalLines.tsx",
+      "symbol": "AmbientVerticalLines",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyPresentationOverlay.tsx",
+        "src/layouts/RootLayout.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/CaseStudiesCardModal.tsx",
+      "symbol": "CaseStudiesCardModal",
+      "consumers": [
+        "src/components/SiteTopBar.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/pages/SideQuestViewerPage.tsx"
+      ],
+      "stories": [
+        "lightbox"
+      ]
+    },
+    {
+      "source": "src/components/CaseStudyList.tsx",
+      "symbol": "CaseStudyList",
+      "consumers": [
+        "src/components/ExperimentalCaseStudiesPanel.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/CustomCursor.tsx",
+      "symbol": "CursorReticle",
+      "consumers": [],
+      "stories": [
+        "cursor",
+        "cursor-interactions"
+      ]
+    },
+    {
+      "source": "src/components/CustomCursor.tsx",
+      "symbol": "CustomCursor",
+      "consumers": [
+        "src/App.tsx"
+      ],
+      "stories": [
+        "cursor",
+        "cursor-interactions"
+      ]
+    },
+    {
+      "source": "src/components/ExperimentalCaseStudiesPanel.tsx",
+      "symbol": "ExperimentalCaseStudiesPanel",
+      "consumers": [
+        "src/components/CaseStudiesCardModal.tsx",
+        "src/components/ExperimentalGrid.tsx",
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx"
+      ],
+      "stories": [
+        "rows",
+        "case-study-card"
+      ]
+    },
+    {
+      "source": "src/components/ExperimentalGrid.tsx",
+      "symbol": "ExperimentalGrid",
+      "consumers": [
+        "src/pages/Home.tsx"
+      ],
+      "stories": [
+        "biography"
+      ]
+    },
+    {
+      "source": "src/components/ExperimentalSideQuestsPanel.tsx",
+      "symbol": "ExperimentalSideQuestsPanel",
+      "consumers": [
+        "src/components/ExperimentalGrid.tsx",
+        "src/components/ShowTellQuadrantModal.tsx"
+      ],
+      "stories": [
+        "side-quests"
+      ]
+    },
+    {
+      "source": "src/components/Fake3DCube.tsx",
+      "symbol": "Fake3DCube",
+      "consumers": [
+        "src/components/ExperimentalCaseStudiesPanel.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/FlowingLine.tsx",
+      "symbol": "FlowingLine",
+      "consumers": [
+        "src/components/sideQuest/SideQuestFlowingLineRail.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/HudDialMarks.tsx",
+      "symbol": "HudDialMarks",
+      "consumers": [
+        "src/components/HudGraphic.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/HudGraphic.tsx",
+      "symbol": "HudGraphic",
+      "consumers": [
+        "src/components/HudShooterIntro.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/HudLoadingScreen.tsx",
+      "symbol": "HudLoadingScreen",
+      "consumers": [
+        "src/App.tsx"
+      ],
+      "stories": [
+        "loading"
+      ]
+    },
+    {
+      "source": "src/components/HudShooterIntro.tsx",
+      "symbol": "HudShooterIntro",
+      "consumers": [
+        "src/components/ExperimentalGrid.tsx"
+      ],
+      "stories": [
+        "hero"
+      ]
+    },
+    {
+      "source": "src/components/LeaderboardCityFilter.tsx",
+      "symbol": "LeaderboardCityFilter",
+      "consumers": [
+        "src/pages/GlobalLeaderboardPage.tsx"
+      ],
+      "stories": [
+        "search"
+      ]
+    },
+    {
+      "source": "src/components/LeaderboardGate.tsx",
+      "symbol": "LeaderboardGate",
+      "consumers": [
+        "src/pages/GlobalLeaderboardPage.tsx"
+      ],
+      "stories": [
+        "password"
+      ]
+    },
+    {
+      "source": "src/components/NotFound404Glyph.tsx",
+      "symbol": "NotFound404Glyph",
+      "consumers": [
+        "src/components/ErrorBoundary.tsx",
+        "src/pages/NotFoundPage.tsx"
+      ],
+      "stories": [
+        "not-found"
+      ]
+    },
+    {
+      "source": "src/components/ShowTellAmbientLines.tsx",
+      "symbol": "ShowTellAmbientLines",
+      "consumers": [
+        "src/components/sideQuest/SideQuestSandBackground.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/ShowTellQuadrantModal.tsx",
+      "symbol": "ShowTellQuadrantModal",
+      "consumers": [
+        "src/components/SiteTopBar.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/ShowTellSandCanvas.tsx",
+      "symbol": "ShowTellSandCanvas",
+      "consumers": [
+        "src/components/sideQuest/SideQuestSandBackground.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/SiteFooter.tsx",
+      "symbol": "SiteFooter",
+      "consumers": [
+        "src/layouts/RootLayout.tsx"
+      ],
+      "stories": [
+        "footer"
+      ]
+    },
+    {
+      "source": "src/components/SiteTopBar.tsx",
+      "symbol": "SiteTopBar",
+      "consumers": [
+        "src/layouts/RootLayout.tsx"
+      ],
+      "stories": [
+        "links",
+        "header"
+      ]
+    },
+    {
+      "source": "src/components/ThemeSwatches.tsx",
+      "symbol": "ThemeSwatchSelectedIndicator",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyPresentationOverlay.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/ThemeSwatches.tsx",
+      "symbol": "ThemeSwatches",
+      "consumers": [
+        "src/components/SiteTopBar.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/pages/SideQuestViewerPage.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/WhoIamOrbMarquee.tsx",
+      "symbol": "WhoIamOrbMarquee",
+      "consumers": [
+        "src/components/ExperimentalGrid.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyLazyVideo.tsx",
+      "symbol": "CaseStudyLazyVideo",
+      "consumers": [
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmDeckAutoplayVideo.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/super/SuperDeckAutoplayVideo.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": [
+        "video"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyMobileToc.tsx",
+      "symbol": "CaseStudyMobileSectionsRow",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyMobileToc.tsx",
+      "symbol": "CaseStudyMobileSectionsModal",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyPortaledHeader.tsx",
+      "symbol": "CaseStudyPortaledHeader",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyPresentationOverlay.tsx",
+      "symbol": "CaseStudyPresentationOverlay",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": [
+        "presentation"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyRailShell.tsx",
+      "symbol": "CaseStudyRailShell",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyRenderer.tsx",
+      "symbol": "CaseStudyRenderer",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyScrollProgressBar.tsx",
+      "symbol": "CaseStudyScrollProgressBar",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyPresentationOverlay.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": [
+        "progress"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+      "symbol": "CaseStudyShowcaseScaffold",
+      "consumers": [
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/IbmChamferMediaPlaceholder.tsx",
+      "symbol": "IbmChamferMediaPlaceholder",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/IbmChamferMediaPlaceholder.tsx",
+      "symbol": "IbmToggleAspectSpacer",
+      "consumers": [
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferCollage",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs2",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs3",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs4",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs5",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs6",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs7",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs8",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs9",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs10",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs11",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/dsCaseStudy/DsCaseStudyHeroMedia.tsx",
+      "symbol": "DsCaseStudyChamferDs12",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/patterns/BeforeAfterToggle.tsx",
+      "symbol": "BeforeAfterToggle",
+      "consumers": [
+        "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+        "src/components/caseStudy/patterns/index.ts"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+      "symbol": "ComparisonShowcase",
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts"
+      ],
+      "stories": [
+        "comparison"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/patterns/KpiMetricsGrid.tsx",
+      "symbol": "KpiAnimatedValue",
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts"
+      ],
+      "stories": [
+        "metrics"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/patterns/KpiMetricsGrid.tsx",
+      "symbol": "KpiMetricsGrid",
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts",
+        "src/components/sections/KPISection.tsx"
+      ],
+      "stories": [
+        "metrics"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/patterns/ProblemStatementFrame.tsx",
+      "symbol": "ProblemStatementGlitchFramedBlock",
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts"
+      ],
+      "stories": [
+        "statement"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/patterns/ProblemStatementFrame.tsx",
+      "symbol": "ProblemStatementGlitchedCopy",
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts"
+      ],
+      "stories": [
+        "statement"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/patterns/ProblemStatementFrame.tsx",
+      "symbol": "ProblemStatementFrame",
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts"
+      ],
+      "stories": [
+        "statement"
+      ]
+    },
+    {
+      "source": "src/components/caseStudy/patterns/TimelinePillsRow.tsx",
+      "symbol": "TimelinePillsRow",
+      "consumers": [
+        "src/components/caseStudy/patterns/index.ts",
+        "src/components/sections/StepperSection.tsx"
+      ],
+      "stories": [
+        "timeline"
+      ]
+    },
+    {
+      "source": "src/components/sections/ComparisonSection.tsx",
+      "symbol": "ComparisonSection",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/sections/DecisionSection.tsx",
+      "symbol": "DecisionSection",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ],
+      "stories": [
+        "decisions"
+      ]
+    },
+    {
+      "source": "src/components/sections/KPISection.tsx",
+      "symbol": "KPISection",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/sections/SplitSection.tsx",
+      "symbol": "SplitSection",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/sections/StatementSection.tsx",
+      "symbol": "StatementSection",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/sections/StepperSection.tsx",
+      "symbol": "StepperSection",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/sections/TextSection.tsx",
+      "symbol": "TextSection",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/sideQuest/SideQuestFlowingLineRail.tsx",
+      "symbol": "SideQuestFlowingLineRail",
+      "consumers": [
+        "src/components/ExperimentalSideQuestsPanel.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/sideQuest/SideQuestSandBackground.tsx",
+      "symbol": "SideQuestSandBackground",
+      "consumers": [
+        "src/components/ExperimentalSideQuestsPanel.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/CaseStudySwitch.tsx",
+      "symbol": "CaseStudySwitch",
+      "consumers": [
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+        "src/pages/super/SuperShowcaseChamfers.tsx"
+      ],
+      "stories": [
+        "switch"
+      ]
+    },
+    {
+      "source": "src/components/system/ChamferFrame.tsx",
+      "symbol": "ChamferFrame",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx",
+        "src/components/caseStudy/patterns/BeforeAfterToggle.tsx",
+        "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+        "src/components/sections/DecisionSection.tsx",
+        "src/components/system/PlaceholderVisual.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/DsPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/ibm/ibmEnviziContentComponents.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx",
+        "src/pages/super/SuperShowcaseChamfers.tsx"
+      ],
+      "stories": [
+        "card-corners",
+        "card",
+        "image"
+      ]
+    },
+    {
+      "source": "src/components/system/FigmaGrid.tsx",
+      "symbol": "FigmaFrame",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRailShell.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/FigmaGrid.tsx",
+      "symbol": "FigmaGrid12",
+      "consumers": [
+        "src/components/caseStudy/patterns/ComparisonShowcase.tsx",
+        "src/components/sections/KPISection.tsx",
+        "src/components/sections/StepperSection.tsx",
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/FigmaGrid.tsx",
+      "symbol": "FigmaRailGrid",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRailShell.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/PlaceholderVisual.tsx",
+      "symbol": "PlaceholderVisual",
+      "consumers": [
+        "src/content/caseStudies/carbonNeutralClub.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/PortfolioAccordion.tsx",
+      "symbol": "PortfolioAccordion",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/PortfolioControls.tsx",
+      "symbol": "PortfolioButton",
+      "consumers": [
+        "src/components/LeaderboardGate.tsx"
+      ],
+      "stories": [
+        "buttons",
+        "text-fields"
+      ]
+    },
+    {
+      "source": "src/components/system/PortfolioControls.tsx",
+      "symbol": "PortfolioTextField",
+      "consumers": [
+        "src/components/LeaderboardGate.tsx"
+      ],
+      "stories": [
+        "buttons",
+        "text-fields"
+      ]
+    },
+    {
+      "source": "src/components/system/PortfolioControls.tsx",
+      "symbol": "PortfolioSelect",
+      "consumers": [],
+      "stories": [
+        "buttons",
+        "text-fields"
+      ]
+    },
+    {
+      "source": "src/components/system/PortfolioControls.tsx",
+      "symbol": "PortfolioChoice",
+      "consumers": [],
+      "stories": [
+        "buttons",
+        "text-fields"
+      ]
+    },
+    {
+      "source": "src/components/system/PortfolioTabs.tsx",
+      "symbol": "PortfolioTab",
+      "consumers": [
+        "src/pages/PrivacyPolicyPage.tsx"
+      ],
+      "stories": [
+        "tabs"
+      ]
+    },
+    {
+      "source": "src/components/system/PresentationIconButton.tsx",
+      "symbol": "PresentationIconButton",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyPresentationOverlay.tsx",
+        "src/components/system/PortfolioControls.tsx"
+      ],
+      "stories": [
+        "icon-buttons"
+      ]
+    },
+    {
+      "source": "src/components/system/RotatingGradientCircle.tsx",
+      "symbol": "RotatingGradientCircle",
+      "consumers": [
+        "src/pages/CarbonNeutralClubShowcasePage.tsx",
+        "src/pages/CaseStudyComponentsPage.tsx",
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/IbmEnviziShowcasePage.tsx",
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/carbon/CarbonPresentationDeck.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx",
+        "src/pages/ibm/IbmPresentationDeck.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/RotatingGradientCircle.tsx",
+      "symbol": "RotatingGradientCircleDotPlaceholder",
+      "consumers": [
+        "src/pages/CaseStudyComponentsPage.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/SectionWrapper.tsx",
+      "symbol": "SectionWrapper",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/system/SidebarNav.tsx",
+      "symbol": "SidebarNav",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx",
+        "src/components/caseStudy/CaseStudyShowcaseScaffold.tsx"
+      ],
+      "stories": [
+        "sidebar"
+      ]
+    },
+    {
+      "source": "src/components/system/SystemContainer.tsx",
+      "symbol": "SystemContainer",
+      "consumers": [
+        "src/components/caseStudy/CaseStudyRenderer.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/contexts/HudShooterProvider.tsx",
+      "symbol": "HudShooterProvider",
+      "consumers": [
+        "src/App.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/contexts/SiteThemeProvider.tsx",
+      "symbol": "SiteThemeProvider",
+      "consumers": [
+        "src/App.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/layouts/RootLayout.tsx",
+      "symbol": "RootLayout",
+      "consumers": [
+        "src/App.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/CarbonNeutralClubShowcasePage.tsx",
+      "symbol": "CarbonNeutralClubShowcasePage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/CaseStudyComponentsPage.tsx",
+      "symbol": "CaseStudyComponentsPage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/DesignSystemsShowcasePage.tsx",
+      "symbol": "DesignSystemsShowcasePage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/GlobalLeaderboardPage.tsx",
+      "symbol": "GlobalLeaderboardPage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/Home.tsx",
+      "symbol": "Home",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/IbmEnviziShowcasePage.tsx",
+      "symbol": "IbmEnviziShowcasePage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/NotFoundPage.tsx",
+      "symbol": "NotFoundPage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/PrivacyPolicyPage.tsx",
+      "symbol": "PrivacyPolicyPage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/SideQuestViewerPage.tsx",
+      "symbol": "SideQuestViewerPage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/SuperAppShowcasePage.tsx",
+      "symbol": "SuperAppShowcasePage",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/carbon/CarbonPresentationDeck.tsx",
+      "symbol": "CarbonDeckCrossfadeChamfer",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/carbon/CarbonPresentationDeck.tsx",
+      "symbol": "CarbonDeckPlanB2B2CChamfer",
+      "consumers": [],
+      "stories": []
+    },
+    {
+      "source": "src/pages/ds/dsShowcaseBulletGrid.tsx",
+      "symbol": "DsBulletGrid",
+      "consumers": [
+        "src/pages/DesignSystemsShowcasePage.tsx",
+        "src/pages/ds/dsPresentationTextSlides.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/ibm/IbmDeckAutoplayVideo.tsx",
+      "symbol": "IbmDeckAutoplayVideo",
+      "consumers": [
+        "src/pages/ibm/IbmPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/ibm/IbmDeckToggleChamfer.tsx",
+      "symbol": "IbmDeckToggleChamfer",
+      "consumers": [
+        "src/pages/ibm/IbmPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/ibm/ibmEnviziContentComponents.tsx",
+      "symbol": "IbmCoreFlowStepBlock",
+      "consumers": [
+        "src/pages/ibm/IbmPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/ibm/ibmEnviziContentComponents.tsx",
+      "symbol": "IbmActionLayerStep1Chamfer",
+      "consumers": [
+        "src/pages/ibm/IbmPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/super/SuperDeckAutoplayVideo.tsx",
+      "symbol": "SuperDeckAutoplayVideo",
+      "consumers": [
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/super/SuperShowcaseChamfers.tsx",
+      "symbol": "SuperToggleImageChamfer",
+      "consumers": [
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/super/SuperShowcaseChamfers.tsx",
+      "symbol": "SuperSuperCashRelocatedComparison",
+      "consumers": [
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/super/SuperShowcaseChamfers.tsx",
+      "symbol": "SuperTrueHomeComparison",
+      "consumers": [
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/pages/super/SuperShowcaseChamfers.tsx",
+      "symbol": "SuperProblemOldScreensChamfer",
+      "consumers": [
+        "src/pages/SuperAppShowcasePage.tsx",
+        "src/pages/super/SuperPresentationDeck.tsx"
+      ],
+      "stories": []
+    }
+  ]
+}

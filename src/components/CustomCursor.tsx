@@ -57,13 +57,13 @@ function getReticleLayout(expanded: boolean): ReticleLayout {
   }
 }
 
-function Reticle({ expanded }: { expanded: boolean }) {
+export function CursorReticle({ expanded }: { expanded: boolean }) {
   const { box, cx, cy, ring, tickLen, dot, u } = getReticleLayout(expanded)
   const lineStyle = { transition: RETICLE_TRANSITION, backgroundColor: 'currentColor' } as const
 
   return (
     <div
-      className="relative text-white"
+      className="relative text-on-scrim"
       style={{
         width: box,
         height: box,
@@ -303,7 +303,7 @@ export function CustomCursor() {
         aria-hidden
       >
         <div className="inline-flex overflow-visible will-change-transform">
-          <Reticle expanded={reticleExpanded} />
+          <CursorReticle expanded={reticleExpanded} />
         </div>
       </div>
     </div>

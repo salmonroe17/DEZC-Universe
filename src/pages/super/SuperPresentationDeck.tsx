@@ -42,6 +42,7 @@ import {
 } from '../../components/caseStudy/patterns'
 import type { CaseStudyPresentationSlide } from '../../components/caseStudy/CaseStudyShowcaseScaffold'
 import { ChamferFrame } from '../../components/system/ChamferFrame'
+import { CaseStudyLazyVideo } from '../../components/caseStudy/CaseStudyLazyVideo'
 import { FigmaGrid12 } from '../../components/system/FigmaGrid'
 import { RotatingGradientCircle } from '../../components/system/RotatingGradientCircle'
 import {
@@ -222,12 +223,10 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
             innerClassName="bg-bg p-0"
             aria-hidden
           >
-            <img
+            <CaseStudyLazyVideo
               src={superHeroDrivingGif}
-              alt=""
+              ariaHidden
               className="pointer-events-none block h-full w-full object-cover object-center select-none"
-              loading="lazy"
-              decoding="async"
             />
           </RotatingGradientCircle>
         </div>
@@ -407,7 +406,7 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
     content: (
       <ChamferFrame
         className={`chamfer-media-border ${deckMaxW}`}
-        innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/25 p-0 md:bg-gradient-to-b md:from-[#eaeaea]/40 md:via-surface/30 md:to-bg"
+        innerClassName="flex min-w-0 justify-center overflow-hidden bg-surface/25 p-0 md:bg-gradient-to-b md:from-media-highlight/40 md:via-surface/30 md:to-bg"
       >
         <img
           src={superAlignmentVenn}
@@ -447,7 +446,7 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
     content: (
       <ChamferFrame
         className={`chamfer-media-border ${deckMaxW}`}
-        innerClassName="flex min-w-0 justify-center overflow-hidden bg-white p-0"
+        innerClassName="flex min-w-0 justify-center overflow-hidden bg-media-paper p-0"
       >
         <img
           src={superWorkshopBoard}
@@ -491,7 +490,7 @@ const SUPER_PRESENTATION_SLIDES_BASE = [
                 className="chamfer-tradeoff-outline w-full"
                 innerClassName="flex gap-4 bg-transparent p-5 md:gap-5 md:p-6"
               >
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-[#414141] text-sm font-normal tabular-nums text-fg md:size-10 md:text-base">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border-[0.5px] border-solid border-cell-border text-sm font-normal tabular-nums text-fg md:size-10 md:text-base">
                   {dest.step}
                 </span>
                 <div className="min-w-0">

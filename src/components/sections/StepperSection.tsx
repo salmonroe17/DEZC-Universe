@@ -40,21 +40,21 @@ export function StepperSection({
     <div>
       <h2
         id={headingIdProp}
-        className="text-2xl font-bold tracking-tight text-zinc-50 md:text-3xl"
+        className="text-2xl font-bold tracking-tight text-fg md:text-3xl"
       >
         {title}
       </h2>
-      <ol className="mt-8 flex flex-col gap-8 md:mt-10 lg:flex-row lg:gap-0 lg:divide-x lg:divide-zinc-800">
+      <ol className="mt-8 flex flex-col gap-8 md:mt-10 lg:flex-row lg:gap-0 lg:divide-x lg:divide-border">
         {steps.map((step, i) => (
           <li key={`${i}-${step.title}`} className="relative flex-1 lg:px-6 lg:first:pl-0 lg:last:pr-0">
             <div className="flex gap-3 lg:block lg:gap-0">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900 text-xs font-semibold tabular-nums text-zinc-300">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cell-border bg-elevated text-xs font-semibold tabular-nums text-fg/85">
                 {i + 1}
               </span>
               <div className="min-w-0 pt-0.5 lg:mt-4 lg:pt-0">
-                <p className="text-sm font-semibold text-zinc-200 md:text-base">{step.title}</p>
+                <p className="text-sm font-semibold text-fg/90 md:text-base">{step.title}</p>
                 {step.description ? (
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-500 lg:mt-1.5">
+                  <p className="mt-2 text-sm leading-relaxed text-fg-subtle lg:mt-1.5">
                     {step.description}
                   </p>
                 ) : null}

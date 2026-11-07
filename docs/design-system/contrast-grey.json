@@ -1,0 +1,456 @@
+{
+  "theme": "grey",
+  "viewport": "1440 × 1000",
+  "capturedAt": "2026-11-06T21:51:35.953Z",
+  "results": [
+    {
+      "path": "/",
+      "checked": 36,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 4:50:44 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Concert Adventures",
+          "selector": "span.line-clamp-2.w-full.font-mono",
+          "ratio": 8.54,
+          "required": 4.5,
+          "foreground": "oklab(0.985098 0.0000447631 0.0000197291 / 0.9)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/carbon-neutral-club",
+      "checked": 219,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/super-app",
+      "checked": 225,
+      "findings": [
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/ibm-envizi",
+      "checked": 287,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/design-systems",
+      "checked": 188,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/case-study/components",
+      "checked": 84,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/sidequest/bobaghosteas",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/leaderboard",
+      "checked": 14,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 4:51:00 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/privacy",
+      "checked": 78,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 4:51:02 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/contrast-check-not-found",
+      "checked": 12,
+      "findings": [
+        {
+          "text": "Home",
+          "selector": "a.underline.decoration-cell-border.underline-offset-[3px]",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "•",
+          "selector": "span.text-fg-muted",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Case studies",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Side quests",
+          "selector": "button.cursor-pointer.border-0.bg-transparent",
+          "ratio": 18.23,
+          "required": 4.5,
+          "foreground": "rgb(250, 250, 250)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        },
+        {
+          "text": "Toronto • Fri Nov 6 • 4:51:05 PM",
+          "selector": "time.max-lg:hidden.justify-self-end.text-[10px]",
+          "ratio": 7.42,
+          "required": 4.5,
+          "foreground": "rgb(161, 161, 170)",
+          "background": "rgb(16, 16, 16)",
+          "review": true
+        }
+      ]
+    },
+    {
+      "path": "/sidequest/neon-drawings",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/japan-adventures",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/concert-adventures",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/a-marriage-proposal",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/eedenn",
+      "checked": 7,
+      "findings": []
+    },
+    {
+      "path": "/sidequest/daisy",
+      "checked": 7,
+      "findings": []
+    }
+  ]
+}

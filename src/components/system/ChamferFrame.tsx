@@ -150,8 +150,8 @@ export function ChamferFrame({
           <defs>
             <linearGradient id={meteorGradId} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="var(--color-hud)" stopOpacity={0.75} />
-              <stop offset="42%" stopColor="#ffffff" stopOpacity={1} />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity={0.85} />
+              <stop offset="42%" stopColor="var(--color-fg)" stopOpacity={1} />
+              <stop offset="100%" stopColor="var(--color-fg)" stopOpacity={0.85} />
             </linearGradient>
           </defs>
           <path
@@ -186,9 +186,9 @@ export function ChamferFrame({
             fitContentHeight
             staticVisual
             className="max-w-[min(calc(100%-1rem),18rem)] shrink-0 [--quadrant-chamfer:5px]"
-            innerClassName="bg-[rgba(0,0,0,0.7)] px-[10px] py-[6px]"
+            innerClassName="bg-scrim/70 px-[10px] py-[6px]"
           >
-            <span className="block text-right text-[10px] font-normal leading-snug text-white">
+            <span className="block text-right text-[10px] font-normal leading-snug text-on-scrim">
               Click for presentation mode
             </span>
           </ChamferFrame>

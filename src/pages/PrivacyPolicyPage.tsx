@@ -1,4 +1,5 @@
-import { type KeyboardEvent, type ReactNode, useLayoutEffect, useMemo } from 'react'
+import { PortfolioTab } from '../components/system/PortfolioTabs'
+import { type KeyboardEvent, useLayoutEffect, useMemo } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const sectionClass = 'mt-8 max-w-2xl text-sm leading-relaxed text-fg-muted'
@@ -93,30 +94,30 @@ export default function PrivacyPolicyPage() {
         onKeyDown={onTabStripKeyDown}
       >
         <div className="flex flex-wrap gap-1">
-          <TabButton
+          <PortfolioTab
             id="privacy-tab"
             controls="privacy-panel"
             selected={activeTab === 'privacy'}
             onSelect={() => selectTab('privacy')}
           >
             Privacy policy
-          </TabButton>
-          <TabButton
+          </PortfolioTab>
+          <PortfolioTab
             id="terms-tab"
             controls="terms-panel"
             selected={activeTab === 'terms'}
             onSelect={() => selectTab('terms')}
           >
             Terms &amp; conditions
-          </TabButton>
-          <TabButton
+          </PortfolioTab>
+          <PortfolioTab
             id="cookies-tab"
             controls="cookies-panel"
             selected={activeTab === 'cookies'}
             onSelect={() => selectTab('cookies')}
           >
             Cookie policy
-          </TabButton>
+          </PortfolioTab>
         </div>
       </div>
 
@@ -465,7 +466,7 @@ export default function PrivacyPolicyPage() {
       <p className="mt-8 flex flex-wrap gap-x-4 gap-y-2">
         <Link
           to="/leaderboard"
-          className="cursor-default text-[10px] text-fg-muted/55 no-underline hover:text-fg-muted/55"
+          className="cursor-default text-[10px] text-fg-muted no-underline hover:text-fg-muted"
         >
           ← Global leaderboard
         </Link>
@@ -477,38 +478,5 @@ export default function PrivacyPolicyPage() {
         </Link>
       </p>
     </main>
-  )
-}
-
-function TabButton({
-  id,
-  controls,
-  selected,
-  children,
-  onSelect,
-}: {
-  id: string
-  controls: string
-  selected: boolean
-  children: ReactNode
-  onSelect: () => void
-}) {
-  return (
-    <button
-      id={id}
-      type="button"
-      role="tab"
-      aria-selected={selected}
-      aria-controls={controls}
-      tabIndex={selected ? 0 : -1}
-      onClick={onSelect}
-      className={
-        selected
-          ? 'flex-1 min-w-[10rem] rounded border border-cell-border bg-bg px-3 py-2.5 text-left text-[11px] font-medium uppercase tracking-[0.08em] text-fg shadow-[0_1px_0_rgba(0,0,0,0.04)] md:min-w-0 md:flex-none md:px-4'
-          : 'flex-1 min-w-[10rem] rounded border border-transparent bg-transparent px-3 py-2.5 text-left text-[11px] font-normal uppercase tracking-[0.08em] text-fg-muted transition-colors hover:border-cell-border/50 hover:bg-elevated/40 hover:text-fg md:min-w-0 md:flex-none md:px-4'
-      }
-    >
-      {children}
-    </button>
   )
 }

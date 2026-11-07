@@ -447,7 +447,7 @@ export function CaseStudyShowcaseScaffold({
                 fitContentHeight
                 staticVisual
                 className="inline-flex max-w-none min-w-0 shadow-[0_2px_12px_color-mix(in_srgb,var(--color-hud)_20%,transparent)] [--quadrant-chamfer:clamp(4px,0.65vmin,8px)]"
-                innerClassName="w-max max-w-full bg-white px-3 py-2"
+                innerClassName="w-max max-w-full bg-media-paper px-3 py-2"
               >
                 <button
                   ref={showSidebarBtnRef}
@@ -455,7 +455,7 @@ export function CaseStudyShowcaseScaffold({
                   aria-controls="case-study-sidebar"
                   aria-expanded={false}
                   onClick={() => setSidebarHidden(false)}
-                  className="m-0 block cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[10px] font-medium leading-snug tracking-[0.02em] text-black underline decoration-black/35 underline-offset-[3px] transition-colors hover:decoration-black md:text-[11px] lg:text-[11px]"
+                  className="m-0 block cursor-pointer border-0 bg-transparent p-0 text-left font-mono text-[10px] font-medium leading-snug tracking-[0.02em] text-on-media-paper underline decoration-on-media-paper/35 underline-offset-[3px] transition-colors hover:decoration-on-media-paper md:text-[11px] lg:text-[11px]"
                 >
                   Show sidebar
                 </button>

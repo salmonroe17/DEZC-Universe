@@ -10,12 +10,24 @@
   --color-border: #27272a;
   --color-fg: #fafafa;
   --color-fg-muted: #a1a1aa;
-  --color-fg-subtle: #71717a;
+  --color-fg-subtle: #888891;
 
   /* HUD / grid accents (overridden per theme) */
   --color-hud: #ffffff;
   --color-cell-border: #414141;
   --color-cell-hover: #ffffff;
+
+  /* Fixed media surfaces: always pair with their on-* foreground. */
+  --color-media-paper: #ffffff;
+  --color-on-media-paper: #000000;
+  --color-media-cream: #f9f6f0;
+  --color-media-warm: #d9d5cf;
+  --color-media-highlight: #eaeaea;
+  --color-media-dark: #0a0a0a;
+  --color-scrim: #000000;
+  --color-on-scrim: #ffffff;
+  --color-effect-cyan: #00fff2;
+  --color-effect-magenta: #ff00aa;
 
   /* Semantic spacing (maps to Tailwind spacing utilities) */
   --spacing-18: 4.5rem;
@@ -398,7 +410,7 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 .sidequest-viewer__scroll {
   scrollbar-gutter: stable;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-fg) 14%, transparent) transparent;
 }
 .sidequest-viewer__scroll::-webkit-scrollbar {
   width: 5px;
@@ -407,11 +419,11 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   background: transparent;
 }
 .sidequest-viewer__scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.14);
+  background: color-mix(in srgb, var(--color-fg) 14%, transparent);
   border-radius: 2px;
 }
 .sidequest-viewer__scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.28);
+  background: color-mix(in srgb, var(--color-fg) 28%, transparent);
 }
 
 /* SideQuest viewer: Space Mono 400 only (no bold/medium/italic from UA or ancestors) */
@@ -459,72 +471,6 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   margin-right: auto;
 }
 
-/* Presentation: scoped deck themes (do not invert raster media). */
-.case-study-presentation-overlay.presentation-theme-gray {
-  --color-bg: #101010;
-  --color-surface: #141414;
-  --color-elevated: #1a1a1a;
-  --color-border: #2a2a2a;
-  --color-fg: #fafafa;
-  --color-fg-muted: #a3a3a3;
-  --color-fg-subtle: #737373;
-  --color-hud: #ffffff;
-  --color-cell-border: #3f3f3f;
-  --color-cell-hover: #ffffff;
-}
-
-.case-study-presentation-overlay.presentation-theme-turquoise {
-  --color-bg: #0b1312;
-  --color-surface: #0e1715;
-  --color-elevated: #152320;
-  --color-border: #2a5850;
-  --color-fg: #dffaf6;
-  --color-fg-muted: #78c9b8;
-  --color-fg-subtle: #559e8f;
-  --color-hud: #3cdbcb;
-  --color-cell-border: #335f56;
-  --color-cell-hover: #6ae8d4;
-}
-
-.case-study-presentation-overlay.presentation-theme-pink {
-  --color-bg: #100a12;
-  --color-surface: #140d16;
-  --color-elevated: #1c1220;
-  --color-border: #4a2a52;
-  --color-fg: #ffe8ff;
-  --color-fg-muted: #c896d4;
-  --color-fg-subtle: #9a6aa8;
-  --color-hud: #e879f9;
-  --color-cell-border: #553060;
-  --color-cell-hover: #f0a8ff;
-}
-
-.case-study-presentation-overlay.presentation-theme-blue {
-  --color-bg: #0a0e16;
-  --color-surface: #0c1220;
-  --color-elevated: #121a2e;
-  --color-border: #243a5c;
-  --color-fg: #e8f0ff;
-  --color-fg-muted: #8aa8e0;
-  --color-fg-subtle: #6080c0;
-  --color-hud: #6eb0ff;
-  --color-cell-border: #30456e;
-  --color-cell-hover: #8cc4ff;
-}
-
-.case-study-presentation-overlay.presentation-theme-white {
-  --color-bg: #ffffff;
-  --color-surface: #f4f4f5;
-  --color-elevated: #fafafa;
-  --color-border: #e4e4e7;
-  --color-fg: #09090b;
-  --color-fg-muted: #52525b;
-  --color-fg-subtle: #71717a;
-  --color-hud: #18181b;
-  --color-cell-border: #d4d4d8;
-  --color-cell-hover: #18181b;
-}
-
 /* Entire subtree must ignore hit-testing so `elementFromPoint` sees real UI under the reticle. */
 .custom-cursor-root,
 .custom-cursor-root * {
@@ -557,6 +503,32 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 
 .hud-svg-glow {
   animation: hud-glow-pulse 4.2s ease-in-out infinite;
+}
+
+/* Route fallback: 1px rail + traveling meteor (same idea as case-study scroll progress) */
+.hud-loading-meteor-svg {
+  overflow: visible;
+}
+
+.hud-loading-meteor-rail {
+  stroke: color-mix(in srgb, var(--color-fg) 16%, transparent);
+}
+
+.hud-loading-meteor-path {
+  shape-rendering: geometricPrecision;
+  stroke-dasharray: 14 86;
+  animation: rotating-circle-meteor-dash 2.8s linear infinite;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-hud) 80%, transparent))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-hud) 45%, transparent))
+    drop-shadow(0 0 28px color-mix(in srgb, var(--color-hud) 28%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-loading-meteor-path {
+    animation: none;
+    stroke-dasharray: 18 82;
+    stroke-dashoffset: 0;
+  }
 }
 
 /* Case study list: active-row progress (duration set inline to match auto-rotate) */
@@ -825,15 +797,15 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 
 /* User vs business trade-off rows — #414141 ring, no interior fill (page shows through). */
 .chamfer-tradeoff-outline.quadrant-cell::before {
-  background-color: #414141;
+  background-color: var(--color-cell-border);
 }
 
 .chamfer-tradeoff-outline.quadrant-cell:hover::before {
-  background-color: #414141;
+  background-color: var(--color-cell-border);
 }
 
 .chamfer-tradeoff-outline.figma-frame-static.quadrant-cell:hover::before {
-  background-color: #414141;
+  background-color: var(--color-cell-border);
 }
 
 /* Match page fill so only the 1px chamfer ring reads as #414141 (transparent lets ::before show through). */
@@ -982,18 +954,18 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   backdrop-filter: blur(1.5px) saturate(138%);
   -webkit-mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.48) 0%,
-    rgba(0, 0, 0, 0.32) 18%,
-    rgba(0, 0, 0, 0.16) 42%,
-    rgba(0, 0, 0, 0.06) 68%,
+    color-mix(in srgb, var(--color-scrim) 48%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 32%, transparent) 18%,
+    color-mix(in srgb, var(--color-scrim) 16%, transparent) 42%,
+    color-mix(in srgb, var(--color-scrim) 6%, transparent) 68%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.48) 0%,
-    rgba(0, 0, 0, 0.32) 18%,
-    rgba(0, 0, 0, 0.16) 42%,
-    rgba(0, 0, 0, 0.06) 68%,
+    color-mix(in srgb, var(--color-scrim) 48%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 32%, transparent) 18%,
+    color-mix(in srgb, var(--color-scrim) 16%, transparent) 42%,
+    color-mix(in srgb, var(--color-scrim) 6%, transparent) 68%,
     transparent 100%
   );
 }
@@ -1003,20 +975,20 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   backdrop-filter: blur(3px) saturate(142%);
   -webkit-mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.52) 0%,
-    rgba(0, 0, 0, 0.36) 14%,
-    rgba(0, 0, 0, 0.2) 34%,
-    rgba(0, 0, 0, 0.08) 58%,
-    rgba(0, 0, 0, 0.02) 82%,
+    color-mix(in srgb, var(--color-scrim) 52%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 36%, transparent) 14%,
+    color-mix(in srgb, var(--color-scrim) 20%, transparent) 34%,
+    color-mix(in srgb, var(--color-scrim) 8%, transparent) 58%,
+    color-mix(in srgb, var(--color-scrim) 2%, transparent) 82%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.52) 0%,
-    rgba(0, 0, 0, 0.36) 14%,
-    rgba(0, 0, 0, 0.2) 34%,
-    rgba(0, 0, 0, 0.08) 58%,
-    rgba(0, 0, 0, 0.02) 82%,
+    color-mix(in srgb, var(--color-scrim) 52%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 36%, transparent) 14%,
+    color-mix(in srgb, var(--color-scrim) 20%, transparent) 34%,
+    color-mix(in srgb, var(--color-scrim) 8%, transparent) 58%,
+    color-mix(in srgb, var(--color-scrim) 2%, transparent) 82%,
     transparent 100%
   );
 }
@@ -1026,20 +998,20 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   backdrop-filter: blur(6px) saturate(148%);
   -webkit-mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.58) 0%,
-    rgba(0, 0, 0, 0.4) 12%,
-    rgba(0, 0, 0, 0.22) 28%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0.03) 75%,
+    color-mix(in srgb, var(--color-scrim) 58%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 40%, transparent) 12%,
+    color-mix(in srgb, var(--color-scrim) 22%, transparent) 28%,
+    color-mix(in srgb, var(--color-scrim) 10%, transparent) 50%,
+    color-mix(in srgb, var(--color-scrim) 3%, transparent) 75%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.58) 0%,
-    rgba(0, 0, 0, 0.4) 12%,
-    rgba(0, 0, 0, 0.22) 28%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0.03) 75%,
+    color-mix(in srgb, var(--color-scrim) 58%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 40%, transparent) 12%,
+    color-mix(in srgb, var(--color-scrim) 22%, transparent) 28%,
+    color-mix(in srgb, var(--color-scrim) 10%, transparent) 50%,
+    color-mix(in srgb, var(--color-scrim) 3%, transparent) 75%,
     transparent 100%
   );
 }
@@ -1049,20 +1021,20 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   backdrop-filter: blur(11px) saturate(154%);
   -webkit-mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.65) 0%,
-    rgba(0, 0, 0, 0.45) 10%,
-    rgba(0, 0, 0, 0.26) 24%,
-    rgba(0, 0, 0, 0.11) 44%,
-    rgba(0, 0, 0, 0.04) 66%,
+    color-mix(in srgb, var(--color-scrim) 65%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 45%, transparent) 10%,
+    color-mix(in srgb, var(--color-scrim) 26%, transparent) 24%,
+    color-mix(in srgb, var(--color-scrim) 11%, transparent) 44%,
+    color-mix(in srgb, var(--color-scrim) 4%, transparent) 66%,
     transparent 92%
   );
   mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.65) 0%,
-    rgba(0, 0, 0, 0.45) 10%,
-    rgba(0, 0, 0, 0.26) 24%,
-    rgba(0, 0, 0, 0.11) 44%,
-    rgba(0, 0, 0, 0.04) 66%,
+    color-mix(in srgb, var(--color-scrim) 65%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 45%, transparent) 10%,
+    color-mix(in srgb, var(--color-scrim) 26%, transparent) 24%,
+    color-mix(in srgb, var(--color-scrim) 11%, transparent) 44%,
+    color-mix(in srgb, var(--color-scrim) 4%, transparent) 66%,
     transparent 92%
   );
 }
@@ -1072,20 +1044,20 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   backdrop-filter: blur(19px) saturate(162%);
   -webkit-mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.78) 0%,
-    rgba(0, 0, 0, 0.52) 9%,
-    rgba(0, 0, 0, 0.28) 22%,
-    rgba(0, 0, 0, 0.12) 40%,
-    rgba(0, 0, 0, 0.04) 62%,
+    color-mix(in srgb, var(--color-scrim) 78%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 52%, transparent) 9%,
+    color-mix(in srgb, var(--color-scrim) 28%, transparent) 22%,
+    color-mix(in srgb, var(--color-scrim) 12%, transparent) 40%,
+    color-mix(in srgb, var(--color-scrim) 4%, transparent) 62%,
     transparent 88%
   );
   mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.78) 0%,
-    rgba(0, 0, 0, 0.52) 9%,
-    rgba(0, 0, 0, 0.28) 22%,
-    rgba(0, 0, 0, 0.12) 40%,
-    rgba(0, 0, 0, 0.04) 62%,
+    color-mix(in srgb, var(--color-scrim) 78%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 52%, transparent) 9%,
+    color-mix(in srgb, var(--color-scrim) 28%, transparent) 22%,
+    color-mix(in srgb, var(--color-scrim) 12%, transparent) 40%,
+    color-mix(in srgb, var(--color-scrim) 4%, transparent) 62%,
     transparent 88%
   );
 }
@@ -1095,20 +1067,20 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   backdrop-filter: blur(30px) saturate(172%);
   -webkit-mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.88) 0%,
-    rgba(0, 0, 0, 0.58) 8%,
-    rgba(0, 0, 0, 0.28) 20%,
-    rgba(0, 0, 0, 0.1) 36%,
-    rgba(0, 0, 0, 0.03) 54%,
+    color-mix(in srgb, var(--color-scrim) 88%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 58%, transparent) 8%,
+    color-mix(in srgb, var(--color-scrim) 28%, transparent) 20%,
+    color-mix(in srgb, var(--color-scrim) 10%, transparent) 36%,
+    color-mix(in srgb, var(--color-scrim) 3%, transparent) 54%,
     transparent 78%
   );
   mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.88) 0%,
-    rgba(0, 0, 0, 0.58) 8%,
-    rgba(0, 0, 0, 0.28) 20%,
-    rgba(0, 0, 0, 0.1) 36%,
-    rgba(0, 0, 0, 0.03) 54%,
+    color-mix(in srgb, var(--color-scrim) 88%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 58%, transparent) 8%,
+    color-mix(in srgb, var(--color-scrim) 28%, transparent) 20%,
+    color-mix(in srgb, var(--color-scrim) 10%, transparent) 36%,
+    color-mix(in srgb, var(--color-scrim) 3%, transparent) 54%,
     transparent 78%
   );
 }
@@ -1118,20 +1090,20 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   backdrop-filter: blur(46px) saturate(184%);
   -webkit-mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.96) 0%,
-    rgba(0, 0, 0, 0.72) 7%,
-    rgba(0, 0, 0, 0.4) 16%,
-    rgba(0, 0, 0, 0.16) 30%,
-    rgba(0, 0, 0, 0.05) 48%,
+    color-mix(in srgb, var(--color-scrim) 96%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 72%, transparent) 7%,
+    color-mix(in srgb, var(--color-scrim) 40%, transparent) 16%,
+    color-mix(in srgb, var(--color-scrim) 16%, transparent) 30%,
+    color-mix(in srgb, var(--color-scrim) 5%, transparent) 48%,
     transparent 70%
   );
   mask-image: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.96) 0%,
-    rgba(0, 0, 0, 0.72) 7%,
-    rgba(0, 0, 0, 0.4) 16%,
-    rgba(0, 0, 0, 0.16) 30%,
-    rgba(0, 0, 0, 0.05) 48%,
+    color-mix(in srgb, var(--color-scrim) 96%, transparent) 0%,
+    color-mix(in srgb, var(--color-scrim) 72%, transparent) 7%,
+    color-mix(in srgb, var(--color-scrim) 40%, transparent) 16%,
+    color-mix(in srgb, var(--color-scrim) 16%, transparent) 30%,
+    color-mix(in srgb, var(--color-scrim) 5%, transparent) 48%,
     transparent 70%
   );
 }
@@ -1253,7 +1225,7 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
   }
 
   50% {
-    opacity: 0.15;
+    opacity: 0.65;
   }
 }
 
@@ -1411,53 +1383,6 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
 }
 
 /*
- * Page color themes (header swatches). Default = @theme block above (grey).
- * Swatch hex reference:
- *   grey:    bg #101010, fg #fafafa, hud #ffffff
- *   turquoise (cyan id): bg #0b1312, fg #dffaf6, hud #3cdbcb
- *   magenta: bg #100a12, fg #ffe8ff, hud #e879f9
- *   blue:    bg #0a0e16, fg #e8f0ff, hud #6eb0ff
- */
-html[data-theme='cyan'] {
-  --color-bg: #0b1312;
-  --color-surface: #0e1715;
-  --color-elevated: #152320;
-  --color-border: #2a5850;
-  --color-fg: #dffaf6;
-  --color-fg-muted: #78c9b8;
-  --color-fg-subtle: #559e8f;
-  --color-hud: #3cdbcb;
-  --color-cell-border: #335f56;
-  --color-cell-hover: #6ae8d4;
-}
-
-html[data-theme='magenta'] {
-  --color-bg: #100a12;
-  --color-surface: #140d16;
-  --color-elevated: #1c1220;
-  --color-border: #4a2a52;
-  --color-fg: #ffe8ff;
-  --color-fg-muted: #c896d4;
-  --color-fg-subtle: #9a6aa8;
-  --color-hud: #e879f9;
-  --color-cell-border: #553060;
-  --color-cell-hover: #f0a8ff;
-}
-
-html[data-theme='blue'] {
-  --color-bg: #0a0e16;
-  --color-surface: #0c1220;
-  --color-elevated: #121a2e;
-  --color-border: #243a5c;
-  --color-fg: #e8f0ff;
-  --color-fg-muted: #8aa8e0;
-  --color-fg-subtle: #6080c0;
-  --color-hud: #6eb0ff;
-  --color-cell-border: #30456e;
-  --color-cell-hover: #8cc4ff;
-}
-
-/*
  * Responsive `--text-body` (after @theme): small / large mobile only; tablet+ matches @theme (1rem).
  * Opt in per page later via component classes; base body uses var(--text-body) already.
  */
@@ -1557,14 +1482,14 @@ html[data-theme='blue'] {
 
 .not-found-404-glitch::before {
   z-index: -1;
-  color: #00fff2;
+  color: var(--color-effect-cyan);
   mix-blend-mode: screen;
   animation: not-found-404-glitch-before 2.8s steps(1, end) infinite;
 }
 
 .not-found-404-glitch::after {
   z-index: -1;
-  color: #ff00aa;
+  color: var(--color-effect-magenta);
   mix-blend-mode: screen;
   animation: not-found-404-glitch-after 3.4s steps(1, end) infinite;
 }

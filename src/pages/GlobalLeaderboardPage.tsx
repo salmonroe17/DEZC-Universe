@@ -1,10 +1,12 @@
+import { LeaderboardGate } from '../components/LeaderboardGate'
 import {
   useEffect,
   useMemo,
   useState,
   type FormEvent,
 } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { unlockDesignSystem } from '../design-system/editorAccess'
 import { CaretDown, CaretUp } from '@phosphor-icons/react'
 import { LeaderboardCityFilter } from '../components/LeaderboardCityFilter'
 import {
@@ -127,6 +129,21 @@ function sortRows(
 }
 
 export default function GlobalLeaderboardPage() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (!import.meta.env.DEV) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) return
+      const target = event.target
+      if (target instanceof HTMLElement && target.closest('input,textarea,select,[contenteditable="true"]')) return
+      if (event.key.toLowerCase() === 'd' && unlockDesignSystem()) {
+        event.preventDefault()
+        navigate('/design-system')
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [navigate])
   const [geoReady, setGeoReady] = useState(false)
   const [viewerCity, setViewerCity] = useState<string | null>(null)
   const [authTicker, setAuthTicker] = useState(0)
@@ -310,6 +327,10 @@ export default function GlobalLeaderboardPage() {
 
   function handleUnlock(e: FormEvent) {
     e.preventDefault()
+    if (import.meta.env.DEV && passwordInput.trim().toLowerCase() === 'd' && unlockDesignSystem()) {
+      navigate('/design-system')
+      return
+    }
     if (passwordInput === LEADERBOARD_ACCESS_PASSWORD) {
       persistLeaderboardPasswordUnlock()
       setAuthError(false)
@@ -339,39 +360,10 @@ export default function GlobalLeaderboardPage() {
       ) : !unlocked ? (
         <>
           <p className="mt-3 max-w-2xl text-sm text-fg-muted">This page is password protected.</p>
-          <form
-            onSubmit={handleUnlock}
-            className="mt-8 max-w-sm rounded border border-cell-border/80 bg-elevated/30 p-4"
-          >
-            <label
-              htmlFor="leaderboard-password"
-              className="block text-[10px] uppercase tracking-[0.1em] text-fg-muted"
-            >
-              Password
-            </label>
-            <input
-              id="leaderboard-password"
-              type="password"
-              autoComplete="off"
-              value={passwordInput}
-              onChange={(ev) => {
-                setPasswordInput(ev.target.value)
-                if (authError) setAuthError(false)
-              }}
-              className="mt-2 w-full rounded border border-cell-border/80 bg-bg px-3 py-2 text-sm text-fg outline-none ring-hud/40 transition-[box-shadow] focus:ring-2"
-            />
-            {authError && (
-              <p className="mt-2 text-xs text-fg-muted" role="alert">
-                Incorrect password.
-              </p>
-            )}
-            <button
-              type="submit"
-              className="mt-4 rounded border border-cell-border/80 bg-bg px-4 py-2 text-xs font-medium text-fg transition-colors hover:border-hud/60 hover:text-fg/90"
-            >
-              View leaderboard
-            </button>
-          </form>
+          <LeaderboardGate password={passwordInput} onPasswordChange={(value) => {
+            setPasswordInput(value)
+            if (authError) setAuthError(false)
+          }} onSubmit={handleUnlock} error={authError} />
           <p className="mt-6">
             <Link
               to="/"
