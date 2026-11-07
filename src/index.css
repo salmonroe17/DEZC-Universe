@@ -1504,3 +1504,14 @@ html:has(body.case-study-presentation-overlay-open) body::-webkit-scrollbar {
     display: none;
   }
 }
+
+/* Luma is opt-in: the shared frames become rounded without changing their content/layout. */
+:where([data-theme=luma], .luma-prototype) .quadrant-cell,
+:where([data-theme=luma], .luma-prototype) .quadrant-cell::before,
+:where([data-theme=luma], .luma-prototype) .quadrant-cell::after,
+:where([data-theme=luma], .luma-prototype) .chamfer-fill-clip {
+  clip-path: inset(0 round var(--surface-radius,24px));
+  border-radius: var(--surface-radius,24px);
+}
+:where([data-theme=luma], .luma-prototype) .chamfer-meteor-ring { display:none; }
+:where([data-theme=luma], .luma-prototype) :is(button,input,select,textarea).rounded { border-radius:12px; }

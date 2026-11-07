@@ -14,10 +14,11 @@ import { PortfolioAccordion } from '../components/system/PortfolioAccordion'
 import { OverviewShowcase } from '../design-system/OverviewShowcase'
 import { visualStories, visualStoryGroups, pageSections } from '../design-system/visualCatalog'
 import { VisualComponentGallery, VisualStoryView, VisualPages, VisualFoundations } from '../design-system/VisualLibrary'
+import { LumaPrototype } from '../design-system/LumaPrototype'
 import './design-system.css'
 
 type Module = typeof inventory.modules[number]
-type Tab = 'Overview' | 'System guide' | 'Foundations' | 'Pages' | 'Components' | 'Media' | 'Contrast'
+type Tab = 'Luma' | 'Overview' | 'System guide' | 'Foundations' | 'Pages' | 'Components' | 'Media' | 'Contrast'
 const controlClass = 'ds-control'
 const byFile = new Map(inventory.modules.map((m) => [m.file, m]))
 const text = (value: unknown) => JSON.stringify(value).toLowerCase()
@@ -215,6 +216,7 @@ export default function DesignSystemPage() {
   const selectedModule = selectedStory ? byFile.get(selectedStory.source) : selection.file ? byFile.get(selection.file) : undefined
   const title = selection.label ?? selection.tab
   const descriptions: Record<Tab, string> = {
+    Luma: 'A light, gradient-led theme study. Review the direction before applying it to the portfolio.',
     Overview: 'Every building block, together.',
     'System guide': 'Coverage, configuration and the workflow behind the portfolio.',
     Foundations: 'The visual language of the portfolio, from tokens to interaction states.',
@@ -226,13 +228,14 @@ export default function DesignSystemPage() {
   const visibleGroups = visualStoryGroups.map((group) => ({ ...group, stories: group.stories.filter((story) => matches(`${story.name} ${story.group} ${story.description}`)) })).filter((group) => group.stories.length)
   const visibleRoutes = inventory.routes.filter((r) => matches(`${pageLabels[r.path]} ${r.path} ${r.component}`))
   const visibleFoundations = foundationGroups.map((group) => ({ ...group, items: group.items.filter((item) => matches(`${group.name} ${item.label}`)) })).filter((group) => group.items.length)
-  const hasResults = visibleGroups.length || visibleRoutes.length || visibleFoundations.length || matches('Overview System guide Media Photos Illustrations Videos Fonts Contrast Accessibility Audit')
+  const hasResults = visibleGroups.length || visibleRoutes.length || visibleFoundations.length || matches('Luma theme prototype Overview System guide Media Photos Illustrations Videos Fonts Contrast Accessibility Audit')
   return <main className={`ds-workbench ds-studio ${sidebarOpen ? 'ds-sidebar-open' : 'ds-sidebar-collapsed'} ${selection.tab==='Overview'?'ds-showcase-view':''}`}>
     {sidebarOpen && <button type="button" className="ds-sidebar-scrim" aria-label="Close navigation" onClick={() => setSidebarOpen(false)} />}
     <aside id="design-system-navigation" className="ds-sidebar" aria-label="Design system navigation">
       <div className="ds-sidebar-brand"><span className="ds-brand-mark"><SquaresFour size={21} weight="fill" /></span>{sidebarOpen && <span><strong>Portfolio system</strong><small>Dez Chang</small></span>}<button className="ds-icon-button" onClick={() => setSidebarOpen((open) => !open)} aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'} aria-expanded={sidebarOpen}><SidebarSimple size={19} /></button></div>
       {sidebarOpen ? <><div className="ds-sidebar-search"><MagnifyingGlass size={16} /><input type="search" aria-label="Search design system navigation" placeholder="Find a component or page…" value={query} onChange={(e) => setQuery(e.target.value)} />{query && <button aria-label="Clear navigation search" onClick={() => setQuery('')}><X size={13} /></button>}</div>
       <div className="ds-sidebar-tree"><div className="ds-nav-caption">WORKSPACE <span>Hidden access</span></div><nav aria-label="System explorer">
+        {matches('Luma theme prototype gradients') && <TreeItem label="Luma · theme study" kind="L" active={selection.tab === 'Luma'} onClick={() => select({tab:'Luma',label:'Luma'})}/>}
         {matches('Overview') && <TreeItem label="Overview" kind="O" active={selection.tab === 'Overview'} onClick={() => select({ tab: 'Overview' })} />}
         {visibleFoundations.length > 0 && <TreeGroup key={`foundations-${searching}`} label="Foundations" count={foundationGroups.reduce((n, g) => n + g.items.length, 0)} searching={searching} initial icon={<Palette size={16} />}><TreeItem label="All foundations" kind="F" active={selection.tab === 'Foundations' && !selection.anchor} onClick={() => select({ tab: 'Foundations' })} />{visibleFoundations.map((group) => <TreeGroup key={`${group.name}-${searching}`} label={group.name} searching={searching}>{group.items.map((item) => <TreeItem key={item.anchor} label={item.label} kind="F" active={selection.anchor === item.anchor} onClick={() => select({ tab: 'Foundations', anchor: item.anchor, label: item.label })} />)}</TreeGroup>)}</TreeGroup>}
         {visibleGroups.length > 0 && <TreeGroup key={`components-${searching}`} label="Components" count={visualStories.length} searching={searching} initial icon={<Stack size={16} />}><TreeItem label="All components" kind="C" active={selection.tab === 'Components' && !selection.story} onClick={() => select({ tab: 'Components' })} />{visibleGroups.map((group) => <TreeGroup key={`${group.name}-${searching}`} label={group.name} count={group.stories.length} searching={searching} initial>{group.stories.map((story) => <TreeItem key={story.id} label={story.name} kind="C" active={selection.story === story.id} onClick={() => select({tab:'Components',story:story.id,label:story.name})} />)}</TreeGroup>)}</TreeGroup>}
@@ -246,6 +249,7 @@ export default function DesignSystemPage() {
     <div className="ds-main"><header className="ds-topbar"><div><button className="ds-icon-button" onClick={() => setSidebarOpen((open) => !open)} aria-label={sidebarOpen ? 'Hide navigation sidebar' : 'Show navigation sidebar'} aria-expanded={sidebarOpen} aria-controls="design-system-navigation"><SidebarSimple size={18} /></button><span className="ds-topbar-divider"/><span>Design system</span><CaretRight size={12}/><strong>{selection.tab}</strong></div><div><Link to="/" className="ds-back-link"><ArrowLeft size={14}/>Portfolio</Link><button className="ds-control" onClick={() => { setTheme(portfolioTheme.activeTheme); lockDesignSystem(); window.location.assign('/leaderboard') }}>Lock & exit</button></div></header>
     <div className="ds-main-scroll" ref={scrollRef}><div className="ds-content"><header className="ds-doc-header"><div className="ds-eyebrow">{selection.tab === 'Overview' ? 'YOUR WORKSPACE' : selection.tab}</div><h1>{title}</h1><p>{selectedStory?.description ?? descriptions[selection.tab]}</p></header>
       {selection.tab === 'Overview' && <OverviewShowcase inspect={id=>{if(id==='@colors')select({tab:'Foundations',anchor:'semantic-color-roles',label:'Semantic colors'});else if(id==='@typography')select({tab:'Foundations',anchor:'type-specimens',label:'Typography'});else {const story=visualStories.find(s=>s.id===id);if(story)select({tab:'Components',story:id,label:story.name})}}}/> }
+      {selection.tab === 'Luma' && <LumaPrototype/>}
       {selection.tab === 'System guide' && <SystemGuide select={select}/>}
       {selection.tab === 'Foundations' && <><VisualFoundations focus={selection.anchor}/><TechnicalReference title="Technical reference · tokens & source"><Foundations query=""/></TechnicalReference></>}
       {selection.tab === 'Pages' && <><VisualPages path={selection.route} section={selection.section} onSelect={(path,label,section)=>select({tab:'Pages',route:path,label:pageLabels[path] && !section ? pageLabels[path]:label,section})}/><TechnicalReference title="Technical reference · page structure & source"><PageMap query="" selectedPath={selection.route}/></TechnicalReference></>}

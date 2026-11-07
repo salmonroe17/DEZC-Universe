@@ -1,0 +1,74 @@
+.luma-prototype { background:var(--color-bg); color:var(--color-fg); padding:44px; border-radius:28px; font-family:var(--font-sans); --surface-radius:24px; }
+.luma-prototype * { box-sizing:border-box; }
+.luma-kicker,.luma-label,.luma-stage-caption,.luma-section-title>span,.luma-foot { font-size:10px; letter-spacing:.09em; font-weight:500; }
+.luma-kicker { display:flex; align-items:center; gap:9px; }
+.luma-mark { width:14px; height:14px; border-radius:50%; background:radial-gradient(circle at 25% 30%,#a4ffff,#2859f6 60%,#201645); }
+.luma-intro-row { display:flex; justify-content:space-between; align-items:end; gap:24px; padding:28px 0 38px; }
+.luma-intro h2 { font-size:clamp(70px,9vw,128px); font-weight:500; line-height:.9; letter-spacing:-.09em; margin:0; }
+.luma-intro h2>span { font-size:20px; letter-spacing:0; vertical-align:top; margin-left:10px; }
+.luma-intro-row>div>p { margin:20px 0 0; font-size:19px; letter-spacing:-.04em; }
+.luma-intro-note { max-width:225px; }
+.luma-intro-note>span { font-size:9px; color:var(--color-fg-subtle); letter-spacing:.1em; }
+.luma-intro .luma-intro-note>p { font-size:12px; line-height:1.7; letter-spacing:0; margin-top:12px; }
+.luma-intro-note button { margin-top:18px; display:flex; align-items:center; gap:12px; font-size:11px; border-bottom:1px solid #a4a5aa; padding-bottom:5px; text-align:left; }
+.luma-hero { background:#efefeb; border:1px solid #e3e3dc; border-radius:28px; overflow:hidden; }
+.luma-stage-caption { display:flex; justify-content:space-between; gap:20px; padding:22px 24px 0; font-size:8px; color:var(--color-fg-muted); }
+.luma-tone-card { padding:30px 25px; height:100%; display:flex; flex-direction:column; justify-content:space-between; font-family:"Inter",sans-serif; }
+.luma-tone-top { display:flex; justify-content:space-between; font-size:12px; line-height:1.4; }
+.luma-tone-value { padding-top:25px; }
+.luma-tone-value output { display:block; text-align:center; font-size:96px; font-weight:400; letter-spacing:-.09em; color:#92f8ff; line-height:1.2; }
+.luma-tone-value output>span { font-size:38px; vertical-align:top; display:inline-block; margin-top:16px; margin-left:5px; }
+.luma-tone-value input { display:block; width:100%; accent-color:#c3fcff; height:20px; }
+.luma-tone-value>div { display:flex; justify-content:space-between; font-size:10px; margin-top:4px; }
+.luma-tone-bottom { display:flex; justify-content:space-between; align-items:end; font-size:11px; gap:20px; }
+.luma-tone-bottom>span+span { font-size:8px; }
+.luma-stage-toolbar { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; padding:8px 20px 20px; }
+.luma-stage-toolbar>div { display:flex; gap:5px; flex-wrap:wrap; }
+.luma-stage-toolbar button { display:flex; align-items:center; gap:7px; border:1px solid transparent; padding:8px 10px; border-radius:999px; font-size:10px; color:var(--color-fg-muted); }
+.luma-stage-toolbar button[aria-pressed=true] { background:var(--color-surface); border-color:#dedfdc; color:var(--color-fg); }
+.luma-stage-toolbar button>i { width:14px; height:14px; border-radius:50%; }
+.luma-prototype button:focus-visible,.luma-prototype input:focus-visible { outline:2px solid #234dcc; outline-offset:4px; }
+.luma-section { margin-top:56px; }
+.luma-section-title { display:flex; justify-content:space-between; align-items:baseline; gap:16px; margin-bottom:20px; }
+.luma-section-title h3 { font-size:24px; font-weight:500; letter-spacing:-.055em; margin:0; }
+.luma-section-title>span { font-size:8px; color:var(--color-fg-subtle); text-align:right; }
+.luma-foundations { display:grid; grid-template-columns:1fr 1fr; gap:18px; min-width:0; }
+.luma-panel { padding:28px; border:1px solid var(--color-border); background:var(--color-surface); border-radius:24px; min-width:0; }
+.luma-label { color:var(--color-fg-subtle); font-size:9px; }
+.luma-swatches { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px 10px; margin-top:28px; }
+.luma-swatches>div { min-width:0; display:flex; flex-direction:column; gap:6px; }
+.luma-swatches i { display:block; height:44px; border-radius:10px; border:1px solid #17182712; }
+.luma-swatches span { font-size:10px; }
+.luma-swatches small { font-size:8px; color:var(--color-fg-subtle); }
+.luma-panel>p { font-size:12px; line-height:1.7; color:var(--color-fg-muted); margin-top:24px; }
+.luma-type>strong { display:block; font-weight:400; font-size:52px; letter-spacing:-.06em; margin:20px 0 14px; }
+.luma-type h4 { font-size:36px; line-height:1.04; font-weight:500; letter-spacing:-.065em; margin:0; }
+.luma-type>div { display:flex; justify-content:space-between; font-size:11px; margin-top:24px; }
+.luma-type b { font-weight:500; }
+.luma-gradient-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.luma-gradient-grid>article { min-width:0; }
+.luma-gradient-grid .gradient-field { height:220px; }
+.luma-recipe-card { display:flex; align-items:start; justify-content:space-between; padding:22px; height:100%; background:linear-gradient(#0004,transparent 45%); font-size:14px; }
+.luma-recipe-notes { display:flex; flex-direction:column; gap:7px; margin:14px 4px 0; }
+.luma-recipe-notes strong { font-size:12px; font-weight:500; }
+.luma-recipe-notes span { font-size:8px; color:var(--color-fg-subtle); overflow-wrap:anywhere; }
+.luma-atmosphere { display:grid; grid-template-columns:1.2fr 1fr; gap:32px; align-items:center; margin-top:32px; padding:24px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:24px; }
+.luma-atmosphere>.gradient-field { height:310px; }
+.luma-atmosphere h4 { font-size:42px; line-height:1.02; letter-spacing:-.065em; font-weight:500; margin:20px 0; }
+.luma-atmosphere p { color:var(--color-fg-muted); font-size:12px; line-height:1.7; max-width:240px; }
+.luma-component-title { font-size:30px; font-weight:500; line-height:1.1; letter-spacing:-.055em; margin:24px 0 16px; }
+.luma-component-copy { font-size:12px; line-height:1.7; color:var(--color-fg-muted); margin-bottom:24px; }
+.luma-controls { display:flex; flex-direction:column; align-items:stretch; gap:15px; }
+.luma-controls>label { font-size:12px; }
+.luma-control-row { display:flex; gap:9px; flex-wrap:wrap; }
+.luma-switch-row { display:flex; align-items:center; justify-content:space-between; padding:18px 0; border-top:1px solid var(--color-border); margin-top:12px; font-size:12px; }
+.luma-controls>small { color:var(--color-fg-subtle); font-size:10px; line-height:1.7; }
+.luma-foot { display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; margin-top:40px; padding-top:24px; border-top:1px solid var(--color-border); font-size:8px; color:var(--color-fg-subtle); }
+@media(max-width:1100px) { .luma-prototype { padding:28px; } .luma-foundations { grid-template-columns:1fr; } }
+@media(max-width:600px) { .luma-prototype { padding:20px; border-radius:20px; } .luma-intro-row { align-items:start; flex-direction:column; } .luma-intro-note { max-width:none; } .luma-intro h2 { font-size:82px; } .luma-stage-caption { padding:18px 16px 0; } .luma-stage-caption>span+span { display:none; } .luma-gradient-grid { grid-template-columns:1fr; } .luma-gradient-grid .gradient-field { height:240px; } .luma-atmosphere { grid-template-columns:1fr; gap:22px; padding:18px; } .luma-section-title { align-items:start; } .luma-section-title h3 { font-size:22px; } .luma-section-title>span { max-width:95px; } .luma-tone-card { padding:24px 18px; } .luma-tone-value output { font-size:78px; } }
+/* Fixed ink backing keeps live text legible across every gradient family and pointer position. */
+.luma-tone-card { background:linear-gradient(180deg,#051126bd,transparent 35%,transparent 72%,#051126d9); }
+.luma-tone-value { background:#06152edb; border:1px solid #ffffff1f; border-radius:18px; padding:14px; }
+.luma-tone-value output { font-size:80px; }
+.luma-tone-value output>span { font-size:32px; margin-top:14px; }
+.luma-recipe-card>span { background:#06152ee6; color:#fff; border-radius:999px; padding:6px 10px; font-size:12px; }

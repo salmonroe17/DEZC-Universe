@@ -33,6 +33,7 @@ const SWATCH: Record<SiteTheme, { selected: string; idle: string; selectedDot: s
     idle: 'border-2 border-fuchsia-400 bg-transparent',
     selectedDot: themeSwatchSelectedDotOnColorClass,
   },
+  luma: { selected: 'bg-blue-200', idle: 'border border-blue-400 bg-transparent', selectedDot: themeSwatchSelectedDotOnLightFillClass },
   light: { selected: 'bg-white', idle: 'border border-zinc-400 bg-transparent', selectedDot: themeSwatchSelectedDotOnLightFillClass },
   blue: {
     selected: 'bg-blue-400',

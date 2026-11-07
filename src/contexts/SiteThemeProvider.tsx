@@ -30,7 +30,7 @@ export function SiteThemeProvider({ children }: { children: ReactNode }) {
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme
-    document.documentElement.style.colorScheme = theme === 'light' ? 'light' : 'dark'
+    document.documentElement.style.colorScheme = (theme === 'light' || theme === 'luma') ? 'light' : 'dark'
     for (const [key, value] of Object.entries(themeVariables(theme))) {
       document.documentElement.style.setProperty(key, value)
     }

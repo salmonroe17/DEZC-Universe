@@ -94,3 +94,11 @@ Validated catalog and real Super case-study switch toggles, mixed-mode presentat
 ## Production availability
 
 The production build includes the design-system route, hidden D entry and lazy-loaded inventory. `designSystemAssets.ts` is generated from the asset inventory with explicit Vite URL imports, so catalog media uses valid fingerprinted build URLs rather than development source paths. The build regenerates both inventories and the asset manifest. The checker now requires the production workbench chunk and discovery gate. Verified the production preview redirects a locked direct visit, opens Overview after entering D in the leaderboard gate, and loads the fingerprinted Super app preview image.
+
+## Luma theme study
+
+**Luma** is the new light, gradient-led direction, available under **Luma · theme study** in the explorer. Its prototype is scoped to its own warm-white palette even while the editor uses Original. Published `portfolioTheme.activeTheme` remains `grey`; no global theme cutover has been made. The study's preview action, or the theme selector, can opt this browser into Luma across existing site components.
+
+Luma adds Inter typography, 24px shared rounded frames, cobalt focus/action roles and three reusable gradient recipes: Azure, Iris and Solar. `GradientField` supports mesh/ring surfaces, pointer response, optional ambient motion, touch fallback and reduced motion. `RefractedCard` adds perspective and SVG-displaced side reflections while keeping central text and inputs undistorted. This is an interpretation of the supplied stills; the animation is a prototype for review. New effects are exposed in the theme study, not misrepresented as existing production portfolio components in the main catalog.
+
+Interactive specimen controls include family selection, reflection and motion toggles, a working range input and the actual shared buttons, input, switch and frame. Text on gradients uses fixed dark backing, and base semantic text colors are checked by `design-system:check`. Case-study media keeps its original colors.
