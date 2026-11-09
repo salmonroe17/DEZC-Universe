@@ -108,7 +108,7 @@ export function ExperimentalCaseStudiesPanel({
   )
 
   if (layout === 'quadrant') {
-    return <div className="flex h-full min-h-0 flex-col">{body}</div>
+    return <div data-ui="case-study-panel" className="flex h-full min-h-0 flex-col">{body}</div>
   }
 
   const footerWidthClass =
@@ -117,6 +117,7 @@ export function ExperimentalCaseStudiesPanel({
   return (
     <div
       ref={setFooterShellEl}
+      data-ui="case-study-panel"
       className={`${quadrantCell} group/right-quadrant relative mx-auto flex ${footerWidthClass} ${footerPanelHeightClass} flex-col`}
       data-quadrant-in-view={footerNarrowMajorityInView ? true : undefined}
     >

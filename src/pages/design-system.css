@@ -539,3 +539,10 @@ body.custom-cursor-active .ds-image-dialog,body.custom-cursor-active .ds-image-d
 
 .ds-showcase-masonry + .ds-showcase-masonry { margin-top: 24px; }
 .ds-showcase-type-foundation { border-top: 0; padding-top: 0; }
+/* Compact rail: fixed hit targets, uniform glyphs, centered independently of C's control styles. */
+.ds-studio.ds-sidebar-collapsed .ds-sidebar-brand { padding:10px; min-height:64px; height:64px; justify-content:center; }
+.ds-studio.ds-sidebar-collapsed .ds-sidebar-brand>.ds-icon-button { margin:0; flex:none; align-self:center; }
+.ds-studio.ds-sidebar-collapsed .ds-collapsed-links { align-items:center; gap:8px; padding:8px 10px; }
+.ds-studio.ds-sidebar-collapsed .ds-collapsed-links>.ds-icon-button,
+.ds-studio.ds-sidebar-collapsed .ds-sidebar-brand>.ds-icon-button { display:flex; width:44px; height:44px; min-width:44px; min-height:44px; padding:12px; align-items:center; justify-content:center; align-self:center; border-radius:14px; }
+.ds-studio.ds-sidebar-collapsed .ds-sidebar .ds-icon-button svg { display:block; flex:none; width:20px; height:20px; }

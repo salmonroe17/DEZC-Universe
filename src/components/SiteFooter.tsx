@@ -26,7 +26,7 @@ export function SiteFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative z-20 grid h-12 w-full shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 border-t border-border bg-bg/95 px-3 backdrop-blur-sm sm:gap-4 sm:px-6">
+    <footer className="site-footer relative z-20 grid h-12 w-full shrink-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 border-t border-border bg-bg/95 px-3 backdrop-blur-sm sm:gap-4 sm:px-6">
       <Link
         to="/privacy"
         className={`justify-self-start ${footerLinkClass}`}

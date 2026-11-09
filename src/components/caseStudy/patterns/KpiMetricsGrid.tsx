@@ -1,3 +1,5 @@
+import { useSiteTheme } from '../../../contexts/useSiteTheme'
+import { GlassText } from '../../../design-system/GlassTypography'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { KPISectionProps } from '../../../types/caseStudy'
 import { caseStudyScrollAnchorClass, caseStudySectionHeadingClass } from './caseStudyPatternStyles'
@@ -58,6 +60,7 @@ function usePrefersReducedMotion(): boolean {
 const kpiValueGlowClass = 'kpi-metric-value-glow'
 
 export function KpiAnimatedValue({ value }: { value: string }) {
+  const {theme}=useSiteTheme()
   const parsed = useMemo(() => parseKpiNumeric(value), [value])
   const reduceMotion = usePrefersReducedMotion()
   const ref = useRef<HTMLSpanElement>(null)
@@ -102,9 +105,10 @@ export function KpiAnimatedValue({ value }: { value: string }) {
   }, [parsed, inView, reduceMotion])
 
   if (!parsed) {
-    return <span className={kpiValueGlowClass}>{value}</span>
+    return <span className={kpiValueGlowClass}>{theme==='luma-c'?<GlassText text={value} number/>:value}</span>
   }
 
+  if(reduceMotion&&theme==='luma-c')return <GlassText text={value} number/>
   if (reduceMotion) {
     return (
       <span className={kpiValueGlowClass}>
@@ -120,7 +124,7 @@ export function KpiAnimatedValue({ value }: { value: string }) {
 
   return (
     <span ref={ref} className={kpiValueGlowClass}>
-      {text}
+      {theme==='luma-c'?<GlassText text={text} number/>:text}
     </span>
   )
 }

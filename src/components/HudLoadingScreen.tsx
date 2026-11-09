@@ -7,6 +7,7 @@ export function HudLoadingScreen({ label = 'Loading…' }: { label?: string }) {
   return (
     <div
       className="flex min-h-dvh w-full items-center justify-center bg-bg"
+      data-ui="loader"
       role="status"
       aria-live="polite"
       aria-busy="true"
@@ -20,9 +21,9 @@ export function HudLoadingScreen({ label = 'Loading…' }: { label?: string }) {
         >
           <defs>
             <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="var(--color-hud)" stopOpacity={0} />
-              <stop offset="55%" stopColor="var(--color-hud)" stopOpacity={0.85} />
-              <stop offset="100%" stopColor="var(--color-fg)" stopOpacity={1} />
+              <stop offset="0%" stopColor="var(--primary-start,var(--color-hud))" stopOpacity={0} />
+              <stop offset="55%" stopColor="var(--primary-mid,var(--color-hud))" stopOpacity={0.85} />
+              <stop offset="100%" stopColor="var(--primary-end,var(--color-fg))" stopOpacity={1} />
             </linearGradient>
           </defs>
           <circle

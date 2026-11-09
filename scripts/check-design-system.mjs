@@ -8,6 +8,8 @@ async function loadTs(file) {
 }
 const { portfolioTheme, themePalettes, fixedColors, themeGlyphColors } = await loadTs('src/design-system/theme.ts')
 const { contrastRatio } = await loadTs('src/design-system/contrast.ts')
+const { lumaPreviewVariables,lumaPaletteOptions,defaultLumaPreview } = await loadTs('src/design-system/lumaPreview.ts')
+for(const mode of ['light','dark'])for(const palette of Object.keys(lumaPaletteOptions)){const overrides=lumaPreviewVariables({...defaultLumaPreview,mode,palette});const colors={...themePalettes['luma-c'],...Object.fromEntries(Object.entries(overrides).filter(([key])=>key.startsWith('--color-')).map(([key,value])=>[key.slice(8),value]))};for(const fg of ['fg','fg-muted','fg-subtle','hud'])for(const bg of ['bg','surface','elevated'])assert.ok(contrastRatio(colors[fg],colors[bg])>=4.5,`Luma C ${mode}/${palette}: ${fg} on ${bg}`)}
 assert.equal(contrastRatio('#ffffff', '#000000'), 21)
 assert.equal(contrastRatio('#ffffff', '#ffffff'), 1)
 assert.ok(themePalettes[portfolioTheme.activeTheme], 'Published theme must exist')
@@ -23,7 +25,7 @@ for (const [name, palette] of Object.entries(themePalettes)) {
   for (const color of themeGlyphColors[name]) assert.ok(contrastRatio(color, palette.bg) >= 3, `${name}: animated 404 glyph must remain legible`)
 }
 // Luma fixed glass/text backing and meaningful control boundaries.
-assert.ok(contrastRatio('#62797b', '#c9e2de') >= 3, 'Luma glass control boundary')
+assert.ok(contrastRatio('#62718e', '#ffffff') >= 3, 'Luma field/slider/switch marker')
 assert.ok(contrastRatio('#123445', '#abd4d8') >= 4.5, 'Luma primary glass action')
 assert.ok(contrastRatio('#92f8ff', '#06152e') >= 4.5, 'Luma optical field text backing')
 assert.ok(contrastRatio(fixedColors['on-media-paper'], fixedColors['media-paper']) >= 4.5)

@@ -32,3 +32,4 @@
 @media(max-width:600px) { .refracted-wing-left { right:calc(50% + 145px); } .refracted-wing-right { left:calc(50% + 145px); } }
 
 .optical-field[data-optical-shape=soft] { filter:blur(18px); transform:scale(1.12); opacity:.92; }
+.optical-field[data-ambient=true] { background:transparent; }

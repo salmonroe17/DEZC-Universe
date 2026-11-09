@@ -64,7 +64,9 @@
         "PortfolioChoice"
       ],
       "consumers": [
-        "src/components/LeaderboardGate.tsx"
+        "src/components/HudShooterIntro.tsx",
+        "src/components/LeaderboardGate.tsx",
+        "src/components/system/PortfolioContentSwitcher.tsx"
       ]
     },
     {
@@ -999,6 +1001,12 @@
       ]
     },
     {
+      "source": "src/components/gradients/FormStudy.tsx",
+      "symbol": "FormStudy",
+      "consumers": [],
+      "stories": []
+    },
+    {
       "source": "src/components/gradients/GradientField.tsx",
       "symbol": "GradientField",
       "consumers": [
@@ -1007,10 +1015,60 @@
       "stories": []
     },
     {
+      "source": "src/components/gradients/LiquidGLLayer.tsx",
+      "symbol": "LiquidGLLayer",
+      "consumers": [
+        "src/components/gradients/LiquidGlassLayer.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/gradients/LiquidGlassLayer.tsx",
+      "symbol": "LiquidGlassLayer",
+      "consumers": [
+        "src/components/gradients/GradientField.tsx",
+        "src/components/gradients/LumaGlassSurfaces.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/gradients/LumaAmbientCards.tsx",
+      "symbol": "LumaAmbientCards",
+      "consumers": [
+        "src/contexts/SiteThemeProvider.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/gradients/LumaCursor.tsx",
+      "symbol": "LumaCursor",
+      "consumers": [
+        "src/components/CustomCursor.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/gradients/LumaGlassSurfaces.tsx",
+      "symbol": "LumaGlassSurfaces",
+      "consumers": [
+        "src/components/gradients/LumaAmbientCards.tsx"
+      ],
+      "stories": []
+    },
+    {
+      "source": "src/components/gradients/LumaShapeDefs.tsx",
+      "symbol": "LumaShapeDefs",
+      "consumers": [
+        "src/components/gradients/LumaAmbientCards.tsx"
+      ],
+      "stories": []
+    },
+    {
       "source": "src/components/gradients/OpticalField.tsx",
       "symbol": "OpticalField",
       "consumers": [
-        "src/components/gradients/GradientField.tsx"
+        "src/components/gradients/GradientField.tsx",
+        "src/components/gradients/LumaAmbientCards.tsx"
       ],
       "stories": []
     },
@@ -1190,10 +1248,20 @@
       "stories": []
     },
     {
+      "source": "src/components/system/PortfolioContentSwitcher.tsx",
+      "symbol": "PortfolioContentSwitcher",
+      "consumers": [
+        "src/components/caseStudy/patterns/BeforeAfterToggle.tsx"
+      ],
+      "stories": []
+    },
+    {
       "source": "src/components/system/PortfolioControls.tsx",
       "symbol": "PortfolioButton",
       "consumers": [
-        "src/components/LeaderboardGate.tsx"
+        "src/components/HudShooterIntro.tsx",
+        "src/components/LeaderboardGate.tsx",
+        "src/components/system/PortfolioContentSwitcher.tsx"
       ],
       "stories": [
         "buttons",
@@ -1228,6 +1296,12 @@
         "buttons",
         "text-fields"
       ]
+    },
+    {
+      "source": "src/components/system/PortfolioDropdown.tsx",
+      "symbol": "PortfolioDropdown",
+      "consumers": [],
+      "stories": []
     },
     {
       "source": "src/components/system/PortfolioTabs.tsx",

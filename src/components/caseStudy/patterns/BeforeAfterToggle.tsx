@@ -1,3 +1,5 @@
+import { useSiteTheme } from '../../../contexts/useSiteTheme'
+import { PortfolioContentSwitcher } from '../../system/PortfolioContentSwitcher'
 import { ChamferFrame } from '../../system/ChamferFrame'
 
 export type BeforeAfterMode = 'before' | 'after'
@@ -16,11 +18,13 @@ export function BeforeAfterToggle({
   beforeLabel = 'Before',
   afterLabel = 'After',
 }: BeforeAfterToggleProps) {
+  const {theme}=useSiteTheme()
   const afterActive = mode === 'after'
 
   const inactiveClass =
     'bg-transparent text-fg [@media(hover:hover)]:hover:bg-fg/[0.06]'
 
+  if(theme==='luma-c')return <PortfolioContentSwitcher label="Before and after" value={mode} onChange={value=>onModeChange(value as BeforeAfterMode)} options={[{value:'before',label:beforeLabel},{value:'after',label:afterLabel}]}/>
   return (
     <>
       <ChamferFrame

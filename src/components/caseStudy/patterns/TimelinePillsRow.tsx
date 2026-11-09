@@ -91,7 +91,7 @@ export function TimelinePillsRow({ stepLabels, ariaLabelledBy, pillTextMode = 's
             className="flex w-full min-w-0 max-w-full flex-col items-center gap-4"
           >
             {i > 0 ? <MobileStepArrow /> : null}
-            <span className={mobilePillClassName}>{label}</span>
+            <span data-ui="timeline-step" className={mobilePillClassName}>{label}</span>
           </li>
         ))}
       </ol>

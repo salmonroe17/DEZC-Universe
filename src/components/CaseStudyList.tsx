@@ -60,7 +60,7 @@ const CaseStudyProgressFill = memo(function CaseStudyProgressFill({
 
   return (
     <div
-      className="absolute inset-0 origin-left bg-[color-mix(in_srgb,var(--color-hud)_58%,transparent)] will-change-transform"
+      className="case-project-progress absolute inset-0 origin-left bg-[color-mix(in_srgb,var(--color-hud)_58%,transparent)] will-change-transform"
       style={{
         animation: `case-study-progress ${durationMs}ms linear forwards`,
         animationPlayState: paused ? 'paused' : 'running',
@@ -93,6 +93,7 @@ export function CaseStudyList({
 
   return (
     <div
+      data-ui="project-rows"
       className={listShellClass}
       onMouseEnter={() => onCaseListPointerInsideChange(true)}
       onMouseLeave={() => onCaseListPointerInsideChange(false)}

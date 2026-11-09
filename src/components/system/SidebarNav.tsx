@@ -30,6 +30,7 @@ export function SidebarNav({
   return (
     <nav
       aria-label={ariaLabel}
+      data-glass-policy="quiet"
       className={
         embedded
           ? `min-w-0 max-w-full font-mono ${className}`
@@ -43,6 +44,7 @@ export function SidebarNav({
             <li key={id} className="min-w-0">
               <button
                 type="button"
+                data-glass-action
                 onClick={() => onNavigate(id)}
                 className={`flex w-full min-w-0 flex-nowrap items-start gap-x-1.5 text-left text-[10px] leading-snug tracking-[0.02em] text-fg md:text-[11px] md:leading-snug ${
                   isActive

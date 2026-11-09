@@ -61,6 +61,7 @@ export function ShowTellQuadrantModal({ open, onClose }: ShowTellQuadrantModalPr
           footerColumn="modal-wide"
           topRightSlot={
             <button
+              data-glass-action
               ref={closeBtnRef}
               type="button"
               onClick={onClose}

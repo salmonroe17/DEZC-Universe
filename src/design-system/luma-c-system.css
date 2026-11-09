@@ -1,0 +1,283 @@
+/* Luma C component contract: one material, three radii, a restrained reading palette. */
+html[data-theme=luma-c] {
+ --glass-radius-surface:28px; --glass-radius-inner:20px; --glass-radius-control:14px;
+ --glass-line:linear-gradient(125deg,#ffffffb3,#ffffff14 40%,#7897c933 68%,#ffffff7a);
+ --glass-shine-duration:2400ms;
+}
+html[data-theme=luma-c] :is(.ds-studio,.luma-prototype) { font-family:var(--font-sans); font-weight:500; }
+html[data-theme=luma-c] :is(h1,h2,h3,h4,strong) { font-weight:700; }
+html[data-theme=luma-c] :is(.ds-showcase-tile,.quadrant-cell,.ds-example,.ds-visual-tile,.ds-story-guidance,.ds-inline-dialog,.port-modal-panel,.luma-panel,.luma-atmosphere,.ds-state-cell) { border-radius:var(--glass-radius-surface); border-color:#ffffff45; }
+html[data-theme=luma-c] :is(.ds-example-label,.ds-example-canvas,.ds-tile-preview,.ds-state-pattern,.ds-state-dialog,.ds-gallery-search,.ds-cursor-playground,.ds-story-guidance,.ds-doc-header,.ds-state-project-row,.ds-demo-accordion,.ds-inline-dialog,.ds-showcase-tabs,.ds-showcase-tab-panel) { background:transparent; }
+html[data-theme=luma-c] :is(.bg-bg,.bg-surface,[class*="bg-elevated"],.ds-example-description,.ds-state-pattern,.ds-state-dialog,.ds-cursor-states,.ds-showcase-site-nav,.ds-showcase-footer) { background-color:transparent; }
+html[data-theme=luma-c] :is(.ds-example-label,.ds-example-description,.ds-tile-preview,.ds-state-pattern,.ds-state-dialog,.ds-cursor-playground,.ds-story-guidance,.ds-showcase-footer,.ds-showcase-site-nav,.ds-demo-accordion) { border-color:#ffffff66; border-radius:var(--glass-radius-inner); }
+html[data-theme=luma-c] .ds-example-label { border-radius:28px 28px 0 0; }
+html[data-theme=luma-c] .ds-example-canvas { border-radius:0; }
+html[data-theme=luma-c] :is(.ds-showcase-tile>header h2,.ds-example-label h2) { font-size:15px; font-weight:700; letter-spacing:-.02em; }
+html[data-theme=luma-c] :is(.ds-note,.ds-showcase-caption,.ds-example-description,.ds-demo-field small,.ds-state-cell small,.ds-cursor-readout,.ds-cursor-instruction,.ds-showcase-selection,.ds-showcase-timeline-labels,.ds-showcase-feedback small,.ds-state-descriptions p,.ds-state-cell>small,.ds-visual-tile small) { color:var(--color-fg-muted); font-size:12px; font-weight:600; line-height:1.65; }
+html[data-theme=luma-c] .ds-showcase-type-foundation :is(span,small) { font-size:12px; font-weight:600; color:var(--color-fg-muted); }
+html[data-theme=luma-c] .ds-showcase-type-foundation>strong { font-weight:800; }
+html[data-theme=luma-c] :is(.font-normal,.font-light) { font-weight:500; }
+html[data-theme=luma-c] :is([data-ui=button],[data-ui=icon-button],[data-glass-action],[role=tab],.ds-control,.ds-icon-button) { display:inline-flex; align-items:center; justify-content:center; flex:none; width:auto; max-width:100%; min-width:0; align-self:flex-start; border-radius:var(--glass-radius-control); font-size:13px; font-weight:600; letter-spacing:0; color:var(--color-fg); }
+html[data-theme=luma-c] [data-ui=button] { padding:11px 18px; }
+html[data-theme=luma-c] :is([data-ui=icon-button],.ds-icon-button) { width:44px; height:44px; flex-shrink:0; padding:10px; }
+html[data-theme=luma-c] [data-ui=switch] { width:56px; height:32px; flex:none; align-self:center; border-radius:999px; }
+html[data-theme=luma-c] [role=tab] { min-width:0; min-height:44px; text-transform:none; padding:10px 16px; }
+html[data-theme=luma-c] :is([role=tab][aria-selected=true],[data-glass-action][aria-pressed=true]) { color:var(--color-hud); font-weight:700; }
+html[data-theme=luma-c] :is([data-ui=field],select,textarea) { border-radius:var(--glass-radius-control); border:1px solid #ffffff80; background:#ffffff12; font-size:14px; font-weight:600; color:var(--color-fg); }
+html[data-theme=luma-c] [data-ui=field]:is([type=checkbox],[type=radio]) { width:18px; height:18px; min-height:0; padding:0; box-shadow:none; accent-color:var(--color-hud); }
+html[data-theme=luma-c] [data-ui=field]:disabled { opacity:.5; }
+html[data-theme=luma-c] :is(input,textarea)::placeholder { color:var(--color-fg-muted); opacity:1; font-weight:500; }
+html[data-theme=luma-c] :is(.luma-controls,.ds-demo-field) { align-items:flex-start; }
+html[data-theme=luma-c] :is(.ds-demo-field,.luma-controls)>:is(input,textarea) { width:100%; }
+html[data-theme=luma-c] .ds-showcase-tabs { display:flex; flex-wrap:wrap; width:fit-content; max-width:100%; gap:6px; padding:6px; border:1px solid #ffffff66; }
+html[data-theme=luma-c] .site-frosted-nav { background:#ffffff14; backdrop-filter:blur(16px); border-color:#ffffff66; }
+html[data-theme=luma-c] :is(.comparison-toggle-shell,.port-modal-panel form,.ds-showcase-tile form) { border-radius:var(--glass-radius-inner); background:transparent; border-color:#ffffff66; }
+html[data-theme=luma-c] .comparison-toggle-shell { width:fit-content; max-width:100%; }
+html[data-theme=luma-c] :is(.comparison-toggle-shell button,.ds-demo-accordion summary,[data-glass-action]) { color:var(--color-fg); font-weight:600; border-radius:var(--glass-radius-control); }
+html[data-theme=luma-c] .comparison-toggle-shell button { min-width:88px; }
+html[data-theme=luma-c] [data-glass-action] { position:relative; padding:10px 14px; min-height:44px; overflow:hidden; }
+html[data-theme=luma-c] .luma-material-host { overflow:hidden; }
+html[data-theme=luma-c] .luma-material-host::after { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:2; opacity:0; background:linear-gradient(110deg,transparent 18%,#ffffff05 33%,#ffffff6b 48%,#ffffff14 61%,transparent 78%); transform:translateX(-150%); }
+/* Override the old fast primitive sweep; the shared layer owns reflection now. */
+html[data-theme=luma-c] :is([data-ui=button],[data-ui=icon-button],[role=tab])::after { display:none; animation:none; }
+@media(hover:hover) and (prefers-reduced-motion:no-preference) {
+ html[data-theme=luma-c] :is([data-ui=button],[data-ui=icon-button],[data-ui=switch],[data-ui=dropdown],[data-ui=timeline-arrow],[role=tab],[data-glass-action]):not(:disabled):hover>.luma-material-host::after { animation:luma-c-reflection var(--glass-shine-duration) cubic-bezier(.2,.55,.25,1) both; }
+ html[data-theme=luma-c] :is(button,a,summary):not(:disabled):not([aria-disabled=true]):not([data-glass-surface]):hover { background-image:linear-gradient(110deg,transparent 20%,#ffffff30 45%,#ffffff08 60%,transparent 80%); background-size:260% 100%; animation:luma-c-inline-reflection var(--glass-shine-duration) ease-out both; }
+}
+@keyframes luma-c-reflection { 0% {opacity:0;transform:translateX(-150%);} 18% {opacity:.8;} 75% {opacity:.55;} 100% {opacity:0;transform:translateX(150%);} }
+@keyframes luma-c-inline-reflection { from {background-position:140% 0;} to {background-position:-140% 0;} }
+@media(prefers-reduced-motion:reduce) { html[data-theme=luma-c] .luma-material-host::after { display:none; } }
+/* Display typography uses actual refractive glass; the companion caption stays solid ink. */
+.ds-glass-type-stage { position:relative; width:100%; min-width:0; }
+.ds-glass-type-lens { position:absolute; inset:0; filter:drop-shadow(0 2px 1px #30457540) drop-shadow(0 10px 16px #30457526); }
+.ds-glass-type-edge { position:absolute; inset:0; pointer-events:none; filter:drop-shadow(0 1px 1px #30457533); }
+html[data-theme=luma-c] .ds-glass-type :is(p,small) { font-size:13px; font-weight:600; color:var(--color-fg-muted); max-width:50ch; line-height:1.7; }
+.ds-type-options { display:flex; flex-wrap:wrap; gap:8px; }
+.ds-type-experiment-sample { padding-top:28px; }
+.ds-type-experiment-sample>strong { font-size:clamp(28px,3.5vw,44px); font-weight:700; line-height:1.15; letter-spacing:-.045em; }
+.ds-type-experiment-sample>p { font-size:20px; font-weight:600; margin-top:24px; }
+.ds-type-experiment-sample>small { display:block; margin-top:12px; font-size:12px; font-weight:600; }
+html[data-theme=luma-c] .luma-page-atmosphere>.optical-field { opacity:.55; }
+@media(max-width:600px) { html[data-theme=luma-c] .ds-example-canvas { padding:20px; } html[data-theme=luma-c] .ds-state-grid { grid-template-columns:1fr; } .ds-type-experiment-sample>strong { font-size:30px; } }
+/* Absolute before/after segments need an explicit compact track width. */
+html[data-theme=luma-c] .comparison-toggle-shell { width:min(294px,100%); }
+html[data-theme=luma-c] .comparison-toggle-shell button { background:transparent; color:var(--color-fg); }
+html[data-theme=luma-c] .comparison-toggle-shell button.bg-fg { background:#ffffff38; color:var(--color-hud); font-weight:700; }
+html[data-theme=luma-c] [role=group][aria-label="Before and after"] { width:min(294px,100%); border-radius:20px; border-color:#ffffff80; background:transparent; }
+html[data-theme=luma-c] [role=group][aria-label="Before and after"] button { background:transparent; color:var(--color-fg); }
+html[data-theme=luma-c] [role=group][aria-label="Before and after"] button.bg-fg { background:#ffffff38; color:var(--color-hud); }
+html[data-theme=luma-c] :is([data-ui=switch],[data-ui=button],[data-ui=icon-button]):not(:disabled):hover { opacity:1; }
+html[data-theme=luma-c] :is(.chamfer-media-border,.chamfer-media-clip) { border-radius:var(--glass-radius-inner); clip-path:inset(0 round var(--glass-radius-inner)); border-color:#ffffff80; }
+html[data-theme=luma-c] .ds-glass-type-edge { filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 3px 2px #20375c55) drop-shadow(0 10px 15px #20375c26); }
+html[data-theme=luma-c] .port-modal-panel :is(button,.rounded-sm) { border-radius:var(--glass-radius-control); }
+html[data-theme=luma-c] .port-modal-panel { background:#ffffff0f; }
+html[data-theme=luma-c] :is(.ds-topbar,.ds-sidebar,.ds-editor) { background-color:#f3f6fcad; backdrop-filter:blur(20px); border-color:#ffffff80; }
+html[data-theme=luma-c] .ds-studio .ds-control:hover { background-color:#ffffff24; border-color:#ffffffb3; }
+html[data-theme=luma-c] .port-modal-backdrop { background:#f3f6fc33; backdrop-filter:blur(18px) saturate(110%); }
+html[data-theme=luma-c] .cube-face-cell { clip-path:inset(0 round var(--glass-radius-inner)); border-radius:var(--glass-radius-inner); }
+html[data-theme=luma-c] .cube-face-cell::before,
+html[data-theme=luma-c] .cube-face-cell::after { clip-path:inset(0 round var(--glass-radius-inner)); border-radius:var(--glass-radius-inner); background:transparent; }
+html[data-theme=luma-c] .cube-face-stroke-clip { display:none; }
+/* Owner controls apply through SiteThemeProvider, including live page previews. */
+.ds-preview-settings { display:flex; flex-wrap:wrap; align-items:end; gap:16px; padding:20px; margin-bottom:24px; border-radius:24px; background:#ffffff18; border:1px solid #ffffff80; backdrop-filter:blur(18px); }
+.ds-preview-settings>div { margin-right:auto; }
+.ds-preview-settings strong { font-size:17px; }
+.ds-preview-settings p { margin-top:6px; font-size:12px; color:var(--color-fg-muted); }
+.ds-preview-settings label { display:flex; flex-direction:column; gap:8px; font-size:12px; font-weight:600; }
+.ds-preview-settings select { max-width:250px; min-height:44px; padding:9px 12px; }
+html[data-theme=luma-c] .ds-preview-settings>button { align-self:flex-end; }
+/* Avoid font-weight reflow: labels have a stable box and gently strengthen on hover. */
+html[data-theme=luma-c] .portfolio-control-content { transition:font-weight 320ms ease,color 320ms ease,text-shadow 320ms ease; }
+html[data-theme=luma-c] [data-ui=button]:not(:disabled):hover .portfolio-control-content { font-weight:800; text-shadow:0 0 .25px currentColor; }
+html[data-theme=luma-c] :is([data-ui=button],[data-ui=icon-button]) { transition:box-shadow 450ms ease,translate 450ms ease; }
+html[data-theme=luma-c] [data-glass-policy=quiet] { background:transparent; backdrop-filter:none; }
+html[data-theme=luma-c] [data-glass-policy=quiet] button { padding:4px 0; min-height:0; border:0; background:transparent; box-shadow:none; justify-content:flex-start; font-size:12px; }
+html[data-theme=luma-c] [data-glass-policy=quiet] button:hover { color:var(--color-hud); font-weight:700; }
+html[data-theme=luma-c] [data-glass-policy=quiet] ul { border-color:#ffffff80; }
+html[data-theme=luma-c] .portfolio-content-switcher { display:inline-flex; flex-wrap:nowrap; width:fit-content; max-width:100%; gap:6px; padding:6px; border-radius:20px; border:1px solid #ffffff66; background:transparent; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-ui=button] { min-width:90px; min-height:44px; padding:10px 18px; background:transparent!important; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-selected=true] { color:var(--color-hud); box-shadow:inset 0 1px 1px #fff,0 5px 14px #23364e1c; font-weight:800; }
+/* Remove the rectangular rim and chalky outline from the glass-letter specimen. */
+html[data-theme=luma-c] .ds-glass-type-lens .luma-refractive-layer>span { display:none; }
+html[data-theme=luma-c] .ds-glass-type-edge { filter:none; }
+html[data-theme=luma-c] .ds-glass-type-lens { filter:none; }
+.luma-shape-defs { position:absolute; pointer-events:none; overflow:hidden; }
+html[data-theme=luma-c] [data-glass-shape=bracket] { width:.65em; }
+html[data-theme=luma-c] [data-glass-shape=bracket] path { stroke:url(#luma-c-glass-edge); stroke-width:5px; stroke-linecap:round; stroke-linejoin:round; filter:url(#luma-c-shape-light); }
+html[data-theme=luma-c] [data-ui=sidequest-line] { stroke:url(#luma-c-spectral); stroke-width:1.5; filter:url(#luma-c-shape-light); }
+html[data-theme=luma-c] .timeline-pills-connector-arrow svg { fill:url(#luma-c-spectral); filter:url(#luma-c-shape-light); }
+html[data-theme=luma-c] .timeline-pills-connector-arrow svg :is(path,polygon) { fill:url(#luma-c-spectral); }
+html[data-theme=luma-c] [data-ui=loader] { background:transparent; }
+html[data-theme=luma-c] .hud-loading-meteor-rail { stroke:#ffffff80; stroke-width:4; filter:url(#luma-c-shape-light); }
+html[data-theme=luma-c] .hud-loading-meteor-path { stroke-width:5; filter:url(#luma-c-shape-light); }
+html[data-theme=luma-c] .luma-feedback-404 { display:inline-block; font-size:clamp(44px,8vw,88px); font-weight:800; letter-spacing:-.07em; background:var(--primary-paint); background-clip:text; color:transparent; filter:drop-shadow(0 1px 0 #ffffffa6) drop-shadow(0 5px 12px #4d5e8d24); }
+html[data-theme=luma-c] :is(.case-project-progress,.case-study-scroll-progress-meteor,.case-study-scroll-progress-meteor-fill) { background:var(--primary-paint); box-shadow:0 0 10px #ffffff4d; }
+html[data-theme=luma-c] [data-ui=project-rows] li a>div { background:transparent!important; box-shadow:none!important; border-radius:14px; transition:background 450ms,box-shadow 450ms; }
+html[data-theme=luma-c] [data-ui=project-rows] li a:hover>div { background:#ffffff18!important; box-shadow:inset 0 1px 0 #ffffffa6!important; }
+html[data-theme=luma-c] .case-study-cube :is(.cube-face-cell,.chamfer-fill-clip) { border-radius:6px; clip-path:inset(0 round 6px); }
+html[data-theme=luma-c] .case-study-cube .cube-face-cell::before,
+html[data-theme=luma-c] .case-study-cube .cube-face-cell::after { border-radius:6px; clip-path:inset(0 round 6px); }
+html[data-theme=luma-c] .case-study-cube .cube-face-cell { background:#ffffff18; }
+html[data-theme=luma-c] .case-study-cube img { opacity:.95; filter:none; }
+html[data-theme=luma-c] [data-design-section=biography],
+html[data-theme=luma-c] [data-show-tell-quadrant],
+html[data-theme=luma-c] footer { background:transparent!important; border-color:#ffffff66; }
+html[data-theme=luma-c] [data-ui=art-orb] { border:1px solid #ffffffa6; background:#ffffff12; box-shadow:inset 0 1px 1px #fff,0 5px 14px #23364e0f; }
+html[data-theme=luma-c] [data-ui=art-orb][data-bursting=true] { box-shadow:inset 0 1px 2px #fff,0 0 22px #ffffff4d; }
+html[data-theme=luma-c] .luma-orb-pulse { border:0; background:radial-gradient(circle,transparent 35%,#ffffff59 60%,transparent 75%); filter:blur(3px); }
+html[data-theme=luma-c] .luma-orb-droplet { width:7px; height:7px; background:linear-gradient(135deg,#ffffffed,#ffffff33); box-shadow:inset 0 1px 1px #fff,0 3px 6px #30457526; backdrop-filter:blur(4px); }
+/* Space is a dedicated dark stage inside the light glass system. */
+html[data-theme=luma-c] [data-ui=shooter][data-space=true] { --color-fg:#f5f7ff; --color-fg-muted:#d7e1fa; --color-fg-subtle:#c4cdea; --color-hud:#c8aaff; border-radius:24px; background:#070b21; overflow:hidden; }
+.luma-space-field { position:absolute; inset:0; pointer-events:none; overflow:hidden; background:radial-gradient(ellipse at 70% 50%,#63347750,transparent 60%),radial-gradient(ellipse at 30% 80%,#18489a66,transparent 55%),#070b21; }
+.luma-space-disk { position:absolute; width:clamp(200px,60%,520px); aspect-ratio:1; left:65%; top:50%; border-radius:50%; transform:translate(-50%,-50%); background:conic-gradient(from 20deg,#286cff,#45e4d2,#ffb792,#ee60da,#6754ef,#286cff); filter:blur(9px); animation:luma-space-orbit 28s linear infinite; opacity:.9; }
+.luma-space-disk::after { content:''; position:absolute; inset:20%; border-radius:50%; background:#070b21; box-shadow:0 0 26px 10px #070b21,0 0 60px 5px #7955eb; }
+.luma-space-eye { position:absolute; left:65%; top:50%; width:46px; height:46px; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(circle,#fff 0 2px,transparent 3px 11px,#ffffff8c 12px 13px,transparent 14px); box-shadow:0 0 22px #ab8eff4d; }
+.luma-space-eye::before,.luma-space-eye::after { content:''; position:absolute; background:#ffffff80; }
+.luma-space-eye::before { width:30px; height:1px; left:8px; top:23px; }
+.luma-space-eye::after { width:1px; height:30px; left:23px; top:8px; }
+html[data-theme=luma-c] [data-space=true] .hud-svg-glow { opacity:0; }
+@keyframes luma-space-orbit { to {transform:translate(-50%,-50%) rotate(360deg);} }
+/* Refractive droplet cursor: no targeting reticle or falling particles. */
+.luma-cursor { position:fixed; top:0; left:0; pointer-events:none; z-index:12000; opacity:0; }
+.luma-cursor>span { position:absolute; width:20px; height:20px; transform:translate(-50%,-50%); border-radius:50%; background:linear-gradient(135deg,#ffffff80,#ffffff08); border:1px solid #ffffffb3; box-shadow:inset 1px 1px 2px #fff,0 2px 6px #23364e40; backdrop-filter:blur(4px) saturate(140%); transition:width 240ms,height 240ms,box-shadow 240ms; }
+.luma-cursor[data-mode=action]>span { width:34px; height:34px; box-shadow:inset 1px 1px 2px #fff,0 3px 10px #23364e33; }
+.luma-cursor[data-pressed=true]>span { width:16px; height:16px; }
+.luma-cursor[data-mode=text] { opacity:0!important; }
+@media(pointer:fine) and (hover:hover) { .luma-cursor-active,.luma-cursor-active :is(button,a,summary,[role=button]) { cursor:none!important; } .luma-cursor-active :is(input,textarea) {cursor:text!important;} }
+@media(prefers-reduced-motion:reduce) { .luma-space-disk {animation:none;} .luma-cursor>span,.portfolio-control-content {transition:none!important;} }
+@media(max-width:600px) { .ds-preview-settings {align-items:stretch;} .ds-preview-settings label {width:100%;} .ds-preview-settings select {max-width:none;width:100%;} .luma-space-disk,.luma-space-eye {left:65%;} }
+html[data-theme=luma-c] .show-tell-ambient-lines path { stroke:url(#luma-c-spectral); }
+html[data-theme=luma-c] [data-ui=timeline-step] { border-color:#ffffff99; background:linear-gradient(135deg,#ffffff26,#ffffff05); box-shadow:inset 0 1px 1px #fff,0 4px 12px #23364e14; backdrop-filter:blur(8px); }
+.luma-cursor-sample { display:inline-block; vertical-align:middle; width:20px; height:20px; border-radius:50%; margin-right:10px; background:linear-gradient(135deg,#ffffffb3,#ffffff0d); border:1px solid #ffffffcc; box-shadow:inset 1px 1px 1px #fff,0 2px 5px #23364e40; }
+.luma-cursor-sample-action { width:30px; height:30px; }
+/* Nocturnal glass stage: white ink, bounded scene luminance, soft colliding 3D volumes. */
+html[data-theme=luma-c] .luma-page-atmosphere { background:#080d22; }
+html[data-theme=luma-c] .luma-page-atmosphere>.optical-field { opacity:.85; inset:-15%; width:130%; height:130%; }
+html[data-theme=luma-c] :is(.ds-topbar,.ds-sidebar,.ds-editor) { background-color:#0a122bbd; border-color:#ffffff24; }
+html[data-theme=luma-c] :is(.ds-preview-settings,.ds-showcase-tabs,.portfolio-content-switcher) { background-color:#ffffff05; border-color:#ffffff38; }
+html[data-theme=luma-c] :is(h1,h2,h3,h4,p,strong,small,label,button,a,summary,input,textarea,select,.luma-tone-card,.luma-tone-value output,.ds-showcase-caption,.ds-showcase-selection,.ds-note,.ds-cursor-readout) { color:var(--color-fg); }
+html[data-theme=luma-c] :is([class*="text-fg-muted"],[class*="text-fg-subtle"],.ds-doc-header>p,.ds-preview-settings p) { color:var(--color-fg-muted); }
+html[data-theme=luma-c] :is([data-ui=button],[data-ui=icon-button],[data-ui=dropdown],[role=tab],[data-glass-action],.ds-control,.portfolio-content-switcher [data-selected=true]) { color:var(--color-fg); }
+html[data-theme=luma-c] :is([data-ui=field],textarea,select) { background:#ffffff06; color:#f7f9ff; border-color:#ffffff42; }
+html[data-theme=luma-c] :is([data-ui=field],input,textarea)::placeholder { color:#d1dcef; }
+html[data-theme=luma-c] .ds-showcase-type-foundation :is(span,small),html[data-theme=luma-c] .ds-glass-type p { color:#dce5f8; }
+html[data-theme=luma-c] .port-modal-backdrop { background:#080d2266; }
+html[data-theme=luma-c] .port-modal-panel { background:#0e183333; }
+html[data-theme=luma-c] .who-iam-orb-art { filter:brightness(0) invert(1); }
+html[data-theme=luma-c] .luma-feedback-404 { color:#f7f9ff; background:none; text-shadow:0 1px 0 #ffffff8c,0 4px 14px #94b1ff33; }
+html[data-theme=luma-c] :is(.ds-live-page-stage,.ds-live-page-stage iframe) { background:transparent!important; }
+html[data-theme=luma-c] [data-ui=project-rows] li a:hover>div { background:#ffffff09!important; }
+html[data-theme=luma-c] .ds-glass-type-edge { opacity:.9; }
+.ds-preview-setting { display:flex; flex-direction:column; gap:8px; font-size:12px; font-weight:600; min-width:0; }
+/* One keyboard-accessible dropdown for theme, palette, type and primary treatment. */
+.portfolio-dropdown-trigger { position:relative; display:inline-flex; min-height:44px; width:100%; max-width:100%; align-items:center; padding:10px 12px; border:1px solid var(--color-cell-border); border-radius:14px; background:color-mix(in srgb,var(--color-surface) 35%,transparent); color:var(--color-fg); font:inherit; font-size:12px; font-weight:600; text-align:left; cursor:pointer; }
+.portfolio-dropdown-trigger>.portfolio-control-content { position:relative; z-index:3; display:flex; align-items:center; gap:10px; width:100%; min-width:0; }
+.portfolio-dropdown-trigger .portfolio-control-content>span { flex:1; min-width:0; }
+.portfolio-dropdown-trigger svg { flex:none; transition:transform 240ms; }
+.portfolio-dropdown-trigger[aria-expanded=true] svg {transform:rotate(180deg);}
+.portfolio-dropdown-trigger i,.portfolio-dropdown-menu i { display:block; width:20px; height:20px; border-radius:7px; flex:none; box-shadow:inset 0 1px 1px #ffffff80; }
+.portfolio-dropdown-menu { position:fixed; z-index:1500; overflow-y:auto; overscroll-behavior:contain; padding:6px; border-radius:18px; border:1px solid color-mix(in srgb,var(--color-fg) 20%,transparent); background:color-mix(in srgb,var(--color-surface) 90%,transparent); backdrop-filter:blur(28px) saturate(125%); box-shadow:inset 0 1px 1px #ffffff4d,0 16px 45px #0005; }
+.portfolio-dropdown-menu>button { display:flex; align-items:center; gap:10px; width:100%; min-height:44px; padding:10px 12px; border:0; border-radius:12px; background:transparent; color:var(--color-fg); font-size:13px; font-weight:500; text-align:left; }
+.portfolio-dropdown-menu>button>span { flex:1; }
+.portfolio-dropdown-menu>button[aria-selected=true] { background:color-mix(in srgb,var(--color-fg) 9%,transparent); font-weight:700; box-shadow:inset 0 1px 0 #ffffff29; }
+.portfolio-dropdown-menu>button:focus-visible { outline:2px solid var(--color-hud); outline-offset:-2px; background:color-mix(in srgb,var(--color-fg) 6%,transparent); }
+.portfolio-dropdown-trigger:focus-visible { outline:2px solid var(--color-hud); outline-offset:3px; }
+.ds-editor>.portfolio-dropdown-trigger { margin:10px 0; font-size:12px; }
+html[data-theme=luma-c] .portfolio-dropdown-trigger { border-color:#ffffff42; background:transparent; color:#f7f9ff; }
+html[data-theme=luma-c] .ds-preview-settings .portfolio-dropdown-trigger { min-width:180px; width:auto; }
+@media(max-width:600px) { .ds-preview-setting {width:100%;} html[data-theme=luma-c] .ds-preview-settings .portfolio-dropdown-trigger {width:100%;} }
+html[data-theme=luma-c] :is(.ds-showcase-root,.ds-example,.ds-state-cell,.ds-doc-header,.luma-prototype) :is(span,small,p,strong,label) { color:var(--color-fg)!important; }
+html[data-theme=luma-c] .luma-tone-card { font-family:var(--font-sans); }
+html[data-theme=luma-c] .ds-showcase-type-foundation :is(span,small) { color:#e0e8fa!important; }
+.ds-live-palette { margin-bottom:22px; }
+.ds-live-palette>div { height:54px; border-radius:16px; box-shadow:inset 0 1px 1px #ffffff80; }
+.ds-live-palette>p { margin-top:12px; font-size:12px; font-weight:600; }
+.ds-glyph-glass { display:block; width:100%; height:clamp(120px,20vw,265px); filter:drop-shadow(0 5px 8px #0003); }
+.ds-glyph-fallback { font-size:clamp(60px,12vw,160px); color:#ffffff40; text-shadow:0 1px 2px #fff9; }
+/* New shared switcher sizes to its segments, rather than the legacy 294px track. */
+html[data-theme=luma-c] .portfolio-content-switcher[role=group][aria-label] { width:fit-content; max-width:100%; }
+html[data-theme=luma-c] .site-footer { border-radius:20px; }
+html[data-theme=luma-c] .luma-cube-cap { background:linear-gradient(135deg,#ffffff24,#ffffff08 45%,#384f8433); border:1px solid #ffffff4d; box-shadow:inset 0 1px 1px #ffffff80; }
+/* Clear magnifying cursor above portal menus and the full-screen presentation. */
+.luma-cursor { z-index:2147483000; }
+.luma-cursor>span { overflow:hidden; backdrop-filter:none; background:linear-gradient(135deg,#ffffff29,#ffffff02); }
+.luma-cursor>span>i { position:absolute; inset:0; display:block; backdrop-filter:opacity(1); background:transparent; }
+.luma-cursor[data-mode=action]>span { width:46px; height:46px; }
+.glass-display,.glass-number { display:block; width:100%; min-width:0; }
+.glass-number .ds-glyph-glass { height:clamp(70px,10vw,120px); width:100%; }
+html[data-theme=luma-c] .kpi-metric-value-glow { display:block; width:100%; text-shadow:none; filter:none; }
+html[data-theme=luma-c] .ds-showcase-404 .glass-number { width:150px; }
+/* A compact, two-segment track with a clearly raised active segment. */
+html[data-theme=luma-c] .portfolio-content-switcher[role=group][aria-label] { display:inline-grid; grid-auto-flow:column; grid-auto-columns:minmax(90px,auto); width:max-content; gap:4px; padding:4px; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-ui=button] { width:100%; min-width:0; margin:0; align-self:stretch; box-shadow:none; color:color-mix(in srgb,var(--color-fg) 70%,transparent); }
+html[data-theme=luma-c] .portfolio-content-switcher [data-ui=button][data-selected=true] { background:#ffffff1c!important; box-shadow:inset 0 1px 1px #fff,0 4px 10px #0003; color:var(--color-fg); font-weight:800; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-ui=button]:not([data-selected=true])>.luma-material-host { opacity:.3; }
+/***** Responsive case-study content, with visible six-face volume. *****/
+html[data-theme=luma-c] [data-ui=case-study-panel] { width:100%!important; max-width:none!important; min-width:0; }
+html[data-theme=luma-c] [data-ui=project-rows] { width:100%; max-width:none; align-self:stretch; }
+html[data-theme=luma-c] [data-ui=case-study-panel]>.relative { width:100%; }
+html[data-theme=luma-c] .case-study-cube { width:clamp(130px,28vw,240px)!important; height:clamp(130px,28vw,240px)!important; }
+html[data-theme=luma-c] .luma-cube-cap { background:linear-gradient(135deg,#aebdfb99,#6278b999 50%,#364875cc); border:1px solid #ffffff99; box-shadow:inset 0 1px 1px #fff; }
+html[data-theme=luma-c] [data-cube-face][data-selected=true] .cube-face-cell { box-shadow:inset 0 0 0 2px #ffffffc9,0 0 20px var(--glass-accent-start); }
+html[data-theme=luma-c] [data-cube-face][data-selected=true] .cube-face-cell::after { background:transparent; box-shadow:inset 0 0 0 2px #ffffffb3; }
+/* Timelines are graphic paths, not glass tubes. */
+html[data-theme=luma-c] [data-ui=sidequest-line] { filter:none; stroke-width:1.7; opacity:1; }
+html[data-theme=luma-c] .show-tell-ambient-lines svg { opacity:.55; }
+html[data-theme=luma-c] .show-tell-ambient-lines path { stroke-width:1.2px; filter:none; }
+html[data-theme=luma-c] [data-flowing-line-node] .size-4,
+html[data-theme=luma-c] [data-flowing-line-node] .size-5 { background:var(--primary-paint)!important; opacity:1!important; border:1px solid #ffffff99; box-shadow:none!important; border-radius:5px; }
+html[data-theme=luma-c] [data-ui=timeline-arrow] { border-radius:14px; background:#ffffff0d; border-color:#ffffff66; color:var(--color-fg); box-shadow:var(--luma-c-glass-shadow); backdrop-filter:blur(8px); }
+html[data-theme=luma-c] [data-ui=timeline-arrow]:hover { background:#ffffff1c; }
+html[data-theme=luma-c] .case-study-presentation-overlay { background:color-mix(in srgb,var(--color-bg) 28%,transparent)!important; backdrop-filter:blur(24px) saturate(115%); }
+html[data-theme=luma-c] .case-study-presentation-overlay .presentation-slide-body { background:transparent!important; }
+/* A warped accretion disk, event horizon and gravitational halo replace the flat ring. */
+.luma-space-disk,.luma-space-front { position:absolute; left:65%; top:50%; width:clamp(250px,78%,680px); aspect-ratio:1; border-radius:50%; background:conic-gradient(from 45deg,#39baff,#6b4eff,#ff61ce,#ffa781,#56f2d0,#39baff); transform:translate(-50%,-50%) rotate(-16deg) scaleY(.3); filter:blur(7px); opacity:.85; animation:luma-accretion 24s linear infinite; }
+.luma-space-disk { z-index:1; }
+.luma-space-disk::after { inset:26%; background:#070b21; box-shadow:0 0 35px 15px #070b21; }
+.luma-space-front { z-index:3; clip-path:polygon(0 49%,100% 49%,100% 100%,0 100%); mask-image:radial-gradient(circle,transparent 25%,#000 32%,#000 60%,transparent 72%); }
+.luma-space-field::before { content:''; position:absolute; left:65%; top:50%; width:clamp(100px,22%,190px); aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; z-index:2; background:radial-gradient(circle at 42% 38%,#02030b,#050719 68%,#151830 85%,transparent); box-shadow:0 0 18px #9f8aff80,0 0 65px #8159ed4d; }
+.luma-space-field::after { content:''; position:absolute; left:65%; top:50%; width:clamp(125px,29%,240px); aspect-ratio:1; transform:translate(-50%,-50%) rotate(-15deg); border-radius:50%; z-index:1; background:conic-gradient(#6b75ff,#ff7dca,#67e9ff,#b79aff,#6b75ff); mask-image:radial-gradient(circle,transparent 54%,#000 62%,#000 68%,transparent 75%); filter:blur(5px); }
+.luma-space-eye { z-index:4; }
+@keyframes luma-accretion { 50% {filter:blur(9px) hue-rotate(30deg);} }
+@media(prefers-reduced-motion:reduce) { .luma-space-disk,.luma-space-front {animation:none;} }
+/***** Light mode keeps the same scene and material, with ink that survives bright blobs. *****/
+html[data-theme=luma-c][data-luma-mode=light] .luma-page-atmosphere { background:#edf2fc; }
+html[data-theme=luma-c][data-luma-mode=light] :is(.ds-topbar,.ds-sidebar,.ds-editor) { background:#edf2fcad; }
+html[data-theme=luma-c][data-luma-mode=light] :is(.ds-showcase-root,.ds-example,.ds-state-cell,.ds-doc-header,.luma-prototype) :is(span,small,p,strong,label,button,a,summary,input,textarea,h1,h2,h3,h4),
+html[data-theme=luma-c][data-luma-mode=light] :is(.ds-control,.portfolio-dropdown-trigger,.portfolio-dropdown-menu>button,.ds-sidebar,.ds-topbar) { color:var(--color-fg)!important; }
+html[data-theme=luma-c][data-luma-mode=light] :is([data-ui=field],input,textarea)::placeholder { color:var(--color-fg-muted)!important; }
+html[data-theme=luma-c][data-luma-mode=light] :is([data-ui=field],select,textarea) { color:var(--color-fg); background:#ffffff0a; }
+html[data-theme=luma-c][data-luma-mode=light] .who-iam-orb-art { filter:brightness(0); }
+html[data-theme=luma-c][data-luma-mode=light] .port-modal-backdrop { background:#edf2fc33; }
+html[data-theme=luma-c][data-luma-mode=light] .portfolio-content-switcher [data-ui=button][data-selected=true] { background:#ffffff59!important; box-shadow:inset 0 1px 1px #fff,0 3px 12px #23364e26; }
+.ds-preview-mode { display:flex; gap:4px; padding:4px; border:1px solid #ffffff42; border-radius:16px; align-self:flex-end; }
+.ds-preview-mode button { padding:9px 14px; border-radius:12px; color:var(--color-fg); font-size:12px; font-weight:600; }
+.ds-preview-mode button[aria-pressed=true] { background:#ffffff1c; box-shadow:inset 0 1px 1px #ffffffb3,0 2px 8px #0002; font-weight:800; }
+html[data-theme=luma-c] .case-study-cube { --cube-edge:clamp(130px,28vw,240px); --cube-half:calc(var(--cube-edge) / 2); width:var(--cube-edge)!important; height:var(--cube-edge)!important; }
+html[data-theme=luma-c][data-luma-mode=light] .luma-recipe-card>span { color:#fff!important; }
+html[data-theme=luma-c] [data-cube-face][data-selected=true] .cube-face-cell::after { z-index:20; inset:0; opacity:1; box-shadow:inset 0 0 0 2px var(--glass-accent-start); }
+html[data-theme=luma-c] .portfolio-content-switcher[role=group][aria-label] { display:inline-flex; width:fit-content; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-ui=button] { width:auto!important; flex:0 0 auto; min-width:96px; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-ui=button]:not([data-selected=true]) .portfolio-control-content { opacity:.62; font-weight:500; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-selected=true] .portfolio-control-content { opacity:1; font-weight:800; }
+html[data-theme=luma-c] .portfolio-content-switcher [data-selected=true]::before { content:''; position:absolute; left:16px; right:16px; bottom:4px; height:2px; border-radius:999px; z-index:4; background:var(--primary-paint); }
+html[data-theme^=luma] [data-ui=timeline-arrow][data-glass-surface] { position:absolute; }
+html[data-theme=luma-c] [data-ui=timeline-arrow][data-glass-surface] { width:44px; height:44px; border-radius:14px; }
+
+/* Decorative frame samples have no interaction: cancel the inherited dark-theme fill. */
+html[data-theme=luma-c] .quadrant-cell::before,
+html[data-theme=luma-c] .quadrant-cell:hover::before,
+html[data-theme=luma-c] .quadrant-cell[data-quadrant-in-view]::before { background:transparent!important; }
+html[data-theme=luma-c] .quadrant-cell::after,
+html[data-theme=luma-c] .quadrant-cell:hover::after,
+html[data-theme=luma-c] .quadrant-cell[data-quadrant-in-view]::after { background:transparent!important; box-shadow:none!important; }
+/* Corner specimens keep a quiet static material; hovering never paints a solid fill. */
+html[data-theme=luma-c] :is([data-specimen="card-corners"],.ds-corner-examples) .quadrant-cell { border:1px solid #ffffff70; background:linear-gradient(135deg,#ffffff1a,#ffffff03)!important; box-shadow:inset 0 1px 1px #ffffffb3; backdrop-filter:blur(10px); }
+
+/* The game shares one inset across its header, greeting, action and score. */
+html[data-theme=luma-c] [data-ui=shooter] .luma-shooter-ui { padding:clamp(20px,3vw,36px); }
+html[data-theme=luma-c] .luma-shooter-idle { padding-right:0; padding-block:20px; }
+html[data-theme=luma-c] [data-ui=shooter] .luma-shooter-start { margin-top:20px; width:max-content; }
+@media(max-width:480px) {
+ html[data-theme=luma-c] [data-ui=shooter] .luma-shooter-ui { padding:20px; }
+}

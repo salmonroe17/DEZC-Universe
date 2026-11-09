@@ -761,6 +761,7 @@ export function FlowingLine({
             </filter>
           </defs>
           <path
+            data-ui="sidequest-line"
             d={pathD}
             fill="none"
             stroke="currentColor"
@@ -783,6 +784,7 @@ export function FlowingLine({
           return (
             <div
               key={j}
+              data-ui="timeline-node"
               className="pointer-events-none absolute z-[1] overflow-visible"
               style={{
                 left: `${(p.x / FLOW_TRACK_VIEW_W) * 100}%`,
@@ -955,6 +957,7 @@ export function FlowingLine({
 
       <button
         type="button"
+        data-ui="timeline-arrow"
         className={`${arrowBtnClass} absolute bottom-1 left-1 md:bottom-2 md:left-2`}
         aria-label="Move line left (hover or hold)"
         onPointerEnter={() => {
@@ -1000,6 +1003,7 @@ export function FlowingLine({
       </button>
       <button
         type="button"
+        data-ui="timeline-arrow"
         className={`${arrowBtnClass} absolute bottom-1 right-1 md:bottom-2 md:right-2`}
         aria-label="Move line right (hover or hold)"
         onPointerEnter={() => {

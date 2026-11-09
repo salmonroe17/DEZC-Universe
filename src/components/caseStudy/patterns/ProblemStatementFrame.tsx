@@ -33,6 +33,7 @@ function ProblemBracket({
       : 'M 2 4 H 11 V 96 H 2'
   return (
     <div
+      data-glass-shape="bracket"
       className={`flex w-[0.5em] shrink-0 self-stretch text-current ${accentClassName}`}
       aria-hidden
     >

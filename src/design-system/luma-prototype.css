@@ -85,3 +85,66 @@
 .luma-stage-toolbar button { background:#ffffffb8; border:1px solid #71829f; color:#303a50; box-shadow:inset 0 1px 0 #fff,0 3px 10px #2032580b; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); min-height:40px; }
 .luma-stage-toolbar button[aria-pressed=true] { background:#e0e9ff; border-color:#234dcc; color:#17399b; }
 @media(max-width:600px) { .luma-forms { grid-template-columns:1fr; } .luma-form-render { height:260px; } }
+.ds-forms-nav { margin-left:22px; border-left:1px solid var(--color-cell-border); padding-left:8px; }
+.ds-forms-controls { display:flex; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px; }
+.ds-forms-controls label { font-size:14px; font-weight:600; }
+.ds-forms-controls output { margin-left:12px; font-variant-numeric:tabular-nums; }
+.ds-forms-controls input { width:clamp(120px,25vw,280px); accent-color:var(--color-hud); }
+.ds-forms-controls p { flex-basis:100%; margin:0; font-size:13px; }
+.ds-forms-page .luma-forms>article:last-child { grid-column:auto; }
+.ds-forms-page .luma-form-render { height:360px; }
+.ds-forms-page .luma-forms h2 { margin:14px 0 6px; font-size:18px; font-weight:700; }
+@media(max-width:600px) { .ds-forms-page .luma-form-render { height:280px; } }
+.ds-forms-page .ds-forms-controls p { color:var(--color-fg-muted); }
+/* Form studies use a stable light canvas regardless of the portfolio preview mode. */
+.ds-forms-page { padding:24px!important; border-radius:24px; background:#f4f4f0; color:#20283a; }
+.ds-forms-page .ds-forms-controls { background:#ffffffb3; border:1px solid #d9dce1; box-shadow:none; padding:20px; border-radius:18px; color:#20283a; }
+.ds-forms-page .ds-forms-controls p,.ds-forms-page .luma-forms p { color:#536071!important; }
+.ds-forms-page .luma-forms h2,.ds-forms-page .ds-forms-controls label { color:#20283a!important; }
+.ds-forms-page .luma-form-render { height:auto; aspect-ratio:1; background:#f8f8f4; border-radius:18px; }
+.ds-forms-page .luma-forms { gap:32px 24px; }
+.ds-forms-page .ds-forms-controls>.luma-material-host { display:none; }
+@media(max-width:600px) { .ds-forms-page {padding:14px!important;} }
+html[data-theme] .luma-prototype.ds-forms-page { background:#f4f4f0!important; color:#20283a; }
+html[data-theme] .ds-forms-page .ds-forms-controls { background:#ffffffb3!important; box-shadow:none!important; }
+.ds-forms-page .ds-form-technique { display:block; color:#637085!important; font-size:10px; letter-spacing:.025em; margin-top:8px; }
+.ds-form-settings { margin-top:18px; padding:16px; border:1px solid #d3d8df; border-radius:14px; background:#ffffff91; color:#263247; display:grid; gap:14px; }
+.ds-form-settings legend { padding:0 6px; color:#445169; font-size:11px; }
+.ds-form-setting { display:grid; grid-template-columns:minmax(110px,1fr) minmax(0,1.25fr); align-items:center; gap:14px; }
+.ds-form-setting label { color:#263247!important; font-size:12px; }
+.ds-form-setting output { float:right; margin-left:8px; font-variant-numeric:tabular-nums; }
+.ds-form-setting input { width:100%; accent-color:#747ac9; }
+.ds-form-settings select,.ds-form-settings button,.ds-forms-controls>button { border:1px solid #c8d0da; border-radius:8px; background:#fff; color:#27344a; padding:7px 10px; font-size:12px; }
+.ds-form-settings button { width:max-content; }
+.ds-form-color-stops { display:flex; gap:12px; flex-wrap:wrap; }
+.ds-form-color-stops label { display:flex; align-items:center; gap:6px; color:#536071!important; font-size:10px; }
+.ds-form-color-stops input { width:32px; height:28px; border:0; padding:0; background:none; cursor:pointer; }
+.ds-form-gradient { height:12px; border-radius:6px; }
+html[data-theme] .ds-forms-page .ds-form-settings>legend { color:#445169!important; }
+.form-study[data-form=cat]::after { opacity:.08; }
+.ds-forms-global-palette { display:grid; gap:8px; flex:1 1 320px; max-width:500px; }
+.ds-forms-global-palette .portfolio-dropdown-trigger,.ds-form-settings .portfolio-dropdown-trigger { width:100%; min-width:0; max-width:100%; }
+html[data-theme] .ds-forms-page :is(.ds-form-settings,.ds-forms-controls) .portfolio-dropdown-trigger { background:#ffffffb3; color:#27344a; border:1px solid #c8d0da; border-radius:10px; padding:9px 12px; font-size:12px; }
+.ds-form-settings .portfolio-control-content { min-width:0; gap:6px; }
+.ds-form-settings .portfolio-control-content>span { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; min-width:0; }
+.ds-form-settings .portfolio-control-content>svg,.ds-form-settings .portfolio-control-content>i { flex-shrink:0; }
+.ds-form-settings [data-ui=switch] { justify-self:start; }
+.ds-forms-page .luma-forms>article:last-child { grid-column:1/-1; }
+.ds-forms-page .luma-forms>article:last-child .luma-form-render { aspect-ratio:2.1; max-height:500px; }
+.ds-forms-page .luma-forms>article:last-child .ds-form-settings { max-width:640px; }
+@media(max-width:600px) { .ds-forms-page .luma-forms>article:last-child .luma-form-render { aspect-ratio:1; } }
+.ds-form-save-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.ds-form-save-actions>button:first-child { background:#e6e7fb; border-color:#b8bce3; font-weight:600; }
+.ds-form-save-notice { min-height:1.4em; color:#36425e!important; font-size:12px; margin:0 0 16px; }
+.ds-forms-archive { margin-top:48px; border-top:1px solid #ccd1db; padding-top:24px; }
+.ds-forms-archive>summary { cursor:pointer; color:#263247; font-size:20px; font-weight:700; padding:12px 0; }
+.ds-forms-archive>summary>span { font-size:12px; font-weight:500; color:#66728a; margin-left:12px; }
+.ds-forms-archive>p { color:#536071!important; font-size:13px; margin:12px 0 24px; }
+.ds-forms-page .luma-forms>article[data-study=water] { grid-column:1/-1; }
+.ds-forms-page .luma-forms>article[data-study=water] .luma-form-render { aspect-ratio:2.1; max-height:500px; }
+.ds-forms-page .luma-forms>article[data-study=water] .ds-form-settings { max-width:640px; }
+.ds-forms-page .ds-forms-archive .luma-forms>article:last-child { grid-column:auto; }
+.ds-forms-page .ds-forms-archive .luma-forms>article:last-child .luma-form-render { aspect-ratio:1; }
+@media(max-width:600px) { .ds-forms-page .luma-forms>article[data-study=water] .luma-form-render { aspect-ratio:1; } }
+html[data-theme] .ds-forms-page [data-study] .luma-form-render { background:transparent; }
+html[data-theme] .ds-forms-transparency-grid [data-study] .luma-form-render { background:repeating-conic-gradient(#e1e5ec 0% 25%,#f8f9fc 0% 50%) 50%/24px 24px; }

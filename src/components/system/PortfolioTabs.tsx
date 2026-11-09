@@ -28,7 +28,7 @@ export function PortfolioTab({
           : 'flex-1 min-w-[10rem] rounded border border-transparent bg-transparent px-3 py-2.5 text-left text-[11px] font-normal uppercase tracking-[0.08em] text-fg-muted transition-colors hover:border-cell-border/50 hover:bg-elevated/40 hover:text-fg md:min-w-0 md:flex-none md:px-4'
       }
     >
-      {children}
+      <span className="portfolio-control-content">{children}</span>
     </button>
   )
 }

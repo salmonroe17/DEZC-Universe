@@ -1,3 +1,4 @@
+import { useSiteTheme } from '../contexts/useSiteTheme'
 /**
  * CSS faux 3D cube (4 faces). Rotation follows controlled activeCaseIndex.
  *
@@ -27,7 +28,7 @@ import caseStudy3IbmFace from '../../IBM case study assets/ap1.png'
 import caseStudy4DsFace from '../../DS case study assets/ds1.png'
 
 const EDGE = '15rem' as const
-const HALF = '7.5rem' as const
+const HALF = 'var(--cube-half,7.5rem)' as const
 
 const ROTATION_BY_FACE = [0, -90, -180, -270] as const
 
@@ -144,14 +145,16 @@ function CubeChamferFace({
   transform,
   innerClassName,
   children,
+  active=false,
 }: {
+  active?:boolean
   transform: string
   innerClassName: string
   children: ReactNode
 }) {
   const strokeMeasureRef = useRef<HTMLDivElement | null>(null)
   return (
-    <div className={face3dShell} style={{ transform }} aria-hidden>
+    <div data-cube-face data-selected={active||undefined} className={face3dShell} style={{ transform }} aria-hidden>
       <div className={faceContentGlow}>
         <div className={faceContentDim}>
           <div className={faceChamferShell}>
@@ -168,10 +171,11 @@ function CubeChamferFace({
   )
 }
 
-const CubeFaces = memo(function CubeFaces() {
+const CubeFaces = memo(function CubeFaces({activeIndex}:{activeIndex:number}) {
   return (
     <>
       <CubeChamferFace
+        active={activeIndex===0}
         transform={`rotateY(0deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -185,6 +189,7 @@ const CubeFaces = memo(function CubeFaces() {
         <div className={caseStudyImageFaceVignette} aria-hidden />
       </CubeChamferFace>
       <CubeChamferFace
+        active={activeIndex===1}
         transform={`rotateY(90deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -198,6 +203,7 @@ const CubeFaces = memo(function CubeFaces() {
         <div className={caseStudyImageFaceVignette} aria-hidden />
       </CubeChamferFace>
       <CubeChamferFace
+        active={activeIndex===2}
         transform={`rotateY(180deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -211,6 +217,7 @@ const CubeFaces = memo(function CubeFaces() {
         <div className={caseStudyImageFaceVignette} aria-hidden />
       </CubeChamferFace>
       <CubeChamferFace
+        active={activeIndex===3}
         transform={`rotateY(-90deg) translateZ(${HALF})`}
         innerClassName="relative"
       >
@@ -236,6 +243,7 @@ export type Fake3DCubeProps = {
 }
 
 export function Fake3DCube({ activeCaseIndex }: Fake3DCubeProps) {
+  const {theme}=useSiteTheme()
   const idx = clampCaseIndex(activeCaseIndex)
   const rotateY = ROTATION_BY_FACE[idx] ?? 0
   const href = CASE_STUDY_FACE_PATHS[idx]
@@ -243,7 +251,8 @@ export function Fake3DCube({ activeCaseIndex }: Fake3DCubeProps) {
   return (
     <div className="flex h-full min-h-0 w-full flex-1 items-center justify-center p-4">
       <div
-        className="group/cube-bezel relative [perspective:1000px]"
+        data-selected-case={idx+1}
+        className="case-study-cube group/cube-bezel relative [perspective:1000px]"
         style={{ width: EDGE, height: EDGE }}
       >
         {/* Flat overlay: same destination as active list “View”; reliable across viewports */}
@@ -255,12 +264,13 @@ export function Fake3DCube({ activeCaseIndex }: Fake3DCubeProps) {
           <div
             className="relative h-full w-full [transform-style:preserve-3d]"
             style={{
-              transform: `rotateY(${rotateY}deg)`,
-              transition: 'transform 600ms cubic-bezier(0.42, 0, 0.58, 1)',
+              transform:theme==='luma-c'?`rotateX(-18deg) rotateY(${rotateY-18}deg)`:`rotateY(${rotateY}deg)`,
+              transition: theme==='luma-c'?'transform 1000ms cubic-bezier(.22,.65,.3,1)':'transform 600ms cubic-bezier(0.42, 0, 0.58, 1)',
               willChange: 'transform',
             }}
           >
-            <CubeFaces />
+            <CubeFaces activeIndex={idx}/>
+            {theme==='luma-c'&&[90,-90].map(angle=><div key={angle} className="luma-cube-cap" aria-hidden style={{position:'absolute',inset:0,transform:`rotateX(${angle}deg) translateZ(${HALF})`,backfaceVisibility:'hidden'}}/>)}
           </div>
         </div>
       </div>

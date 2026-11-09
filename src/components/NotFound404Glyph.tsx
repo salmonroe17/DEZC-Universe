@@ -1,3 +1,4 @@
+import { GlassText } from '../design-system/GlassTypography'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useContext } from 'react'
 import { SiteThemeContext } from '../contexts/siteThemeContext'
@@ -14,6 +15,7 @@ export function NotFound404Glyph() {
   // ErrorBoundary can render this outside the provider; use the configured palette there.
   const theme = useContext(SiteThemeContext)?.theme ?? portfolioTheme.activeTheme
 
+  if(theme==='luma-c')return <GlassText text="404" number/>
   if (reduceMotion) {
     return <span className={`${glyphClass} text-fg-subtle`}>404</span>
   }

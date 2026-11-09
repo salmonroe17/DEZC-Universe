@@ -1,3 +1,6 @@
+import { lumaPreviewVariables,lumaPaletteOptions } from './lumaPreview'
+import { LumaPreviewControls } from './LumaPreviewControls'
+import { GlassTypography, TypeExperiments } from './GlassTypography'
 import { Children, isValidElement, useEffect, useRef, useState, type ReactNode } from 'react'
 import { ArrowUpRight } from '@phosphor-icons/react'
 import inventory from './inventory'
@@ -30,7 +33,7 @@ import { ProblemStatementFrame } from '../components/caseStudy/patterns/ProblemS
 const video=inventory.assets.find(a=>a.kind==='Video'&&a.usedBy.length&&!a.file.includes('ARCHIVE'))
 const sections=[{id:'intro',label:'Introduction'},{id:'overview',label:'Overview'},{id:'design',label:'The design'},{id:'impact',label:'Impact'}]
 // Large, composed previews need a whole row; smaller specimens share two columns.
-const fullRowSpecimens = new Set(['hero', 'metrics', 'presentation', 'side-quests', 'biography', 'case-study-card', 'decisions', 'image', 'video', 'rows', 'comparison'])
+const fullRowSpecimens = new Set(['@glass-type', 'hero', 'metrics', 'presentation', 'side-quests', 'biography', 'case-study-card', 'decisions', 'image', 'video', 'rows', 'comparison'])
 function ShowcaseItem({children,span}:{children:ReactNode;span:number}) {
   const host=useRef<HTMLDivElement>(null)
   const [rows,setRows]=useState(16)
@@ -47,7 +50,8 @@ function Tile({ title, story, children, inspect, className='' }: {title:string;s
   return <section data-specimen={story} className={`ds-showcase-tile ${className}`}><header><h2>{title}</h2><button onClick={()=>inspect(story)} aria-label={`Inspect ${title}`} title={`Inspect ${title}`}><ArrowUpRight size={14}/></button></header><div className="ds-showcase-tile-body">{children}</div></section>
 }
 export function OverviewShowcase({ inspect }: {inspect:(id:string)=>void}) {
-  const {theme}=useSiteTheme()
+  const {theme,previewOptions}=useSiteTheme()
+  const palette={...themePalettes[theme],...(theme==='luma-c'?{...Object.fromEntries(Object.entries(lumaPreviewVariables(previewOptions)).filter(([key])=>key.startsWith('--color-')).map(([key,value])=>[key.slice(8),value])),'accent-start':lumaPaletteOptions[previewOptions.palette].start,'accent-mid':lumaPaletteOptions[previewOptions.palette].mid,'accent-end':lumaPaletteOptions[previewOptions.palette].end}:{})}
   const [glassEnabled,setGlassEnabled]=useState(true)
   const [name,setName]=useState('')
   const [tab,setTab]=useState(0)
@@ -55,11 +59,13 @@ export function OverviewShowcase({ inspect }: {inspect:(id:string)=>void}) {
   const [modal,setModal]=useState<'case'|'side'|null>(null)
   const [progress,setProgress]=useState(0.6)
   const [saved,setSaved]=useState(false)
-  return <div className="ds-showcase-root"><div className="ds-showcase-site-nav"><SiteTopBar/></div><ShowcaseColumns>
-    <Tile title="Theme palette" story="@colors" inspect={inspect}><div className="ds-showcase-colors">{Object.entries(themePalettes[theme]).map(([role,color])=><div key={role} title={`${role}: ${color}`}><span style={{background:color}}/><small>{role}</small></div>)}</div></Tile>
-    <Tile title="Typography" story="@typography" inspect={inspect}><div className="ds-showcase-type ds-showcase-type-foundation"><span className="text-fg-subtle">{theme==='luma'?'DM Sans':'Space Mono'} · 400 / 700</span><strong>Aa Bb Cc</strong><p style={{fontSize:'var(--text-title)',lineHeight:'var(--text-title--line-height)'}}>Systems behind the screens.</p><p style={{fontSize:'var(--text-body)',lineHeight:'var(--text-body--line-height)'}}>Clear words, consistent rhythm.</p><p className="font-bold">Bold emphasis · 700</p><small>Primary text · Muted text · Subtle text</small></div></Tile>
+  return <div className="ds-showcase-root">{theme==='luma-c'&&<LumaPreviewControls/>}<div className="ds-showcase-site-nav"><SiteTopBar/></div><ShowcaseColumns>
+    <Tile title="Theme palette" story="@colors" inspect={inspect}>{theme==='luma-c'&&<div className="ds-live-palette"><div aria-label="Current primary gradient" style={{background:previewOptions.primary==='gradient'?`linear-gradient(110deg,${lumaPaletteOptions[previewOptions.palette].start},${lumaPaletteOptions[previewOptions.palette].mid},${lumaPaletteOptions[previewOptions.palette].end})`:lumaPaletteOptions[previewOptions.palette].ink}}/><p>{lumaPaletteOptions[previewOptions.palette].label} · {previewOptions.primary==='gradient'?'Gradient primary':'Solid primary'}</p></div>}<div className="ds-showcase-colors">{Object.entries(palette).map(([role,color])=><div key={role} title={`${role}: ${color}`}><span style={{background:color}}/><small>{role}</small></div>)}</div></Tile>
+    <Tile title="Typography" story="@typography" inspect={inspect}><div className="ds-showcase-type ds-showcase-type-foundation"><span className="text-fg-subtle">{theme==='luma-c'?`${previewOptions.font} · 500 / 800`:theme.startsWith('luma')?'DM Sans · 400 / 700':'Space Mono · 400 / 700'}</span><strong>Aa Bb Cc</strong><p style={{fontSize:'var(--text-title)',lineHeight:'var(--text-title--line-height)'}}>Systems behind the screens.</p><p style={{fontSize:'var(--text-body)',lineHeight:'var(--text-body--line-height)'}}>Clear words, consistent rhythm.</p><p className="font-bold">Bold emphasis · 700</p><small>Primary text · Muted text · Subtle text</small></div></Tile>
+    {theme==='luma-c'&&<Tile title="Typography explorations" story="@type-experiments" inspect={()=>inspect('@typography')}><TypeExperiments/></Tile>}
+    {theme==='luma-c'&&<Tile title="Glass typography" story="@glass-type" inspect={()=>inspect('@typography')}><GlassTypography/></Tile>}
   </ShowcaseColumns><ShowcaseColumns>
-    {theme==='luma'&&<Tile title="Glass controls" story="buttons" inspect={inspect}><div className="ds-showcase-inline"><PortfolioButton variant="solid">Primary action</PortfolioButton><PortfolioButton>Glass button</PortfolioButton><PortfolioIconButton aria-label="Open glass action"><ArrowUpRight size={18}/></PortfolioIconButton></div><div className="ds-showcase-inline"><span>Ambient light</span><CaseStudySwitch checked={glassEnabled} aria-label="Overview ambient light" onClick={()=>setGlassEnabled(!glassEnabled)}/><CaseStudySwitch checked={false} aria-label="Unavailable glass setting" disabled/></div><PortfolioTextField aria-label="Glass field" placeholder="Focus to inspect the glass field"/></Tile>}
+    {theme.startsWith('luma')&&<Tile title="Glass controls" story="buttons" inspect={inspect}><div className="ds-showcase-inline"><PortfolioButton variant="solid">Primary action</PortfolioButton><PortfolioButton>Glass button</PortfolioButton><PortfolioIconButton aria-label="Open glass action"><ArrowUpRight size={18}/></PortfolioIconButton></div><div className="ds-showcase-inline"><span>Ambient light</span><CaseStudySwitch checked={glassEnabled} aria-label="Overview ambient light" onClick={()=>setGlassEnabled(!glassEnabled)}/><CaseStudySwitch checked={false} aria-label="Unavailable glass setting" disabled/></div><PortfolioTextField aria-label="Glass field" placeholder="Focus to inspect the glass field"/></Tile>}
     <Tile title="Leaderboard gate" story="password" inspect={inspect}><LeaderboardGate password={name} onPasswordChange={setName} onSubmit={event=>{event.preventDefault();setSaved(true)}}/>{saved&&<p className="ds-showcase-caption">Preview submitted locally.</p>}</Tile>
     <Tile title="Legal tabs" story="tabs" inspect={inspect}><div className="ds-showcase-tabs" role="tablist" aria-label="Showcase tabs">{['Privacy','Terms','Cookies'].map((label,i)=><PortfolioTab id={`overview-tab-${i}`} controls="overview-tab-panel" selected={tab===i} onSelect={()=>setTab(i)} key={label}>{label}</PortfolioTab>)}</div><div role="tabpanel" id="overview-tab-panel" aria-labelledby={`overview-tab-${tab}`} className="ds-showcase-tab-panel">{['Privacy policy','Terms & conditions','Cookie policy'][tab]}</div></Tile>
     <Tile title="Card corners" story="card-corners" inspect={inspect}><CardCornerExamples compact/><ChamferFrame meteorTrail innerClassName="bg-elevated p-5"><p className="font-mono text-xs text-fg">One shared outline.</p><p className="mt-2 font-mono text-[10px] text-fg-muted">Inset border + clipped fill + optional meteor.</p></ChamferFrame></Tile>

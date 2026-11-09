@@ -1,0 +1,194 @@
+[
+  {
+    "examples": 2,
+    "name": "Cursor",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 2,
+    "name": "Cursor interactions",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 2,
+    "name": "Card corners & borders",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 3,
+    "name": "Cards",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 2,
+    "name": "Buttons",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Icon buttons",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 2,
+    "name": "Links",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 4,
+    "name": "Text fields",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Password field",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Search & filtering",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Switches",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Site header",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Section sidebar",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Tabs",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Footer",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Rows & lists",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Metrics",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Reading progress",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Loading state",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Not-found state",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Case-study presentation",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 2,
+    "name": "Lightboxes & dialogs",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Image frames",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Video",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 2,
+    "name": "Timelines",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 2,
+    "name": "Before & after",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 3,
+    "name": "Problem statements",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Decision cards",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 1,
+    "name": "Case-study card",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 0,
+    "name": "Introduction & game",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 0,
+    "name": "Biography",
+    "overflow": false,
+    "white": []
+  },
+  {
+    "examples": 0,
+    "name": "Side-quest timeline",
+    "overflow": false,
+    "white": []
+  }
+]

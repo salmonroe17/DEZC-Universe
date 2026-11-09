@@ -1,98 +1,118 @@
-/* One optical-glass material for Luma's actual site components and the study. */
-:is(html[data-theme=luma],.luma-prototype) {
- --luma-glass-fill:linear-gradient(145deg,#fffffff0,#ffffff98 48%,#e9eff6b8);
- --luma-glass-shadow:inset 0 1px 1px #fffffffa,inset 0 -2px 2px #fff,2px 4px 8px #2339540b,14px 24px 32px -12px #21334a27;
- --luma-glass-edge:#ffffffef;
- --luma-control-ink:#17364b;
- --luma-glass-radius:24px;
+/* Luma material foundations. The isolated hero tests rdev/liquid-glass-react. */
+:is(html[data-theme^=luma],.luma-prototype) { --glass-accent-rgb:155,167,216; }
+:is(html[data-theme^=luma],.luma-prototype) :is(.quadrant-cell,.ds-showcase-tile,.luma-panel,.luma-atmosphere) { position:relative; isolation:auto; background:transparent; border:0; outline:0; border-radius:24px; backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:0 12px 30px #23364e12; }
+:is(html[data-theme^=luma],.luma-prototype) :is(.quadrant-cell,.chamfer-fill-clip),
+:is(html[data-theme^=luma],.luma-prototype) .quadrant-cell::before,
+:is(html[data-theme^=luma],.luma-prototype) .quadrant-cell::after { clip-path:inset(0 round var(--surface-radius,24px)); border-radius:var(--surface-radius,24px); }
+:is(html[data-theme^=luma],.luma-prototype) .quadrant-cell::before,
+:is(html[data-theme^=luma],.luma-prototype) .quadrant-cell::after { background:transparent; box-shadow:none; }
+:is(html[data-theme^=luma],.luma-prototype) .quadrant-cell>.p-px>.chamfer-fill-clip { background-color:transparent; }
+:is(html[data-theme^=luma],.luma-prototype) .chamfer-meteor-ring { display:none; }
+.luma-refractive-layer,.luma-control-lens-host { position:absolute; inset:0; pointer-events:none; z-index:2; border-radius:inherit; background:transparent; }
+.luma-refractive-layer[data-engine=css-fallback] { backdrop-filter:blur(24px) saturate(125%); -webkit-backdrop-filter:blur(24px) saturate(125%); box-shadow:inset 0 1px 0 #ffffff73; }
+.luma-object-light { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; border-radius:inherit; background:transparent; }
+.luma-object-light>.optical-field { position:absolute; z-index:0; inset:-25% -35%; width:160%; height:150%; left:calc(-35% + var(--object-offset,0%)); mix-blend-mode:multiply; opacity:.75; }
+.luma-object-second { position:absolute; inset:-20% -35% -25% 5%; transform:translate(23%,20%) rotate(-24deg); z-index:0; mix-blend-mode:multiply; opacity:.8; }
+.luma-object-second>.optical-field { width:100%; height:100%; }
+.luma-object-light::after { content:''; position:absolute; inset:0; background:#ffffff59; pointer-events:none; z-index:1; }
+html[data-theme^=luma] .ds-showcase-tile>header,
+html[data-theme^=luma] .ds-showcase-tile>.ds-showcase-tile-body,
+.luma-prototype .luma-panel>*:not(.luma-object-light),
+.luma-prototype .luma-atmosphere>*:not(.luma-object-light),
+:is(html[data-theme^=luma],.luma-prototype) .quadrant-cell>.p-px { position:relative; z-index:3; }
+:is(html[data-theme^=luma],.luma-prototype) :is(button,input,select,textarea).rounded { border-radius:14px; }
+:is(html[data-theme^=luma],.luma-prototype) :is([data-ui=button],[data-ui=icon-button],[role=tab]) { position:relative; isolation:auto; overflow:hidden; background:transparent; color:#172f49; border:0; border-radius:14px; min-height:44px; box-shadow:inset 0 1px 0 #ffffff66,0 6px 14px #26395414; backdrop-filter:none; -webkit-backdrop-filter:none; transition:translate 300ms,box-shadow 300ms; }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=icon-button] { width:44px; height:44px; }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=button][data-variant=solid],
+:is(html[data-theme^=luma],.luma-prototype) [role=tab][aria-selected=true] { background:rgba(var(--glass-accent-rgb),.14); }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=field] { min-height:44px; border-radius:14px; border:0; border-bottom:1px solid #62718e; background:transparent; color:#172f49; box-shadow:inset 0 2px 5px #2134540a; }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=field]::placeholder { color:#575967; opacity:1; }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=switch] { position:relative; isolation:auto; width:56px; height:32px; border-radius:999px; background:transparent; border:0; box-shadow:inset 0 1px 0 #ffffff73,0 6px 14px #26395414; }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=switch]>span:not(.luma-material-host) { width:24px; height:24px; left:3px; z-index:3; background:linear-gradient(135deg,#fff,#e9eff5); border:1px solid #62718e; box-shadow:0 3px 6px #23364e22; }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=switch][aria-checked=true] { background:rgba(var(--glass-accent-rgb),.18); }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=switch][aria-checked=true]>span:not(.luma-material-host) { left:calc(100% - 27px); }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=switch]:disabled { opacity:.45; cursor:not-allowed; }
+:is(html[data-theme^=luma],.luma-prototype) :is(button,input,select,textarea,[role=tab]):focus-visible,
+:is(html[data-theme^=luma],.luma-prototype) [data-preview-state=focus-visible] { outline:2px solid #234dcc; outline-offset:4px; }
+:is(html[data-theme^=luma],.luma-prototype) input[type=range] { appearance:none; -webkit-appearance:none; height:8px; border-radius:999px; border:1px solid #62718e; background:#ffffff26; box-shadow:inset 0 2px 3px #32594b19; }
+:is(html[data-theme^=luma],.luma-prototype) input[type=range]::-webkit-slider-thumb { appearance:none; -webkit-appearance:none; width:26px; height:26px; border:1px solid #62718e; border-radius:50%; background:linear-gradient(135deg,#fff,#edf2f8); box-shadow:0 4px 7px #23364e26; }
+:is(html[data-theme^=luma],.luma-prototype) input[type=range]::-moz-range-thumb { width:24px; height:24px; border:1px solid #62718e; border-radius:50%; background:linear-gradient(135deg,#fff,#edf2f8); box-shadow:0 4px 7px #23364e26; }
+html[data-theme^=luma] .ds-showcase-root,.luma-prototype .luma-foundations::before,.luma-prototype .luma-panel::before { background:none; }
+.luma-prototype :is(.luma-hero,.luma-tone-card,.luma-tone-value,.luma-foundations) { background:transparent; }
+.luma-prototype .luma-foundations { isolation:auto; }
+.luma-prototype .luma-tone-card { color:#172f49; }
+.luma-prototype .luma-tone-value { border:0; box-shadow:none; }
+.luma-prototype .luma-tone-value output { color:#172f49; }
+html[data-theme^=luma] .who-iam-orb-art { filter:brightness(0) saturate(0); }
+html[data-theme^=luma] .custom-cursor-root,html[data-theme^=luma] .problem-statement-glitch-ghost { display:none; }
+html[data-theme^=luma] [class*="text-fg/"] { color:var(--color-fg); }
+html[data-theme^=luma] [class*="text-fg-muted/"] { color:var(--color-fg-muted); }
+html[data-theme^=luma] [class*="text-fg-subtle/"] { color:var(--color-fg-subtle); }
+:is(html[data-theme^=luma],.luma-prototype) :is([data-ui=button],[data-ui=icon-button],[role=tab])::after { content:''; position:absolute; inset:-70% -30%; z-index:4; pointer-events:none; opacity:0; background:linear-gradient(110deg,transparent 30%,#ffffff0d 40%,#ffffffbf 49%,#ffffff29 54%,transparent 65%); transform:translateX(-160%) rotate(-12deg); }
+@media(hover:hover) and (prefers-reduced-motion:no-preference) {
+ :is(html[data-theme^=luma],.luma-prototype) :is([data-ui=button],[data-ui=icon-button],[role=tab]):not(:disabled):hover { translate:0 -1px; box-shadow:inset 0 1px 1px #fff,0 8px 18px #23364e1f; }
+ :is(html[data-theme^=luma],.luma-prototype) :is([data-ui=button],[data-ui=icon-button],[role=tab]):not(:disabled):hover::after { animation:luma-glass-sweep 850ms cubic-bezier(.2,.65,.2,1) both; }
 }
-:is(html[data-theme=luma],.luma-prototype) .quadrant-cell,
-html[data-theme=luma] .ds-showcase-tile,
-.luma-prototype .luma-panel,
-.luma-prototype .luma-atmosphere {
- position:relative; isolation:isolate; border-radius:var(--luma-glass-radius);
- background:var(--luma-glass-fill); border:1px solid var(--luma-glass-edge);
- box-shadow:var(--luma-glass-shadow); backdrop-filter:blur(28px) saturate(120%); -webkit-backdrop-filter:blur(28px) saturate(120%);
-}
-:is(html[data-theme=luma],.luma-prototype) .quadrant-cell::before { background:linear-gradient(145deg,#ffffffee,#b7cbd155 50%,#fff); }
-:is(html[data-theme=luma],.luma-prototype) .quadrant-cell::after { background:linear-gradient(145deg,#ffffffd9,#edf3f68c); box-shadow:inset 0 1px 2px #fff,inset 0 -2px 2px #ffffffea; }
-:is(html[data-theme=luma],.luma-prototype) .quadrant-cell>.p-px>.chamfer-fill-clip { background-color:transparent; }
-html[data-theme=luma] .ds-showcase-tile::before,
-.luma-panel::before { content:''; position:absolute; z-index:-1; pointer-events:none; inset:0; border-radius:inherit; background:radial-gradient(ellipse at 80% 95%,#8bcad42b,transparent 64%),radial-gradient(ellipse at 0 20%,#b5b8ee15,transparent 60%); }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=button],
-:is(html[data-theme=luma],.luma-prototype) [data-ui=icon-button] {
- background:linear-gradient(145deg,#ffffffed,#eaf1f0b8); color:var(--luma-control-ink); border:1px solid #62718e;
- border-radius:14px; box-shadow:inset 0 1px 1px #fff,inset 0 -2px 2px #fff,0 6px 9px -3px #153d4830;
- backdrop-filter:blur(22px) saturate(130%); -webkit-backdrop-filter:blur(22px) saturate(130%);
-}
-:is(html[data-theme=luma],.luma-prototype) [data-ui=button][data-variant=solid] { color:#123445; background:linear-gradient(145deg,#d3eeed,#a9d3d8); border-color:#527b93; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=field] { background:linear-gradient(145deg,#ffffffdb,#eaf1f5b8); box-shadow:inset 1px 3px 6px #18345212,inset 0 -1px 0 #fff; border-radius:14px; color:#17364b; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch] { height:32px; width:56px; border-radius:999px; background:linear-gradient(145deg,#ffffffdc,#e2eceebd); border-color:#71829f; box-shadow:inset 0 2px 3px #17445426,inset 0 -1px 1px #fff,0 4px 8px -3px #193f493b; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch]>span { height:24px; width:24px; left:3px; background:linear-gradient(145deg,#fff,#e9eeef); border:1px solid #657891; box-shadow:inset 0 1px 0 #fff,1px 4px 5px #1d454328; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch][aria-checked=true] { background:linear-gradient(145deg,#c1e9e4,#92c6cf); border-color:#527b93; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch][aria-checked=true]>span { left:calc(100% - 27px); background:linear-gradient(145deg,#fff,#f0f5f6); }
-:is(html[data-theme=luma],.luma-prototype) [role=tab] { border-radius:14px; color:#243f51; background:#ffffff80; box-shadow:inset 0 1px 1px #fff,0 5px 9px -4px #2245522a; border-color:#71829f; }
-:is(html[data-theme=luma],.luma-prototype) [role=tab][aria-selected=true] { background:linear-gradient(145deg,#d7eeec,#abd4d8); color:#123445; border-color:#527b93; }
-.luma-prototype { background:#f6f8fc; }
-.luma-prototype .luma-hero { background:radial-gradient(ellipse at 30% 70%,#bed9e04d,transparent 62%),#f1f4f9; border:1px solid #fff; box-shadow:var(--luma-glass-shadow); }
-.luma-prototype .refracted-stage { background:transparent; }
-.luma-prototype .refracted-card { background:#ffffffb5; border:1px solid #fff; box-shadow:var(--luma-glass-shadow); border-radius:24px; }
-.luma-prototype .refracted-card .optical-field { opacity:.30; }
-.luma-prototype .luma-tone-card { background:linear-gradient(145deg,#ffffffe6,#ffffff96); color:#17364b; backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); }
-.luma-prototype .luma-tone-value { background:#ffffff9c; border:1px solid #fff; box-shadow:inset 0 2px 5px #1c454b12,inset 0 -1px 1px #fff; border-radius:20px; }
-.luma-prototype .luma-tone-value output { color:#17364b; }
-.luma-prototype input[type=range] { accent-color:#365d77; }
-.luma-prototype .luma-stage-toolbar button { border-radius:14px; background:var(--luma-glass-fill); border-color:#71829f; box-shadow:inset 0 1px 1px #fff,0 5px 8px -3px #244c5030; color:#17364b; }
-.luma-prototype .luma-stage-toolbar button[aria-pressed=true] { background:linear-gradient(145deg,#d7eeec,#abd4d8); color:#123445; border-color:#527b93; }
-html[data-theme=luma] .cube-face-cell,
-html[data-theme=luma] .cube-face-cell::before,
-html[data-theme=luma] .cube-face-cell::after,
-html[data-theme=luma] .cube-face-stroke-clip { clip-path:inset(0 round 24px); border-radius:24px; }
-/* Optical glass v3: translucent body, two refractive rims and colored transmitted light. */
-:is(html[data-theme=luma],.luma-prototype) {
- --luma-glass-fill:linear-gradient(132deg,#ffffff6b 0%,#ffffff29 42%,#e6efed38 75%,#ffffff5c 100%);
- --luma-glass-edge:#a4bcb86b;
- --luma-glass-shadow:inset 0 1px 1px #fffffff2,inset 1px 0 1px #ffffffcc,inset -1px -2px 2px #ffffffed,0 1px 1px #41665c19,7px 12px 14px -6px #315a4f26,18px 30px 38px -18px #274a4329;
-}
-:is(html[data-theme=luma],.luma-prototype) .quadrant-cell,
-html[data-theme=luma] .ds-showcase-tile,
-.luma-prototype .luma-panel,
-.luma-prototype .luma-atmosphere {
- background:var(--luma-glass-fill); border:1px solid var(--luma-glass-edge); box-shadow:var(--luma-glass-shadow);
- outline:1px solid #ffffffd9; outline-offset:-4px;
- backdrop-filter:blur(18px) saturate(135%); -webkit-backdrop-filter:blur(18px) saturate(135%);
-}
-:is(html[data-theme=luma],.luma-prototype) .quadrant-cell::before { background:linear-gradient(135deg,#b3cbc480,#ffffffed 19%,#ffffff24 48%,#90b7b173 73%,#fffffff2); }
-:is(html[data-theme=luma],.luma-prototype) .quadrant-cell::after { inset:3px; border-radius:21px; background:linear-gradient(135deg,#ffffff55,#eef7f522 55%,#ffffff40); box-shadow:inset 0 1px 1px #fff,inset 0 -1px 2px #ffffffd9; }
-html[data-theme=luma] .ds-showcase-root { background:radial-gradient(ellipse at 22% 18%,#a7d8cc4d,transparent 28%),radial-gradient(ellipse at 86% 39%,#e9bdb24d,transparent 25%),radial-gradient(ellipse at 24% 70%,#a4cfd745,transparent 28%); }
-.luma-prototype .luma-foundations { position:relative; isolation:isolate; padding:12px; gap:24px; }
-.luma-prototype .luma-foundations::before { content:''; z-index:-1; position:absolute; pointer-events:none; inset:8% -2% -3%; background:radial-gradient(ellipse at 22% 55%,#78bcb773,transparent 48%),radial-gradient(ellipse at 88% 80%,#e4b9af52,transparent 43%); filter:blur(24px); }
-.luma-prototype .luma-panel::before,
-html[data-theme=luma] .ds-showcase-tile::before { background:radial-gradient(ellipse at 20% 90%,#8fcac038,transparent 67%),radial-gradient(ellipse at 100% 0%,#ffffff70,transparent 60%); }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=button],
-:is(html[data-theme=luma],.luma-prototype) [data-ui=icon-button] {
- background:linear-gradient(135deg,#ffffff73,#ffffff33 55%,#e4efeb61); border-color:#62797b;
- outline:1px solid #ffffffe0; outline-offset:-4px;
- box-shadow:inset 0 1px 1px #fff,inset 0 -1px 1px #fff,2px 7px 9px -3px #274f4538;
- backdrop-filter:blur(14px) saturate(140%); -webkit-backdrop-filter:blur(14px) saturate(140%);
-}
-:is(html[data-theme=luma],.luma-prototype) [data-ui=button][data-variant=solid] { background:linear-gradient(135deg,#d7efecb8,#94c5c5ba); border-color:#476b75; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=field] { background:linear-gradient(135deg,#ffffff40,#e4efeb3d); box-shadow:inset 1px 2px 5px #31574f19,inset 0 -1px 0 #fff,0 1px 0 #ffffffb3; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch] { background:linear-gradient(135deg,#ffffff63,#d8e8e247); outline:1px solid #ffffffe0; outline-offset:-3px; box-shadow:inset 0 1px 1px #fff,inset 0 -1px 2px #fff,2px 7px 10px -3px #244f403d; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch]>span { box-shadow:inset 0 1px 1px #fff,2px 5px 6px #1f4c4138; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch][aria-checked=true] { background:linear-gradient(135deg,#cbe6dfc2,#8dbdbfbd); }
-:is(html[data-theme=luma],.luma-prototype) [role=tab] { background:linear-gradient(135deg,#ffffff7a,#edf4ee40); outline:1px solid #ffffffb3; outline-offset:-3px; box-shadow:inset 0 1px 1px #fff,inset 0 -1px 1px #fff,2px 6px 8px -3px #1f4c4038; }
-:is(html[data-theme=luma],.luma-prototype) [role=tab][aria-selected=true] { background:linear-gradient(135deg,#cbe6dfc2,#8dbdbfbd); }
-.luma-prototype .refracted-card { background:var(--luma-glass-fill); border:1px solid var(--luma-glass-edge); outline:1px solid #ffffffed; outline-offset:-4px; }
-.luma-prototype .luma-tone-card { background:linear-gradient(135deg,#ffffff8c,#ffffff3b); backdrop-filter:blur(20px) saturate(130%); -webkit-backdrop-filter:blur(20px) saturate(130%); }
-.luma-prototype .luma-tone-value { background:#ffffff30; border:1px solid #ffffffa8; outline:1px solid #ffffff9c; outline-offset:-3px; box-shadow:inset 1px 3px 5px #2148410f,inset 0 -1px 1px #fff; }
-/* The white refractive rim must never replace keyboard focus indication. */
-:is(html[data-theme=luma],.luma-prototype) :is(button,input,select,textarea,[role=tab]):focus-visible,
-:is(html[data-theme=luma],.luma-prototype) [data-preview-state=focus-visible] { outline:2px solid #234dcc; outline-offset:4px; }
-:is(html[data-theme=luma],.luma-prototype) input[type=range] { appearance:none; -webkit-appearance:none; height:8px; border-radius:999px; border:1px solid #62718e; background:linear-gradient(#afcdc85c,#e8f4efa6); box-shadow:inset 0 2px 3px #32594b26,0 1px 1px #fff; }
-:is(html[data-theme=luma],.luma-prototype) input[type=range]::-webkit-slider-thumb { appearance:none; -webkit-appearance:none; width:26px; height:26px; border:1px solid #62718e; border-radius:50%; background:linear-gradient(135deg,#fff,#edf2ef); box-shadow:inset 0 1px 0 #fff,2px 6px 6px #325e4d38; }
-:is(html[data-theme=luma],.luma-prototype) input[type=range]::-moz-range-thumb { width:24px; height:24px; border:1px solid #62718e; border-radius:50%; background:linear-gradient(135deg,#fff,#edf2ef); box-shadow:inset 0 1px 0 #fff,2px 6px 6px #325e4d38; }
+@keyframes luma-glass-sweep { 0% {opacity:0;transform:translateX(-150%) rotate(-12deg);} 20%,75% {opacity:.75;} 100% {opacity:0;transform:translateX(150%) rotate(-12deg);} }
+@media(prefers-reduced-motion:reduce) { :is(html[data-theme^=luma],.luma-prototype) :is([data-ui=button],[data-ui=icon-button],[role=tab])::after { animation:none!important; } }
 
-:is(html[data-theme=luma],.luma-prototype) [data-ui=field],
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch] { border-color:#62718e; }
-:is(html[data-theme=luma],.luma-prototype) [data-ui=switch][aria-checked=true] { border-color:#476b75; }
+.luma-prototype .refracted-stage { perspective:none; background:transparent; }
+.luma-prototype .refracted-card { isolation:auto; transform:none; background:transparent; }
+.luma-prototype .refracted-card>.gradient-field-content { z-index:3; }
+.luma-prototype .refracted-card::before { content:''; position:absolute; inset:0; z-index:1; background:#ffffff59; border-radius:inherit; pointer-events:none; }
+/* Transmitted color can vary; supporting copy keeps the high-contrast ink role. */
+html[data-theme^=luma] :is(.ds-showcase-tile,.quadrant-cell) :is(.text-fg-muted,.text-fg-subtle,.ds-showcase-caption,.ds-demo-field small),
+.luma-prototype .luma-panel :is(p,small,.luma-label) { color:#171827; }
+:is(html[data-theme^=luma],.luma-prototype) [data-ui=field]::placeholder { color:#26314b; opacity:1; }
+
+/* The library owns only this local optical layer, never the page canvas. */
+.luma-react-glass { pointer-events:none; }
+.luma-react-glass .glass { width:100%; height:100%; box-shadow:0 10px 30px #23364e12!important; }
+.luma-react-glass .glass>div { width:100%; height:100%; }
+.luma-react-glass-fill { display:block; width:100%; height:100%; }
+.luma-prototype .refracted-card::before { display:none; }
+.luma-prototype .refracted-card { isolation:isolate; }
+.luma-prototype .refracted-card>.optical-field { z-index:0; }
+.luma-prototype .refracted-card>.luma-refractive-layer { z-index:1; }
+.luma-prototype .refracted-wing { opacity:.25; filter:blur(30px); }
+.luma-react-glass { transition:none!important; }
+.luma-prototype .refracted-card>.gradient-field-content { position:absolute; inset:0; z-index:3; }
+/* Keep every library rim/helper in the same local box, without centering translations. */
+.luma-refractive-layer>div { position:absolute!important; inset:0!important; width:100%!important; height:100%!important; transform:none!important; transition:none!important; }
+.luma-react-glass .glass { position:absolute!important; inset:0!important; }
+.luma-prototype .gradient-field.refracted-card { position:relative!important; }
+/* A single viewport scene; it does not follow scroll using JavaScript. */
+.luma-page-atmosphere { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; background:#f6f8fc; }
+.luma-page-atmosphere>.optical-field { z-index:0; inset:-25%; width:150%; height:150%; opacity:.72; transform:scale(1.2); animation:luma-scene-drift 60s ease-in-out infinite alternate; }
+html[data-theme^=luma] #root { position:relative; z-index:1; background:transparent; }
+html[data-theme^=luma] :is(.ds-app,.ds-main,.ds-main-scroll,.ds-content,.luma-prototype,.luma-hero,.refracted-stage) { background:transparent; }
+html[data-theme^=luma] :is(.luma-panel,.luma-atmosphere,.ds-showcase-tile) { background:#ffffff12; backdrop-filter:blur(12px) saturate(115%); -webkit-backdrop-filter:blur(12px) saturate(115%); box-shadow:inset 0 1px 0 #ffffffb3,0 12px 30px #23364e0d; }
+@keyframes luma-scene-drift { from {transform:translate(-9%,-5%) rotate(-12deg) scale(1.2);} to {transform:translate(9%,7%) rotate(15deg) scale(1.35);} }
+@media(prefers-reduced-motion:reduce) { .luma-page-atmosphere>.optical-field { animation:none; } }
+html[data-theme^=luma] .ds-studio { background:transparent; }
+
+html[data-theme=luma-b] #root { z-index:auto; }
+/* liquidGL draws its scene on a body canvas at z=1; page content stays above it. */
+html[data-theme=luma-b] #root { z-index:2; }
+/* Real engine layers replace the previous frosted CSS approximation. */
+.luma-material-host { position:absolute; inset:0; display:block; border-radius:inherit; pointer-events:none; z-index:0; }
+html[data-theme^=luma] [data-glass-surface] { position:relative; isolation:auto; background:transparent!important; backdrop-filter:none!important; -webkit-backdrop-filter:none!important; }
+html[data-theme^=luma] [data-glass-surface]>*:not(.luma-material-host) { position:relative; z-index:3; }
+html[data-theme^=luma] [data-ui=switch][data-glass-surface]>span:not(.luma-material-host) { position:absolute; }
+html[data-theme^=luma] .portfolio-control-content { display:inline-flex; align-items:center; justify-content:center; gap:4px; }
+html[data-theme^=luma] .luma-page-atmosphere>.optical-field { animation:none; transform:scale(1.2); }
+/* Engines have deliberately different optical settings, shared content and palette. */
+html[data-theme=luma-b] .luma-liquidgl-layer[data-ready=fallback] { backdrop-filter:blur(12px); }
+/* Luma C: richer refraction and a light-catching bevel, using the local React engine. */
+html[data-theme=luma-c] .luma-react-glass .glass { box-shadow:none!important; }
+html[data-theme=luma-c] .luma-refractive-layer::after { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:2; background:radial-gradient(ellipse at 22% -12%,#ffffff52,transparent 58%),linear-gradient(160deg,#ffffff14,#ffffff06 46%,#ffffff0d); }
+/* Promote the former button hover material to the shared resting state. */
+html[data-theme=luma-c] { --luma-c-glass-shadow:inset 0 1px 1px #fff,0 8px 18px #23364e1f; }
+html[data-theme=luma-c] :is([data-glass-surface],.refracted-card,[data-ui=field],[role=tab]) { box-shadow:var(--luma-c-glass-shadow); }
+@media(hover:hover) { html[data-theme=luma-c] [data-glass-surface]:has(> .portfolio-control-content):not(:disabled):hover { box-shadow:inset 0 1px 2px #fff,0 10px 22px #23364e26; } }
+
+/* A broken, directional specular rim replaces the library’s continuous white stroke. */
+html[data-theme=luma-c] .luma-refractive-layer>span { opacity:.45!important; padding:1px!important; mix-blend-mode:screen!important; box-shadow:none!important; background:linear-gradient(145deg,#ffffffd9 0%,#ffffff70 12%,#ffffff08 26%,transparent 43%,transparent 64%,#ffffff52 82%,#ffffff14 100%)!important; }
+html[data-theme=luma-c] .luma-refractive-layer>span~span { display:none; }
+/* Rims must follow the live host box, not the upstream component's cached pixel sizes. */
+.luma-refractive-layer[data-engine=liquid-glass-react]>span { position:absolute!important; inset:0!important; width:100%!important; height:100%!important; transform:none!important; box-sizing:border-box; transition:none!important; }

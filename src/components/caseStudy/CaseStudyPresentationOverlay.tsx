@@ -492,8 +492,8 @@ export function CaseStudyPresentationOverlay({
   const [textSlidesVisible, setTextSlidesVisible] = useState(true)
   const [textScale, setTextScale] = useState(1)
   const [imageScale, setImageScale] = useState(1)
-  const { theme: siteTheme, setTheme: setSiteTheme } = useSiteTheme()
-  const theme: PresentationTheme = ({ grey: 'gray', cyan: 'turquoise', magenta: 'pink', blue: 'blue', light: 'white', luma: 'white' } as const)[siteTheme]
+  const { theme: siteTheme, setTheme: setSiteTheme,previewOptions } = useSiteTheme()
+  const theme: PresentationTheme = ({ grey: 'gray', cyan: 'turquoise', magenta: 'pink', blue: 'blue', light: 'white', luma: 'white', 'luma-b': 'white', 'luma-c': previewOptions.mode==='dark'?'gray':'white' } as const)[siteTheme]
   const setTheme = (value: PresentationTheme) => setSiteTheme(({ gray: 'grey', turquoise: 'cyan', pink: 'magenta', blue: 'blue', white: 'light' } as const)[value])
   const [imagePan, setImagePan] = useState<PanPoint>({ x: 0, y: 0 })
   const [presentationMdUp, setPresentationMdUp] = useState(() =>

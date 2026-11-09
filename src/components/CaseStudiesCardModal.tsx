@@ -62,6 +62,7 @@ export function CaseStudiesCardModal({ open, onClose }: CaseStudiesCardModalProp
           footerInViewMinRatio={0.35}
           topRightSlot={
             <button
+              data-glass-action
               ref={closeBtnRef}
               type="button"
               onClick={onClose}

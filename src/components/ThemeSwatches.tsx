@@ -34,6 +34,8 @@ const SWATCH: Record<SiteTheme, { selected: string; idle: string; selectedDot: s
     selectedDot: themeSwatchSelectedDotOnColorClass,
   },
   luma: { selected: 'bg-blue-200', idle: 'border border-blue-400 bg-transparent', selectedDot: themeSwatchSelectedDotOnLightFillClass },
+  'luma-b': { selected: 'bg-blue-200', idle: 'border border-blue-400 bg-transparent', selectedDot: themeSwatchSelectedDotOnLightFillClass },
+  'luma-c': { selected: 'bg-blue-200', idle: 'border border-blue-400 bg-transparent', selectedDot: themeSwatchSelectedDotOnLightFillClass },
   light: { selected: 'bg-white', idle: 'border border-zinc-400 bg-transparent', selectedDot: themeSwatchSelectedDotOnLightFillClass },
   blue: {
     selected: 'bg-blue-400',

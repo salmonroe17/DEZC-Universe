@@ -116,3 +116,33 @@ Luma now uses DM Sans, cool white/slate surfaces, shared glass buttons/fields/sw
 All optical forms and reflections are diffused: 14px blur for the 3D blob, torus, ribbons and split beam, and 28px for the atmospheric volume. The central UI is frosted glass over the geometry rather than an opaque gradient card.
 
 The final rendered Luma audit (`docs/design-system/contrast-luma.json`) checked 1,187 text samples across 16 route/album views: zero computed below-threshold results and no load errors. It flagged 398 effect/gradient cases for visual review. This is not a full WCAG certification; the checker cannot certify image/canvas text or arbitrary optical composites. Actual homepage dot-art filtering, native cursor behavior, WebGL forms, blur values and glass controls were separately inspected in the browser. Build, lint (existing FlowingLine warning only), theme checks and whitespace checks passed.
+
+### Theme study and Luma comparisons
+
+Theme study appears directly below Overview and follows the owner’s Theme preview selection. Original, Turquoise, Magenta, Blue and Light show their own foundations and component gallery. Luma A (`luma`, retained for existing saved previews) uses `liquid-glass-react`; Luma B (`luma-b`) uses `liquid-gl`. Both share the same single moving 3D page backdrop and theme tokens. Both engines are attached to visible overview cards, portfolio frames, study panels and shared buttons, icon buttons and switches. A/C mount their React filters with the page and retain them while scrolling. B uses a visibility observer to suspend offscreen liquidGL lenses; theme changes and unmounts destroy them. Input text and media retain their native rendering over the glass. B snapshots only `.luma-page-atmosphere` and destroys its lens when changing themes or leaving the study. These are editor previews; the published theme remains Original.
+
+Luma C (`luma-c`) preserves A’s local React refraction engine and the same shared scene, with prominent refraction, stronger edge displacement, clearer transmission, and layered white bevel highlights. A and B remain unchanged for comparison; C does not initialize liquidGL.
+
+### Luma C component material pass
+
+C now uses Manrope 500–800, darker navy text roles, a blue/violet/peach ambient recipe, 28px main surfaces, 20px nested frames and 14px controls (switches stay pill-shaped). Inputs, tabs, page chrome and documentation specimens transmit the shared scene rather than using opaque UI fills. Buttons and tabs size to content; fields remain full width within their form. The shared lens reflection runs for 2400ms, with a matching slower fallback for ordinary navigation actions and no moving shine under reduced motion.
+
+Overview includes interactive Manrope / DM Sans / Space Grotesk specimens and a large glass-lettering display using the React lens clipped to glyphs. Display lettering is decorative; reading text uses solid ink roles. `docs/design-system/luma-c-component-audit.json` records the 32 catalog entry DOM smoke review (overflow and opaque-white UI fill checks); this is not a pixel-level contrast certification and does not measure image contents.
+
+### Luma C appearance and shape refinement
+
+The owner preview now uses white text over a navy stage with three smoothly merging ray-marched 3D volumes. Overview exposes shared palette, font and solid/gradient-primary controls. Settings are stored only through explicit owner edits; storage events synchronize same-origin live previews without writing them back. The palette card shows the selected gradient stops and primary treatment. Ion, Voltage and Opal add cyan/violet/hot-pink, electric-blue/cyan/lime and softer iridescent color families.
+
+The shared `PortfolioDropdown` replaces the native appearance and theme selectors (listbox selection, arrow/Home/End/Enter/Escape keys, outside dismissal and viewport placement). Collapsed navigation uses centered 20px icons in 44px targets and includes Theme study. React glass edges use live host bounds; a coalesced ResizeObserver adapter asks the upstream library to remeasure its filter geometry on surface-size changes, without remounting on scroll.
+
+Small shapes have dedicated vector lighting rather than rectangular lenses. Section navigation is quiet; before/after uses the shared `PortfolioContentSwitcher`; reading/project progress and timeline paths use the selected primary spectrum. Glass display text uses a glyph-mask shader that refracts the actual scene; it no longer outlines a rectangular lens clipped to text. Cube faces retain small 6px corner rounding, an angled 3D view and a slower turn. The original shooting game keeps its behavior with a themed black-hole/starfield stage, and dot-art clicks use a smaller light pulse and glass droplets. Isolated overview iframes have transparent backings so side quests and biography do not introduce white panels. Production theme remains Original; these edits remain owner-preview configuration.
+
+### Light/dark refinement
+
+Luma C has an owner Light/Dark control, persisted alongside palette and font. Light mode uses brighter 3D volumes with dark reading ink; dark mode retains bounded scene luminance and white ink. Palette/foundation swatches reflect the effective mode tokens. Checks cover both modes for all seven palette presets in addition to the eight base themes.
+
+The cursor is portalled directly to body above dropdowns/presentations and uses an SVG magnifying displacement with no blur. The same brighter glyph-contour glass renderer now serves display lettering, 404 and KPI values. The cube uses a responsive half-depth matching its width, a visible top/bottom cap and an active-face outline. Case-study panels and rows stretch together; the before/after track fits its segments, with a raised active segment and primary-gradient marker. Timeline paths have gradient strokes without glass shadows, stronger secondary paths/nodes and rounded frosted arrow controls. The game’s ring is replaced with a flattened accretion disk, event horizon and lensed halo. Presentation UI has a translucent backdrop; original media keeps its own colors.
+
+### Glyph lifecycle and passive hover repair
+
+Glass labels now share one offscreen WebGL renderer, copied into ordinary visible 2D canvases. No React effect cleanup destroys a displayed canvas's GPU context, which avoids StrictMode cleanup/setup failures. GPU loss falls back inside the same canvas rather than exposing a broken canvas plus a second text block. Passive frame samples cancel inherited `quadrant-cell` hover fills; reflection sweeps are limited to actionable controls, and corner specimens retain a static translucent material.

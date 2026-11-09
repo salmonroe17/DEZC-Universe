@@ -1,3 +1,5 @@
+import { PortfolioButton } from './system/PortfolioControls'
+import { useSiteTheme } from '../contexts/useSiteTheme'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   useCallback,
@@ -797,6 +799,8 @@ function spawnWordDestroyExplosion(
 // --- Component ---
 
 export function HudShooterIntro() {
+  const {theme}=useSiteTheme()
+  const lumaSpace=theme==='luma-c'
   const { setActive } = useHudShooterGame()
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -1100,7 +1104,7 @@ export function HudShooterIntro() {
           getComputedStyle(document.documentElement).getPropertyValue('--color-fg').trim() ||
           '#fafafa'
       }
-      const fg = fgCached
+      const fg = document.documentElement.dataset.theme==='luma-c'?'#edf2ff':fgCached
       const cx = w / 2
       const cy = h / 2
       const stars = starsRef.current
@@ -1539,10 +1543,13 @@ export function HudShooterIntro() {
   return (
     <div
       ref={containerRef}
+      data-ui="shooter"
+      data-space={lumaSpace||undefined}
       className={`relative isolate h-full min-h-[200px] w-full select-none ${
         combatHud ? 'cursor-none' : ''
       }`}
     >
+      {lumaSpace&&<div className="luma-space-field" aria-hidden><div className="luma-space-disk"/><div className="luma-space-front"/><div className="luma-space-eye"/></div>}
       <canvas
         ref={starsCanvasRef}
         className="pointer-events-none absolute inset-0 z-0"
@@ -1568,7 +1575,7 @@ export function HudShooterIntro() {
       />
 
       {/* UI overlay */}
-      <div className="pointer-events-none absolute inset-0 z-20 flex min-h-0 flex-col p-2 max-lg:p-2.5 sm:max-lg:p-3 lg:max-[1439px]:p-3.5 port-xl:p-5">
+      <div className="luma-shooter-ui pointer-events-none absolute inset-0 z-20 flex min-h-0 flex-col p-2 max-lg:p-2.5 sm:max-lg:p-3 lg:max-[1439px]:p-3.5 port-xl:p-5">
         <div className="flex shrink-0 items-start justify-between gap-2 max-lg:gap-2.5 sm:max-lg:gap-3 port-xl:gap-3">
           <div className="min-w-0" style={{ fontSize: '10px' }}>
             <div className="mb-1 font-normal normal-case tracking-[0.08em] text-fg/60">
@@ -1604,9 +1611,10 @@ export function HudShooterIntro() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                  className="w-full max-w-full pr-2 text-left"
+                  className="luma-shooter-idle w-full max-w-full pr-2 text-left"
                 >
                   <IdleGreetingTypewriter containerRef={idleTextRef} />
+                  {lumaSpace ? <PortfolioButton className="pointer-events-auto luma-shooter-start" onClick={(e) => { e.preventDefault(); beginExplosion() }}>Start game</PortfolioButton> : <>
                   <span
                     className="quadrant-cell relative mt-6 inline-flex [--quadrant-chamfer:clamp(5px,0.9vmin,9px)]"
                   >
@@ -1620,7 +1628,7 @@ export function HudShooterIntro() {
                     >
                       Start game
                     </button>
-                  </span>
+                  </span></>}
                 </motion.div>
               )}
 

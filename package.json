@@ -21,6 +21,8 @@
     "@upstash/redis": "^1.37.0",
     "framer-motion": "^12.38.0",
     "html-to-image": "^1.11.13",
+    "liquid-gl": "^3.0.0",
+    "liquid-glass-react": "^1.1.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.0"

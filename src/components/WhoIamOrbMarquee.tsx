@@ -1,3 +1,4 @@
+import { useSiteTheme } from '../contexts/useSiteTheme'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useCallback, useRef, useState } from 'react'
 import { WHO_IAM_ORB_ART } from '../data/whoIamOrbArt'
@@ -7,7 +8,7 @@ const PARTICLE_N = 14
 
 type BurstState = { idx: number; id: number }
 
-function OrbBurstParticles({ burstId }: { burstId: number }) {
+function OrbBurstParticles({ burstId,glass=false }: { burstId: number;glass?:boolean }) {
   return (
     <>
       {Array.from({ length: PARTICLE_N }, (_, pi) => {
@@ -16,15 +17,15 @@ function OrbBurstParticles({ burstId }: { burstId: number }) {
         return (
           <motion.span
             key={`${burstId}-p-${pi}`}
-            className="pointer-events-none absolute left-1/2 top-1/2 z-20 size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fg/85"
+            className={`pointer-events-none absolute left-1/2 top-1/2 z-20 size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-fg/85 ${glass?'luma-orb-droplet':''}`}
             initial={{ scale: 1, opacity: 1 }}
             animate={{
-              x: Math.cos(angle) * dist,
-              y: Math.sin(angle) * dist,
+              x: Math.cos(angle) * dist*(glass?.7:1),
+              y: Math.sin(angle) * dist*(glass?.7:1),
               opacity: 0,
               scale: 0.12,
             }}
-            transition={{ duration: 0.52, ease: 'easeOut' }}
+            transition={{ duration:glass?.9:.52, ease:'easeOut' }}
           />
         )
       })}
@@ -43,6 +44,8 @@ function OrbCell({
   burst: BurstState | null
   onActivate: (index: number) => void
 }) {
+  const {theme}=useSiteTheme()
+  const glass=theme==='luma-c'
   const reduced = useReducedMotion() ?? false
   const bursting = burst !== null && burst.idx === index
 
@@ -50,6 +53,8 @@ function OrbCell({
     <motion.button
       type="button"
       onClick={() => onActivate(index)}
+      data-ui="art-orb"
+      data-bursting={bursting||undefined}
       aria-label={src ? `Dot art ${index + 1}` : `Empty circle ${index + 1}`}
       className={[
         'group/orb relative box-border flex aspect-square h-full max-h-full min-h-[2.75rem] min-w-[2.75rem] shrink-0 cursor-pointer',
@@ -67,7 +72,7 @@ function OrbCell({
         className="relative z-[1] flex h-full w-full max-h-[4.25rem] max-w-[4.25rem] items-center justify-center"
         animate={
           bursting && !reduced
-            ? { scale: 1.28, opacity: 0, filter: 'blur(5px)' }
+            ? glass?{scale:[1,.88,1.04,1],opacity:[1,.6,1],filter:'blur(0px)'}:{ scale: 1.28, opacity: 0, filter: 'blur(5px)' }
             : bursting && reduced
               ? { opacity: [1, 0.45, 1] }
               : { scale: 1, opacity: 1, filter: 'blur(0px)' }
@@ -94,16 +99,16 @@ function OrbCell({
         {bursting && !reduced && (
           <motion.span
             key={`ring-${burst.id}`}
-            className="pointer-events-none absolute inset-0 z-[5] rounded-full border-2 border-hud/65"
+            className={`pointer-events-none absolute inset-0 z-[5] rounded-full border-2 border-hud/65 ${glass?'luma-orb-pulse':''}`}
             initial={{ scale: 0.88, opacity: 0.95 }}
-            animate={{ scale: 2.15, opacity: 0 }}
+            animate={{ scale:glass?1.45:2.15, opacity: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           />
         )}
       </AnimatePresence>
 
-      {bursting && !reduced && <OrbBurstParticles burstId={burst.id} />}
+      {bursting && !reduced && <OrbBurstParticles burstId={burst.id} glass={glass}/>}
     </motion.button>
   )
 }
@@ -133,6 +138,7 @@ export type WhoIamOrbMarqueeProps = {
 
 /** Outlined circles with dot-art images, left → right marquee; hover + click burst. */
 export function WhoIamOrbMarquee({ quadrantActive }: WhoIamOrbMarqueeProps) {
+  const {theme}=useSiteTheme()
   const [burst, setBurst] = useState<BurstState | null>(null)
   const burstSerial = useRef(0)
 
@@ -142,8 +148,8 @@ export function WhoIamOrbMarquee({ quadrantActive }: WhoIamOrbMarqueeProps) {
     setBurst({ idx: index, id })
     window.setTimeout(() => {
       setBurst((b) => (b?.id === id ? null : b))
-    }, BURST_RESET_MS)
-  }, [])
+    }, theme==='luma-c'?1100:BURST_RESET_MS)
+  }, [theme])
 
   return (
     <div className="box-border h-full min-h-0 w-full min-w-0 overflow-visible p-1">

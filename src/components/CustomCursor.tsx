@@ -1,3 +1,4 @@
+import { LumaCursor } from './gradients/LumaCursor'
 import { useEffect, useRef, useState } from 'react'
 import { useSiteTheme } from '../contexts/useSiteTheme'
 
@@ -167,7 +168,7 @@ export function CustomCursor() {
   useEffect(() => {
     hasMovedRef.current = false
     particlesRef.current = []
-    if (theme === 'luma') { document.body.classList.remove('custom-cursor-active'); return }
+    if (theme.startsWith('luma')) { document.body.classList.remove('custom-cursor-active'); return }
     const wrap = wrapRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
@@ -294,7 +295,8 @@ export function CustomCursor() {
     }
   }, [theme])
 
-  if (theme === 'luma') return null
+  if(theme==='luma-c')return <LumaCursor/>
+  if (theme.startsWith('luma')) return null
   return (
     <div className="custom-cursor-root">
       <canvas

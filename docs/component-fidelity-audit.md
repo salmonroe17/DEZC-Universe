@@ -9,7 +9,7 @@ Static source linkage audit. Imports establish shared implementation, not visual
 | Cursor | `src/components/CustomCursor.tsx` | `src/App.tsx` |
 | Cursor interactions | `src/components/CustomCursor.tsx` | `src/App.tsx` |
 | Card corners & borders | `src/components/system/ChamferFrame.tsx` | `src/components/caseStudy/CaseStudyShowcaseScaffold.tsx`, `src/components/caseStudy/patterns/BeforeAfterToggle.tsx`, `src/components/caseStudy/patterns/ComparisonShowcase.tsx`, `src/components/sections/DecisionSection.tsx`, `src/components/system/PlaceholderVisual.tsx`, `src/pages/CarbonNeutralClubShowcasePage.tsx`, `src/pages/CaseStudyComponentsPage.tsx`, `src/pages/DesignSystemsShowcasePage.tsx`, `src/pages/IbmEnviziShowcasePage.tsx`, `src/pages/SuperAppShowcasePage.tsx`, `src/pages/carbon/CarbonPresentationDeck.tsx`, `src/pages/ds/DsPresentationDeck.tsx`, `src/pages/ds/dsPresentationTextSlides.tsx`, `src/pages/ibm/IbmDeckToggleChamfer.tsx`, `src/pages/ibm/IbmPresentationDeck.tsx`, `src/pages/ibm/ibmEnviziContentComponents.tsx`, `src/pages/super/SuperPresentationDeck.tsx`, `src/pages/super/SuperShowcaseChamfers.tsx` |
-| Buttons | `src/components/system/PortfolioControls.tsx` | `src/components/LeaderboardGate.tsx` |
+| Buttons | `src/components/system/PortfolioControls.tsx` | `src/components/HudShooterIntro.tsx`, `src/components/LeaderboardGate.tsx`, `src/components/system/PortfolioContentSwitcher.tsx` |
 | Icon buttons | `src/components/system/PresentationIconButton.tsx` | `src/components/caseStudy/CaseStudyPresentationOverlay.tsx`, `src/components/system/PortfolioControls.tsx` |
 | Links | `src/components/SiteTopBar.tsx` | `src/layouts/RootLayout.tsx` |
 | Text fields | `src/components/system/PortfolioControls.tsx` | `src/components/LeaderboardGate.tsx` |
@@ -100,8 +100,15 @@ Static source linkage audit. Imports establish shared implementation, not visual
 | ProblemStatementGlitchedCopy | `src/components/caseStudy/patterns/ProblemStatementFrame.tsx` | 1 | statement |
 | ProblemStatementFrame | `src/components/caseStudy/patterns/ProblemStatementFrame.tsx` | 1 | statement |
 | TimelinePillsRow | `src/components/caseStudy/patterns/TimelinePillsRow.tsx` | 2 | timeline |
+| FormStudy | `src/components/gradients/FormStudy.tsx` | 0 | Live pages only |
 | GradientField | `src/components/gradients/GradientField.tsx` | 1 | Live pages only |
-| OpticalField | `src/components/gradients/OpticalField.tsx` | 1 | Live pages only |
+| LiquidGLLayer | `src/components/gradients/LiquidGLLayer.tsx` | 1 | Live pages only |
+| LiquidGlassLayer | `src/components/gradients/LiquidGlassLayer.tsx` | 2 | Live pages only |
+| LumaAmbientCards | `src/components/gradients/LumaAmbientCards.tsx` | 1 | Live pages only |
+| LumaCursor | `src/components/gradients/LumaCursor.tsx` | 1 | Live pages only |
+| LumaGlassSurfaces | `src/components/gradients/LumaGlassSurfaces.tsx` | 1 | Live pages only |
+| LumaShapeDefs | `src/components/gradients/LumaShapeDefs.tsx` | 1 | Live pages only |
+| OpticalField | `src/components/gradients/OpticalField.tsx` | 2 | Live pages only |
 | RefractedCard | `src/components/gradients/RefractedCard.tsx` | 0 | Live pages only |
 | ComparisonSection | `src/components/sections/ComparisonSection.tsx` | 1 | Live pages only |
 | DecisionSection | `src/components/sections/DecisionSection.tsx` | 1 | decisions |
@@ -119,10 +126,12 @@ Static source linkage audit. Imports establish shared implementation, not visual
 | FigmaRailGrid | `src/components/system/FigmaGrid.tsx` | 1 | Live pages only |
 | PlaceholderVisual | `src/components/system/PlaceholderVisual.tsx` | 1 | Live pages only |
 | PortfolioAccordion | `src/components/system/PortfolioAccordion.tsx` | 0 | Live pages only |
-| PortfolioButton | `src/components/system/PortfolioControls.tsx` | 1 | buttons, text-fields |
+| PortfolioContentSwitcher | `src/components/system/PortfolioContentSwitcher.tsx` | 1 | Live pages only |
+| PortfolioButton | `src/components/system/PortfolioControls.tsx` | 3 | buttons, text-fields |
 | PortfolioTextField | `src/components/system/PortfolioControls.tsx` | 1 | buttons, text-fields |
 | PortfolioSelect | `src/components/system/PortfolioControls.tsx` | 0 | buttons, text-fields |
 | PortfolioChoice | `src/components/system/PortfolioControls.tsx` | 0 | buttons, text-fields |
+| PortfolioDropdown | `src/components/system/PortfolioDropdown.tsx` | 0 | Live pages only |
 | PortfolioTab | `src/components/system/PortfolioTabs.tsx` | 1 | tabs |
 | PresentationIconButton | `src/components/system/PresentationIconButton.tsx` | 2 | icon-buttons |
 | RotatingGradientCircle | `src/components/system/RotatingGradientCircle.tsx` | 9 | Live pages only |
